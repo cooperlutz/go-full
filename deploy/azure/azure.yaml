@@ -1,0 +1,20 @@
+# Docs: https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/azd-schema
+# Raw Schema: https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: pingpong
+metadata:
+  template: none
+hooks:
+  preprovision: 
+    shell: sh
+    run: pnpm -C ../../web run build
+services:
+  app:
+    project: ../../
+    language: js
+    host: containerapp
+    docker:
+      path: ./build/docker/Dockerfile
+      context: ./
+infra:
+  provider: bicep 
+  path: ../../deploy/azure

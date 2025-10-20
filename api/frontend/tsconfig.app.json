@@ -1,0 +1,30 @@
+{
+  "extends": [
+    "@vue/tsconfig/tsconfig.dom.json",
+  ],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue", 
+    "tests/*.ts",
+    "document-load.ts"
+  ],
+  "exclude": [
+    "public/*",
+    "dist",
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "types": [
+      "vitest/globals",
+      "sweetalert2",
+    ],
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

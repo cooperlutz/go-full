@@ -1,0 +1,21 @@
+{
+  "entry": ["index.html", "src/main.ts", "src/app/App.vue"],
+  "project": ["**/*.{js,ts,vue}"],
+  "vue": {
+    "config": [
+      "vite.config.{js,ts,mjs}"
+    ]
+  },
+  "ignore" : [
+    "env.d.ts",
+    "src/**/api/**"
+  ],
+  "ignoreDependencies": [
+    "tailwindcss", 
+    "daisyui", 
+    "eslint-plugin-import",
+    "eslint-plugin-simple-import-sort",
+    "globals",
+    "@opentelemetry/*"
+  ]
+}

@@ -1,0 +1,40 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "gomod" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "monthly"
+      
+  - package-ecosystem: "npm"
+    directory: "api/frontend" # Location of package manifests
+    schedule:
+      interval: "monthly"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directory: "/build/docker" # Location of Dockerfiles
+    schedule:
+      interval: "monthly"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of workflow files
+    schedule:
+      interval: "monthly"
+
+  # Enable version updates for Docker Compose files
+  - package-ecosystem: "docker-compose"
+    directory: "/deploy/compose" # Location of docker-compose.yml files
+    schedule:
+      interval: "monthly"
+
+  # Enable version updates for Python dependencies in the docs folder
+  - package-ecosystem: "pip"
+    directory: "/docs" # Location of requirements.txt or pyproject.toml
+    schedule:
+      interval: "monthly"

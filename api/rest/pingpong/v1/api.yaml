@@ -1,0 +1,371 @@
+# Source: https://github.com/Redocly/openapi-template/blob/gh-pages/openapi.yaml
+openapi: 3.0.2
+info:
+  version: '1.0.0' # Your API version
+  # It can be any string but it is better to use semantic versioning: http://semver.org/
+  # Warning: OpenAPI requires the version to be a string, but without quotation marks YAML can recognize it as a number.
+  
+  title: PingPong # Replace with your API title
+  # Keep it simple. Don't add "API" or version at the end of the string.
+
+  # termsOfService: 'https://localhost:8080/terms/' # [Optional] Replace with an URL to your ToS
+  # contact:
+  #   email: contact@localhost:8080 # [Optional] Replace with your contact email
+  #   url: 'http://localhost:8080/contact' # [Optional] Replace with link to your contact form
+  # license:
+  #   name: Apache 2.0
+  #   url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  # x-logo:
+  #   url: 'https://redocly.github.io/openapi-template/logo.png'
+  
+  # # Describe your API here, you can use GFM (https://guides.github.com/features/mastering-markdown) here
+  # description: |
+  #   This is an **example** API to demonstrate features of OpenAPI specification
+  #   # Introduction
+  #   This API definition is intended to to be a good starting point for describing your API in 
+  #   [OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md).
+  #   It also demonstrates features of [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) tool and 
+  #   [Redoc](https://github.com/Redocly/Redoc) documentation engine. So beyond the standard OpenAPI syntax we use a few 
+  #   [vendor extensions](https://github.com/Redocly/Redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+  #   # OpenAPI Specification
+  #   The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
+  #   allows both humans and computers to discover and understand the capabilities of the service without access to source
+  #   code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
+  #   understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
+  #   interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
+# externalDocs:
+#   description: Find out how to create a GitHub repo for your OpenAPI definition.
+#   url: 'https://github.com/Rebilly/generator-openapi-repo'
+
+# A list of tags used by the definition with additional metadata.
+# The order of the tags can be used to reflect on their order by the parsing tools.
+tags:
+  - name: pingpong
+    description: Example pingpong operations
+  - name: ping
+    description: Ping operations
+  - name: pong
+    description: Pong operations
+servers:
+  - url: 'http://localhost:8080/pingpong/api/v1'
+  - url: 'https://localhost:8080/pingpong/api/v1'
+
+# Holds the relative paths to the individual endpoints. The path is appended to the
+# basePath in order to construct the full URL. 
+paths:
+  /ping-pongs:
+    get:
+      tags:
+        - pingpongs
+      summary: Get all Pingpongs
+      description: Retrieve all PingPongs
+      operationId: getFindAllPingPongs
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingPongsRaw'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingPongsRaw'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+    post: # documentation for POST operation for this path
+      tags:
+        - pingpong
+      summary: Pong
+      description: Post a PingPong message
+      operationId: pingPong
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingPong'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingPong'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+      requestBody:
+        required: true
+        description: Pong payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PingPong'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/PingPong'
+  /ping-pong/pings:
+    get:
+      tags:
+        - pings
+      summary: Get all Pings
+      description: Retrieve all PingPong Pings
+      operationId: getPings
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingPongs'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingPongs'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /ping-pong/pongs:
+    get:
+      tags:
+        - pongs
+      summary: Get all Pongs
+      description: Retrieve all PingPong Pongs
+      operationId: getPongs
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingPongs'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingPongs'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /metrics/dailyDistribution:
+    get:
+      tags:
+        - metrics
+      summary: Get total number of ping pongs per day
+      description: Retrieve total number of PingPong Pongs per day
+      operationId: getDailyDistribution
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trend'
+                example: 25
+            application/xml:
+              schema:
+                type: integer
+                example: 25
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /metrics/totalPingPongs:
+    get:
+      tags:
+        - metrics
+      summary: Get total number of Pings Pongs
+      description: Retrieve total number of PingPong Pongs
+      operationId: getTotalPingPongs
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 25
+            application/xml:
+              schema:
+                type: integer
+                example: 25
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /metrics/totalPings:
+    get:
+      tags:
+        - metrics
+      summary: Get total number of Pings
+      description: Retrieve total number of PingPong Pings
+      operationId: getTotalPings
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 25
+            application/xml:
+              schema:
+                type: integer
+                example: 25
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+  /metrics/totalPongs:
+    get:
+      tags:
+        - metrics
+      summary: Get total number of Pongs
+      description: Retrieve total number of PingPong Pongs
+      operationId: getTotalPongs
+      security:
+        - api_key: []
+        - basic_auth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 25
+            application/xml:
+              schema:
+                type: integer
+                example: 25
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+# An object to hold reusable parts that can be used across the definition
+components:
+  headers:
+    X-Request-Id:
+      schema:
+        type: string
+        description: The unique identifier for the request.
+  schemas:
+    PingPongRaw:
+      description: A Ping or Pong
+      type: object
+      properties:
+        id:
+          type: string
+          example: Ping!
+        message:
+          description: The message of the Ping or Pong
+          type: string
+          example: 49a6d644-34d5-4c2d-8abc-8fda8a114bd4
+        createdAt:
+          description: The creation timestamp of the entity
+          type: string
+          format: date-time
+          example: '2023-10-01T12:00:00Z'
+        updatedAt:
+          description: The last update timestamp of the entity
+          type: string
+          format: date-time
+          example: '2023-10-01T12:00:00Z'
+        deleted:
+          description: Indicates if the entity is deleted
+          type: boolean
+          example: false
+        deletedAt:
+          description: The deletion timestamp of the entity, if applicable
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+    PingPong:
+      description: A Ping or Pong
+      type: object
+      properties:
+        message:
+          description: The message of the Ping or Pong
+          type: string
+          example: Ping!
+    PingPongs:
+      description: A collection of PingPong messages
+      type: object
+      properties:
+        pingpongs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PingPong'
+    PingPongsRaw:
+      description: A collection of PingPong messages
+      type: object
+      properties:
+        pingpongs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PingPongRaw'
+    Trend:
+      description: A PingPong data trend
+      type: object
+      properties:
+        dimensionKeys:
+          description: The keys of the defined trend dimension
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendKey'
+        dimensionValues:
+          description: values associated with the trend
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendValue'
+    TrendValue:
+      type: integer
+    TrendKey:
+      type: string
+

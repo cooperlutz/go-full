@@ -1,0 +1,29 @@
+all: false
+dir: test/mocks/pingpong
+force-file-write: true
+formatter: goimports
+include-auto-generated: false
+log-level: info
+structname: '{{.Mock}}{{.InterfaceName}}'
+pkgname: mocks
+recursive: false
+require-template-schema-exists: true
+template: testify
+template-schema: '{{.Template}}.schema.json'
+packages:
+  github.com/cooperlutz/go-full/internal/pingpong/domain/repository:
+    config:
+      filename: mocks_repo.go
+      all: true
+  github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres:
+    config:
+      filename: mocks_postgres_repo.go
+      all: true
+  github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/server:
+    config:
+      filename: mocks_api_v1.go
+      all: true
+  github.com/cooperlutz/go-full/internal/pingpong/app/service:
+    config:
+      filename: mocks_service.go
+      all: true

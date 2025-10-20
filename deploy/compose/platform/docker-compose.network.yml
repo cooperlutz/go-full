@@ -1,0 +1,13 @@
+services:
+  nginx:
+    image: nginx:1.29-alpine
+    volumes:
+      - ../../../configs/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    networks:
+      app_network:
+        aliases:
+          - nginx.lvh.me

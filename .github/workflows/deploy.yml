@@ -1,0 +1,69 @@
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+
+# Deployment workflow for pushes to main branch.
+name: Deploy
+
+# TODO: ideally, trigger on tags for production releases. however, Azure Container Apps GitHub integration does not support dynamic tag refs
+# https://learn.microsoft.com/en-us/azure/container-apps/github-actions
+on:
+  # push:
+  #   branches: [ main ]
+  workflow_dispatch:
+
+# Set up permissions for deploying with secretless Azure federated credentials
+# https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure?tabs=azure-portal%2Clinux#set-up-azure-login-with-openid-connect-authentication
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+  AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+  AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  AZURE_DEV_COLLECT_TELEMETRY: no
+
+jobs:
+  cd:
+    name: Deploy Latest Image to Azure
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Setup / Check out code 
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Deploy / Setup / Install azd
+        uses: Azure/setup-azd@v2
+
+      - name: Deploy / Setup / Log in with Azure (Federated Credentials)
+        run: |
+          azd auth login `
+            --client-id "$Env:AZURE_CLIENT_ID" `
+            --federated-credential-provider "github" `
+            --tenant-id "$Env:AZURE_TENANT_ID"
+        shell: pwsh
+
+      - name: Deploy / Provision Immutable Azure Infrastructure
+        run: azd provision -C ./deploy/azure --no-prompt --no-state
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          CONTAINER_REG_PAT: ${{ secrets.CONTAINER_REG_PAT }}
+          CONTAINER_REG_USERNAME: ${{ vars.CONTAINER_REG_USERNAME }}
+          INBOUND_IP_ALLOW: ${{ vars.INBOUND_IP_ALLOW }}
+          DB_USER: ${{ vars.DB_USER }}
+          DB_TYPE: ${{ vars.DB_TYPE }}
+          DB_NAME: ${{ vars.DB_DBNAME }}
+          DB_SSLMODE: ${{ vars.DB_SSLMODE }}
+          HTTP_PORT: ${{ vars.HTTP_PORT }}
+          IMAGE_TAG: "latest"
+
+      - name: Output AZD Info
+        run: azd show -C ./deploy/azure

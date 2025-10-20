@@ -1,0 +1,120 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - wsl_v5
+    - asciicheck
+    - bodyclose
+    - copyloopvar
+    - cyclop
+    - dogsled
+    - dupl
+    - durationcheck
+    - err113
+    - errcheck
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - funlen
+    - gochecknoglobals
+    - gocognit
+    - goconst
+    - gocyclo
+    - godot
+    - godox
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - govet
+    - ineffassign
+    - makezero
+    - misspell
+    - mnd
+    - nakedret
+    - nestif
+    - nlreturn
+    - noctx
+    - nolintlint
+    - paralleltest
+    - predeclared
+    - rowserrcheck
+    - sqlclosecheck
+    - staticcheck
+    - thelper
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+  settings:
+    wsl_v5:
+      allow-first-in-block: true
+      allow-whole-block: false
+      branch-max-lines: 2
+    dupl:
+      threshold: 100
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    errorlint:
+      errorf: true
+    exhaustive:
+      default-signifies-exhaustive: false
+    funlen:
+      lines: 65
+      statements: 40
+    gocognit:
+      min-complexity: 15
+    goconst:
+      min-len: 2
+      min-occurrences: 2
+    gocyclo:
+      min-complexity: 10
+    misspell:
+      locale: US
+    nestif:
+      min-complexity: 4
+    nolintlint:
+      require-explanation: true
+      require-specific: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - bin/
+      - third_party$
+      - builtin$
+      - examples$
+      - mocks/
+      - tools/
+      - examples/
+      - api/
+      - docs/
+      - migrations/
+      - test/
+      - _test.go$
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
+  settings:
+    gofumpt:
+      extra-rules: true
+    gci:
+      sections:
+        - standard
+        - default
+  exclusions:
+    generated: lax
+    paths:
+      - bin/
+      - third_party$
+      - builtin$
+      - examples$

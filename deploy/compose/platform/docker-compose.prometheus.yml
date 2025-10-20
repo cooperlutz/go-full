@@ -1,0 +1,12 @@
+services:
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    restart: always
+    volumes:
+      - "../../../configs/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    networks:
+      app_network:
+        aliases:
+          - prometheus.lvh.me

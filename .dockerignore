@@ -1,0 +1,26 @@
+## When Docker runs a build, we exclude these files from the Docker build context
+## we do this to reduce the size, improve performance, and improve security of the build context
+
+# Ignore common directories
+.git/
+.github/
+
+build/
+configs/
+deploy/
+examples/
+docs/
+tools/
+web/node_modules/
+
+.dockerignore
+*.env
+.env.example
+.gitignore
+.golangci.yml
+.sqlc.yaml
+.mockery.yml
+
+LICENSE
+Makefile
+README*
