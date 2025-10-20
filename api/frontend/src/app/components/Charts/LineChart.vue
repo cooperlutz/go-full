@@ -1,10 +1,5 @@
-<template>
-  <div class="container">
-    <LineChart :data="chartData" :options="chartOptions" />
-  </div>
-</template>
-
 <script lang="ts">
+import { defineComponent, type PropType } from "vue";
 import {
   LineElement,
   PointElement,
@@ -29,18 +24,19 @@ ChartJS.register(
 
 ChartJS.defaults.font.family = "JetBrains Mono";
 
-export default {
+export default defineComponent({
   name: "LineChartComponent",
   components: {
-    LineChart,
+    // cast to a neutral type to avoid leaking vue-chartjs types into the SFC export
+    LineChart: LineChart as unknown as Record<string, unknown>,
   },
   props: {
     chartData: {
-      type: Object,
+      type: Object as PropType<Record<string, unknown>>,
       required: true,
     },
     chartOptions: {
-      type: Object,
+      type: Object as PropType<Record<string, unknown>>,
       default: () => ({
         scales: {
           y: {
@@ -50,5 +46,11 @@ export default {
       }),
     },
   },
-};
+});
 </script>
+
+<template>
+  <div class="container">
+    <LineChart :data="chartData" :options="chartOptions" />
+  </div>
+</template>

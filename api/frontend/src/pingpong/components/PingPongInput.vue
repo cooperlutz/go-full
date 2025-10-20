@@ -18,8 +18,8 @@ const clickSend = async (msg: string) => {
   <div
     class="card w-full bg-base-300 shadow-md card-border border-secondary border-solid"
   >
-    <div class="card-title">Ping Pong Input</div>
-    <div class="card-body flex flex-row">
+    <div class="card-body">
+      <div class="card-title">Ping Pong Input</div>
       <label class="input">
         <input
           id="pingpong-input"
@@ -29,12 +29,14 @@ const clickSend = async (msg: string) => {
           v-model="inputValue"
         />
       </label>
-      <div
-        id="send-button"
-        class="btn btn-m text-xs"
-        @click="clickSend(inputValue)"
-      >
-        Send
+      <div class="card-actions">
+        <div
+          id="send-button"
+          class="btn btn-m text-xs"
+          @click="clickSend(inputValue)"
+        >
+          Send
+        </div>
       </div>
     </div>
   </div>
