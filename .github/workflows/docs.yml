@@ -2,9 +2,9 @@ name: Docs CI/CD
 
 on:
   push:
-    # branches: [ main ]
-    # paths:
-    # - 'docs/**'
+    branches: [ main ]
+    paths:
+    - 'docs/**'
 
 permissions:
   contents: write
