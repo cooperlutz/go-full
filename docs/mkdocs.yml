@@ -1,7 +1,6 @@
-site_name: Go Full Vue
-site_description: Go Full Vue is a full-stack web application boilerplate built with Go and Vue 3. It provides a solid foundation for building modern web applications with a clean architecture and best practices.
-repo_name: cooperlutz/go-full-vue
-repo_url: https://github.com/cooperlutz/go-full-vue
+site_name: Go Full Documentation
+repo_name: cooperlutz/go-full
+repo_url: https://github.com/cooperlutz/go-full
 
 theme:
   name: material
