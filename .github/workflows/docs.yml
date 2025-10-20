@@ -27,5 +27,5 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          uv gh-pages deploy --branch gh-pages --message "Docs updated via CI" --force
+          uv run mkdocs gh-deploy --force
         working-directory: ./docs
