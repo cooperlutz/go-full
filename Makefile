@@ -116,7 +116,7 @@ sync-gh-vars-from-env-file:
 	gh variable set -f .var.env
 	
 # .cz.yaml config file is used for commitizen settings
-commit: pre-commit ### commit changes
+commit: ### commit changes
 	cz commit
 .PHONY: commit
 
