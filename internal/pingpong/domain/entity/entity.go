@@ -61,12 +61,6 @@ func (e *PingPongEntity) GetMessage() string {
 	return e.Message
 }
 
-func (e *PingPongEntity) Delete() {
-	now := time.Now()
-	e.DeletedAt = &now
-	e.Deleted = true
-}
-
 func (e *PingPongEntity) DetermineResponseMessage() string {
 	if e.Message == constant.PingMessage {
 		return constant.PongFunMessage
