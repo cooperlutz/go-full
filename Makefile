@@ -108,12 +108,6 @@ migrate-create:  ### create new migration, run it like this "make migrate-create
 	@echo "Creating $(MIGNAME) migration for $(MIGMODULE)/$(MIGDBTYPE) database!"
 	migrate create -ext sql -dir db/migrations $(MIGNAME)
 .PHONY: migrate-create
-
-sync-gh-secrets-from-env-file:
-	gh secret set -f .env
-
-sync-gh-vars-from-env-file:
-	gh variable set -f .var.env
 	
 # .cz.yaml config file is used for commitizen settings
 commit: ### commit changes
@@ -151,7 +145,6 @@ azd-down: ### run azd down
 
 azd-provision: ### run azd provision
 	azd provision -C ${AZD_CONF} --debug
-
 
 ############################################################################
 #                            BUILD                                        #
@@ -271,6 +264,7 @@ cover-be: test-be cover-filter ### backend coverage report
 ############################################################################
 #                            UTILITIES                                     #
 ############################################################################
+
 help: ## Display this help screen
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 .PHONY: help
@@ -291,8 +285,13 @@ docs: ### generate documentation and run mkdocs server
 	cd docs && uv sync && uv run mkdocs serve
 .PHONY: docs
 
-coverage-directory:
+coverage-directory: ### create .coverage directory
 	@mkdir -p .coverage
 .PHONY: coverage-directory
 
-init: coverage-directory all compose ### initialize project
+init-env-file: ### initialize .env file from .env.example if it does not exist
+	if [ ! -f ".env" ]; then cp .env.example .env; else echo ".env file already exists, skipping copy."; fi
+.PHONY: init-env-file
+
+init: coverage-directory init-env-file all compose ### initialize project
+.PHONY: init

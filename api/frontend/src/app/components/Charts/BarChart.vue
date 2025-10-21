@@ -1,8 +1,5 @@
-<template>
-  <Bar :data="data" :options="options" />
-</template>
-
 <script lang="ts">
+import { defineComponent } from "vue";
 import {
   BarElement,
   CategoryScale,
@@ -23,12 +20,16 @@ ChartJS.register(
   Legend,
 );
 
-export default {
+export default defineComponent({
   name: "App",
   components: {
-    Bar,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Bar: Bar as any,
   },
-  data() {
+  data(): {
+    data: { labels: string[]; datasets: { data: number[] }[] };
+    options: { responsive: boolean };
+  } {
     return {
       data: {
         labels: ["January", "February", "March"],
@@ -39,5 +40,9 @@ export default {
       },
     };
   },
-};
+});
 </script>
+
+<template>
+  <Bar :data="data" :options="options" />
+</template>

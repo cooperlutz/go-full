@@ -12,11 +12,7 @@ const clickPing = async () => {
 </script>
 
 <template>
-  <div
-    id="ping-button"
-    class="btn btn-error btn-xl text-xs"
-    @click="clickPing()"
-  >
+  <div id="ping-button" class="btn btn-error text-xs" @click="clickPing()">
     ping
   </div>
 </template>
