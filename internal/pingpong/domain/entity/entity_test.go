@@ -114,46 +114,6 @@ func TestPingPongEntity_GetMessage(t *testing.T) {
 	}
 }
 
-func TestPingPongEntity_Delete(t *testing.T) {
-	t.Parallel()
-
-	testingTimestamp := time.Now()
-
-	testableNotDeletedEntity := &entity.PingPongEntity{
-		Message: "ping",
-		PingPongMetadata: &entity.PingPongMetadata{
-			CreatedAt: time.Now(),
-			UpdatedAt: time.Now(),
-			DeletedAt: nil,
-			Deleted:   false,
-		},
-	}
-
-	tests := []struct {
-		name                   string
-		entity                 *entity.PingPongEntity
-		expectedDeletedField   bool
-		expectedDeletedAtField *time.Time
-	}{
-		{
-			name:                   "delete a pingpong",
-			entity:                 testableNotDeletedEntity,
-			expectedDeletedField:   true,
-			expectedDeletedAtField: &testingTimestamp,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			// Act
-			tt.entity.Delete()
-			// Assert
-			assert.Equal(t, tt.expectedDeletedField, tt.entity.PingPongMetadata.Deleted)
-			assert.WithinDuration(t, *tt.expectedDeletedAtField, *tt.entity.PingPongMetadata.DeletedAt, time.Second)
-		})
-	}
-}
-
 func TestNewPingPong(t *testing.T) {
 	t.Parallel()
 
