@@ -1,0 +1,17 @@
+name: "👩‍💻 Contributor Request"
+description: Request to become a contributor
+title: "👩‍💻 [REQUEST] - Contributor Addition"
+labels: [
+  "question"
+]
+body:
+  - type: checkboxes
+    id: contributor_agreement
+    attributes:
+      label: "Contributor"
+      description: "Please confirm that you would like to become a contributor"
+      options:
+        - label: "Yes"
+          value: "yes"
+    validations:
+      required: true

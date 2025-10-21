@@ -1,7 +1,5 @@
 # System Architecture
 
-![system](../_img/system.drawio.png)
-
 ## Full Stack
 
 This project exemplifies a full stack system architecture inclusive of a frontend User Interface (UI), a backend Application Programming Interface (API) encompassing the core logic, and a data persistence layer.
