@@ -7,6 +7,7 @@ We have also adapted the base ADR template to better suit our needs. See below f
 ## ADR Template
 
 ```markdown
+
 # [00000]: Title of the Decision
 
 ## Status
@@ -32,4 +33,5 @@ List and briefly describe the alternative options that were explored but ultimat
 ## Consequences
 
 Detail the implications of this decision. What are the positive and negative impacts? What becomes easier or more difficult as a result of this change? Consider impacts on development, operations, maintenance, performance, security, and other relevant aspects.
+
 ```
