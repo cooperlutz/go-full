@@ -7,7 +7,7 @@ import (
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 )
 
-func TranslateToDB(pp *entity.PingPongEntity) postgresql.CreatePingPongParams {
+func MapToDB(pp *entity.PingPongEntity) postgresql.CreatePingPongParams {
 	return postgresql.CreatePingPongParams{
 		PingpongID: pgtype.UUID{Bytes: pp.PingPongID, Valid: true},
 		PingOrPong: pgtype.Text{String: pp.Message, Valid: pp.Valid()},

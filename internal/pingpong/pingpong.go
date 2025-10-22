@@ -10,6 +10,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist"
 )
 
+// NewModule - Initializes the PingPong module with its needed dependencies.
 func NewModule(pgconn *pgxpool.Pool) http.Handler {
 	repo := persist.NewPingPongPostgresRepo(pgconn)
 	svc := service.NewPingPongService(repo)

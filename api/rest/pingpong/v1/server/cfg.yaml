@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
 package: server
-output: ../../../../../../internal/pingpong/api/rest/v1/server/server.gen.go
+output: ../../../../../internal/pingpong/api/rest/v1/server/server.gen.go
 generate:
   embedded-spec: true
   strict-server: true

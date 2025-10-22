@@ -7,7 +7,7 @@ import (
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 )
 
-func TranslatePingPongsFromDB(pingponglist []postgresql.Pingpong) *entity.ListOfPingPongs {
+func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) *entity.ListOfPingPongs {
 	if len(pingponglist) == 0 {
 		return &entity.ListOfPingPongs{PingPongs: []entity.PingPongEntity{}}
 	}
@@ -15,9 +15,7 @@ func TranslatePingPongsFromDB(pingponglist []postgresql.Pingpong) *entity.ListOf
 	outputList := make([]entity.PingPongEntity, 0, len(pingponglist))
 
 	for _, ppp := range pingponglist {
-		translatedPingPong := entity.PingPongEntity{
-			Message: ppp.PingOrPong.String,
-		}
+		translatedPingPong := MapFromDB(ppp)
 
 		outputList = append(outputList, translatedPingPong)
 	}
@@ -25,13 +23,7 @@ func TranslatePingPongsFromDB(pingponglist []postgresql.Pingpong) *entity.ListOf
 	return &entity.ListOfPingPongs{PingPongs: outputList}
 }
 
-func TranslateFromDB(p postgresql.Pingpong) entity.PingPongEntity {
-	return entity.PingPongEntity{
-		Message: p.PingOrPong.String,
-	}
-}
-
-func TranslateFromDBRaw(p postgresql.Pingpong) entity.PingPongEntity {
+func MapFromDB(p postgresql.Pingpong) entity.PingPongEntity {
 	var deletedAtTime *time.Time
 	if p.DeletedAt.Time.IsZero() {
 		deletedAtTime = nil

@@ -11,7 +11,7 @@ import (
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 )
 
-func TestTranslateToDB(t *testing.T) {
+func TestMapToDB(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -43,7 +43,7 @@ func TestTranslateToDB(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TranslateToDB(tt.pp)
+			got := MapToDB(tt.pp)
 			assert.IsType(t, pgtype.UUID{}, got.PingpongID)
 			assert.Equal(t, tt.want.PingOrPong, got.PingOrPong)
 			assert.Equal(t, tt.want.Deleted, got.Deleted)

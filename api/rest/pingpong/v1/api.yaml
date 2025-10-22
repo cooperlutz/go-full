@@ -57,7 +57,7 @@ paths:
   /ping-pongs:
     get:
       tags:
-        - pingpongs
+        - pingpong
       summary: Get all Pingpongs
       description: Retrieve all PingPongs
       operationId: getFindAllPingPongs
@@ -120,7 +120,7 @@ paths:
   /ping-pong/pings:
     get:
       tags:
-        - pings
+        - pingpong
       summary: Get all Pings
       description: Retrieve all PingPong Pings
       operationId: getPings
@@ -147,7 +147,7 @@ paths:
   /ping-pong/pongs:
     get:
       tags:
-        - pongs
+        - pingpong
       summary: Get all Pongs
       description: Retrieve all PingPong Pongs
       operationId: getPongs

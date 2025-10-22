@@ -7,6 +7,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/types"
 )
 
+// TotalNumberOfPingPongs - Returns the total number of pingpongs in the database.
 func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongs")
@@ -20,6 +21,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.C
 	return count, nil
 }
 
+// TotalNumberOfPings - Returns the total number of pings in the database.
 func (r *pingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpings")
@@ -33,6 +35,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Conte
 	return count, nil
 }
 
+// TotalNumberOfPongs - Returns the total number of pongs in the database.
 func (r *pingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpongs")
@@ -46,6 +49,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Conte
 	return count, nil
 }
 
+// AverageNumberOfPingPongsCreatedPerDay - Returns the average number of pingpongs created per day.
 func (r *pingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenenumberofpingpongscreatedperday")
@@ -69,6 +73,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDa
 	return totalPingPings / int64(numDays), nil
 }
 
+// AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
 func (r *pingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpingscreatedperday")
@@ -91,6 +96,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ct
 	return totalPings / int64(numDays), nil
 }
 
+// AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
 func (r *pingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpongscreatedperday")
@@ -113,6 +119,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ct
 	return totalPings / int64(numDays), nil
 }
 
+// TotalNumberOfPingPongsCreatedPerDay - Returns the total number of pingpongs created per day as a slice of MeasureCountbyDateTime.
 func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongscreatedperday")
