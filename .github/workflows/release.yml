@@ -55,6 +55,15 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create bump and changelog
+        uses: commitizen-tools/commitizen-action@master
+        with:
+          push: false
+          
+      - name: Push using ssh
+        run: |
+          git push origin main --tags
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@e435ccd777264be153ace6237001ef4d979d3a7a #v6.4
