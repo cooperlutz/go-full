@@ -5,8 +5,7 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main ]
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
