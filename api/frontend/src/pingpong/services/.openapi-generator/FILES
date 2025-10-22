@@ -1,8 +1,5 @@
 apis/MetricsApi.ts
 apis/PingpongApi.ts
-apis/PingpongsApi.ts
-apis/PingsApi.ts
-apis/PongsApi.ts
 apis/index.ts
 index.ts
 models/PingPong.ts

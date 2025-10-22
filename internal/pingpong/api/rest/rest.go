@@ -24,7 +24,7 @@ func NewPingPongAPIRouter(svc service.IPingPongService) http.Handler {
 	pingPongRouter := hteeteepee.NewRouter("pingpong-api")
 
 	// Create the v1 controller
-	controller := v1.NewController(svc)
+	controller := v1.NewRestAPIController(svc)
 
 	// Create the v1 handler from the controller
 	// We're using the "strict" handler which enforces request validation

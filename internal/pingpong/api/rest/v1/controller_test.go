@@ -127,7 +127,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -233,7 +233,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -291,7 +291,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -372,7 +372,7 @@ func TestPingPongRestAPIController_GetPings(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -430,7 +430,7 @@ func TestPingPongRestAPIController_GetPings_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -511,7 +511,7 @@ func TestPingPongRestAPIController_GetPongs(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -569,7 +569,7 @@ func TestPingPongRestAPIController_GetPongs_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -644,7 +644,7 @@ func TestPingPongRestAPIController_GetDailyDistribution(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -707,7 +707,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -764,7 +764,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -827,7 +827,7 @@ func TestPingPongRestAPIController_GetTotalPings(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -885,7 +885,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -948,7 +948,7 @@ func TestPingPongRestAPIController_GetTotalPongs(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/
@@ -1006,7 +1006,7 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
 
-	controller := v1.NewController(mock_svc)
+	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
 	*/

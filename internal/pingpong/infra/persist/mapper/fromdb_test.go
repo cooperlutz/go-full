@@ -17,9 +17,10 @@ var (
 	sampleUUID = uuid.New()
 )
 
-func TestTranslateFromDB(t *testing.T) {
+func TestMapFromDB(t *testing.T) {
 	t.Parallel()
 
+	now := time.Now()
 	tests := []struct {
 		name string
 		db   postgresql.Pingpong
@@ -28,29 +29,52 @@ func TestTranslateFromDB(t *testing.T) {
 		{
 			name: "Valid PingPongEntity from DB",
 			db: postgresql.Pingpong{
-				PingOrPong: pgtype.Text{String: "Ping!", Valid: true},
+				PingpongID: pgtype.UUID{Bytes: sampleUUID, Valid: true},
+				PingOrPong: pgtype.Text{String: "ping", Valid: true},
+				CreatedAt:  pgtype.Timestamptz{Time: now, Valid: true},
+				UpdatedAt:  pgtype.Timestamptz{Time: now, Valid: true},
+				DeletedAt:  pgtype.Timestamptz{Time: time.Time{}, Valid: false},
+				Deleted:    false,
 			},
-			want: entity.PingPongEntity{Message: "Ping!"},
+			want: entity.PingPongEntity{
+				Message: "ping",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: sampleUUID,
+					CreatedAt:  now,
+					UpdatedAt:  now,
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
+			},
 		},
 		{
 			name: "Invalid PingPongEntity from DB",
 			db: postgresql.Pingpong{
 				PingOrPong: pgtype.Text{String: "", Valid: false},
 			},
-			want: entity.PingPongEntity{Message: ""},
+			want: entity.PingPongEntity{
+				Message: "",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: uuid.Nil,
+					CreatedAt:  time.Time{},
+					UpdatedAt:  time.Time{},
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
+			},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TranslateFromDB(tt.db)
+			got := MapFromDB(tt.db)
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
-func TestTranslatePingPongsFromDB_EmptyInput(t *testing.T) {
-	result := TranslatePingPongsFromDB([]postgresql.Pingpong{})
+func TestMapFromDBPingPongs_EmptyInput(t *testing.T) {
+	result := MapFromDBPingPongs([]postgresql.Pingpong{})
 	if result == nil {
 		t.Fatal("Expected non-nil result")
 	}
@@ -59,13 +83,13 @@ func TestTranslatePingPongsFromDB_EmptyInput(t *testing.T) {
 	}
 }
 
-func TestTranslatePingPongsFromDB_SingleItem(t *testing.T) {
+func TestMapFromDBPingPongs_SingleItem(t *testing.T) {
 	input := []postgresql.Pingpong{
 		{PingOrPong: pgtype.Text{String: "Ping"}},
 	}
 	expected := "Ping"
 
-	result := TranslatePingPongsFromDB(input)
+	result := MapFromDBPingPongs(input)
 	if result == nil {
 		t.Fatal("Expected non-nil result")
 	}
@@ -77,14 +101,14 @@ func TestTranslatePingPongsFromDB_SingleItem(t *testing.T) {
 	}
 }
 
-func TestTranslatePingPongsFromDB_MultipleItems(t *testing.T) {
+func TestMapFromDBPingPongs_MultipleItems(t *testing.T) {
 	input := []postgresql.Pingpong{
 		{PingOrPong: pgtype.Text{String: "Ping", Valid: true}},
 		{PingOrPong: pgtype.Text{String: "Pong", Valid: true}},
 	}
 	expected := []string{"Ping", "Pong"}
 
-	result := TranslatePingPongsFromDB(input)
+	result := MapFromDBPingPongs(input)
 	if result == nil {
 		t.Fatal("Expected non-nil result")
 	}
@@ -98,7 +122,7 @@ func TestTranslatePingPongsFromDB_MultipleItems(t *testing.T) {
 	}
 }
 
-func TestTranslateFromDBRaw_DeletedAtZero(t *testing.T) {
+func TestMapFromDBPingPongRaw_DeletedAtZero(t *testing.T) {
 	t.Parallel()
 
 	id := uuid.New()
@@ -112,7 +136,7 @@ func TestTranslateFromDBRaw_DeletedAtZero(t *testing.T) {
 		Deleted:    false,
 	}
 
-	result := TranslateFromDBRaw(p)
+	result := MapFromDB(p)
 
 	if result.PingPongMetadata == nil {
 		t.Fatal("PingPongMetadata should not be nil")
@@ -134,7 +158,7 @@ func TestTranslateFromDBRaw_DeletedAtZero(t *testing.T) {
 	}
 }
 
-func TestTranslateFromDBRaw_DeletedAtSet(t *testing.T) {
+func TestMapFromDBPingPongRaw_DeletedAtSet(t *testing.T) {
 	t.Parallel()
 
 	id := uuid.New()
@@ -149,7 +173,7 @@ func TestTranslateFromDBRaw_DeletedAtSet(t *testing.T) {
 		Deleted:    true,
 	}
 
-	result := TranslateFromDBRaw(p)
+	result := MapFromDB(p)
 
 	if result.PingPongMetadata == nil {
 		t.Fatal("PingPongMetadata should not be nil")

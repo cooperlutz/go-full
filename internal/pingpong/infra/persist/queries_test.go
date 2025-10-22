@@ -102,9 +102,23 @@ func TestFindAllPings_Success(t *testing.T) {
 		PingPongs: []entity.PingPongEntity{
 			{
 				Message: "ping",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: validPingPongID,
+					CreatedAt:  timeNow,
+					UpdatedAt:  timeNow,
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
 			},
 			{
 				Message: "ping",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: validPingPongIDTwo,
+					CreatedAt:  timeNow,
+					UpdatedAt:  timeNow,
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
 			},
 		},
 	}
@@ -148,9 +162,23 @@ func TestFindAllPongs_Success(t *testing.T) {
 		PingPongs: []entity.PingPongEntity{
 			{
 				Message: "pong",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: validPingPongID,
+					CreatedAt:  timeNow,
+					UpdatedAt:  timeNow,
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
 			},
 			{
 				Message: "pong",
+				PingPongMetadata: &entity.PingPongMetadata{
+					PingPongID: validPingPongIDTwo,
+					CreatedAt:  timeNow,
+					UpdatedAt:  timeNow,
+					DeletedAt:  nil,
+					Deleted:    false,
+				},
 			},
 		},
 	}

@@ -19,13 +19,9 @@ func (r *pingPongPersistPostgresRepository) FindAll(ctx context.Context) (*entit
 		return &entity.ListOfPingPongs{}, err
 	}
 
-	var resultingPingPongEntities []entity.PingPongEntity
+	result := mapper.MapFromDBPingPongs(pingpongs)
 
-	for _, p := range pingpongs {
-		resultingPingPongEntities = append(resultingPingPongEntities, mapper.TranslateFromDBRaw(p))
-	}
-
-	return &entity.ListOfPingPongs{PingPongs: resultingPingPongEntities}, nil
+	return result, nil
 }
 
 // FindAllPings - Query all pings from the database and return them as a list of PingPongEntity.
@@ -39,15 +35,12 @@ func (r *pingPongPersistPostgresRepository) FindAllPings(ctx context.Context) (*
 		return &entity.ListOfPingPongs{}, err
 	}
 
-	var resultingPingPongEntities []entity.PingPongEntity
+	result := mapper.MapFromDBPingPongs(pingpongs)
 
-	for _, p := range pingpongs {
-		resultingPingPongEntities = append(resultingPingPongEntities, mapper.TranslateFromDB(p))
-	}
-
-	return &entity.ListOfPingPongs{PingPongs: resultingPingPongEntities}, nil
+	return result, nil
 }
 
+// FindAllPongs - Query all pongs from the database and return them as a list of PingPongEntity.
 func (r *pingPongPersistPostgresRepository) FindAllPongs(ctx context.Context) (*entity.ListOfPingPongs, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findallpongs")
@@ -58,11 +51,7 @@ func (r *pingPongPersistPostgresRepository) FindAllPongs(ctx context.Context) (*
 		return &entity.ListOfPingPongs{}, err
 	}
 
-	var resultingPingPongEntities []entity.PingPongEntity
+	result := mapper.MapFromDBPingPongs(pingpongs)
 
-	for _, p := range pingpongs {
-		resultingPingPongEntities = append(resultingPingPongEntities, mapper.TranslateFromDB(p))
-	}
-
-	return &entity.ListOfPingPongs{PingPongs: resultingPingPongEntities}, nil
+	return result, nil
 }

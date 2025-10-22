@@ -20,7 +20,7 @@ func (r *pingPongPersistPostgresRepository) SavePingPong(ctx context.Context, p 
 	)
 	defer span.End()
 
-	queryParams := mapper.TranslateToDB(p)
+	queryParams := mapper.MapToDB(p)
 
 	tx, err := r.db.Begin(ctx)
 	if err != nil {

@@ -5,12 +5,6 @@ import (
 	"time"
 )
 
-// // mockMigrate is a mock implementation of *migrate.Migrate for testing.
-// type mockMigrate struct{}
-
-// func (m *mockMigrate) Up() error    { return nil }
-// func (m *mockMigrate) Close() error { return nil }
-
 // TestNewPostgresMigration_InvalidURL tests that newPostgresMigration returns an error for an invalid URL.
 func TestNewPostgresMigration_InvalidURL(t *testing.T) {
 	t.Parallel()

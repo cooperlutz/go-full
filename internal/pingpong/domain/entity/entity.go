@@ -7,6 +7,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/constant"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 type PingPongMetadata struct {
@@ -27,8 +28,8 @@ func New(msg string) (*PingPongEntity, error) {
 		Message: msg,
 		PingPongMetadata: &PingPongMetadata{
 			PingPongID: uuid.New(),
-			CreatedAt:  time.Now(),
-			UpdatedAt:  time.Now(),
+			CreatedAt:  utilitee.RightNow(),
+			UpdatedAt:  utilitee.RightNow(),
 			DeletedAt:  nil,
 			Deleted:    false,
 		},

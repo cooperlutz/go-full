@@ -18,13 +18,14 @@ type PingPongRestAPIControllerV1 struct {
 	Service service.IPingPongService
 }
 
-func NewController(svc service.IPingPongService) *PingPongRestAPIControllerV1 {
+// NewRestAPIController creates a new PingPongRestAPIControllerV1
+func NewRestAPIController(svc service.IPingPongService) *PingPongRestAPIControllerV1 {
 	return &PingPongRestAPIControllerV1{
 		Service: svc,
 	}
 }
 
-// GET /ping-pong
+// PUT /ping-pongs
 func (c *PingPongRestAPIControllerV1) PingPong(ctx context.Context, request server.PingPongRequestObject) (server.PingPongResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -44,7 +45,7 @@ func (c *PingPongRestAPIControllerV1) PingPong(ctx context.Context, request serv
 	return response, nil
 }
 
-// GET /ping-pong/all
+// GET /ping-pongs
 func (c *PingPongRestAPIControllerV1) GetFindAllPingPongs(ctx context.Context, request server.GetFindAllPingPongsRequestObject) (server.GetFindAllPingPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -63,7 +64,7 @@ func (c *PingPongRestAPIControllerV1) GetFindAllPingPongs(ctx context.Context, r
 	return response, nil
 }
 
-// GET /pings
+// GET /ping-pong/pings
 func (c *PingPongRestAPIControllerV1) GetPings(ctx context.Context, request server.GetPingsRequestObject) (server.GetPingsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -81,7 +82,7 @@ func (c *PingPongRestAPIControllerV1) GetPings(ctx context.Context, request serv
 	return response, nil
 }
 
-// GET /pongs
+// GET /ping-pong/pongs
 func (c *PingPongRestAPIControllerV1) GetPongs(ctx context.Context, request server.GetPongsRequestObject) (server.GetPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -99,7 +100,7 @@ func (c *PingPongRestAPIControllerV1) GetPongs(ctx context.Context, request serv
 	return response, nil
 }
 
-// GET /analytics/measure/totalPingPongs
+// GET /metrics/totalPingPongs
 func (c *PingPongRestAPIControllerV1) GetTotalPingPongs(ctx context.Context, request server.GetTotalPingPongsRequestObject) (server.GetTotalPingPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -115,7 +116,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPingPongs(ctx context.Context, req
 	return response, nil
 }
 
-// GET /analytics/measure/totalPings
+// GET /metrics/totalPings
 func (c *PingPongRestAPIControllerV1) GetTotalPings(ctx context.Context, request server.GetTotalPingsRequestObject) (server.GetTotalPingsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -131,7 +132,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPings(ctx context.Context, request
 	return response, nil
 }
 
-// GET /analytics/measure/totalPongs
+// GET /metrics/totalPongs
 func (c *PingPongRestAPIControllerV1) GetTotalPongs(ctx context.Context, request server.GetTotalPongsRequestObject) (server.GetTotalPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
@@ -147,7 +148,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPongs(ctx context.Context, request
 	return response, nil
 }
 
-// GET /analytics/trend/dailyDistribution
+// GET /metrics/dailyDistribution
 func (c *PingPongRestAPIControllerV1) GetDailyDistribution(ctx context.Context, request server.GetDailyDistributionRequestObject) (server.GetDailyDistributionResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 	dailyDistribution, err := c.Service.TotalNumberOfPingPongsPerDay(ctx)
