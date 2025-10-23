@@ -3,14 +3,9 @@
 # Release workflow for pushes to main branch.
 name: Release
 
-# do not trigger on changes to only docs/ or README.md or examples/
 on:
   push:
     branches: [ main ]
-    paths:
-      - '!README.md'
-      - '!docs/**'
-      - '!examples/**'
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
@@ -48,7 +43,7 @@ jobs:
       - name: Setup / Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
-          go-version: '1.25'
+          go-version: '1.25.2'
           check-latest: true
 
       - name: Setup / Docker Buildx
