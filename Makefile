@@ -114,17 +114,6 @@ commit: ### commit changes
 	cz commit
 .PHONY: commit
 
-release: ### create a new release
-	@echo "\n"
-	@echo "\033[1;35mCreate a new release with the following commands:\033[0m"
-	@echo "\033[1;31mCreate a release branch:\033[0m"
-	@echo "git checkout -b releases/$(version)"
-	@echo "\n"
-	@echo "\033[1;31mTag the release:\033[0m"
-	@echo "git tag -a v0.1.0 -m 'First release'"
-	@echo "\n"
-	@echo "\033[1;31mPush the release branch and tags to the remote repository:\033[0m"
-	@echo "git push origin v0.1.0"
 ############################################################################
 #                            DEPLOY                                        #
 ############################################################################
@@ -160,7 +149,6 @@ build: ## goreleaser build
 build-local: ## goreleaser build 
 	goreleaser release --snapshot --clean 
 .PHONY: build-local
-
 
 release-local: ## goreleaser build 
 	goreleaser release --snapshot --clean --skip=publish

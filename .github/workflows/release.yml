@@ -3,9 +3,14 @@
 # Release workflow for pushes to main branch.
 name: Release
 
+# do not trigger on changes to only docs/ or README.md or examples/
 on:
   push:
     branches: [ main ]
+    paths:
+      - '!README.md'
+      - '!docs/**'
+      - '!examples/**'
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
@@ -56,11 +61,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
-      - name: Create bump and changelog
+      - name: Bump version & generate changelog
         uses: commitizen-tools/commitizen-action@master
         with:
           push: false
           
+        # this step is necessary to ensure that the git tag and changelog created by commitizen is pushed to the remote repository
       - name: Push using ssh
         run: |
           git push origin main --tags
@@ -74,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Release / Publish / Upload dist
+      - name: Publish / Upload dist
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: dist

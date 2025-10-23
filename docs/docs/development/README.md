@@ -48,11 +48,9 @@ After the backend build process completes, a Make `copier` is ran. This command 
 
 ## Releasing
 
-<!-- TODO -->
+[ADR-00002](../decisions/00007_releases.md) outlines our release strategy.
 
-Releases are managed via GitHub Releases, with each release tagged according to semantic versioning.
-
-Release branches are created from `main` and merged back into `main` after release completion.
+Upon merge to `main`, releases are automatically managed and orchestrated via Github Actions, utilizing [GoReleaser](https://goreleaser.com/) for building and packaging releases, [Commitizen](https://commitizen-tools.github.io/commitizen/) for versioning and changelog generation.
 
 ## Deploying
 
