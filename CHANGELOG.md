@@ -1,3 +1,12 @@
+## v0.0.3 (2025-10-23)
+
+### Fix
+
+- go version in cicd and release trigger fix (#13)
+- go version in cicd and release trigger fix
+- **project**: finalize release workflow along with docs (#12)
+- **project**: finalize release workflow along with docs
+
 ## v0.0.2 (2025-10-22)
 
 ### Fix
