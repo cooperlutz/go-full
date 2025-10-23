@@ -12,6 +12,7 @@ endif
 
 # CONSTANTS
 GO_MODULE_NAME := $(shell go list -m | head -n 1)
+GO_VERSION := $(shell go list -f {{.GoVersion}} -m)
 PNPM := pnpm -C ./api/frontend
 APP_VERSION := $(shell cz version -p)
 APP_NAME := $(GO_MODULE_NAME)
@@ -260,6 +261,10 @@ help: ## Display this help screen
 module: ### print go module name
 	@echo $(GO_MODULE_NAME)
 .PHONY: module
+
+go-version:  ### print go version
+	@echo $(GO_VERSION)
+.PHONY: go-version
 
 loc: ### lines of code
 	git ls-files | xargs wc -l
