@@ -1,3 +1,10 @@
+## v0.0.4 (2025-10-26)
+
+### Fix
+
+- dev env and docs improvements (#14)
+- dev env and docs improvements
+
 ## v0.0.3 (2025-10-23)
 
 ### Fix
