@@ -27,6 +27,9 @@ This project aims to provide a well-formed, "just enough" featured, minimalist b
 
 ## Getting Started
 
+> [!WARNING]
+> This project has only been tested for development on macOS
+
 ### Prerequisites
 
 - [Git](https://git-scm.com/)
@@ -34,9 +37,6 @@ This project aims to provide a well-formed, "just enough" featured, minimalist b
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [Brew](https://brew.sh/)
-
-> [!WARNING]
-> This project has only been tested for development on macOS
 
 ### Installation
 
@@ -47,8 +47,20 @@ git clone https://github.com/cooperlutz/go-full.git
 # Change directory to the project folder
 cd go-full
 
-# run make to initialize the project
+# run make init to initialize and run the project
 make init
 ```
 
 Then open your browser to `http://app.lvh.me` to see the running application
+
+### Additional Helpful Development Commands
+
+```shell
+make # end to end development tools
+
+make compose # builds, deploys, and runs development environment
+
+make commit # provides a mechanism to simplify conventional commits
+```
+
+For further details, please consult our [docs](https://cooperlutz.github.io/go-full/development/)

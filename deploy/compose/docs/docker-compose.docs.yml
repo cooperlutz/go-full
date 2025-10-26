@@ -1,0 +1,15 @@
+services:
+  docs:
+    container_name: go-full_docs
+    build:
+      context: ../../../docs
+      dockerfile: Dockerfile
+    volumes:
+      - ../../../docs/docs:/docs
+      - ../../../README.md:/README.md
+    ports:
+      - "8000:8000"
+    networks:
+      app_network:
+        aliases:
+          - docs.lvh.me

@@ -1,68 +1,17 @@
 # Environment variables are passed in via a .env file in the root of the project
-
-# app environment variables
-x-app-environment: &x-app-environment
-  # HTTP Server
-  HTTP_PORT: ${HTTP_PORT}
-  # Database
-  DB_HOST: db
-  DB_USER: ${DB_USER}
-  DB_PASSWORD: ${DB_PASSWORD}
-  DB_PORT: ${DB_PORT}
-  DB_DBNAME: ${DB_DBNAME}
-  DB_SSLMODE: ${DB_SSLMODE}
-  DB_TYPE: ${DB_TYPE}
-  # Telemetry
-  OBSERVE_TRACE_ENDPOINT: ${OBSERVE_TRACE_ENDPOINT}
-
-# db environment variables
-x-db-environment: &x-db-environment
-  POSTGRES_SSL_MODE: ${DB_SSLMODE}
-  POSTGRES_HOST: "pingpong_db"
-  POSTGRES_PORT: ${DB_PORT}
-  POSTGRES_DB: ${DB_DBNAME}
-  POSTGRES_PASSWORD: ${DB_PASSWORD}
-  POSTGRES_USER: ${DB_USER}
+name: go-full
 
 include:
-  # - ./project/docker-compose.docs.yml
-  - ./platform/docker-compose.prometheus.yml
-  - ./platform/docker-compose.jaeger.yml
-  - ./platform/docker-compose.network.yml
+  # Application & Database
+  - ./app/docker-compose.go-full.yml
+  - ./database/docker-compose.postgres.yml
+  
+  # Mkdocs 
+  - ./docs/docker-compose.docs.yml
+  
+  # Observability
+  - ./observability/docker-compose.prometheus.yml
+  - ./observability/docker-compose.jaeger.yml
 
-services:
-  db:
-    container_name: go-full_db
-    image: postgres:18-alpine
-    environment:
-      <<: *x-db-environment
-    volumes:
-      - db_data:/var/lib/postgresql/18/docker
-    ports:
-      - "5432:5432"
-    networks:
-      app_network:
-        aliases:
-          - db.lvh.me
-
-  app:
-    container_name: go-full_app
-    image: ghcr.io/cooperlutz/go-full:latest-arm64
-    environment:
-      <<: *x-app-environment
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
-    networks:
-      app_network:
-        aliases:
-          - app.lvh.me
-
-networks:
-  app_network:
-    external: false
-
-
-volumes:
-  db_data:
+  # Network Layer
+  - ./network/docker-compose.nginx.yml

@@ -1,0 +1,30 @@
+# app environment variables
+x-app-environment: &x-app-environment
+  # HTTP Server
+  HTTP_PORT: ${HTTP_PORT}
+  # Database
+  DB_HOST: db
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_PORT: ${DB_PORT}
+  DB_DBNAME: ${DB_DBNAME}
+  DB_SSLMODE: ${DB_SSLMODE}
+  DB_TYPE: ${DB_TYPE}
+  # Telemetry
+  OBSERVE_TRACE_ENDPOINT: ${OBSERVE_TRACE_ENDPOINT}
+  
+services:
+
+  app:
+    container_name: go-full_app
+    image: ghcr.io/cooperlutz/go-full:latest-arm64
+    environment:
+      <<: *x-app-environment
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    networks:
+      app_network:
+        aliases:
+          - app.lvh.me

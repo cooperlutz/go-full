@@ -19,3 +19,9 @@ uv sync
 
 uv run mkdocs serve
 ```
+
+## Drawio Diagrams
+
+We use [Drawio VSCode Extension](https://marketplace.visualstudio.com/items?itemName=hediet.vscode-drawio) for creating and editing diagrams in our documentation.
+
+Utilizing the extension, diagrams are saved as `.drawio.svg` files which contain both the SVG image data and the embedded Drawio XML data.
