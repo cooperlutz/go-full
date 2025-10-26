@@ -48,7 +48,7 @@ func TestSavePingPong_Success(t *testing.T) {
 	timeNow := time.Now()
 	validPingPongID := uuid.New()
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		db:    mockDB,
 		query: mockQuerier,
 	}

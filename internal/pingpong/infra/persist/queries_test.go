@@ -17,7 +17,7 @@ func TestFindAll_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
@@ -77,7 +77,7 @@ func TestFindAllPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
@@ -137,7 +137,7 @@ func TestFindAllPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
