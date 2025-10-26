@@ -8,7 +8,7 @@ import (
 )
 
 // TotalNumberOfPingPongs - Returns the total number of pingpongs in the database.
-func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongs")
 	defer span.End()
@@ -22,7 +22,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.C
 }
 
 // TotalNumberOfPings - Returns the total number of pings in the database.
-func (r *pingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpings")
 	defer span.End()
@@ -36,7 +36,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Conte
 }
 
 // TotalNumberOfPongs - Returns the total number of pongs in the database.
-func (r *pingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpongs")
 	defer span.End()
@@ -50,7 +50,7 @@ func (r *pingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Conte
 }
 
 // AverageNumberOfPingPongsCreatedPerDay - Returns the average number of pingpongs created per day.
-func (r *pingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenenumberofpingpongscreatedperday")
 	defer span.End()
@@ -74,7 +74,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDa
 }
 
 // AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
-func (r *pingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpingscreatedperday")
 	defer span.End()
@@ -97,7 +97,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ct
 }
 
 // AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
-func (r *pingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ctx context.Context) (int64, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpongscreatedperday")
 	defer span.End()
@@ -120,7 +120,7 @@ func (r *pingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ct
 }
 
 // TotalNumberOfPingPongsCreatedPerDay - Returns the total number of pingpongs created per day as a slice of MeasureCountbyDateTime.
-func (r *pingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongscreatedperday")
 	defer span.End()

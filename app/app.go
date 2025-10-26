@@ -53,7 +53,7 @@ func (a *Application) Run() {
 	----------------------------------------------------------------------------------- */
 
 	// PingPong
-	pingpongHttpHandler := pingpong.NewModule(conn)
+	pingPongModule := pingpong.NewModule(conn)
 
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
@@ -80,7 +80,7 @@ func (a *Application) Run() {
 	Each domain's router is created and registered with the main HTTP server handler.
 	the resulting mountpoint will be {root}/{service-name}/[routes defined in the service router]
 	----------------------------------------------------------------------------------- */
-	httpServer.RegisterController("/pingpong", pingpongHttpHandler) // mounts `/pingpong/api/v1/ping-pong`
+	httpServer.RegisterController("/pingpong", pingPongModule.RestApi) // mounts `/pingpong/api/v1/ping-pong`
 
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server

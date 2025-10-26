@@ -18,7 +18,7 @@ func TestTotalNumberOfPingPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedCount := int64(5)
@@ -36,7 +36,7 @@ func TestTotalNumberOfPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedCount := int64(5)
@@ -54,7 +54,7 @@ func TestTotalNumberOfPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedCount := int64(5)
@@ -72,7 +72,7 @@ func TestAverageNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedOutput := int64(8)
@@ -110,7 +110,7 @@ func TestAverageNumberOfPingsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedOutput := int64(8)
@@ -148,7 +148,7 @@ func TestAverageNumberOfPongsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedOutput := int64(8)
@@ -186,7 +186,7 @@ func TestTotalNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
 
-	repo := &pingPongPersistPostgresRepository{
+	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 

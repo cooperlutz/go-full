@@ -10,11 +10,23 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist"
 )
 
+type PingPongModule struct {
+	PersistentRepo *persist.PingPongPersistPostgresRepository
+	Service        *service.PingPongService
+	RestApi        http.Handler
+}
+
 // NewModule - Initializes the PingPong module with its needed dependencies.
-func NewModule(pgconn *pgxpool.Pool) http.Handler {
+func NewModule(pgconn *pgxpool.Pool) *PingPongModule {
 	repo := persist.NewPingPongPostgresRepo(pgconn)
 	svc := service.NewPingPongService(repo)
 	api := rest.NewPingPongAPIRouter(svc)
 
-	return api
+	module := &PingPongModule{
+		PersistentRepo: repo,
+		Service:        svc,
+		RestApi:        api,
+	}
+
+	return module
 }

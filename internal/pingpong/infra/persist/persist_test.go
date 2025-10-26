@@ -19,11 +19,11 @@ func TestNewPingPongPersistPostgresRepository(t *testing.T) {
 
 	unitTests := []struct {
 		name           string
-		expectedReturn *pingPongPersistPostgresRepository
+		expectedReturn *PingPongPersistPostgresRepository
 	}{
 		{
 			name:           "new ping pong postgres repository returns expected type and is not nil",
-			expectedReturn: &pingPongPersistPostgresRepository{},
+			expectedReturn: &PingPongPersistPostgresRepository{},
 		},
 	}
 	for _, tt := range unitTests {

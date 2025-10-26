@@ -9,7 +9,7 @@ import (
 )
 
 // FindAll - Query all pingpongs from DB and return a list of PingPongEntity.
-func (r *pingPongPersistPostgresRepository) FindAll(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (r *PingPongPersistPostgresRepository) FindAll(ctx context.Context) (*entity.ListOfPingPongs, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findall")
 	defer span.End()
@@ -25,7 +25,7 @@ func (r *pingPongPersistPostgresRepository) FindAll(ctx context.Context) (*entit
 }
 
 // FindAllPings - Query all pings from the database and return them as a list of PingPongEntity.
-func (r *pingPongPersistPostgresRepository) FindAllPings(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (r *PingPongPersistPostgresRepository) FindAllPings(ctx context.Context) (*entity.ListOfPingPongs, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findallpings")
 	defer span.End()
@@ -41,7 +41,7 @@ func (r *pingPongPersistPostgresRepository) FindAllPings(ctx context.Context) (*
 }
 
 // FindAllPongs - Query all pongs from the database and return them as a list of PingPongEntity.
-func (r *pingPongPersistPostgresRepository) FindAllPongs(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (r *PingPongPersistPostgresRepository) FindAllPongs(ctx context.Context) (*entity.ListOfPingPongs, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findallpongs")
 	defer span.End()

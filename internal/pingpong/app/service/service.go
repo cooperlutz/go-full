@@ -30,7 +30,7 @@ type PingPongService struct {
 	Persist repository.IPingPongRepository
 }
 
-func NewPingPongService(repo repository.IPingPongRepository) IPingPongService {
+func NewPingPongService(repo repository.IPingPongRepository) *PingPongService {
 	return &PingPongService{
 		Persist: repo,
 	}

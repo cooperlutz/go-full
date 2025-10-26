@@ -8,20 +8,20 @@ import (
 	"github.com/cooperlutz/go-full/pkg/deebee"
 )
 
-// Ensure pingPongPersistPostgresRepository implements the IPingPongRepository interface.
-var _ repository.IPingPongRepository = (*pingPongPersistPostgresRepository)(nil)
+// Ensure PingPongPersistPostgresRepository implements the IPingPongRepository interface.
+var _ repository.IPingPongRepository = (*PingPongPersistPostgresRepository)(nil)
 
-// pingPongPersistPostgresRepository is a repository for managing PingPong entities in a PostgreSQL database.
+// PingPongPersistPostgresRepository is a repository for managing PingPong entities in a PostgreSQL database.
 //
 // It implements the entity.PingPongRepository interface.
-type pingPongPersistPostgresRepository struct {
+type PingPongPersistPostgresRepository struct {
 	db    deebee.IDatabase
 	query persist_postgres.IQuerierPingPong
 }
 
-// NewPingPongPostgresRepo creates a new instance of pingPongPersistPostgresRepository.
-func NewPingPongPostgresRepo(pgconn *pgxpool.Pool) *pingPongPersistPostgresRepository {
-	return &pingPongPersistPostgresRepository{
+// NewPingPongPostgresRepo creates a new instance of PingPongPersistPostgresRepository.
+func NewPingPongPostgresRepo(pgconn *pgxpool.Pool) *PingPongPersistPostgresRepository {
+	return &PingPongPersistPostgresRepository{
 		db:    pgconn,
 		query: persist_postgres.NewQuerysWrapper(pgconn),
 	}
