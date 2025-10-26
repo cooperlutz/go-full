@@ -13,13 +13,13 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     coverage: {
-      reporter: ['text', 'html'],
+      // reporter: ['text', 'html'],
       include: [
         'src/**/*.{js,ts,vue}' // Include all Vue, JS, and TS files in src
       ],
       exclude: [
         ...configDefaults.coverage.exclude ?? [],
-        '**/api/**',
+        '**/services/**', // Exclude service files from coverage as they are generated
       ],
       thresholds: {
         statements: 80,
@@ -31,7 +31,7 @@ export default defineConfig({
     reporters: 'dot',
     exclude: [
       ...(configDefaults.exclude), 
-      '**/api/**',
+      '**/services/**', // Exclude service files from tests as they are generated
     ]
   },
   base: '/',

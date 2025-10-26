@@ -14,7 +14,7 @@
     "type-check": "vue-tsc --declaration --emitDeclarationOnly",
     "declutter": "knip --no-exit-code",
     "test": "vitest --dom",
-    "test:once": "vitest --run --dom",
+    "test:once": "vitest --run --coverage --dom",
     "coverage": "vitest --coverage --dom",
     "test-ui": "vitest --ui",
     "openapi": "openapi-generator-cli --openapitools .openapitools.json generate"
