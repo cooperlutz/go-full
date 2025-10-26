@@ -1,3 +1,10 @@
+## v0.0.6 (2025-10-26)
+
+### Fix
+
+- **frontend**: improve fe tests and add to codecov (#16)
+- **frontend**: improve fe tests and add to codecov
+
 ## v0.0.5 (2025-10-26)
 
 ### Fix
