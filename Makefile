@@ -164,7 +164,7 @@ build-fe: ### build frontend
 ############################################################################
 
 pre-wflow: build-fe  ### prehook for ci tasks
-	@mkdir .coverage
+	if [ ! -d .coverage ]; then mkdir .coverage; else echo ".coverage directory already exists, skipping creation."; fi
 .PHONY: pre-wflow
 
 ci: pre-wflow deps deps-audit lint format test cover-filter ### run all ci tasks
@@ -250,6 +250,10 @@ cover-be: test-be cover-filter ### backend coverage report
 # 	Print total coverage percentage
 	go tool cover -func=.coverage/coverage.filtered.out | grep total | awk '{print "Total Coverage: " $$3}'
 .PHONY: cover-be
+
+cover-fe: ### frontend coverage report
+	$(PNPM) coverage
+.PHONY: cover-fe
 
 ############################################################################
 #                            UTILITIES                                     #
