@@ -1,5 +1,6 @@
 services:
   nginx:
+    container_name: go-full_nginx
     image: nginx:1.29-alpine
     volumes:
       - ../../../configs/nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -7,7 +8,14 @@ services:
       - "80:80"
     depends_on:
       - app
+      - db
+      - docs
+      - prometheus
+      - jaeger
     networks:
       app_network:
         aliases:
           - nginx.lvh.me
+networks:
+  app_network:
+    external: false

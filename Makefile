@@ -200,6 +200,7 @@ install-brews: ### install brew packages
 # languages
 	brew install go
 	brew install node
+	brew install pnpm
 # dev tools
 	brew install commitizen
 	brew install golang-migrate

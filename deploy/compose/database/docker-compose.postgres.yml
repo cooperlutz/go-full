@@ -1,0 +1,25 @@
+# db environment variables
+x-db-environment: &x-db-environment
+  POSTGRES_SSL_MODE: ${DB_SSLMODE}
+  POSTGRES_HOST: "pingpong_db"
+  POSTGRES_PORT: ${DB_PORT}
+  POSTGRES_DB: ${DB_DBNAME}
+  POSTGRES_PASSWORD: ${DB_PASSWORD}
+  POSTGRES_USER: ${DB_USER}
+
+services:
+  db:
+    container_name: go-full_db
+    image: postgres:18-alpine
+    environment:
+      <<: *x-db-environment
+    volumes:
+      - db_data:/var/lib/postgresql/18/docker
+    ports:
+      - "5432:5432"
+    networks:
+      app_network:
+        aliases:
+          - db.lvh.me
+volumes:
+  db_data:

@@ -1,5 +1,6 @@
 services:
   prometheus:
+    container_name: go-full_prometheus
     image: prom/prometheus:v3.1.0
     restart: always
     volumes:

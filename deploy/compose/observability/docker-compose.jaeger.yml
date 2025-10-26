@@ -1,7 +1,7 @@
 services:
   jaeger:
     image: cr.jaegertracing.io/jaegertracing/jaeger:2.10.0 # At least 1.35 if you want to have enabled collector
-    container_name: jaeger
+    container_name: go-full_jaeger
     environment:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
       - COLLECTOR_OTLP_ENABLED=true
