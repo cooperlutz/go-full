@@ -1,3 +1,10 @@
+## v0.0.5 (2025-10-26)
+
+### Fix
+
+- **backend**: improve be module standards (#15)
+- **backend**: improve be module standards
+
 ## v0.0.4 (2025-10-26)
 
 ### Fix
