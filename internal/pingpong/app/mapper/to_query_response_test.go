@@ -16,19 +16,19 @@ func TestMapListToQueryResponse(t *testing.T) {
 
 	tests := []struct {
 		name string
-		list *entity.ListOfPingPongs
-		want *query.FindAllQueryResponse
+		list entity.ListOfPingPongs
+		want query.FindAllQueryResponse
 	}{
 		{
 			name: "maps list of entities to list of common results",
-			list: &entity.ListOfPingPongs{
+			list: entity.ListOfPingPongs{
 				PingPongs: []entity.PingPongEntity{
 					{Message: "ping"},
 					{Message: "pong"},
 				},
 			},
-			want: &query.FindAllQueryResponse{
-				PingPongs: []*common.PingPongResult{
+			want: query.FindAllQueryResponse{
+				PingPongs: []common.PingPongResult{
 					{Message: "ping"},
 					{Message: "pong"},
 				},
@@ -49,18 +49,18 @@ func TestMapListToQueryResponseRaw(t *testing.T) {
 
 	tests := []struct {
 		name string
-		list *entity.ListOfPingPongs
-		want *query.FindAllQueryResponseRaw
+		list entity.ListOfPingPongs
+		want query.FindAllQueryResponseRaw
 	}{
 		{
 			name: "maps list of entities to raw query response",
-			list: &entity.ListOfPingPongs{
+			list: entity.ListOfPingPongs{
 				PingPongs: []entity.PingPongEntity{
 					{Message: "ping"},
 					{Message: "pong"},
 				},
 			},
-			want: &query.FindAllQueryResponseRaw{
+			want: query.FindAllQueryResponseRaw{
 				Entities: []entity.PingPongEntity{
 					{Message: "ping"},
 					{Message: "pong"},
@@ -69,10 +69,10 @@ func TestMapListToQueryResponseRaw(t *testing.T) {
 		},
 		{
 			name: "maps empty list to raw query response",
-			list: &entity.ListOfPingPongs{
+			list: entity.ListOfPingPongs{
 				PingPongs: []entity.PingPongEntity{},
 			},
-			want: &query.FindAllQueryResponseRaw{
+			want: query.FindAllQueryResponseRaw{
 				Entities: []entity.PingPongEntity{},
 			},
 		},

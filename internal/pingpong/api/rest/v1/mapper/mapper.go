@@ -7,13 +7,13 @@ import (
 	"github.com/cooperlutz/go-full/pkg/types"
 )
 
-func MapPingPongToCommand(req server.PingPongRequestObject) *command.PingPongCommand {
-	return &command.PingPongCommand{
+func MapPingPongToCommand(req server.PingPongRequestObject) command.PingPongCommand {
+	return command.PingPongCommand{
 		Message: *req.JSONBody.Message,
 	}
 }
 
-func MapFindAllToResponse(res *query.FindAllQueryResponse) server.PingPongs {
+func MapFindAllToResponse(res query.FindAllQueryResponse) server.PingPongs {
 	var httpPings []server.PingPong
 	for _, p := range res.PingPongs {
 		httpPing := server.PingPong{
@@ -24,7 +24,7 @@ func MapFindAllToResponse(res *query.FindAllQueryResponse) server.PingPongs {
 	return server.PingPongs{Pingpongs: &httpPings}
 }
 
-func MapFindAllToResponseRaw(res *query.FindAllQueryResponseRaw) server.PingPongsRaw {
+func MapFindAllToResponseRaw(res query.FindAllQueryResponseRaw) server.PingPongsRaw {
 	var httpPings []server.PingPongRaw
 
 	for _, p := range res.Entities {

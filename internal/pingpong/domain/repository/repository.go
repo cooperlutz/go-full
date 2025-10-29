@@ -12,9 +12,9 @@ type IPingPongRepository interface {
 	SavePingPong(ctx context.Context, p *entity.PingPongEntity) error
 
 	// Queries
-	FindAll(ctx context.Context) (*entity.ListOfPingPongs, error)
-	FindAllPings(ctx context.Context) (*entity.ListOfPingPongs, error)
-	FindAllPongs(ctx context.Context) (*entity.ListOfPingPongs, error)
+	FindAll(ctx context.Context) (entity.ListOfPingPongs, error)
+	FindAllPings(ctx context.Context) (entity.ListOfPingPongs, error)
+	FindAllPongs(ctx context.Context) (entity.ListOfPingPongs, error)
 
 	// Metrics
 	TotalNumberOfPingPongs(ctx context.Context) (int64, error)

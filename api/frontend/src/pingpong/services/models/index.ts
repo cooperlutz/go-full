@@ -1,7 +1,7 @@
 /* tslint:disable */
-
-export * from "./PingPong";
-export * from "./PingPongRaw";
-export * from "./PingPongs";
-export * from "./PingPongsRaw";
-export * from "./Trend";
+/* eslint-disable */
+export * from './PingPong';
+export * from './PingPongRaw';
+export * from './PingPongs';
+export * from './PingPongsRaw';
+export * from './Trend';

@@ -41,24 +41,22 @@ func (_m *MockIPingPongService) EXPECT() *MockIPingPongService_Expecter {
 }
 
 // FindAll provides a mock function for the type MockIPingPongService
-func (_mock *MockIPingPongService) FindAll(ctx context.Context) (*query.FindAllQueryResponseRaw, error) {
+func (_mock *MockIPingPongService) FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAll")
 	}
 
-	var r0 *query.FindAllQueryResponseRaw
+	var r0 query.FindAllQueryResponseRaw
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*query.FindAllQueryResponseRaw, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (query.FindAllQueryResponseRaw, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *query.FindAllQueryResponseRaw); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) query.FindAllQueryResponseRaw); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*query.FindAllQueryResponseRaw)
-		}
+		r0 = ret.Get(0).(query.FindAllQueryResponseRaw)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -92,35 +90,33 @@ func (_c *MockIPingPongService_FindAll_Call) Run(run func(ctx context.Context)) 
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAll_Call) Return(findAllQueryResponseRaw *query.FindAllQueryResponseRaw, err error) *MockIPingPongService_FindAll_Call {
+func (_c *MockIPingPongService_FindAll_Call) Return(findAllQueryResponseRaw query.FindAllQueryResponseRaw, err error) *MockIPingPongService_FindAll_Call {
 	_c.Call.Return(findAllQueryResponseRaw, err)
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAll_Call) RunAndReturn(run func(ctx context.Context) (*query.FindAllQueryResponseRaw, error)) *MockIPingPongService_FindAll_Call {
+func (_c *MockIPingPongService_FindAll_Call) RunAndReturn(run func(ctx context.Context) (query.FindAllQueryResponseRaw, error)) *MockIPingPongService_FindAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FindAllPings provides a mock function for the type MockIPingPongService
-func (_mock *MockIPingPongService) FindAllPings(ctx context.Context) (*query.FindAllQueryResponse, error) {
+func (_mock *MockIPingPongService) FindAllPings(ctx context.Context) (query.FindAllQueryResponse, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAllPings")
 	}
 
-	var r0 *query.FindAllQueryResponse
+	var r0 query.FindAllQueryResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*query.FindAllQueryResponse, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (query.FindAllQueryResponse, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *query.FindAllQueryResponse); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) query.FindAllQueryResponse); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*query.FindAllQueryResponse)
-		}
+		r0 = ret.Get(0).(query.FindAllQueryResponse)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -154,35 +150,33 @@ func (_c *MockIPingPongService_FindAllPings_Call) Run(run func(ctx context.Conte
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAllPings_Call) Return(findAllQueryResponse *query.FindAllQueryResponse, err error) *MockIPingPongService_FindAllPings_Call {
+func (_c *MockIPingPongService_FindAllPings_Call) Return(findAllQueryResponse query.FindAllQueryResponse, err error) *MockIPingPongService_FindAllPings_Call {
 	_c.Call.Return(findAllQueryResponse, err)
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAllPings_Call) RunAndReturn(run func(ctx context.Context) (*query.FindAllQueryResponse, error)) *MockIPingPongService_FindAllPings_Call {
+func (_c *MockIPingPongService_FindAllPings_Call) RunAndReturn(run func(ctx context.Context) (query.FindAllQueryResponse, error)) *MockIPingPongService_FindAllPings_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FindAllPongs provides a mock function for the type MockIPingPongService
-func (_mock *MockIPingPongService) FindAllPongs(ctx context.Context) (*query.FindAllQueryResponse, error) {
+func (_mock *MockIPingPongService) FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAllPongs")
 	}
 
-	var r0 *query.FindAllQueryResponse
+	var r0 query.FindAllQueryResponse
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*query.FindAllQueryResponse, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (query.FindAllQueryResponse, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *query.FindAllQueryResponse); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) query.FindAllQueryResponse); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*query.FindAllQueryResponse)
-		}
+		r0 = ret.Get(0).(query.FindAllQueryResponse)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -216,37 +210,35 @@ func (_c *MockIPingPongService_FindAllPongs_Call) Run(run func(ctx context.Conte
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAllPongs_Call) Return(findAllQueryResponse *query.FindAllQueryResponse, err error) *MockIPingPongService_FindAllPongs_Call {
+func (_c *MockIPingPongService_FindAllPongs_Call) Return(findAllQueryResponse query.FindAllQueryResponse, err error) *MockIPingPongService_FindAllPongs_Call {
 	_c.Call.Return(findAllQueryResponse, err)
 	return _c
 }
 
-func (_c *MockIPingPongService_FindAllPongs_Call) RunAndReturn(run func(ctx context.Context) (*query.FindAllQueryResponse, error)) *MockIPingPongService_FindAllPongs_Call {
+func (_c *MockIPingPongService_FindAllPongs_Call) RunAndReturn(run func(ctx context.Context) (query.FindAllQueryResponse, error)) *MockIPingPongService_FindAllPongs_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // PingPong provides a mock function for the type MockIPingPongService
-func (_mock *MockIPingPongService) PingPong(ctx context.Context, cmd *command.PingPongCommand) (*command.PingPongCommandResult, error) {
+func (_mock *MockIPingPongService) PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) {
 	ret := _mock.Called(ctx, cmd)
 
 	if len(ret) == 0 {
 		panic("no return value specified for PingPong")
 	}
 
-	var r0 *command.PingPongCommandResult
+	var r0 command.PingPongCommandResult
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *command.PingPongCommand) (*command.PingPongCommandResult, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, command.PingPongCommand) (command.PingPongCommandResult, error)); ok {
 		return returnFunc(ctx, cmd)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *command.PingPongCommand) *command.PingPongCommandResult); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, command.PingPongCommand) command.PingPongCommandResult); ok {
 		r0 = returnFunc(ctx, cmd)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*command.PingPongCommandResult)
-		}
+		r0 = ret.Get(0).(command.PingPongCommandResult)
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *command.PingPongCommand) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(context.Context, command.PingPongCommand) error); ok {
 		r1 = returnFunc(ctx, cmd)
 	} else {
 		r1 = ret.Error(1)
@@ -261,20 +253,20 @@ type MockIPingPongService_PingPong_Call struct {
 
 // PingPong is a helper method to define mock.On call
 //   - ctx context.Context
-//   - cmd *command.PingPongCommand
+//   - cmd command.PingPongCommand
 func (_e *MockIPingPongService_Expecter) PingPong(ctx interface{}, cmd interface{}) *MockIPingPongService_PingPong_Call {
 	return &MockIPingPongService_PingPong_Call{Call: _e.mock.On("PingPong", ctx, cmd)}
 }
 
-func (_c *MockIPingPongService_PingPong_Call) Run(run func(ctx context.Context, cmd *command.PingPongCommand)) *MockIPingPongService_PingPong_Call {
+func (_c *MockIPingPongService_PingPong_Call) Run(run func(ctx context.Context, cmd command.PingPongCommand)) *MockIPingPongService_PingPong_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *command.PingPongCommand
+		var arg1 command.PingPongCommand
 		if args[1] != nil {
-			arg1 = args[1].(*command.PingPongCommand)
+			arg1 = args[1].(command.PingPongCommand)
 		}
 		run(
 			arg0,
@@ -284,12 +276,12 @@ func (_c *MockIPingPongService_PingPong_Call) Run(run func(ctx context.Context, 
 	return _c
 }
 
-func (_c *MockIPingPongService_PingPong_Call) Return(pingPongCommandResult *command.PingPongCommandResult, err error) *MockIPingPongService_PingPong_Call {
+func (_c *MockIPingPongService_PingPong_Call) Return(pingPongCommandResult command.PingPongCommandResult, err error) *MockIPingPongService_PingPong_Call {
 	_c.Call.Return(pingPongCommandResult, err)
 	return _c
 }
 
-func (_c *MockIPingPongService_PingPong_Call) RunAndReturn(run func(ctx context.Context, cmd *command.PingPongCommand) (*command.PingPongCommandResult, error)) *MockIPingPongService_PingPong_Call {
+func (_c *MockIPingPongService_PingPong_Call) RunAndReturn(run func(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error)) *MockIPingPongService_PingPong_Call {
 	_c.Call.Return(run)
 	return _c
 }

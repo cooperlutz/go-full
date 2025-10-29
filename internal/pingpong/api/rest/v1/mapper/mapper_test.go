@@ -26,8 +26,8 @@ func TestMapPingPongToCommand(t *testing.T) {
 }
 
 func TestMapFindAllToResponse(t *testing.T) {
-	res := &query.FindAllQueryResponse{
-		PingPongs: []*common.PingPongResult{
+	res := query.FindAllQueryResponse{
+		PingPongs: []common.PingPongResult{
 			{
 				Message: "ping",
 			},

@@ -6,7 +6,7 @@ import (
 )
 
 // MapFromPingPongCommand maps a PingPongCommand to a VALIDATED PingPongEntity, returning a validation error if invalid.
-func MapFromPingPongCommand(command *command.PingPongCommand) (*entity.PingPongEntity, error) {
+func MapFromPingPongCommand(command command.PingPongCommand) (*entity.PingPongEntity, error) {
 	entity, err := entity.New(
 		command.Message,
 	)

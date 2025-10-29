@@ -100,24 +100,22 @@ func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) Ru
 }
 
 // FindAll provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) FindAll(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (_mock *MockIPingPongRepository) FindAll(ctx context.Context) (entity.ListOfPingPongs, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAll")
 	}
 
-	var r0 *entity.ListOfPingPongs
+	var r0 entity.ListOfPingPongs
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*entity.ListOfPingPongs, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (entity.ListOfPingPongs, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *entity.ListOfPingPongs); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) entity.ListOfPingPongs); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entity.ListOfPingPongs)
-		}
+		r0 = ret.Get(0).(entity.ListOfPingPongs)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -151,35 +149,33 @@ func (_c *MockIPingPongRepository_FindAll_Call) Run(run func(ctx context.Context
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAll_Call) Return(listOfPingPongs *entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAll_Call {
+func (_c *MockIPingPongRepository_FindAll_Call) Return(listOfPingPongs entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAll_Call {
 	_c.Call.Return(listOfPingPongs, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAll_Call) RunAndReturn(run func(ctx context.Context) (*entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAll_Call {
+func (_c *MockIPingPongRepository_FindAll_Call) RunAndReturn(run func(ctx context.Context) (entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FindAllPings provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) FindAllPings(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (_mock *MockIPingPongRepository) FindAllPings(ctx context.Context) (entity.ListOfPingPongs, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAllPings")
 	}
 
-	var r0 *entity.ListOfPingPongs
+	var r0 entity.ListOfPingPongs
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*entity.ListOfPingPongs, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (entity.ListOfPingPongs, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *entity.ListOfPingPongs); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) entity.ListOfPingPongs); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entity.ListOfPingPongs)
-		}
+		r0 = ret.Get(0).(entity.ListOfPingPongs)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -213,35 +209,33 @@ func (_c *MockIPingPongRepository_FindAllPings_Call) Run(run func(ctx context.Co
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAllPings_Call) Return(listOfPingPongs *entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAllPings_Call {
+func (_c *MockIPingPongRepository_FindAllPings_Call) Return(listOfPingPongs entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAllPings_Call {
 	_c.Call.Return(listOfPingPongs, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAllPings_Call) RunAndReturn(run func(ctx context.Context) (*entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAllPings_Call {
+func (_c *MockIPingPongRepository_FindAllPings_Call) RunAndReturn(run func(ctx context.Context) (entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAllPings_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // FindAllPongs provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) FindAllPongs(ctx context.Context) (*entity.ListOfPingPongs, error) {
+func (_mock *MockIPingPongRepository) FindAllPongs(ctx context.Context) (entity.ListOfPingPongs, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for FindAllPongs")
 	}
 
-	var r0 *entity.ListOfPingPongs
+	var r0 entity.ListOfPingPongs
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (*entity.ListOfPingPongs, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (entity.ListOfPingPongs, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) *entity.ListOfPingPongs); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) entity.ListOfPingPongs); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*entity.ListOfPingPongs)
-		}
+		r0 = ret.Get(0).(entity.ListOfPingPongs)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -275,12 +269,12 @@ func (_c *MockIPingPongRepository_FindAllPongs_Call) Run(run func(ctx context.Co
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAllPongs_Call) Return(listOfPingPongs *entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAllPongs_Call {
+func (_c *MockIPingPongRepository_FindAllPongs_Call) Return(listOfPingPongs entity.ListOfPingPongs, err error) *MockIPingPongRepository_FindAllPongs_Call {
 	_c.Call.Return(listOfPingPongs, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_FindAllPongs_Call) RunAndReturn(run func(ctx context.Context) (*entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAllPongs_Call {
+func (_c *MockIPingPongRepository_FindAllPongs_Call) RunAndReturn(run func(ctx context.Context) (entity.ListOfPingPongs, error)) *MockIPingPongRepository_FindAllPongs_Call {
 	_c.Call.Return(run)
 	return _c
 }

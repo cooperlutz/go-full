@@ -55,13 +55,13 @@ func TestPingPongService_PingPong_Success(t *testing.T) {
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
-	cmd := &command.PingPongCommand{Message: "ping"}
+	cmd := command.PingPongCommand{Message: "ping"}
 
 	result, err := svc.PingPong(context.Background(), cmd)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-	assert.Equal(t, &command.PingPongCommandResult{
+	assert.Equal(t, command.PingPongCommandResult{
 		PingPongResult: &common.PingPongResult{Message: "Pong!"},
 	}, result)
 }
@@ -72,12 +72,12 @@ func TestPingPongService_PingPong_MapperError(t *testing.T) {
 	defer mockRepo.AssertExpectations(t)
 
 	// Simulate invalid command (assuming mapper returns error for invalid message)
-	cmd := &command.PingPongCommand{Message: "invalid"}
+	cmd := command.PingPongCommand{Message: "invalid"}
 
 	svc := service.NewPingPongService(mockRepo)
-	result, err := svc.PingPong(context.Background(), cmd)
+	_, err := svc.PingPong(context.Background(), cmd)
 
-	assert.Nil(t, result)
+	// assert.Nil(t, result)
 	assert.Error(t, err)
 }
 
@@ -87,12 +87,12 @@ func TestPingPongService_PingPong_RepoError(t *testing.T) {
 	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("*entity.PingPongEntity")).Return(errors.New("repo error"))
 	defer mockRepo.AssertExpectations(t)
 
-	cmd := &command.PingPongCommand{Message: "ping"}
+	cmd := command.PingPongCommand{Message: "ping"}
 	svc := service.NewPingPongService(mockRepo)
 
-	result, err := svc.PingPong(context.Background(), cmd)
+	_, err := svc.PingPong(context.Background(), cmd)
 
-	assert.Nil(t, result)
+	// assert.Nil(t, result)
 	assert.EqualError(t, err, "repo error")
 }
 
@@ -106,7 +106,7 @@ func TestPingPongService_PingPong_OtelSpan(t *testing.T) {
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
-	cmd := &command.PingPongCommand{Message: "ping"}
+	cmd := command.PingPongCommand{Message: "ping"}
 
 	// Act
 	ctx := context.Background()
@@ -123,7 +123,7 @@ func TestPingPongService_PingPong_OtelSpan(t *testing.T) {
 
 func TestPingPongService_FindAll_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAll", mock.Anything).Return(&entity.ListOfPingPongs{
+	mockRepo.On("FindAll", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{Message: "pong"},
 			{Message: "ping"},
@@ -140,18 +140,18 @@ func TestPingPongService_FindAll_Success(t *testing.T) {
 
 func TestPingPongService_FindAll_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAll", mock.Anything).Return(nil, errors.New("findall error"))
+	mockRepo.On("FindAll", mock.Anything).Return(entity.ListOfPingPongs{}, errors.New("findall error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
-	resp, err := svc.FindAll(context.Background())
-	assert.Nil(t, resp)
+	_, err := svc.FindAll(context.Background())
+	// assert.Nil(t, resp)
 	assert.EqualError(t, err, "findall error")
 }
 
 func TestPingPongService_FindAllPings_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAllPings", mock.Anything).Return(&entity.ListOfPingPongs{
+	mockRepo.On("FindAllPings", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{Message: "ping"},
 		},
@@ -167,18 +167,18 @@ func TestPingPongService_FindAllPings_Success(t *testing.T) {
 
 func TestPingPongService_FindAllPings_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAllPings", mock.Anything).Return(nil, errors.New("findallpings error"))
+	mockRepo.On("FindAllPings", mock.Anything).Return(entity.ListOfPingPongs{}, errors.New("findallpings error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
-	resp, err := svc.FindAllPings(context.Background())
-	assert.Nil(t, resp)
+	_, err := svc.FindAllPings(context.Background())
+
 	assert.EqualError(t, err, "findallpings error")
 }
 
 func TestPingPongService_FindAllPongs_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAllPongs", mock.Anything).Return(&entity.ListOfPingPongs{
+	mockRepo.On("FindAllPongs", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{Message: "pong"},
 		},
@@ -194,12 +194,12 @@ func TestPingPongService_FindAllPongs_Success(t *testing.T) {
 
 func TestPingPongService_FindAllPongs_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindAllPongs", mock.Anything).Return(nil, errors.New("findallpongs error"))
+	mockRepo.On("FindAllPongs", mock.Anything).Return(entity.ListOfPingPongs{}, errors.New("findallpongs error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
-	resp, err := svc.FindAllPongs(context.Background())
-	assert.Nil(t, resp)
+	_, err := svc.FindAllPongs(context.Background())
+
 	assert.EqualError(t, err, "findallpongs error")
 }
 

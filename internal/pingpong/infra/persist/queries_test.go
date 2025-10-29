@@ -38,7 +38,7 @@ func TestFindAll_Success(t *testing.T) {
 			Deleted:    false,
 		},
 	}
-	expectedOutput := &entity.ListOfPingPongs{
+	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{
 				Message: "ping",
@@ -98,7 +98,7 @@ func TestFindAllPings_Success(t *testing.T) {
 			Deleted:    false,
 		},
 	}
-	expectedOutput := &entity.ListOfPingPongs{
+	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{
 				Message: "ping",
@@ -158,7 +158,7 @@ func TestFindAllPongs_Success(t *testing.T) {
 			Deleted:    false,
 		},
 	}
-	expectedOutput := &entity.ListOfPingPongs{
+	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			{
 				Message: "pong",

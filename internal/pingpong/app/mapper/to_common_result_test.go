@@ -18,12 +18,12 @@ func TestMapToCommonResult(t *testing.T) {
 	tests := []struct {
 		name   string
 		entity entity.PingPongEntity
-		want   *common.PingPongResult
+		want   common.PingPongResult
 	}{
 		{
 			name:   "maps entity to common result",
 			entity: entity.PingPongEntity{Message: "ping"},
-			want: &common.PingPongResult{
+			want: common.PingPongResult{
 				Message: "ping",
 			},
 		},
