@@ -208,7 +208,7 @@ func TestPingPongService_TotalNumberOfPingPongs_Success(t *testing.T) {
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPingPongs(context.Background())
 	assert.NoError(t, err)
-	assert.Equal(t, types.QuantityMetric{10}, count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 10}, count)
 }
 
 func TestPingPongService_TotalNumberOfPingPongs_RepoError(t *testing.T) {
