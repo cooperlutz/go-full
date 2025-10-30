@@ -110,7 +110,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPingPongs(ctx context.Context, req
 	}
 
 	response := server.GetTotalPingPongs200JSONResponse{
-		Body:    int(totalPingPongs),
+		Body:    int(totalPingPongs.Quantity),
 		Headers: server.GetTotalPingPongs200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
 	}
 	return response, nil
@@ -126,7 +126,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPings(ctx context.Context, request
 	}
 
 	response := server.GetTotalPings200JSONResponse{
-		Body:    int(totalPingPongs),
+		Body:    int(totalPingPongs.Quantity),
 		Headers: server.GetTotalPings200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
 	}
 	return response, nil
@@ -142,7 +142,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPongs(ctx context.Context, request
 	}
 
 	response := server.GetTotalPongs200JSONResponse{
-		Body:    int(totalPingPongs),
+		Body:    int(totalPingPongs.Quantity),
 		Headers: server.GetTotalPongs200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
 	}
 	return response, nil

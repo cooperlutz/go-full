@@ -50,7 +50,7 @@ func TestMapFromPingPongCommand(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Act
-			got, err := mapper.MapFromPingPongCommand(tt.command)
+			got, err := mapper.MapFromCommandPingPong(tt.command)
 			// Assert
 			// if we receive an error, we should have wanted one, and the error we received should match the one we wanted
 			if err != nil {

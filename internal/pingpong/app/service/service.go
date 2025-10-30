@@ -20,10 +20,10 @@ type IPingPongService interface {
 	FindAllPings(ctx context.Context) (query.FindAllQueryResponse, error)                             // returns all ping messages
 	FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error)                             // returns all pong messages
 	FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error)                               // returns all ping and pong messages
-	TotalNumberOfPingPongs(ctx context.Context) (int64, error)                                        // returns the total number of pingpong
-	TotalNumberOfPings(ctx context.Context) (int64, error)                                            // returns the total number of pings
-	TotalNumberOfPongs(ctx context.Context) (int64, error)                                            // returns the total number of pongs
-	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error)         // returns the total number of pingpongs created per day
+	TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error)                         // returns the total number of pingpong
+	TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error)                             // returns the total number of pings
+	TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error)                             // returns the total number of pongs
+	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error)   // returns the total number of pingpongs created per day
 }
 
 type PingPongService struct {
@@ -40,7 +40,7 @@ func (s *PingPongService) PingPong(ctx context.Context, cmd command.PingPongComm
 	ctx, span := telemetree.AddSpan(ctx, "service.pingpong")
 	defer span.End()
 
-	inputEntity, err := mapper.MapFromPingPongCommand(cmd)
+	inputEntity, err := mapper.MapFromCommandPingPong(cmd)
 	if err != nil {
 		return command.PingPongCommandResult{}, err
 	}
@@ -99,43 +99,43 @@ func (s *PingPongService) FindAllPongs(ctx context.Context) (query.FindAllQueryR
 	return response, nil
 }
 
-func (s *PingPongService) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
+func (s *PingPongService) TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpingpongs")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPingPongs(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
 	return count, nil
 }
 
-func (s *PingPongService) TotalNumberOfPings(ctx context.Context) (int64, error) {
+func (s *PingPongService) TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpings")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPings(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
 	return count, nil
 }
 
-func (s *PingPongService) TotalNumberOfPongs(ctx context.Context) (int64, error) {
+func (s *PingPongService) TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpongs")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPongs(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
 	return count, nil
 }
 
-func (s *PingPongService) TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
+func (s *PingPongService) TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpingpongspersday")
 	defer span.End()
 

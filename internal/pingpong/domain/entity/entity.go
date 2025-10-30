@@ -18,6 +18,10 @@ type PingPongMetadata struct {
 	Deleted    bool       `json:"deleted"`
 }
 
+type ListOfPingPongs struct {
+	PingPongs []PingPongEntity
+}
+
 type PingPongEntity struct {
 	Message string `json:"message"`
 	*PingPongMetadata
@@ -40,10 +44,6 @@ func New(msg string) (*PingPongEntity, error) {
 	}
 
 	return ent, nil
-}
-
-type ListOfPingPongs struct {
-	PingPongs []PingPongEntity
 }
 
 func (e *PingPongEntity) Validate() error {

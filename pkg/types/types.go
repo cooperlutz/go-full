@@ -2,7 +2,11 @@ package types
 
 import "time"
 
-type MeasureCountbyDateTime struct {
+type MeasureCountbyDateTimeMetric struct {
 	DateTime time.Time
 	Count    int
+}
+
+type QuantityMetric struct {
+	Quantity int64
 }

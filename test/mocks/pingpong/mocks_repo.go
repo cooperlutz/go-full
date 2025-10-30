@@ -40,22 +40,22 @@ func (_m *MockIPingPongRepository) EXPECT() *MockIPingPongRepository_Expecter {
 }
 
 // AverageNumberOfPingPongsCreatedPerDay provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error) {
+func (_mock *MockIPingPongRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (types.QuantityMetric, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for AverageNumberOfPingPongsCreatedPerDay")
 	}
 
-	var r0 int64
+	var r0 types.QuantityMetric
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (int64, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (types.QuantityMetric, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) int64); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) types.QuantityMetric); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		r0 = ret.Get(0).(int64)
+		r0 = ret.Get(0).(types.QuantityMetric)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -89,12 +89,12 @@ func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) Ru
 	return _c
 }
 
-func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) Return(n int64, err error) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
-	_c.Call.Return(n, err)
+func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) Return(quantityMetric types.QuantityMetric, err error) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
+	_c.Call.Return(quantityMetric, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) RunAndReturn(run func(ctx context.Context) (int64, error)) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
+func (_c *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call) RunAndReturn(run func(ctx context.Context) (types.QuantityMetric, error)) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -337,22 +337,22 @@ func (_c *MockIPingPongRepository_SavePingPong_Call) RunAndReturn(run func(ctx c
 }
 
 // TotalNumberOfPingPongs provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
+func (_mock *MockIPingPongRepository) TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for TotalNumberOfPingPongs")
 	}
 
-	var r0 int64
+	var r0 types.QuantityMetric
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (int64, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (types.QuantityMetric, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) int64); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) types.QuantityMetric); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		r0 = ret.Get(0).(int64)
+		r0 = ret.Get(0).(types.QuantityMetric)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -386,34 +386,34 @@ func (_c *MockIPingPongRepository_TotalNumberOfPingPongs_Call) Run(run func(ctx 
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPingPongs_Call) Return(n int64, err error) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
-	_c.Call.Return(n, err)
+func (_c *MockIPingPongRepository_TotalNumberOfPingPongs_Call) Return(quantityMetric types.QuantityMetric, err error) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
+	_c.Call.Return(quantityMetric, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPingPongs_Call) RunAndReturn(run func(ctx context.Context) (int64, error)) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
+func (_c *MockIPingPongRepository_TotalNumberOfPingPongs_Call) RunAndReturn(run func(ctx context.Context) (types.QuantityMetric, error)) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // TotalNumberOfPingPongsCreatedPerDay provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
+func (_mock *MockIPingPongRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for TotalNumberOfPingPongsCreatedPerDay")
 	}
 
-	var r0 []types.MeasureCountbyDateTime
+	var r0 []types.MeasureCountbyDateTimeMetric
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]types.MeasureCountbyDateTime, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]types.MeasureCountbyDateTimeMetric, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) []types.MeasureCountbyDateTime); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) []types.MeasureCountbyDateTimeMetric); ok {
 		r0 = returnFunc(ctx)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]types.MeasureCountbyDateTime)
+			r0 = ret.Get(0).([]types.MeasureCountbyDateTimeMetric)
 		}
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
@@ -448,33 +448,33 @@ func (_c *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call) Run(
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call) Return(measureCountbyDateTimes []types.MeasureCountbyDateTime, err error) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
-	_c.Call.Return(measureCountbyDateTimes, err)
+func (_c *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call) Return(measureCountbyDateTimeMetrics []types.MeasureCountbyDateTimeMetric, err error) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
+	_c.Call.Return(measureCountbyDateTimeMetrics, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call) RunAndReturn(run func(ctx context.Context) ([]types.MeasureCountbyDateTime, error)) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
+func (_c *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call) RunAndReturn(run func(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error)) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // TotalNumberOfPings provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) TotalNumberOfPings(ctx context.Context) (int64, error) {
+func (_mock *MockIPingPongRepository) TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for TotalNumberOfPings")
 	}
 
-	var r0 int64
+	var r0 types.QuantityMetric
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (int64, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (types.QuantityMetric, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) int64); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) types.QuantityMetric); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		r0 = ret.Get(0).(int64)
+		r0 = ret.Get(0).(types.QuantityMetric)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -508,33 +508,33 @@ func (_c *MockIPingPongRepository_TotalNumberOfPings_Call) Run(run func(ctx cont
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPings_Call) Return(n int64, err error) *MockIPingPongRepository_TotalNumberOfPings_Call {
-	_c.Call.Return(n, err)
+func (_c *MockIPingPongRepository_TotalNumberOfPings_Call) Return(quantityMetric types.QuantityMetric, err error) *MockIPingPongRepository_TotalNumberOfPings_Call {
+	_c.Call.Return(quantityMetric, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPings_Call) RunAndReturn(run func(ctx context.Context) (int64, error)) *MockIPingPongRepository_TotalNumberOfPings_Call {
+func (_c *MockIPingPongRepository_TotalNumberOfPings_Call) RunAndReturn(run func(ctx context.Context) (types.QuantityMetric, error)) *MockIPingPongRepository_TotalNumberOfPings_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // TotalNumberOfPongs provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) TotalNumberOfPongs(ctx context.Context) (int64, error) {
+func (_mock *MockIPingPongRepository) TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for TotalNumberOfPongs")
 	}
 
-	var r0 int64
+	var r0 types.QuantityMetric
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) (int64, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) (types.QuantityMetric, error)); ok {
 		return returnFunc(ctx)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) int64); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context) types.QuantityMetric); ok {
 		r0 = returnFunc(ctx)
 	} else {
-		r0 = ret.Get(0).(int64)
+		r0 = ret.Get(0).(types.QuantityMetric)
 	}
 	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
 		r1 = returnFunc(ctx)
@@ -568,12 +568,12 @@ func (_c *MockIPingPongRepository_TotalNumberOfPongs_Call) Run(run func(ctx cont
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPongs_Call) Return(n int64, err error) *MockIPingPongRepository_TotalNumberOfPongs_Call {
-	_c.Call.Return(n, err)
+func (_c *MockIPingPongRepository_TotalNumberOfPongs_Call) Return(quantityMetric types.QuantityMetric, err error) *MockIPingPongRepository_TotalNumberOfPongs_Call {
+	_c.Call.Return(quantityMetric, err)
 	return _c
 }
 
-func (_c *MockIPingPongRepository_TotalNumberOfPongs_Call) RunAndReturn(run func(ctx context.Context) (int64, error)) *MockIPingPongRepository_TotalNumberOfPongs_Call {
+func (_c *MockIPingPongRepository_TotalNumberOfPongs_Call) RunAndReturn(run func(ctx context.Context) (types.QuantityMetric, error)) *MockIPingPongRepository_TotalNumberOfPongs_Call {
 	_c.Call.Return(run)
 	return _c
 }

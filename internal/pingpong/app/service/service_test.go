@@ -77,7 +77,6 @@ func TestPingPongService_PingPong_MapperError(t *testing.T) {
 	svc := service.NewPingPongService(mockRepo)
 	_, err := svc.PingPong(context.Background(), cmd)
 
-	// assert.Nil(t, result)
 	assert.Error(t, err)
 }
 
@@ -92,7 +91,6 @@ func TestPingPongService_PingPong_RepoError(t *testing.T) {
 
 	_, err := svc.PingPong(context.Background(), cmd)
 
-	// assert.Nil(t, result)
 	assert.EqualError(t, err, "repo error")
 }
 
@@ -135,7 +133,6 @@ func TestPingPongService_FindAll_Success(t *testing.T) {
 	resp, err := svc.FindAll(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, resp)
-	// assert.Len(t, resp.Results, 2)
 }
 
 func TestPingPongService_FindAll_RepoError(t *testing.T) {
@@ -205,67 +202,67 @@ func TestPingPongService_FindAllPongs_RepoError(t *testing.T) {
 
 func TestPingPongService_TotalNumberOfPingPongs_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(int64(42), nil)
+	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 10}, nil)
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPingPongs(context.Background())
 	assert.NoError(t, err)
-	assert.Equal(t, int64(42), count)
+	assert.Equal(t, types.QuantityMetric{10}, count)
 }
 
 func TestPingPongService_TotalNumberOfPingPongs_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(int64(0), errors.New("count error"))
+	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, errors.New("count error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPingPongs(context.Background())
-	assert.Equal(t, int64(0), count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 0}, count)
 	assert.EqualError(t, err, "count error")
 }
 
 func TestPingPongService_TotalNumberOfPings_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(int64(10), nil)
+	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(types.QuantityMetric{Quantity: 10}, nil)
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPings(context.Background())
 	assert.NoError(t, err)
-	assert.Equal(t, int64(10), count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 10}, count)
 }
 
 func TestPingPongService_TotalNumberOfPings_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(int64(0), errors.New("pings error"))
+	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, errors.New("pings error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPings(context.Background())
-	assert.Equal(t, int64(0), count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 0}, count)
 	assert.EqualError(t, err, "pings error")
 }
 
 func TestPingPongService_TotalNumberOfPongs_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(int64(15), nil)
+	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 15}, nil)
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPongs(context.Background())
 	assert.NoError(t, err)
-	assert.Equal(t, int64(15), count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 15}, count)
 }
 
 func TestPingPongService_TotalNumberOfPongs_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(int64(0), errors.New("pongs error"))
+	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, errors.New("pongs error"))
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongService(mockRepo)
 	count, err := svc.TotalNumberOfPongs(context.Background())
-	assert.Equal(t, int64(0), count)
+	assert.Equal(t, types.QuantityMetric{Quantity: 0}, count)
 	assert.EqualError(t, err, "pongs error")
 }
 
@@ -273,7 +270,7 @@ func TestPingPongService_TotalNumberOfPingPongsPerDay_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
 	date1, _ := time.Parse("2006-01-02", "2024-06-01")
 	date2, _ := time.Parse("2006-01-02", "2024-06-02")
-	expected := []types.MeasureCountbyDateTime{
+	expected := []types.MeasureCountbyDateTimeMetric{
 		{DateTime: date1, Count: 5},
 		{DateTime: date2, Count: 7},
 	}

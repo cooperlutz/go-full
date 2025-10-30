@@ -633,7 +633,7 @@ func TestPingPongRestAPIController_GetDailyDistribution(t *testing.T) {
 		"TotalNumberOfPingPongsPerDay",
 		ctx,
 	).Return(
-		[]types.MeasureCountbyDateTime{
+		[]types.MeasureCountbyDateTimeMetric{
 			{
 				DateTime: testTime,
 				Count:    1,
@@ -701,7 +701,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs(t *testing.T) {
 		"TotalNumberOfPingPongs",
 		ctx,
 	).Return(
-		int64(12345),
+		types.QuantityMetric{Quantity: 12345},
 		nil,
 	)
 	// Ensure that the mock expectations are met
@@ -759,7 +759,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 		"TotalNumberOfPingPongs",
 		ctx,
 	).Return(
-		int64(0), errTemp,
+		types.QuantityMetric{Quantity: 0}, errTemp,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -821,7 +821,7 @@ func TestPingPongRestAPIController_GetTotalPings(t *testing.T) {
 		"TotalNumberOfPings",
 		ctx,
 	).Return(
-		int64(12345),
+		types.QuantityMetric{Quantity: 12345},
 		nil,
 	)
 	// Ensure that the mock expectations are met
@@ -880,7 +880,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 		"TotalNumberOfPings",
 		ctx,
 	).Return(
-		int64(0), errTemp,
+		types.QuantityMetric{Quantity: 0}, errTemp,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -942,7 +942,7 @@ func TestPingPongRestAPIController_GetTotalPongs(t *testing.T) {
 		"TotalNumberOfPongs",
 		ctx,
 	).Return(
-		int64(12345),
+		types.QuantityMetric{Quantity: 12345},
 		nil,
 	)
 	// Ensure that the mock expectations are met
@@ -1001,7 +1001,7 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 		"TotalNumberOfPongs",
 		ctx,
 	).Return(
-		int64(0), errTemp,
+		types.QuantityMetric{Quantity: 0}, errTemp,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)

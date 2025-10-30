@@ -47,7 +47,7 @@ func TestMapMeasureCountByDateTimeToTrend(t *testing.T) {
 	dt1 := time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)
 	dt2 := time.Date(2021, 6, 7, 8, 9, 10, 0, time.UTC)
 
-	input := []types.MeasureCountbyDateTime{
+	input := []types.MeasureCountbyDateTimeMetric{
 		{DateTime: dt1, Count: 7},
 		{DateTime: dt2, Count: 13},
 	}

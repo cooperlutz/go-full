@@ -8,49 +8,49 @@ import (
 )
 
 // TotalNumberOfPingPongs - Returns the total number of pingpongs in the database.
-func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongs")
 	defer span.End()
 
 	count, err := r.query.TotalNumberOfPingPongs(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
-	return count, nil
+	return types.QuantityMetric{Quantity: count}, nil
 }
 
 // TotalNumberOfPings - Returns the total number of pings in the database.
-func (r *PingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpings")
 	defer span.End()
 
 	count, err := r.query.TotalNumberOfPings(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
-	return count, nil
+	return types.QuantityMetric{Quantity: count}, nil
 }
 
 // TotalNumberOfPongs - Returns the total number of pongs in the database.
-func (r *PingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpongs")
 	defer span.End()
 
 	count, err := r.query.TotalNumberOfPongs(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
-	return count, nil
+	return types.QuantityMetric{Quantity: count}, nil
 }
 
 // AverageNumberOfPingPongsCreatedPerDay - Returns the average number of pingpongs created per day.
-func (r *PingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error) {
+func (r *PingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (types.QuantityMetric, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenenumberofpingpongscreatedperday")
 	defer span.End()
@@ -59,68 +59,24 @@ func (r *PingPongPersistPostgresRepository) AverageNumberOfPingPongsCreatedPerDa
 
 	frequencyDist, err := r.query.FrequencyDistributionByDay(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
 	totalPingPings, err := r.query.TotalNumberOfPingPongs(ctx)
 	if err != nil {
-		return 0, err
+		return types.QuantityMetric{Quantity: 0}, err
 	}
 
 	// Calculate the number of days based on the length of the frequency distribution
 	numDays = len(frequencyDist)
 
-	return totalPingPings / int64(numDays), nil
-}
+	avgNumPerDay := totalPingPings / int64(numDays)
 
-// AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
-func (r *PingPongPersistPostgresRepository) AverageNumberOfPingsCreatedPerDay(ctx context.Context) (int64, error) {
-	// telemetree: Add a tracing span for the SavePingPong operation
-	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpingscreatedperday")
-	defer span.End()
-
-	var numDays int
-
-	frequencyDist, err := r.query.FrequencyDistributionByDayPing(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	totalPings, err := r.query.TotalNumberOfPings(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	numDays = len(frequencyDist)
-
-	return totalPings / int64(numDays), nil
-}
-
-// AverageNumberOfPongsCreatedPerDay - Returns the average number of pongs created per day.
-func (r *PingPongPersistPostgresRepository) AverageNumberOfPongsCreatedPerDay(ctx context.Context) (int64, error) {
-	// telemetree: Add a tracing span for the SavePingPong operation
-	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.averagenumberofpongscreatedperday")
-	defer span.End()
-
-	var numDays int
-
-	frequencyDist, err := r.query.FrequencyDistributionByDayPong(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	totalPings, err := r.query.TotalNumberOfPongs(ctx)
-	if err != nil {
-		return 0, err
-	}
-
-	numDays = len(frequencyDist)
-
-	return totalPings / int64(numDays), nil
+	return types.QuantityMetric{Quantity: avgNumPerDay}, nil
 }
 
 // TotalNumberOfPingPongsCreatedPerDay - Returns the total number of pingpongs created per day as a slice of MeasureCountbyDateTime.
-func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error) {
+func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.totalnumberofpingpongscreatedperday")
 	defer span.End()
@@ -130,9 +86,9 @@ func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(
 		return nil, err
 	}
 
-	var pingPongsPerDay []types.MeasureCountbyDateTime
+	var pingPongsPerDay []types.MeasureCountbyDateTimeMetric
 	for _, cpd := range countPerDay {
-		val := types.MeasureCountbyDateTime{
+		val := types.MeasureCountbyDateTimeMetric{
 			DateTime: cpd.CreationDate.Time,
 			Count:    int(cpd.CountCreated),
 		}

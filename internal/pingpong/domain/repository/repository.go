@@ -17,9 +17,9 @@ type IPingPongRepository interface {
 	FindAllPongs(ctx context.Context) (entity.ListOfPingPongs, error)
 
 	// Metrics
-	TotalNumberOfPingPongs(ctx context.Context) (int64, error)
-	TotalNumberOfPings(ctx context.Context) (int64, error)
-	TotalNumberOfPongs(ctx context.Context) (int64, error)
-	TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTime, error)
-	AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (int64, error)
+	TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error)
+	TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error)
+	TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error)
+	TotalNumberOfPingPongsCreatedPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error)
+	AverageNumberOfPingPongsCreatedPerDay(ctx context.Context) (types.QuantityMetric, error)
 }

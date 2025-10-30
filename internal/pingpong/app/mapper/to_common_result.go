@@ -5,9 +5,9 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 )
 
-func MapToResult(entity entity.PingPongEntity) common.PingPongResult {
+func MapToResult(e entity.PingPongEntity) common.PingPongResult {
 	result := common.PingPongResult{
-		Message: entity.GetMessage(),
+		Message: e.GetMessage(),
 	}
 
 	return result
