@@ -21,7 +21,7 @@ func TestNewPingPongAPIRouter(t *testing.T) {
 
 	service := mocks.NewMockIPingPongService(t)
 	router := rest.NewPingPongAPIRouter(service)
-	service.Mock.On("PingPong", mock.Anything, mock.Anything).Return(&command.PingPongCommandResult{
+	service.Mock.On("PingPong", mock.Anything, mock.Anything).Return(command.PingPongCommandResult{
 		PingPongResult: &common.PingPongResult{Message: "pong"},
 	}, nil)
 	// Test that /api/v1/ping returns 200 and "pong"

@@ -5,16 +5,16 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 )
 
-func MapToResult(entity entity.PingPongEntity) *common.PingPongResult {
-	result := &common.PingPongResult{
-		Message: entity.GetMessage(),
+func MapToResult(e entity.PingPongEntity) common.PingPongResult {
+	result := common.PingPongResult{
+		Message: e.GetMessage(),
 	}
 
 	return result
 }
 
-func MapToRawResult(e entity.PingPongEntity) *common.PingPongRawResult {
-	return &common.PingPongRawResult{
+func MapToRawResult(e entity.PingPongEntity) common.PingPongRawResult {
+	return common.PingPongRawResult{
 		ID:        e.PingPongID.String(),
 		Message:   e.Message,
 		CreatedAt: e.CreatedAt,

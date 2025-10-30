@@ -75,9 +75,7 @@ func TestMapFromDB(t *testing.T) {
 
 func TestMapFromDBPingPongs_EmptyInput(t *testing.T) {
 	result := MapFromDBPingPongs([]postgresql.Pingpong{})
-	if result == nil {
-		t.Fatal("Expected non-nil result")
-	}
+
 	if len(result.PingPongs) != 0 {
 		t.Errorf("Expected empty PingPongs slice, got %d", len(result.PingPongs))
 	}
@@ -90,9 +88,9 @@ func TestMapFromDBPingPongs_SingleItem(t *testing.T) {
 	expected := "Ping"
 
 	result := MapFromDBPingPongs(input)
-	if result == nil {
-		t.Fatal("Expected non-nil result")
-	}
+	// if result == nil {
+	// 	t.Fatal("Expected non-nil result")
+	// }
 	if len(result.PingPongs) != 1 {
 		t.Fatalf("Expected 1 PingPongEntity, got %d", len(result.PingPongs))
 	}
@@ -109,9 +107,9 @@ func TestMapFromDBPingPongs_MultipleItems(t *testing.T) {
 	expected := []string{"Ping", "Pong"}
 
 	result := MapFromDBPingPongs(input)
-	if result == nil {
-		t.Fatal("Expected non-nil result")
-	}
+	// if result == nil {
+	// 	t.Fatal("Expected non-nil result")
+	// }
 	if len(result.PingPongs) != len(expected) {
 		t.Fatalf("Expected %d PingPongEntities, got %d", len(expected), len(result.PingPongs))
 	}

@@ -16,7 +16,7 @@ func TestMapFromPingPongCommand(t *testing.T) {
 
 	tests := []struct {
 		name                string
-		command             *command.PingPongCommand
+		command             command.PingPongCommand
 		wantEntityMsg       string
 		wantEntityUpdatedAt time.Time
 		wantEntityDeletedAt *time.Time
@@ -25,7 +25,7 @@ func TestMapFromPingPongCommand(t *testing.T) {
 	}{
 		{
 			name: "maps command to entity",
-			command: &command.PingPongCommand{
+			command: command.PingPongCommand{
 				Message: "ping",
 			},
 			wantEntityMsg:       "ping",
@@ -36,7 +36,7 @@ func TestMapFromPingPongCommand(t *testing.T) {
 		},
 		{
 			name: "an invalid command message returns a validation error",
-			command: &command.PingPongCommand{
+			command: command.PingPongCommand{
 				Message: "NONSENSE_MESSAGE",
 			},
 			wantEntityMsg:       "NONSENSE_MESSAGE",
@@ -50,7 +50,7 @@ func TestMapFromPingPongCommand(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Act
-			got, err := mapper.MapFromPingPongCommand(tt.command)
+			got, err := mapper.MapFromCommandPingPong(tt.command)
 			// Assert
 			// if we receive an error, we should have wanted one, and the error we received should match the one we wanted
 			if err != nil {

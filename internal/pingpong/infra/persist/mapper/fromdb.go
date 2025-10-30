@@ -7,9 +7,9 @@ import (
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 )
 
-func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) *entity.ListOfPingPongs {
+func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) entity.ListOfPingPongs {
 	if len(pingponglist) == 0 {
-		return &entity.ListOfPingPongs{PingPongs: []entity.PingPongEntity{}}
+		return entity.ListOfPingPongs{PingPongs: []entity.PingPongEntity{}}
 	}
 
 	outputList := make([]entity.PingPongEntity, 0, len(pingponglist))
@@ -20,7 +20,7 @@ func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) *entity.ListOfPingPo
 		outputList = append(outputList, translatedPingPong)
 	}
 
-	return &entity.ListOfPingPongs{PingPongs: outputList}
+	return entity.ListOfPingPongs{PingPongs: outputList}
 }
 
 func MapFromDB(p postgresql.Pingpong) entity.PingPongEntity {

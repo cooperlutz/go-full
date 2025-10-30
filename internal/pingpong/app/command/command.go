@@ -18,8 +18,8 @@ type PingPongCommandResult struct {
 	*common.PingPongResult
 }
 
-func NewPingPongCommandResult(msg string) *PingPongCommandResult {
-	return &PingPongCommandResult{
+func NewPingPongCommandResult(msg string) PingPongCommandResult {
+	return PingPongCommandResult{
 		PingPongResult: &common.PingPongResult{
 			Message: msg,
 		},

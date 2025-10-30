@@ -6,20 +6,20 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 )
 
-func MapListToQueryResponse(pps *entity.ListOfPingPongs) *query.FindAllQueryResponse {
-	var resultingPings []*common.PingPongResult
+func MapListToQueryResponse(l entity.ListOfPingPongs) query.FindAllQueryResponse {
+	var resultingPings []common.PingPongResult
 
-	for _, pp := range pps.PingPongs {
+	for _, pp := range l.PingPongs {
 		resultingPings = append(resultingPings, MapToResult(pp))
 	}
 
-	return &query.FindAllQueryResponse{
+	return query.FindAllQueryResponse{
 		PingPongs: resultingPings,
 	}
 }
 
-func MapListToQueryResponseRaw(pps *entity.ListOfPingPongs) *query.FindAllQueryResponseRaw {
-	return &query.FindAllQueryResponseRaw{
-		Entities: pps.PingPongs,
+func MapListToQueryResponseRaw(l entity.ListOfPingPongs) query.FindAllQueryResponseRaw {
+	return query.FindAllQueryResponseRaw{
+		Entities: l.PingPongs,
 	}
 }

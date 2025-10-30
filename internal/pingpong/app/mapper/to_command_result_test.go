@@ -17,12 +17,12 @@ func TestMapToCommandResult(t *testing.T) {
 	tests := []struct {
 		name   string
 		entity entity.PingPongEntity
-		want   *command.PingPongCommandResult
+		want   command.PingPongCommandResult
 	}{
 		{
 			name:   "maps entity to command result",
 			entity: entity.PingPongEntity{Message: "pong"},
-			want: &command.PingPongCommandResult{
+			want: command.PingPongCommandResult{
 				PingPongResult: &common.PingPongResult{Message: "pong"},
 			},
 		},

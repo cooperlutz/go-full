@@ -5,9 +5,11 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 )
 
-func MapToCommandResult(entity entity.PingPongEntity) *command.PingPongCommandResult {
-	command := &command.PingPongCommandResult{
-		PingPongResult: MapToResult(entity),
+func MapToCommandResult(e entity.PingPongEntity) command.PingPongCommandResult {
+	res := MapToResult(e)
+
+	command := command.PingPongCommandResult{
+		PingPongResult: &res,
 	}
 
 	return command

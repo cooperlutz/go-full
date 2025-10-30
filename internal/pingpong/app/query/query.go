@@ -6,7 +6,7 @@ import (
 )
 
 type FindAllQueryResponse struct {
-	PingPongs []*common.PingPongResult
+	PingPongs []common.PingPongResult
 }
 
 type FindAllQueryResponseRaw struct {
