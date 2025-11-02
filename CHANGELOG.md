@@ -1,3 +1,10 @@
+## v0.0.8 (2025-11-02)
+
+### Fix
+
+- tidying up fe tests and app/mapper (#25)
+- tidying up fe tests and app/mapper
+
 ## v0.0.7 (2025-10-30)
 
 ### Fix
