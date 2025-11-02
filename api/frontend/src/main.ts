@@ -1,8 +1,8 @@
 import "~/app/styles/app.css";
 
 import { createApp } from "vue";
-import { createPinia } from "pinia";
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+// import { createPinia } from "pinia";
+// import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 import router from "~/app/router";
 import App from "~/app/App.vue";
@@ -12,11 +12,11 @@ export function createNewApp() {
   const app = createApp(App);
 
   // setup plugins
-  const pinia = createPinia();
-  pinia.use(piniaPluginPersistedstate);
+  // const pinia = createPinia();
+  // pinia.use(piniaPluginPersistedstate);
 
   // register plugins
-  app.use(pinia);
+  // app.use(pinia);
 
   // Register the router
   app.use(router);
