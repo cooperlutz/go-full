@@ -8,33 +8,33 @@ updates:
   - package-ecosystem: "gomod" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "monthly"
+      interval: "weekly"
       
   - package-ecosystem: "npm"
     directory: "api/frontend" # Location of package manifests
     schedule:
-      interval: "monthly"
+      interval: "weekly"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
     directory: "/build/docker" # Location of Dockerfiles
     schedule:
-      interval: "monthly"
+      interval: "weekly"
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/" # Location of workflow files
     schedule:
-      interval: "monthly"
+      interval: "weekly"
 
   # Enable version updates for Docker Compose files
   - package-ecosystem: "docker-compose"
     directory: "/deploy/compose" # Location of docker-compose.yml files
     schedule:
-      interval: "monthly"
+      interval: "weekly"
 
   # Enable version updates for Python dependencies in the docs folder
   - package-ecosystem: "pip"
     directory: "/docs" # Location of requirements.txt or pyproject.toml
     schedule:
-      interval: "monthly"
+      interval: "weekly"
