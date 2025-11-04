@@ -1,3 +1,10 @@
+## v0.0.9 (2025-11-04)
+
+### Fix
+
+- **ci/cd**: add perms to build workflow
+- **ci/cd**: bump actions and weekly dependabot
+
 ## v0.0.8 (2025-11-02)
 
 ### Fix
