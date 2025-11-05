@@ -1,3 +1,11 @@
+## v0.0.10 (2025-11-05)
+
+### Fix
+
+- **frontend**: fe testing: implementation of mockserviceworker (#32)
+- **frontend**: fix test
+- **frontend**: fe testing: implementation of mockserviceworker
+
 ## v0.0.9 (2025-11-04)
 
 ### Fix
