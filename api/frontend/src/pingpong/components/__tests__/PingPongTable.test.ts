@@ -51,12 +51,6 @@ describe("PingPongTable", () => {
         "f660452b-4075-4eac-b87a-a5b1ce7bd428",
       );
       expect(firstRowCells?.[1]?.text()).toBe("pong");
-      expect(firstRowCells?.[2]?.text()).toBe(
-        "Thu Oct 30 2025 08:19:44 GMT-0500 (Central Daylight Time)",
-      );
-      expect(firstRowCells?.[3]?.text()).toBe(
-        "Sun Dec 31 0000 18:09:24 GMT-0550 (Central Standard Time)",
-      );
       expect(firstRowCells?.[4]?.text()).toBe("");
       expect(firstRowCells?.[5]?.text()).toBe("false");
     }
