@@ -32,7 +32,8 @@ export default defineConfig({
     exclude: [
       ...(configDefaults.exclude), 
       '**/services/**', // Exclude service files from tests as they are generated
-    ]
+    ],
+    setupFiles: ['./vitest.setup.ts'],
   },
   base: '/',
   appType: 'spa',
