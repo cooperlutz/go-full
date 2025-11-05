@@ -1,3 +1,10 @@
+## v0.0.11 (2025-11-05)
+
+### Fix
+
+- **frontend**: package bumps and msw version issue (#33)
+- **frontend**: package bumps and msw version issue
+
 ## v0.0.10 (2025-11-05)
 
 ### Fix
