@@ -45,7 +45,7 @@ export function useSendPingPong() {
 
 // Composable for fetching all ping pong entities
 export function useFindAllPingPongs() {
-  const allPingPongs = ref<PingPongsRaw>();
+  const allPingPongs = ref<PingPongsRaw | null>(null);
   const error = ref<Error | null>(null);
   const loading = ref(false);
 
