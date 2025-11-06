@@ -1,3 +1,10 @@
+## v0.0.13 (2025-11-06)
+
+### Fix
+
+- full-stack implementation example (#35)
+- full-stack implementation example
+
 ## v0.0.12 (2025-11-06)
 
 ### Fix
