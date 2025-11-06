@@ -45,6 +45,38 @@ func (c *PingPongRestAPIControllerV1) PingPong(ctx context.Context, request serv
 	return response, nil
 }
 
+// STEP 3.3. Implement API Handlers & Mappers
+// here we implement the handler for the endpoint defined in the openapi spec
+func (c *PingPongRestAPIControllerV1) GetFindOneByID(ctx context.Context, request server.GetFindOneByIDRequestObject) (server.GetFindOneByIDResponseObject, error) {
+	spanCtx := trace.SpanContextFromContext(ctx)
+
+	// first, we map the request object from the API layer, to the query object in the Service Layer
+	q := mapper.MapToQueryFindOneByID(request)
+
+	// using the service Query object, we pass that to the Service method
+	res, err := c.Service.FindOneByID(ctx, q)
+	// if we encounter an error from the service layer, we pass back the 400 response and the resulting error
+	if err != nil {
+		return server.GetFindOneByID400Response{}, err
+	}
+
+	// we map the returned object from the service layer, to the object that we want to return within the API layer
+	response := server.GetFindOneByID200JSONResponse{
+		Body: server.PingPongRaw{
+			CreatedAt: &res.CreatedAt,
+			Deleted:   &res.Deleted,
+			DeletedAt: res.DeletedAt,
+			Id:        &res.ID,
+			Message:   &res.Message,
+			UpdatedAt: &res.UpdatedAt,
+		},
+		Headers: server.GetFindOneByID200ResponseHeaders{XRequestId: spanCtx.SpanID().String()},
+	}
+
+	// finally, we return the resulting object and `nil` for the error return
+	return response, nil
+}
+
 // GET /ping-pongs
 func (c *PingPongRestAPIControllerV1) GetFindAllPingPongs(ctx context.Context, request server.GetFindAllPingPongsRequestObject) (server.GetFindAllPingPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)

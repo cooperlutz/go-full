@@ -7,6 +7,8 @@ package persist_postgres
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const findAll = `-- name: FindAll :many
@@ -117,4 +119,43 @@ func (q *Queries) FindAllPong(ctx context.Context) ([]Pingpong, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const findOneByID = `-- name: FindOneByID :one
+/* STEP 2.1. Implement Data Access Layer
+- Write the associated sql logic in accordance with the specifics defined in SQLC
+- once defined, run ` + "`" + `make queries` + "`" + `, this will run sqlc and generate the relevant Go code
+*/
+
+SELECT pingpong_id, ping_or_pong, created_at, updated_at, deleted_at, deleted
+FROM pingpong
+WHERE pingpong_id = $1
+`
+
+type FindOneByIDParams struct {
+	PingpongID pgtype.UUID `db:"pingpong_id" json:"pingpong_id"`
+}
+
+// FindOneByID
+//
+//	/* STEP 2.1. Implement Data Access Layer
+//	- Write the associated sql logic in accordance with the specifics defined in SQLC
+//	- once defined, run `make queries`, this will run sqlc and generate the relevant Go code
+//	*/
+//
+//	SELECT pingpong_id, ping_or_pong, created_at, updated_at, deleted_at, deleted
+//	FROM pingpong
+//	WHERE pingpong_id = $1
+func (q *Queries) FindOneByID(ctx context.Context, arg FindOneByIDParams) (Pingpong, error) {
+	row := q.db.QueryRow(ctx, findOneByID, arg.PingpongID)
+	var i Pingpong
+	err := row.Scan(
+		&i.PingpongID,
+		&i.PingOrPong,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+		&i.Deleted,
+	)
+	return i, err
 }

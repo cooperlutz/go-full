@@ -619,6 +619,72 @@ func (_c *MockQuerier_FindAllPong_Call) RunAndReturn(run func(ctx context.Contex
 	return _c
 }
 
+// FindOneByID provides a mock function for the type MockQuerier
+func (_mock *MockQuerier) FindOneByID(ctx context.Context, arg persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOneByID")
+	}
+
+	var r0 persist_postgres.Pingpong
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindOneByIDParams) persist_postgres.Pingpong); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(persist_postgres.Pingpong)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, persist_postgres.FindOneByIDParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockQuerier_FindOneByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindOneByID'
+type MockQuerier_FindOneByID_Call struct {
+	*mock.Call
+}
+
+// FindOneByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.FindOneByIDParams
+func (_e *MockQuerier_Expecter) FindOneByID(ctx interface{}, arg interface{}) *MockQuerier_FindOneByID_Call {
+	return &MockQuerier_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, arg)}
+}
+
+func (_c *MockQuerier_FindOneByID_Call) Run(run func(ctx context.Context, arg persist_postgres.FindOneByIDParams)) *MockQuerier_FindOneByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.FindOneByIDParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.FindOneByIDParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockQuerier_FindOneByID_Call) Return(pingpong persist_postgres.Pingpong, err error) *MockQuerier_FindOneByID_Call {
+	_c.Call.Return(pingpong, err)
+	return _c
+}
+
+func (_c *MockQuerier_FindOneByID_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error)) *MockQuerier_FindOneByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FrequencyDistribution provides a mock function for the type MockQuerier
 func (_mock *MockQuerier) FrequencyDistribution(ctx context.Context) ([]persist_postgres.FrequencyDistributionRow, error) {
 	ret := _mock.Called(ctx)
@@ -1384,6 +1450,72 @@ func (_c *MockIQuerierPingPong_FindAllPong_Call) Return(pingpongs []persist_post
 }
 
 func (_c *MockIQuerierPingPong_FindAllPong_Call) RunAndReturn(run func(ctx context.Context) ([]persist_postgres.Pingpong, error)) *MockIQuerierPingPong_FindAllPong_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindOneByID provides a mock function for the type MockIQuerierPingPong
+func (_mock *MockIQuerierPingPong) FindOneByID(ctx context.Context, arg persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOneByID")
+	}
+
+	var r0 persist_postgres.Pingpong
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindOneByIDParams) persist_postgres.Pingpong); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(persist_postgres.Pingpong)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, persist_postgres.FindOneByIDParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierPingPong_FindOneByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindOneByID'
+type MockIQuerierPingPong_FindOneByID_Call struct {
+	*mock.Call
+}
+
+// FindOneByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.FindOneByIDParams
+func (_e *MockIQuerierPingPong_Expecter) FindOneByID(ctx interface{}, arg interface{}) *MockIQuerierPingPong_FindOneByID_Call {
+	return &MockIQuerierPingPong_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, arg)}
+}
+
+func (_c *MockIQuerierPingPong_FindOneByID_Call) Run(run func(ctx context.Context, arg persist_postgres.FindOneByIDParams)) *MockIQuerierPingPong_FindOneByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.FindOneByIDParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.FindOneByIDParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierPingPong_FindOneByID_Call) Return(pingpong persist_postgres.Pingpong, err error) *MockIQuerierPingPong_FindOneByID_Call {
+	_c.Call.Return(pingpong, err)
+	return _c
+}
+
+func (_c *MockIQuerierPingPong_FindOneByID_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.FindOneByIDParams) (persist_postgres.Pingpong, error)) *MockIQuerierPingPong_FindOneByID_Call {
 	_c.Call.Return(run)
 	return _c
 }

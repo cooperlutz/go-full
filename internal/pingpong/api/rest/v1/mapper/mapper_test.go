@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/mapper"
@@ -67,4 +68,24 @@ func TestMapMeasureCountByDateTimeToTrend(t *testing.T) {
 
 	assert.Equal(t, server.TrendValue(7), (*trend.DimensionValues)[0])
 	assert.Equal(t, server.TrendValue(13), (*trend.DimensionValues)[1])
+}
+
+// STEP 3.2. Implement API Handlers & Mappers Tests
+// here, we write the test that implements our logic for mapping objects from Service Layer to API Layer
+func TestMapToQueryFindOneByID(t *testing.T) {
+	// Arrange
+	randomUUID, err := uuid.NewUUID()
+	expectedOutput := query.FindOneByID{
+		ID: randomUUID,
+	}
+	input := server.GetFindOneByIDRequestObject{
+		PingPongID: randomUUID,
+	}
+
+	// Act
+	result := mapper.MapToQueryFindOneByID(input)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.Equal(t, expectedOutput, result)
 }

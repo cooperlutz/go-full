@@ -19,7 +19,9 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
+	"github.com/oapi-codegen/runtime"
 	strictnethttp "github.com/oapi-codegen/runtime/strictmiddleware/nethttp"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 const (
@@ -106,6 +108,9 @@ type ServerInterface interface {
 	// Pong
 	// (POST /ping-pongs)
 	PingPong(w http.ResponseWriter, r *http.Request)
+	// Get a PingPong by ID
+	// (GET /ping-pongs/{pingPongID})
+	GetFindOneByID(w http.ResponseWriter, r *http.Request, pingPongID openapi_types.UUID)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -157,6 +162,12 @@ func (_ Unimplemented) GetFindAllPingPongs(w http.ResponseWriter, r *http.Reques
 // Pong
 // (POST /ping-pongs)
 func (_ Unimplemented) PingPong(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// Get a PingPong by ID
+// (GET /ping-pongs/{pingPongID})
+func (_ Unimplemented) GetFindOneByID(w http.ResponseWriter, r *http.Request, pingPongID openapi_types.UUID) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -345,6 +356,39 @@ func (siw *ServerInterfaceWrapper) PingPong(w http.ResponseWriter, r *http.Reque
 	handler.ServeHTTP(w, r)
 }
 
+// GetFindOneByID operation middleware
+func (siw *ServerInterfaceWrapper) GetFindOneByID(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "pingPongID" -------------
+	var pingPongID openapi_types.UUID
+
+	err = runtime.BindStyledParameterWithOptions("simple", "pingPongID", chi.URLParam(r, "pingPongID"), &pingPongID, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "pingPongID", Err: err})
+		return
+	}
+
+	ctx := r.Context()
+
+	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
+
+	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
+
+	r = r.WithContext(ctx)
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetFindOneByID(w, r, pingPongID)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 type UnescapedCookieParamError struct {
 	ParamName string
 	Err       error
@@ -481,6 +525,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/ping-pongs", wrapper.PingPong)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/ping-pongs/{pingPongID}", wrapper.GetFindOneByID)
 	})
 
 	return r
@@ -984,6 +1031,69 @@ func (response PingPongdefaultResponse) VisitPingPongResponse(w http.ResponseWri
 	return nil
 }
 
+type GetFindOneByIDRequestObject struct {
+	PingPongID openapi_types.UUID `json:"pingPongID"`
+}
+
+type GetFindOneByIDResponseObject interface {
+	VisitGetFindOneByIDResponse(w http.ResponseWriter) error
+}
+
+type GetFindOneByID200ResponseHeaders struct {
+	XRequestId string
+}
+
+type GetFindOneByID200JSONResponse struct {
+	Body    PingPongRaw
+	Headers GetFindOneByID200ResponseHeaders
+}
+
+func (response GetFindOneByID200JSONResponse) VisitGetFindOneByIDResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("X-Request-Id", fmt.Sprint(response.Headers.XRequestId))
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type GetFindOneByID200ApplicationxmlResponse struct {
+	Body          io.Reader
+	Headers       GetFindOneByID200ResponseHeaders
+	ContentLength int64
+}
+
+func (response GetFindOneByID200ApplicationxmlResponse) VisitGetFindOneByIDResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/xml")
+	if response.ContentLength != 0 {
+		w.Header().Set("Content-Length", fmt.Sprint(response.ContentLength))
+	}
+	w.Header().Set("X-Request-Id", fmt.Sprint(response.Headers.XRequestId))
+	w.WriteHeader(200)
+
+	if closer, ok := response.Body.(io.ReadCloser); ok {
+		defer closer.Close()
+	}
+	_, err := io.Copy(w, response.Body)
+	return err
+}
+
+type GetFindOneByID400Response struct {
+}
+
+func (response GetFindOneByID400Response) VisitGetFindOneByIDResponse(w http.ResponseWriter) error {
+	w.WriteHeader(400)
+	return nil
+}
+
+type GetFindOneByIDdefaultResponse struct {
+	StatusCode int
+}
+
+func (response GetFindOneByIDdefaultResponse) VisitGetFindOneByIDResponse(w http.ResponseWriter) error {
+	w.WriteHeader(response.StatusCode)
+	return nil
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 	// Get total number of ping pongs per day
@@ -1010,6 +1120,9 @@ type StrictServerInterface interface {
 	// Pong
 	// (POST /ping-pongs)
 	PingPong(ctx context.Context, request PingPongRequestObject) (PingPongResponseObject, error)
+	// Get a PingPong by ID
+	// (GET /ping-pongs/{pingPongID})
+	GetFindOneByID(ctx context.Context, request GetFindOneByIDRequestObject) (GetFindOneByIDResponseObject, error)
 }
 
 type StrictHandlerFunc = strictnethttp.StrictHTTPHandlerFunc
@@ -1246,28 +1359,55 @@ func (sh *strictHandler) PingPong(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetFindOneByID operation middleware
+func (sh *strictHandler) GetFindOneByID(w http.ResponseWriter, r *http.Request, pingPongID openapi_types.UUID) {
+	var request GetFindOneByIDRequestObject
+
+	request.PingPongID = pingPongID
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetFindOneByID(ctx, request.(GetFindOneByIDRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetFindOneByID")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetFindOneByIDResponseObject); ok {
+		if err := validResponse.VisitGetFindOneByIDResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/+yYX2/bNhfGvwpfvruUI9lxi0x3GboNRS4WBNkwLAiKY/HIZkuRLEm5MQx/94GUJf+R",
-	"7CiNUxRr7mSTPOc5PD8+lL2kmSq0kiidpemSzhAYmvD49+AGP5do3eA9859tNsMC/BNDmxmuHVeSpvR2",
-	"hqSU/HOJhDOUjuccDcmVIW6GxFQxzmhE3UIjTal1hsspXa1W0TpmSHfN5fRayWk7wSXxY0QZEsYjqo3S",
-	"aBzHsLBAa2GK3cLWg0TlQc1eIHyAQgsvyg/8r0Nj842afMTM0VXUCL2BL0/WmhkEh+zSdasNw1xJ4niB",
-	"1kGha+F+X91iR/IoGZ0PhskgGd4OR2mSpEnyD41orkwBjqaUgcOBD9QuK6IMBTpkbRnvJeMZOLSEb2cm",
-	"3JJ6zZaIHITFJvxEKYEgt+IfKjQMHyk08tlBa8EzmAg8VJYshQjjqTMldpTJQ4WPtjk6DUTjn+Etezse",
-	"D87H7M1gnI3Y4AIm2eAiZ3ABw+F4wsZdyUvNjlEhwDpSzXlpMI7xbrtoz5QQmIVWqpzUU+sds60DoLmc",
-	"6joYd1iEh58M5jSl/483ZhSvrSFufGGjDYyBxSNiD5zOb6fXC+gl+dagZIecJKhj4IC4MG1fH+MFSsuV",
-	"vMKF7cbnEy5sTQvDnEtkVTDSLKZRv9qC1CtctAuLNkr+AlFih5Z5+J6AtSrjnnfyhbtZkFXX1l9ESPKE",
-	"/fWi02X76G0F2wxz6XCKprqiuMxVGOOusZD1yZ+jsVVtw7PkLPHxlEYJmtOUnp8lZyPfL3CzUFNcoDM8",
-	"szEDLhbvuBcxKavNWdIpdpz+G78C50icciCILIsJmh1wA+tEoyEMvAt4NsIV4u9s+ju6d61kETVotZK2",
-	"atIoScLNpKRDGTSsfddPjj/aSt7m8n+0NaEL2zEeCrEborGq0Zuoc893d+GPKxodezHpUrSeHu/MDbHH",
-	"Vb37t94cBGeES1266v7KoRQdLflT4oPGzOOLxigTqrWYlcbbcHrnt49/+ORxu7tfRUs6AcuzD1C6Wfjm",
-	"PqK2LAowi6o/rdZ6xyF6r60OvAPd0TVC9N5nbYAKIXZs+jk0dVF0u5vhmQgd7/8rPF8Pj2+RbdrYk5pn",
-	"EcMfI+aVlu+blp6cvKyzvLrKd83JUT/xF9bAX1jhqQckIEQPAzmJd/R5UbeP09E3zA/GSd3IbTbqH0xt",
-	"ONRXwHHINU5iGK9wvDgcqh8cT+SiE4nfuGSX4nQvqb3aGn7knwSQKtIPaiD6MCcR1cp2aLlW1hFo/YPT",
-	"ImPr5/r6r+hfFFucnITTUNBFQKhOw0IoYOsiuEFW/eW5+gaQv1xp/12418R1+V6Iauah5LslLY2gKZ05",
-	"p9M4FioDMVPWpRfJRRLXy2LQPJ4Pqc+6mW97LLhvNOyX+2v1wkvqJaQ5Nv4gSij8G3Cj22few5IfWdM1",
-	"/2COEP9+9W8AAAD//1FVXVmKGgAA",
+	"H4sIAAAAAAAC/+yZ327bNhTGX4XjdilHsuMWme5SZBuCXDQIsmFYYBS0eGSzpUiWpNwIht99IPXHdiTb",
+	"SuMERZM7xSQPv8Pz40eJWeJEZkoKENbgeInnQCho//jv4Aa+5mDs4JK6v00yh4y4Jwom0UxZJgWO8e0c",
+	"UC7Y1xwQoyAsSxlolEqN7ByQLmOc4ADbQgGOsbGaiRlerVZBFdNPd83E7FqKWXuCc+TakNTItwdYaalA",
+	"WwZ+YAbGkBl0C6sakUy9mgeB4J5kijtRruGXDo3NL3L6GRKLV0Ej9IZ8e7TWRAOxQM9tt1rfzKRAlmVg",
+	"LMlULdytqy22JI+i0elgGA2i4e1wFEdRHEX/4QCnUmfE4hhTYmHgArXTCjAFDhZoW8aloCwhFgximzMj",
+	"ZlA9ZkNESriBJvxUSg5EbMTflahv3pNo4GYnSnGWkCmHXWmJnHPfHludQ0eazGd4sMzBcSAa/07e0/fj",
+	"8eB0TN8NxsmIDs7INBmcpZSckeFwPKXjrslzRfdRwYmxqOzz3GDs49100Z5IziHxpZQpqrvWK2ZaG0Ax",
+	"MVN1MGYh8w+/aUhxjH8N12YUVtYQNr6w1ka0JsUBsTt258vpdQJ6Sb7VIOguJ/HqKLEEWd/toT7KMhCG",
+	"SXEFhenG5wsUpqaFQsoE0DIYagbjoF9uXuoVFO3EgrWSfwjPoUPLwv+OiDEyYY539I3ZuZdV59ZfhJ/k",
+	"EevrRMfL9tbbCLZuZsLCDHR5RDGRSt/GbGMh1c5fgDZlbsOT6CRy8aQCQRTDMT49iU5Grl7Ezn1OYQZW",
+	"s8SElDBeXDAnYpqXi7PEM+jY/TduBCwAWWkJRyLPpqC3wPWsIwUaUeJcwLHhjxB3ZuO/wF60JguwBqOk",
+	"MGWRRlHkTyYpLAivofJd1zn8bEp568P/YGl8FTZj3Gd8O0RjVaN3Qeeab6/Cxysc7Hsx6VJUdQ+3+vrY",
+	"4zLfh6fegnBGERMqt+X5lZKcd5TkbwH3ChKHL2gttc/WQJJrZ8PxnVs+9umLw+1usgqWeEoMSz6R3M79",
+	"L5MAmzzLiC7K+rRK6xwHqQdltcQ50B2uEMITN2sDlA+xZdNPoamLotvtGZ6I0P76v8Hz/fC4EpmmjD2p",
+	"eRIx7BAxb7T82LT05OR5neXNVX5oTvb6iTuwBu7A8k89ICGc9zCQo3hHnxd1c5iOvmFeGSd1ITfZqD+Y",
+	"2nDI74Bjl2scxTDe4Hh2OGQ/OB7JRScSfzJBz/nxXlJ7ldV/5B8FkDLSKzUQtZuTACtpOrRcS2MRad3g",
+	"tMjY+FyvrqI/SFocnYTjUNBFgM9OkYJLQqskmAZaXnmuXgDy50vt54W7Iu6g74VLVa3P5cWqhwkiw8SM",
+	"wxr7aYGYNejyYpclfhTwofDNimiSgfVrfdd1UXh5sXnD7cNbiXQ1OQ4wcz0VsXMcYEEy9468lt9iM9gg",
+	"pLl7znNGO66dJy/A8dG8+nVa9RZzvtxddPtZ9KKGLNccx3hurYrDkMuE8Lk0Nj6LzqKwHhYSxcLFEDsV",
+	"6/6mx4BJo+Fh+n+Un3OoHoKavWG22VXlfxZapwvbM6ar/845fPzJ6v8AAAD//9UY0YpoHQAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

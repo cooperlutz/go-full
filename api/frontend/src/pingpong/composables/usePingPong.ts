@@ -3,8 +3,10 @@ import { ref } from "vue";
 import { BackendConfig } from "~/pingpong/config";
 import {
   PingpongApi,
+  type GetFindOneByIDRequest,
   type PingPongRequest,
   type PingPong,
+  // type PingPongRaw,
   type PingPongsRaw,
 } from "~/pingpong/services";
 
@@ -70,5 +72,39 @@ export function useFindAllPingPongs() {
     error,
     loading,
     fetchData,
+  };
+}
+
+/* STEP 5.2. Implement Frontend Composable
+here we define the composable which will be used to interact with our REST API
+the composable will be tested via the component tests in conjunction with the MSW endpoint
+*/
+export function useFindPingPongByID() {
+  // initialize a null error and set our loading state to false
+  const error = ref<Error | null>(null);
+  const loading = ref(false);
+
+  const lookup = async (id: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const req: GetFindOneByIDRequest = {
+        pingPongID: id,
+      };
+      const getByID = await pingpongAPI.getFindOneByID(req);
+      return getByID;
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = err;
+      }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    lookup,
+    error,
+    loading,
   };
 }

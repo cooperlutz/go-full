@@ -17,13 +17,18 @@ var _ IPingPongService = (*PingPongService)(nil)
 // IPingPongService is the interface that describes the pingpong service.
 type IPingPongService interface {
 	PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) // creates a new pingpong message
-	FindAllPings(ctx context.Context) (query.FindAllQueryResponse, error)                             // returns all ping messages
-	FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error)                             // returns all pong messages
-	FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error)                               // returns all ping and pong messages
-	TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error)                         // returns the total number of pingpong
-	TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error)                             // returns the total number of pings
-	TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error)                             // returns the total number of pongs
-	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error)   // returns the total number of pingpongs created per day
+
+	// STEP 4.1. Implement Service Interface
+	// here we define what we want the service interface to do, we provide the Query struct,
+	// and return the resulting response containing the relevant entity attributes
+	FindOneByID(ctx context.Context, q query.FindOneByID) (query.FindOneByIDResponse, error)        // returns one ping pong according to the id provided
+	FindAllPings(ctx context.Context) (query.FindAllQueryResponse, error)                           // returns all ping messages
+	FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error)                           // returns all pong messages
+	FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error)                             // returns all ping and pong messages
+	TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error)                       // returns the total number of pingpong
+	TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error)                           // returns the total number of pings
+	TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error)                           // returns the total number of pongs
+	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) // returns the total number of pingpongs created per day
 }
 
 type PingPongService struct {
@@ -55,6 +60,29 @@ func (s *PingPongService) PingPong(ctx context.Context, cmd command.PingPongComm
 	result := command.NewPingPongCommandResult(outputResponseMessage)
 
 	return result, nil
+}
+
+// STEP 4.3. Implement Service Logic
+// here we implement the service layer logic.
+func (s *PingPongService) FindOneByID(ctx context.Context, q query.FindOneByID) (query.FindOneByIDResponse, error) {
+	// update the context with a new span
+	ctx, span := telemetree.AddSpan(ctx, "service.findOneById")
+	defer span.End()
+
+	// execute the relevant method at the repository persistence layer
+	pp, err := s.Persist.FindOneByID(ctx, q.ID)
+	if err != nil {
+		return query.FindOneByIDResponse{}, err
+	}
+
+	// map the entity to the common result object
+	result := mapper.MapToRawResult(pp)
+
+	// create the response object that we need to return from our method
+	response := query.FindOneByIDResponse{PingPongRawResult: result}
+
+	// finally, we return the response object, and a `nil` for error
+	return response, nil
 }
 
 func (s *PingPongService) FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error) {

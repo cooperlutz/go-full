@@ -14,6 +14,9 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/oapi-codegen/runtime"
+	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
 const (
@@ -172,6 +175,9 @@ type ClientInterface interface {
 	PingPongWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	PingPong(ctx context.Context, body PingPongJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetFindOneByID request
+	GetFindOneByID(ctx context.Context, pingPongID openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) GetDailyDistribution(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -272,6 +278,18 @@ func (c *Client) PingPongWithBody(ctx context.Context, contentType string, body 
 
 func (c *Client) PingPong(ctx context.Context, body PingPongJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPingPongRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetFindOneByID(ctx context.Context, pingPongID openapi_types.UUID, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetFindOneByIDRequest(c.Server, pingPongID)
 	if err != nil {
 		return nil, err
 	}
@@ -511,6 +529,40 @@ func NewPingPongRequestWithBody(server string, contentType string, body io.Reade
 	return req, nil
 }
 
+// NewGetFindOneByIDRequest generates requests for GetFindOneByID
+func NewGetFindOneByIDRequest(server string, pingPongID openapi_types.UUID) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "pingPongID", runtime.ParamLocationPath, pingPongID)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/ping-pongs/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -579,6 +631,9 @@ type ClientWithResponsesInterface interface {
 	PingPongWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PingPongResponse, error)
 
 	PingPongWithResponse(ctx context.Context, body PingPongJSONRequestBody, reqEditors ...RequestEditorFn) (*PingPongResponse, error)
+
+	// GetFindOneByIDWithResponse request
+	GetFindOneByIDWithResponse(ctx context.Context, pingPongID openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetFindOneByIDResponse, error)
 }
 
 type GetDailyDistributionResponse struct {
@@ -765,6 +820,29 @@ func (r PingPongResponse) StatusCode() int {
 	return 0
 }
 
+type GetFindOneByIDResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PingPongRaw
+	XML200       *PingPongRaw
+}
+
+// Status returns HTTPResponse.Status
+func (r GetFindOneByIDResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetFindOneByIDResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 // GetDailyDistributionWithResponse request returning *GetDailyDistributionResponse
 func (c *ClientWithResponses) GetDailyDistributionWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetDailyDistributionResponse, error) {
 	rsp, err := c.GetDailyDistribution(ctx, reqEditors...)
@@ -843,6 +921,15 @@ func (c *ClientWithResponses) PingPongWithResponse(ctx context.Context, body Pin
 		return nil, err
 	}
 	return ParsePingPongResponse(rsp)
+}
+
+// GetFindOneByIDWithResponse request returning *GetFindOneByIDResponse
+func (c *ClientWithResponses) GetFindOneByIDWithResponse(ctx context.Context, pingPongID openapi_types.UUID, reqEditors ...RequestEditorFn) (*GetFindOneByIDResponse, error) {
+	rsp, err := c.GetFindOneByID(ctx, pingPongID, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetFindOneByIDResponse(rsp)
 }
 
 // ParseGetDailyDistributionResponse parses an HTTP response from a GetDailyDistributionWithResponse call
@@ -1099,6 +1186,39 @@ func ParsePingPongResponse(rsp *http.Response) (*PingPongResponse, error) {
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "xml") && rsp.StatusCode == 200:
 		var dest PingPong
+		if err := xml.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.XML200 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetFindOneByIDResponse parses an HTTP response from a GetFindOneByIDWithResponse call
+func ParseGetFindOneByIDResponse(rsp *http.Response) (*GetFindOneByIDResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetFindOneByIDResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PingPongRaw
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "xml") && rsp.StatusCode == 200:
+		var dest PingPongRaw
 		if err := xml.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

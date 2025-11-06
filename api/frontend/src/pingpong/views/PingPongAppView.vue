@@ -2,6 +2,7 @@
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 import PingPongButtons from "../components/PingPongButtons/PingPongButtons.vue";
 import PingPongInput from "../components/PingPongInput.vue";
+import PingPongLookup from "../components/PingPongLookup.vue";
 </script>
 
 <template>
@@ -18,5 +19,9 @@ import PingPongInput from "../components/PingPongInput.vue";
     <PingPongButtons />
 
     <PingPongInput />
+    <!-- STEP 5.5. Implement Frontend Component within the View
+    finally, we implement the component into the frontend UI View
+    -->
+    <PingPongLookup />
   </div>
 </template>
