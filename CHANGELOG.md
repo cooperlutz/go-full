@@ -1,3 +1,10 @@
+## v0.0.12 (2025-11-06)
+
+### Fix
+
+- **frontend**: testing improvements to frontend (#34)
+- **frontend**: testing improvements to frontend
+
 ## v0.0.11 (2025-11-05)
 
 ### Fix
