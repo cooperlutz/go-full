@@ -8,7 +8,7 @@
     "src/**/*.vue", 
     "tests/*.ts",
     "document-load.ts", 
-    "test/mocks"  
+    "test/mocks/**/*.ts"  
 ],
   "exclude": [
     "public/*",

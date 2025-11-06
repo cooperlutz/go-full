@@ -4,12 +4,7 @@ import { onMounted } from "vue";
 import { type PingPongRaw } from "~/pingpong/services";
 import { useFindAllPingPongs } from "~/pingpong/composables/usePingPong";
 
-const {
-  // error,
-  loading,
-  allPingPongs,
-  fetchData,
-} = useFindAllPingPongs();
+const { error, loading, allPingPongs, fetchData } = useFindAllPingPongs();
 
 // Define table headers explicitly
 const pingPongTableHeaders: Record<keyof PingPongRaw, string> = {
@@ -34,7 +29,7 @@ onMounted(async () => {
       <h2 class="card-title">Ping Pongs</h2>
       <p>All Ping Pongs</p>
     </div>
-    <table class="table table-xs" :v-if="!loading">
+    <table class="table table-xs" v-if="!loading && !error">
       <thead>
         <tr>
           <th v-for="header in pingPongTableHeaders" :key="header">
@@ -53,5 +48,9 @@ onMounted(async () => {
         </tr>
       </tbody>
     </table>
+    <div v-else-if="loading">Loading ping pongs...</div>
+    <div v-else-if="error" id="pingpong-table-error">
+      Error loading ping pongs: {{ error }}
+    </div>
   </div>
 </template>
