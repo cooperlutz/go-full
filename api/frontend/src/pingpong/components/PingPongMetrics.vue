@@ -36,33 +36,39 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div :v-if="!state.loading">
+  <div v-if="!state.loading && !state.error">
     <!-- section header -->
     <h2>Metrics</h2>
 
     <!-- Total Number of PingPongs -->
     <div class="stats shadow border border-secondary">
-      <div class="stat place-items-center">
+      <div id="metrics-totalpingpongs" class="stat place-items-center">
         <div class="stat-title">Total Number of PingPongs</div>
         <div class="stat-value">
           {{ totalNumberOfPingPongs }}
         </div>
       </div>
 
-      <div class="stat place-items-center">
+      <div id="metrics-totalpings" class="stat place-items-center">
         <div class="stat-title">Total Number of Pings</div>
         <div class="stat-value">
           {{ totalNumberOfPings }}
         </div>
       </div>
 
-      <div class="stat place-items-center">
+      <div id="metrics-totalpongs" class="stat place-items-center">
         <div class="stat-title">Total Number of Pongs</div>
         <div class="stat-value">
           {{ totalNumberOfPongs }}
         </div>
       </div>
     </div>
+  </div>
+
+  <div v-else-if="state.loading">Loading metrics...</div>
+
+  <div v-else-if="state.error" id="metrics-error">
+    Error loading metrics: {{ state.error }}
   </div>
 
   <SectionDivider />
