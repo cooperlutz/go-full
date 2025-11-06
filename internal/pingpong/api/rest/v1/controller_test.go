@@ -22,8 +22,9 @@ import (
 )
 
 var (
-	testTime       = time.Date(2023, time.January, 1, 12, 0, 0, 0, time.UTC)
-	testTimeString = "2023-01-01 12:00:00 +0000 UTC"
+	testTime        = time.Date(2023, time.January, 1, 12, 0, 0, 0, time.UTC)
+	testTimeString  = "2023-01-01 12:00:00 +0000 UTC"
+	validPingPongID = uuid.UUID([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 )
 
 func TestPingPongRestAPIController_PingPong(t *testing.T) {
@@ -248,6 +249,145 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 			assert.Equal(t, tt.expectedResponse, response)
 			// Assertions of the written response
 			response.VisitGetFindAllPingPongsResponse(rr)
+			assert.Equal(t, tt.expectedResponseCode, rr.Code)
+		})
+	}
+}
+
+// STEP 3.2. Implement API Handlers & Mappers Tests
+// Develop tests for the API handlers and mappers
+// GetFindOneByID
+func TestPingPongRestAPIController_GetFindOneByID_Success(t *testing.T) {
+	t.Parallel()
+
+	// Arrange
+
+	// Unit tests for the PingPongRestAPIController
+	tests := []struct {
+		testCaseName         string
+		param                v1_server.GetFindOneByIDRequestObject
+		expectedResponse     v1_server.GetFindOneByIDResponseObject
+		expectedResponseCode int
+		expectedServiceError error
+	}{
+		{
+			testCaseName: "GET all pingpongs, receive Ping! and Pong!",
+			param: v1_server.GetFindOneByIDRequestObject{
+				PingPongID: validPingPongID,
+			},
+			expectedResponse: v1_server.GetFindOneByID200JSONResponse{
+				Body: v1_server.PingPongRaw{
+					Message:   utilitee.StrPtr("Ping!"),
+					Deleted:   utilitee.BoolPtr(false),
+					DeletedAt: nil,
+					CreatedAt: &testTime,
+					UpdatedAt: &testTime,
+					Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000000"),
+				},
+				Headers: v1_server.GetFindOneByID200ResponseHeaders{
+					XRequestId: "0000000000000000",
+				},
+			},
+			expectedResponseCode: 200,
+			expectedServiceError: nil,
+		},
+	}
+
+	tempUUID, _ := uuid.Parse("00000000-0000-0000-0000-000000000000")
+	ctx := t.Context()
+
+	// Mock the service
+	mock_svc := mocks.NewMockIPingPongService(t)
+	// Define the expected behavior of the mock service
+	mock_svc.On(
+		"FindOneByID",
+		ctx,
+		query.FindOneByID{ID: validPingPongID},
+	).Return(
+		query.FindOneByIDResponse{
+			PingPongRawResult: common.PingPongRawResult{
+				Message:   "Ping!",
+				CreatedAt: testTime,
+				UpdatedAt: testTime,
+				ID:        tempUUID.String(),
+				DeletedAt: nil,
+				Deleted:   false,
+			},
+		},
+		nil,
+	)
+	// Ensure that the mock expectations are met
+	defer mock_svc.AssertExpectations(t)
+
+	controller := v1.NewRestAPIController(mock_svc)
+
+	for _, tt := range tests {
+		t.Run(tt.testCaseName, func(t *testing.T) {
+			ctx := t.Context()
+			rr := httptest.NewRecorder()
+			// Act
+			response, err := controller.GetFindOneByID(ctx, tt.param)
+			// Assert
+			assert.Equal(t, tt.expectedServiceError, err)
+			assert.Equal(t, tt.expectedResponse, response)
+			// Assertions of the written response
+			response.VisitGetFindOneByIDResponse(rr)
+			assert.Equal(t, tt.expectedResponseCode, rr.Code)
+		})
+	}
+}
+
+func TestPingPongRestAPIController_GetFindOneByID_Failure(t *testing.T) {
+	t.Parallel()
+
+	// Arrange
+	tempError := errors.New("there's an error")
+	rr := httptest.NewRecorder()
+	ctx := t.Context()
+	// Unit tests for the PingPongRestAPIController
+	tests := []struct {
+		testCaseName         string
+		param                v1_server.GetFindOneByIDRequestObject
+		expectedResponse     v1_server.GetFindOneByIDResponseObject
+		expectedResponseCode int
+		expectedServiceError error
+	}{
+		{
+			testCaseName: "GET all pingpongs, receive Ping! and Pong!",
+			param: v1_server.GetFindOneByIDRequestObject{
+				PingPongID: validPingPongID,
+			},
+			expectedResponse:     v1_server.GetFindOneByID400Response{},
+			expectedResponseCode: 400,
+			expectedServiceError: tempError,
+		},
+	}
+
+	// Mock the service
+	mock_svc := mocks.NewMockIPingPongService(t)
+	// Define the expected behavior of the mock service
+	mock_svc.On(
+		"FindOneByID",
+		ctx,
+		query.FindOneByID{ID: validPingPongID},
+	).Return(
+		query.FindOneByIDResponse{},
+		tempError,
+	)
+	// ensure that the mock expectations are met
+	defer mock_svc.AssertExpectations(t)
+	// setup the controller
+	controller := v1.NewRestAPIController(mock_svc)
+
+	for _, tt := range tests {
+		t.Run(tt.testCaseName, func(t *testing.T) {
+			// Act
+			response, err := controller.GetFindOneByID(ctx, tt.param)
+
+			// Assert
+			assert.Equal(t, tt.expectedServiceError, err)
+			assert.Equal(t, tt.expectedResponse, response)
+			response.VisitGetFindOneByIDResponse(rr)
 			assert.Equal(t, tt.expectedResponseCode, rr.Code)
 		})
 	}

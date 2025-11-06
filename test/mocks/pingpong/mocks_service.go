@@ -220,6 +220,72 @@ func (_c *MockIPingPongService_FindAllPongs_Call) RunAndReturn(run func(ctx cont
 	return _c
 }
 
+// FindOneByID provides a mock function for the type MockIPingPongService
+func (_mock *MockIPingPongService) FindOneByID(ctx context.Context, q query.FindOneByID) (query.FindOneByIDResponse, error) {
+	ret := _mock.Called(ctx, q)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindOneByID")
+	}
+
+	var r0 query.FindOneByIDResponse
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, query.FindOneByID) (query.FindOneByIDResponse, error)); ok {
+		return returnFunc(ctx, q)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, query.FindOneByID) query.FindOneByIDResponse); ok {
+		r0 = returnFunc(ctx, q)
+	} else {
+		r0 = ret.Get(0).(query.FindOneByIDResponse)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, query.FindOneByID) error); ok {
+		r1 = returnFunc(ctx, q)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIPingPongService_FindOneByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindOneByID'
+type MockIPingPongService_FindOneByID_Call struct {
+	*mock.Call
+}
+
+// FindOneByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - q query.FindOneByID
+func (_e *MockIPingPongService_Expecter) FindOneByID(ctx interface{}, q interface{}) *MockIPingPongService_FindOneByID_Call {
+	return &MockIPingPongService_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, q)}
+}
+
+func (_c *MockIPingPongService_FindOneByID_Call) Run(run func(ctx context.Context, q query.FindOneByID)) *MockIPingPongService_FindOneByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 query.FindOneByID
+		if args[1] != nil {
+			arg1 = args[1].(query.FindOneByID)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIPingPongService_FindOneByID_Call) Return(findOneByIDResponse query.FindOneByIDResponse, err error) *MockIPingPongService_FindOneByID_Call {
+	_c.Call.Return(findOneByIDResponse, err)
+	return _c
+}
+
+func (_c *MockIPingPongService_FindOneByID_Call) RunAndReturn(run func(ctx context.Context, q query.FindOneByID) (query.FindOneByIDResponse, error)) *MockIPingPongService_FindOneByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // PingPong provides a mock function for the type MockIPingPongService
 func (_mock *MockIPingPongService) PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) {
 	ret := _mock.Called(ctx, cmd)

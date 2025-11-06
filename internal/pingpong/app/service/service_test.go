@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.opentelemetry.io/otel"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
+	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/service"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/pkg/types"
@@ -23,6 +25,9 @@ import (
 var (
 	testTracerProvider *trace.TracerProvider
 	testExporter       *tracetest.InMemoryExporter
+	timeNow            = time.Now()
+	validPingPongID    = uuid.New()
+	validPingPongIDTwo = uuid.New()
 )
 
 func TestMain(m *testing.M) {
@@ -117,6 +122,51 @@ func TestPingPongService_PingPong_OtelSpan(t *testing.T) {
 	spans := testExporter.GetSpans()
 	assert.Len(t, spans, 1)
 	assert.Equal(t, "service.pingpong", spans[0].Name)
+}
+
+// STEP 4.2. Implement Service Logic Tests
+// here we define our tests for the service layer logic
+func TestPingPongService_FindOneByID_Success(t *testing.T) {
+	// Arrange
+	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockRepo.On("FindOneByID", mock.Anything, validPingPongID).Return(entity.PingPongEntity{
+		Message: "pong",
+		PingPongMetadata: &entity.PingPongMetadata{
+			PingPongID: validPingPongID,
+			CreatedAt:  timeNow,
+			UpdatedAt:  timeNow,
+			DeletedAt:  nil,
+			Deleted:    false,
+		},
+	}, nil)
+	defer mockRepo.AssertExpectations(t)
+
+	// Act
+	svc := service.NewPingPongService(mockRepo)
+	resp, err := svc.FindOneByID(context.Background(), query.FindOneByID{ID: validPingPongID})
+
+	// Assert
+	assert.NoError(t, err)
+	assert.NotNil(t, resp)
+}
+
+func TestPingPongService_FindOneByID_RepoError(t *testing.T) {
+	// Arrange
+	mockRepo := mocks.NewMockIPingPongRepository(t)
+	ctx := context.Background()
+	tempError := errors.New("findone error")
+	expectedResponse := query.FindOneByIDResponse{}
+	mockRepo.On("FindOneByID", mock.Anything, validPingPongID).Return(entity.PingPongEntity{}, tempError)
+	defer mockRepo.AssertExpectations(t)
+
+	// Act
+	svc := service.NewPingPongService(mockRepo)
+	resp, err := svc.FindOneByID(ctx, query.FindOneByID{ID: validPingPongID})
+
+	// Assert
+	assert.Equal(t, expectedResponse, resp)
+	assert.Error(t, err)
+	assert.EqualError(t, err, "findone error")
 }
 
 func TestPingPongService_FindAll_Success(t *testing.T) {

@@ -117,6 +117,43 @@ paths:
           application/xml:
             schema:
               $ref: '#/components/schemas/PingPong'
+# STEP 3.1. Implement OpenAPI Spec
+# once the spec has been written, run `make gen` to generate the associated server + client code
+  /ping-pongs/{pingPongID}:
+    get:
+      tags:
+        - pingpong # the tag or tags will correlate with the api class defined in the api/frontend/{module}/services/apis
+      summary: Get a PingPong by ID
+      description: Retrieve a single PingPong by its ID
+      operationId: getFindOneByID # the operationId corelates to the function name withihn the Go server, Go Client, and TS Client implemented within the module's frontend services
+      security:
+        - api_key: []
+        - basic_auth: []
+      parameters:
+        - name: pingPongID
+          in: path
+          description: The ID of the PingPong to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingPongRaw'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PingPongRaw'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
   /ping-pong/pings:
     get:
       tags:

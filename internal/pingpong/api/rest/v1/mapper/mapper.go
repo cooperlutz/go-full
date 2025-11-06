@@ -13,6 +13,14 @@ func MapPingPongToCommand(req server.PingPongRequestObject) command.PingPongComm
 	}
 }
 
+// STEP 3.3. Implement API Handlers & Mappers
+// here, we write code that implements our logic for mapping objects from Service Layer to API Layer
+func MapToQueryFindOneByID(req server.GetFindOneByIDRequestObject) query.FindOneByID {
+	return query.FindOneByID{
+		ID: req.PingPongID,
+	}
+}
+
 func MapFindAllToResponse(res query.FindAllQueryResponse) server.PingPongs {
 	var httpPings []server.PingPong
 	for _, p := range res.PingPongs {

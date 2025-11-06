@@ -37,6 +37,17 @@ type Querier interface {
 	//  SELECT pingpong_id, ping_or_pong, created_at, updated_at, deleted_at, deleted FROM pingpong
 	//  WHERE ping_or_pong = 'pong'
 	FindAllPong(ctx context.Context) ([]Pingpong, error)
+	//FindOneByID
+	//
+	//  /* STEP 2.1. Implement Data Access Layer
+	//  - Write the associated sql logic in accordance with the specifics defined in SQLC
+	//  - once defined, run `make queries`, this will run sqlc and generate the relevant Go code
+	//  */
+	//
+	//  SELECT pingpong_id, ping_or_pong, created_at, updated_at, deleted_at, deleted
+	//  FROM pingpong
+	//  WHERE pingpong_id = $1
+	FindOneByID(ctx context.Context, arg FindOneByIDParams) (Pingpong, error)
 	//FrequencyDistribution
 	//
 	//  SELECT ping_or_pong, COUNT(*) AS frequency
