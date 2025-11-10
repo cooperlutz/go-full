@@ -213,7 +213,7 @@ install-playwright: ### install playwright browsers
 ############################################################################
 
 compose-e2e:
-	docker-compose -f ./test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from e2e
+	docker compose -f ./test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from e2e
 .PHONY: compose-e2e
 
 e2e: ### run e2e tests
