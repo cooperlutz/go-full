@@ -1,0 +1,24 @@
+name: go-full
+
+include:
+  # Application & Database
+  - ../../deploy/compose/app/docker-compose.go-full.yml
+  - ../../deploy/compose/database/docker-compose.postgres.yml
+
+services:
+
+  e2e:
+    container_name: go-full_e2e
+    build:
+      context: ../../
+      dockerfile: test/e2e/Dockerfile
+    depends_on:
+      - app
+    networks:
+      app_network:
+        aliases:
+          - e2e.lvh.me
+          
+networks:
+  app_network:
+    external: false
