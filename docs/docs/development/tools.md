@@ -174,6 +174,18 @@ Documentation: [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azu
 
 ---
 
+## Playwright-Go
+
+| category | detail |
+| --- | --- |
+| Documentation | [Playwright-Go](https://playwright-community.github.io/playwright-go/) |
+| System Context | Core / Backend + Frontend |
+| Purpose | Core Library for development of end to end tests |
+| Configuration | |
+| Usage | Run `make compose-e2e` or `make e2e` to run e2e tests |
+
+---
+
 ## Prettier
 
 | category | detail |

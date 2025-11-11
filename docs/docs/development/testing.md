@@ -25,11 +25,13 @@ The frontend test suite consists of:
 To run the frontend tests, use one of the following commands:
 
 ```bash
+# from root dir
 /> make test-fe
 
-/api/frontend/> pnpm test
+# from frontend dir
+/api/frontend/> pnpm test # runs test
 
-/api/frontend/> pnpm coverage
+/api/frontend/> pnpm coverage # runs coverage
 ```
 
 ## Backend
@@ -47,6 +49,47 @@ To run the backend tests, use the following command:
 /> make test-be
 ```
 
-## End-to-End (E2E) Testing
+## End-to-End (e2e) Testing
 
-<!-- TODO: WIP -->
+End to End testing is implemented using [Playwright](https://playwright.dev/) with the [playwright-go](https://github.com/playwright-community/playwright-go) library.
+
+### Writing e2e Tests
+
+End to End tests SHOULD adhere to [Behavior-Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) practices, which emphasize focusing on the User perspective and the associated scenario a User encounters within the system.
+
+Behavior-Driven Development Tests should follow the Given-When-Then format:
+
+- Given: the initial context at the beginning of the scenario, in one or more clauses;
+- When: the event that triggers the scenario;
+- Then: the expected outcome, in one or more clauses.
+
+In order to develop e2e tests, the following development flow is recommended:
+
+- Open 2 terminal sessions
+
+    ```bash
+    # Terminal 1
+    make compose
+    ```
+
+- Write the associated Test
+- Run the test locally
+
+    ```bash
+    # Terminal 2
+    make e2e
+    ```
+
+### Running e2e Tests
+
+Run with docker compose to handle spinning up the application + database + e2e tests within a container
+
+```bash
+make compose-e2e
+```
+
+Run locally (**assuming the app + database are already running**)
+
+```bash
+make e2e
+```

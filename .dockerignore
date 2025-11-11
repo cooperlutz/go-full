@@ -4,6 +4,7 @@
 # Ignore common directories
 .git/
 .github/
+.coverage/
 
 build/
 configs/
@@ -13,11 +14,13 @@ docs/
 tools/
 web/node_modules/
 
+.cz.yaml
 .dockerignore
 *.env
 .env.example
 .gitignore
 .golangci.yml
+.goreleaser.yaml
 .sqlc.yaml
 .mockery.yml
 

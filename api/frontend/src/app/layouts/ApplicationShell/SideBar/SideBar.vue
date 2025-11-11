@@ -20,9 +20,9 @@ const sidebarItems = ref<SidebarItem[]>([
 </script>
 
 <template>
-  <!-- <body> -->
   <!-- Sidebar -->
   <aside
+    id="sidebar"
     class="fixed top-0 h-screen overflow-y-auto bg-base-200 w-64 border-r shadow-sm z-49"
   >
     <!-- Sidebar Header -->

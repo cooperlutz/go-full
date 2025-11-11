@@ -177,20 +177,9 @@ ci: pre-wflow deps deps-audit lint format test cover-filter ### run all ci tasks
 compose: release-local run ### run docker compose
 .PHONY: compose
 
-compose-test: release-local run-with-test ### run docker compose
-.PHONY: compose-test
-
-compose-e2e:
-	docker-compose -f ./deploy/compose/test/docker-compose.e2e-standalone.yml up --build
-.PHONY: compose-e2e
-
 run: ### Run Local
 	docker compose --env-file ".env" -f ./deploy/compose/docker-compose.yml up --build
 .PHONY: run
-
-run-with-test: ### Run Local
-	docker compose --env-file ".env" -f ./deploy/compose/docker-compose.yml --profile test up --build
-.PHONY: run-with-test
 
 install: install-tools install-brews install-playwright ### install all dependencies
 .PHONY: install
@@ -223,8 +212,12 @@ install-playwright: ### install playwright browsers
 #                            TESTING                                     #
 ############################################################################
 
+compose-e2e: ### run containerized e2e tests with docker compose
+	docker compose --env-file ".env.example" -f ./test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from e2e
+.PHONY: compose-e2e
+
 e2e: ### run e2e tests
-	go test -v ./test/e2e/...
+	go test -count=1 -v ./test/e2e/...
 .PHONY: e2e
 
 test-fe: ### run frontend test once

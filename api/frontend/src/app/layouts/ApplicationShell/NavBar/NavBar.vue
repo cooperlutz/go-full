@@ -7,7 +7,7 @@ import LogoName from "./NavBarLogo.vue";
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 w-full z-50 bg-info">
+  <div id="navbar" class="fixed top-0 left-0 w-full z-50 bg-info">
     <div class="mx-auto max-w-7xl px-6 sm:px-6 lg:px-8">
       <div class="relative flex h-16 justify-between">
         <div class="flex flex-1 items-stretch justify-start">

@@ -6,7 +6,7 @@ import SideBar from "~/app/layouts/ApplicationShell/SideBar/SideBar.vue";
 </script>
 
 <template>
-  <div class="antialiased">
+  <div id="app-shell" class="antialiased">
     <NavBar />
     <SideBar>
       <template v-slot:content>
