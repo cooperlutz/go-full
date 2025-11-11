@@ -213,11 +213,11 @@ install-playwright: ### install playwright browsers
 ############################################################################
 
 compose-e2e: ### run containerized e2e tests with docker compose
-	docker compose -f ./test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from e2e
+	docker compose --env-file ".env.example" -f ./test/e2e/docker-compose.yml up --build --abort-on-container-exit --exit-code-from e2e
 .PHONY: compose-e2e
 
 e2e: ### run e2e tests
-	go test -v ./test/e2e/...
+	go test -count=1 -v ./test/e2e/...
 .PHONY: e2e
 
 test-fe: ### run frontend test once

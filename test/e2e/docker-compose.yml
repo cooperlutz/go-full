@@ -1,5 +1,19 @@
 name: go-full
 
+x-app-environment: &x-app-environment
+  # HTTP Server
+  HTTP_PORT: ${HTTP_PORT}
+  # Database
+  DB_HOST: db
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_PORT: ${DB_PORT}
+  DB_DBNAME: ${DB_DBNAME}
+  DB_SSLMODE: ${DB_SSLMODE}
+  DB_TYPE: ${DB_TYPE}
+  # Telemetry
+  OBSERVE_TRACE_ENDPOINT: ${OBSERVE_TRACE_ENDPOINT}
+
 include:
   # Application & Database
   - ../../deploy/compose/app/docker-compose.go-full.yml
@@ -14,6 +28,8 @@ services:
       dockerfile: test/e2e/Dockerfile
     depends_on:
       - app
+    environment:
+      <<: *x-app-environment
     networks:
       app_network:
         aliases:

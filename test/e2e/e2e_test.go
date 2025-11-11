@@ -44,7 +44,11 @@ func TestMain(m *testing.M) {
 func setupEndToEndTests() error {
 	slog.Info("setting up e2e tests...")
 
-	var err error
+	err := seedTestData()
+	if err != nil {
+		return err
+	}
+
 	pw, err = playwright.Run()
 	if err != nil {
 		return err
