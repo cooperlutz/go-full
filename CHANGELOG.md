@@ -1,3 +1,9 @@
+## v0.0.14 (2025-11-11)
+
+### Fix
+
+- **testing**: implementation of e2e testing functionality (#41)
+
 ## v0.0.13 (2025-11-06)
 
 ### Fix
