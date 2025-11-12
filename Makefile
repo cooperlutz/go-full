@@ -197,6 +197,7 @@ install-brews: ### install brew packages
 	brew install mockery
 	brew install goreleaser
 # deployment tools
+	brew install kind
 	brew tap azure/azd && brew install azd
 .PHONY: install-brews
 
@@ -286,3 +287,52 @@ init-env-file: ### initialize .env file from .env.example if it does not exist
 
 init: coverage-directory init-env-file all compose ### initialize project
 .PHONY: init
+
+############################################################################
+#                       KUBERNETES / KIND                                  #
+############################################################################
+
+kind-cluster-create: ### create kind k8s cluster
+	kind create cluster --name go-full --config ./configs/kind/kind-config.yml
+.PHONY: kind-cluster-create
+
+kind-cluster-delete: ### delete kind k8s cluster
+	kind delete cluster --name go-full
+.PHONY: kind-cluster-delete
+
+kind-load-images: ### load local image into kind k8s cluster
+	kind load docker-image ghcr.io/cooperlutz/go-full:latest-amd64 --name go-full
+	docker save postgres:18-alpine | docker exec -i go-full-control-plane ctr --namespace=k8s.io images import - & wait;
+.PHONY: kind-load-images
+
+kind-helm-charts: ### install helm charts
+	helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+	helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+	helm install \
+		cert-manager oci://quay.io/jetstack/charts/cert-manager \
+		--version v1.19.1 \
+		--namespace cert-manager \
+		--create-namespace \
+		--set crds.enabled=true
+.PHONY: kind-helm-charts
+
+kind-create-token: ### create service acct and token
+	@echo "Creating admin user and token for Kubernetes Dashboard..."
+	kubectl -n kubernetes-dashboard create serviceaccount admin-user
+	kubectl -n kubernetes-dashboard create clusterrolebinding admin-user-binding --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:admin-user
+	kubectl -n kubernetes-dashboard create token admin-user | tee configs/kind/token
+.PHONY: kind-create-token
+
+kind-apply: ### apply k8s manifests to kind k8s cluster
+	kubectl apply --recursive -f ./deploy/k8s/
+.PHONY: kind-apply
+
+kind-setup: kind-cluster-create kind-load-images kind-helm-charts kind-create-token kind-apply ### setup kind k8s cluster
+.PHONY: kind-setup
+
+kind-dashboard: ### port-forward kubernetes dashboard
+	kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443
+.PHONY: kind-dashboard
+
+kind-reset: kind-cluster-delete kind-setup ### reset kind k8s cluster
+.PHONY: kind-reset

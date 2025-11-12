@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f deploy/compose/docker-compose.yml
+    kompose.version: 1.37.0 (HEAD)
+  labels:
+    io.kompose.service: app
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: app
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f deploy/compose/docker-compose.yml
+        kompose.version: 1.37.0 (HEAD)
+      labels:
+        io.kompose.service: app
+    spec:
+      containers:
+        - env:
+            - name: DB_DBNAME
+              value: db
+            - name: DB_HOST
+              value: db
+            - name: DB_PASSWORD
+              value: myAwEsOm3pa55@w0rd
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_SSLMODE
+              value: disable
+            - name: DB_TYPE
+              value: postgres
+            - name: DB_USER
+              value: user
+            - name: HTTP_PORT
+              value: ":8080"
+            - name: OBSERVE_TRACE_ENDPOINT
+              value: "jaeger.lvh.me:4318"
+          image: ghcr.io/cooperlutz/go-full
+          name: go-full-app
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      restartPolicy: Always

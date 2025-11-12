@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f deploy/compose/docker-compose.yml
+    kompose.version: 1.37.0 (HEAD)
+  labels:
+    io.kompose.service: prometheus
+  name: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: prometheus
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f deploy/compose/docker-compose.yml
+        kompose.version: 1.37.0 (HEAD)
+      labels:
+        io.kompose.service: prometheus
+    spec:
+      containers:
+        - image: prom/prometheus:v3.1.0
+          name: go-full-prometheus
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/prometheus/prometheus.yml
+              name: prometheus-cm0
+              subPath: prometheus.yml
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: prometheus.yml
+                path: prometheus.yml
+            name: prometheus-cm0
+          name: prometheus-cm0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f deploy/compose/docker-compose.yml
+    kompose.version: 1.37.0 (HEAD)
+  labels:
+    io.kompose.service: prometheus
+  name: prometheus
+spec:
+  ports:
+    - name: "9090"
+      port: 9090
+      targetPort: 9090
+  selector:
+    io.kompose.service: prometheus
+---
+apiVersion: v1
+data:
+  prometheus.yml: |-
+    global:
+      scrape_interval: 60s
+      evaluation_interval: 60s
+
+    scrape_configs:
+      - job_name: 'app-metrics'
+        metrics_path: '/metrics'
+        static_configs:
+          - targets: ['app:8080']
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  labels:
+    io.kompose.service: prometheus
+  name: prometheus-cm0
