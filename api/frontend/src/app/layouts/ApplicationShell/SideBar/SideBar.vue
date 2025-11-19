@@ -33,7 +33,11 @@ const sidebarItems = ref<SidebarItem[]>([
       <!-- Navigation Section -->
       <div class="px-4 mb-4">
         <nav class="mt-2 space-y-1">
-          <div v-for="item in sidebarItems" :key="item.name" class="mb-2">
+          <div
+            v-for="item in sidebarItems"
+            :key="item.name"
+            class="sidebar-item mb-2"
+          >
             <!-- if the sidebar item has no children -->
             <a
               v-if="!item.children"
