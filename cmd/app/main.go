@@ -7,7 +7,7 @@ import (
 
 	"github.com/cooperlutz/go-full/app"
 	"github.com/cooperlutz/go-full/app/config"
-	"github.com/cooperlutz/go-full/pkg/deebee"
+	"github.com/cooperlutz/go-full/pkg/deebee/migration"
 )
 
 // main is the entry point of the application.
@@ -26,7 +26,7 @@ func main() {
 	// Run migrations if the flag is set
 	if *flagMigrate {
 		log.Print("Running migrations before starting the app...\n")
-		deebee.Migrate(conf.DB.Type, conf.DB.GetURL())
+		migration.Migrate(conf.DB.Type, conf.DB.GetURL())
 	}
 
 	// Create and start the application

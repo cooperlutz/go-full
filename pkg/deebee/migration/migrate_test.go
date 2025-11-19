@@ -1,16 +1,18 @@
-package deebee
+package migration_test
 
 import (
 	"testing"
 	"time"
+
+	"github.com/cooperlutz/go-full/pkg/deebee/migration"
 )
 
-// TestNewPostgresMigration_InvalidURL tests that newPostgresMigration returns an error for an invalid URL.
+// TestNewPostgresMigration_InvalidURL tests that NewPostgresMigration returns an error for an invalid URL.
 func TestNewPostgresMigration_InvalidURL(t *testing.T) {
 	t.Parallel()
 
 	invalidURL := "invalid://localhost:5432/db"
-	m, err := newPostgresMigration(invalidURL)
+	m, err := migration.NewPostgresMigration(invalidURL)
 	if err == nil {
 		t.Errorf("expected error for invalid URL, got nil")
 	}
@@ -25,9 +27,9 @@ func TestNewPostgresMigration_Timeout(t *testing.T) {
 
 	start := time.Now()
 	invalidURL := "invalid://localhost:5432/db"
-	_, _ = newPostgresMigration(invalidURL)
+	_, _ = migration.NewPostgresMigration(invalidURL)
 	elapsed := time.Since(start)
-	minExpected := _defaultAttempts * _defaultTimeout
+	minExpected := migration.DefaultMigrationAttempts * migration.DefaultMigrationTimeout
 	if elapsed < minExpected {
 		t.Errorf("expected at least %v of retries, got %v", minExpected, elapsed)
 	}

@@ -177,6 +177,10 @@ ci: pre-wflow deps deps-audit lint format test cover-filter ### run all ci tasks
 compose: release-local run ### run docker compose
 .PHONY: compose
 
+compose-down: ### stop docker compose
+	docker compose -f ./deploy/compose/docker-compose.yml down
+.PHONY: compose-down
+
 run: ### Run Local
 	docker compose --env-file ".env" -f ./deploy/compose/docker-compose.yml up --build
 .PHONY: run
