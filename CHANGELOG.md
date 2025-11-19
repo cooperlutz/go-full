@@ -1,3 +1,9 @@
+## v0.0.17 (2025-11-19)
+
+### Fix
+
+- cleanup of db migration package (#44)
+
 ## v0.0.16 (2025-11-19)
 
 ### Fix
