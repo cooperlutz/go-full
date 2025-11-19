@@ -1,8 +1,9 @@
-package deebee
+package migration
 
 import (
 	"errors"
 	"log"
+	"slices"
 	"time"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -11,45 +12,24 @@ import (
 )
 
 const (
-	_defaultAttempts = 20
-	_defaultTimeout  = 1 * time.Second
+	DefaultMigrationAttempts = 20
+	DefaultMigrationTimeout  = 1 * time.Second
+	DefaultMigrationSource   = "file://db/migrations"
 )
-
-func newPostgresMigration(databaseURL string) (*migrate.Migrate, error) {
-	var (
-		attempts = _defaultAttempts
-		err      error
-		m        *migrate.Migrate
-	)
-
-	for attempts > 0 {
-		m, err = migrate.New("file://db/migrations", databaseURL)
-		if err == nil {
-			break
-		}
-
-		log.Printf("Migrate: postgres is trying to connect, attempts left: %d", attempts)
-		time.Sleep(_defaultTimeout)
-
-		attempts--
-	}
-
-	return m, err
-}
 
 // Migrate runs the database migrations.
 func Migrate(databaseDriver, databaseURL string) {
-	log.Printf("Migrate: starting migrations for driver %s, url: %s", databaseDriver, databaseURL)
+	log.Printf("Migrate: starting migrations")
 
 	supportedDatabaseDrivers := []string{
 		"postgres",
 	}
 
-	if databaseDriver != "postgres" {
+	if !slices.Contains(supportedDatabaseDrivers, databaseDriver) {
 		log.Fatalf("Migrate: unsupported database driver %s, supported drivers are: %v", databaseDriver, supportedDatabaseDrivers)
 	}
 
-	m, err := newPostgresMigration(databaseURL)
+	m, err := NewPostgresMigration(databaseURL)
 	if err != nil {
 		log.Fatalf("Migrate: postgres connect error: %s", err)
 	}
@@ -67,4 +47,27 @@ func Migrate(databaseDriver, databaseURL string) {
 	}
 
 	log.Printf("Migrate: migrations applied successfully for driver %s", databaseDriver)
+}
+
+func NewPostgresMigration(databaseURL string) (*migrate.Migrate, error) {
+	var (
+		attempts = DefaultMigrationAttempts
+		err      error
+		m        *migrate.Migrate
+	)
+
+	for attempts > 0 {
+		m, err = migrate.New(DefaultMigrationSource, databaseURL)
+		if err == nil {
+			break
+		}
+
+		log.Printf("Migrate: postgres is trying to connect, attempts left: %d", attempts)
+
+		time.Sleep(DefaultMigrationTimeout)
+
+		attempts--
+	}
+
+	return m, err
 }
