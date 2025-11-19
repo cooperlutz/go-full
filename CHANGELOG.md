@@ -1,3 +1,9 @@
+## v0.0.16 (2025-11-19)
+
+### Fix
+
+- **frontend**: update deps due to vulnerabilities (#43)
+
 ## v0.0.15 (2025-11-11)
 
 ### Fix
