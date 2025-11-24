@@ -1,3 +1,9 @@
+## v0.0.19 (2025-11-24)
+
+### Fix
+
+- remove codecov step for branches coming from dependabot (#54)
+
 ## v0.0.18 (2025-11-24)
 
 ### Fix
