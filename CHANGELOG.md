@@ -1,3 +1,9 @@
+## v0.0.20 (2025-11-24)
+
+### Fix
+
+- bump versions from dependabot (#55)
+
 ## v0.0.19 (2025-11-24)
 
 ### Fix
