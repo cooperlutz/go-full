@@ -5,7 +5,7 @@ import (
 
 	v1 "github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1"
 	v1_server "github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/server"
-	"github.com/cooperlutz/go-full/internal/pingpong/app/service"
+	"github.com/cooperlutz/go-full/internal/pingpong/app/usecase"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
@@ -15,7 +15,7 @@ import (
 //
 // Currently, this is "/ping-pong", so the full path to the v1 API will be `/ping-pong/api/v1`
 // Any handlers mounted will then be relative to that path, e.g. `/ping-pong/api/v1/ping`
-func NewPingPongAPIRouter(svc service.IPingPongService) http.Handler {
+func NewPingPongAPIRouter(svc usecase.IPingPongUseCase) http.Handler {
 	/*
 		Setup API Versions
 	*/
