@@ -6,20 +6,20 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/cooperlutz/go-full/internal/pingpong/api/rest"
-	"github.com/cooperlutz/go-full/internal/pingpong/app/service"
+	"github.com/cooperlutz/go-full/internal/pingpong/app/usecase"
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist"
 )
 
 type PingPongModule struct {
 	PersistentRepo *persist.PingPongPersistPostgresRepository
-	Service        *service.PingPongService
+	Service        *usecase.PingPongUseCase
 	RestApi        http.Handler
 }
 
 // NewModule - Initializes the PingPong module with its needed dependencies.
 func NewModule(pgconn *pgxpool.Pool) *PingPongModule {
 	repo := persist.NewPingPongPostgresRepo(pgconn)
-	svc := service.NewPingPongService(repo)
+	svc := usecase.NewPingPongUseCase(repo)
 	api := rest.NewPingPongAPIRouter(svc)
 
 	module := &PingPongModule{
