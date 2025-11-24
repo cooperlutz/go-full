@@ -1,3 +1,15 @@
+## v0.0.19 (2025-11-24)
+
+### Fix
+
+- remove codecov step for branches coming from dependabot (#54)
+
+## v0.0.18 (2025-11-24)
+
+### Fix
+
+- hitting bug in workflow, testing reverting of the setup go step (#53)
+
 ## v0.0.17 (2025-11-19)
 
 ### Fix
