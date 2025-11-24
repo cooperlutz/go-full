@@ -7,7 +7,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/mapper"
 	"github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/server"
-	"github.com/cooperlutz/go-full/internal/pingpong/app/service"
+	"github.com/cooperlutz/go-full/internal/pingpong/app/usecase"
 )
 
 // ensure that we've conformed to the `ServerInterface` with a compile-time check
@@ -15,13 +15,13 @@ var _ server.StrictServerInterface = (*PingPongRestAPIControllerV1)(nil)
 
 // PingPongRestAPIControllerV1 is the controller for the PingPong API
 type PingPongRestAPIControllerV1 struct {
-	Service service.IPingPongService
+	UseCase usecase.IPingPongUseCase
 }
 
 // NewRestAPIController creates a new PingPongRestAPIControllerV1
-func NewRestAPIController(svc service.IPingPongService) *PingPongRestAPIControllerV1 {
+func NewRestAPIController(svc usecase.IPingPongUseCase) *PingPongRestAPIControllerV1 {
 	return &PingPongRestAPIControllerV1{
-		Service: svc,
+		UseCase: svc,
 	}
 }
 
@@ -31,7 +31,7 @@ func (c *PingPongRestAPIControllerV1) PingPong(ctx context.Context, request serv
 
 	command := mapper.MapPingPongToCommand(request)
 
-	cmdResponse, err := c.Service.PingPong(ctx, command)
+	cmdResponse, err := c.UseCase.PingPong(ctx, command)
 	if err != nil {
 		return server.PingPong400Response{}, err
 	}
@@ -54,7 +54,7 @@ func (c *PingPongRestAPIControllerV1) GetFindOneByID(ctx context.Context, reques
 	q := mapper.MapToQueryFindOneByID(request)
 
 	// using the service Query object, we pass that to the Service method
-	res, err := c.Service.FindOneByID(ctx, q)
+	res, err := c.UseCase.FindOneByID(ctx, q)
 	// if we encounter an error from the service layer, we pass back the 400 response and the resulting error
 	if err != nil {
 		return server.GetFindOneByID400Response{}, err
@@ -81,7 +81,7 @@ func (c *PingPongRestAPIControllerV1) GetFindOneByID(ctx context.Context, reques
 func (c *PingPongRestAPIControllerV1) GetFindAllPingPongs(ctx context.Context, request server.GetFindAllPingPongsRequestObject) (server.GetFindAllPingPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	queryResponse, err := c.Service.FindAll(ctx)
+	queryResponse, err := c.UseCase.FindAll(ctx)
 	if err != nil {
 		return server.GetFindAllPingPongs400Response{}, err
 	}
@@ -100,7 +100,7 @@ func (c *PingPongRestAPIControllerV1) GetFindAllPingPongs(ctx context.Context, r
 func (c *PingPongRestAPIControllerV1) GetPings(ctx context.Context, request server.GetPingsRequestObject) (server.GetPingsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	allPings, err := c.Service.FindAllPings(ctx)
+	allPings, err := c.UseCase.FindAllPings(ctx)
 	if err != nil {
 		return server.GetPings400Response{}, err
 	}
@@ -118,7 +118,7 @@ func (c *PingPongRestAPIControllerV1) GetPings(ctx context.Context, request serv
 func (c *PingPongRestAPIControllerV1) GetPongs(ctx context.Context, request server.GetPongsRequestObject) (server.GetPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	allPongs, err := c.Service.FindAllPongs(ctx)
+	allPongs, err := c.UseCase.FindAllPongs(ctx)
 	if err != nil {
 		return server.GetPongs400Response{}, err
 	}
@@ -136,7 +136,7 @@ func (c *PingPongRestAPIControllerV1) GetPongs(ctx context.Context, request serv
 func (c *PingPongRestAPIControllerV1) GetTotalPingPongs(ctx context.Context, request server.GetTotalPingPongsRequestObject) (server.GetTotalPingPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	totalPingPongs, err := c.Service.TotalNumberOfPingPongs(ctx)
+	totalPingPongs, err := c.UseCase.TotalNumberOfPingPongs(ctx)
 	if err != nil {
 		return server.GetTotalPingPongs400Response{}, err
 	}
@@ -152,7 +152,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPingPongs(ctx context.Context, req
 func (c *PingPongRestAPIControllerV1) GetTotalPings(ctx context.Context, request server.GetTotalPingsRequestObject) (server.GetTotalPingsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	totalPingPongs, err := c.Service.TotalNumberOfPings(ctx)
+	totalPingPongs, err := c.UseCase.TotalNumberOfPings(ctx)
 	if err != nil {
 		return server.GetTotalPings400Response{}, err
 	}
@@ -168,7 +168,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPings(ctx context.Context, request
 func (c *PingPongRestAPIControllerV1) GetTotalPongs(ctx context.Context, request server.GetTotalPongsRequestObject) (server.GetTotalPongsResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
 
-	totalPingPongs, err := c.Service.TotalNumberOfPongs(ctx)
+	totalPingPongs, err := c.UseCase.TotalNumberOfPongs(ctx)
 	if err != nil {
 		return server.GetTotalPongs400Response{}, err
 	}
@@ -183,7 +183,7 @@ func (c *PingPongRestAPIControllerV1) GetTotalPongs(ctx context.Context, request
 // GET /metrics/dailyDistribution
 func (c *PingPongRestAPIControllerV1) GetDailyDistribution(ctx context.Context, request server.GetDailyDistributionRequestObject) (server.GetDailyDistributionResponseObject, error) {
 	spanCtx := trace.SpanContextFromContext(ctx)
-	dailyDistribution, err := c.Service.TotalNumberOfPingPongsPerDay(ctx)
+	dailyDistribution, err := c.UseCase.TotalNumberOfPingPongsPerDay(ctx)
 	if err != nil {
 		return server.GetDailyDistribution400Response{}, err
 	}
