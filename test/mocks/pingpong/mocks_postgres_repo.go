@@ -7,7 +7,7 @@ package mocks
 import (
 	"context"
 
-	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
+	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/jackc/pgx/v5"
 	mock "github.com/stretchr/testify/mock"
 )
