@@ -66,7 +66,7 @@ func TestSavePingPong_Success(t *testing.T) {
 	mockQuerier.On("WithTx", mock.Anything).Return(mockQuerier)
 	mockDB.ExpectCommit()
 
-	p := &entity.PingPongEntity{
+	p := entity.PingPongEntity{
 		Message: "ping",
 		PingPongMetadata: &entity.PingPongMetadata{
 			CreatedAt:  timeNow,

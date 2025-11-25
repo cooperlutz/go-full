@@ -11,7 +11,7 @@ import (
 )
 
 // SavePingPong - Save a PingPong entity to the database.
-func (r *PingPongPersistPostgresRepository) SavePingPong(ctx context.Context, p *entity.PingPongEntity) error {
+func (r *PingPongPersistPostgresRepository) SavePingPong(ctx context.Context, p entity.PingPongEntity) error {
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.savepingpong",
 		[]attribute.KeyValue{
