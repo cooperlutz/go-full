@@ -1,3 +1,9 @@
+## v0.0.21 (2025-11-25)
+
+### Fix
+
+- remove entity pointer from repo (#57)
+
 ## v0.0.20 (2025-11-24)
 
 ### Fix
