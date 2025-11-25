@@ -347,7 +347,7 @@ func (_c *MockIPingPongRepository_FindOneByID_Call) RunAndReturn(run func(ctx co
 }
 
 // SavePingPong provides a mock function for the type MockIPingPongRepository
-func (_mock *MockIPingPongRepository) SavePingPong(ctx context.Context, p *entity.PingPongEntity) error {
+func (_mock *MockIPingPongRepository) SavePingPong(ctx context.Context, p entity.PingPongEntity) error {
 	ret := _mock.Called(ctx, p)
 
 	if len(ret) == 0 {
@@ -355,7 +355,7 @@ func (_mock *MockIPingPongRepository) SavePingPong(ctx context.Context, p *entit
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *entity.PingPongEntity) error); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, entity.PingPongEntity) error); ok {
 		r0 = returnFunc(ctx, p)
 	} else {
 		r0 = ret.Error(0)
@@ -370,20 +370,20 @@ type MockIPingPongRepository_SavePingPong_Call struct {
 
 // SavePingPong is a helper method to define mock.On call
 //   - ctx context.Context
-//   - p *entity.PingPongEntity
+//   - p entity.PingPongEntity
 func (_e *MockIPingPongRepository_Expecter) SavePingPong(ctx interface{}, p interface{}) *MockIPingPongRepository_SavePingPong_Call {
 	return &MockIPingPongRepository_SavePingPong_Call{Call: _e.mock.On("SavePingPong", ctx, p)}
 }
 
-func (_c *MockIPingPongRepository_SavePingPong_Call) Run(run func(ctx context.Context, p *entity.PingPongEntity)) *MockIPingPongRepository_SavePingPong_Call {
+func (_c *MockIPingPongRepository_SavePingPong_Call) Run(run func(ctx context.Context, p entity.PingPongEntity)) *MockIPingPongRepository_SavePingPong_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *entity.PingPongEntity
+		var arg1 entity.PingPongEntity
 		if args[1] != nil {
-			arg1 = args[1].(*entity.PingPongEntity)
+			arg1 = args[1].(entity.PingPongEntity)
 		}
 		run(
 			arg0,
@@ -398,7 +398,7 @@ func (_c *MockIPingPongRepository_SavePingPong_Call) Return(err error) *MockIPin
 	return _c
 }
 
-func (_c *MockIPingPongRepository_SavePingPong_Call) RunAndReturn(run func(ctx context.Context, p *entity.PingPongEntity) error) *MockIPingPongRepository_SavePingPong_Call {
+func (_c *MockIPingPongRepository_SavePingPong_Call) RunAndReturn(run func(ctx context.Context, p entity.PingPongEntity) error) *MockIPingPongRepository_SavePingPong_Call {
 	_c.Call.Return(run)
 	return _c
 }

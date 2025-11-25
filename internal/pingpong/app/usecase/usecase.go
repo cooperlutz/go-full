@@ -50,7 +50,7 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 		return command.PingPongCommandResult{}, err
 	}
 
-	if err := s.Persist.SavePingPong(ctx, inputEntity); err != nil {
+	if err := s.Persist.SavePingPong(ctx, *inputEntity); err != nil {
 		return command.PingPongCommandResult{}, err
 	}
 

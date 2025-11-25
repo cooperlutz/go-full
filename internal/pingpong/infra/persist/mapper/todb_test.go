@@ -16,12 +16,12 @@ func TestMapToDB(t *testing.T) {
 
 	tests := []struct {
 		name string
-		pp   *entity.PingPongEntity
+		pp   entity.PingPongEntity
 		want postgresql.CreatePingPongParams
 	}{
 		{
 			name: "Valid PingPongEntity to DB Create Params",
-			pp: &entity.PingPongEntity{
+			pp: entity.PingPongEntity{
 				Message: "ping",
 				PingPongMetadata: &entity.PingPongMetadata{
 					PingPongID: sampleUUID,

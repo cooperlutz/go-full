@@ -56,7 +56,7 @@ func TestNewPingPongUseCaseWithMockRepo(t *testing.T) {
 // Test successful PingPong call
 func TestPingPongUseCase_PingPong_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("*entity.PingPongEntity")).Return(nil)
+	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(nil)
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongUseCase(mockRepo)
@@ -88,7 +88,7 @@ func TestPingPongUseCase_PingPong_MapperError(t *testing.T) {
 // Test error from repository
 func TestPingPongUseCase_PingPong_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("*entity.PingPongEntity")).Return(errors.New("repo error"))
+	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(errors.New("repo error"))
 	defer mockRepo.AssertExpectations(t)
 
 	cmd := command.PingPongCommand{Message: "ping"}
@@ -105,7 +105,7 @@ func TestPingPongUseCase_PingPong_OtelSpan(t *testing.T) {
 	testExporter.Reset()
 
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("*entity.PingPongEntity")).Return(nil)
+	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(nil)
 	defer mockRepo.AssertExpectations(t)
 
 	svc := service.NewPingPongUseCase(mockRepo)

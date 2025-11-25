@@ -11,7 +11,7 @@ import (
 
 type IPingPongRepository interface {
 	// Commands
-	SavePingPong(ctx context.Context, p *entity.PingPongEntity) error
+	SavePingPong(ctx context.Context, p entity.PingPongEntity) error
 
 	// Queries
 	FindAll(ctx context.Context) (entity.ListOfPingPongs, error)
