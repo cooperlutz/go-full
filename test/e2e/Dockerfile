@@ -31,9 +31,10 @@ COPY . /workdir
 
 WORKDIR /workdir
 
-RUN apt-get update && apt-get install -y ca-certificates tzdata \
+RUN apt-get update
+RUN apt-get install -y ca-certificates tzdata
     # Install dependencies and all browsers (or specify one)
-    && /playwright install --with-deps \
-    && rm -rf /var/lib/apt/lists/*
+RUN /playwright install --with-deps
+RUN rm -rf /var/lib/apt/lists/*
 
 CMD ["go", "test", "-v", "./test/e2e/..."]
