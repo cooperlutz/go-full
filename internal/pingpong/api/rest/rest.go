@@ -15,7 +15,7 @@ import (
 //
 // Currently, this is "/ping-pong", so the full path to the v1 API will be `/ping-pong/api/v1`
 // Any handlers mounted will then be relative to that path, e.g. `/ping-pong/api/v1/ping`
-func NewPingPongAPIRouter(svc usecase.IPingPongUseCase) http.Handler {
+func NewPingPongAPIRouter(uc usecase.IPingPongUseCase) http.Handler {
 	/*
 		Setup API Versions
 	*/
@@ -24,7 +24,7 @@ func NewPingPongAPIRouter(svc usecase.IPingPongUseCase) http.Handler {
 	pingPongRouter := hteeteepee.NewRouter("pingpong-api")
 
 	// Create the v1 controller
-	controller := v1.NewRestAPIController(svc)
+	controller := v1.NewRestAPIController(uc)
 
 	// Create the v1 handler from the controller
 	// We're using the "strict" handler which enforces request validation

@@ -16,6 +16,6 @@ func TestNewModule(t *testing.T) {
 
 	assert.NotNil(t, module)
 	assert.NotNil(t, module.RestApi)
-	assert.NotNil(t, module.Service)
+	assert.NotNil(t, module.UseCase)
 	assert.NotNil(t, module.PersistentRepo)
 }
