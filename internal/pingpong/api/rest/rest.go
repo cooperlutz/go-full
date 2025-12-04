@@ -21,7 +21,7 @@ func NewPingPongAPIRouter(uc usecase.IPingPongUseCase) http.Handler {
 	*/
 
 	// Create a new Chi based router instance to be used by the PingPong API
-	pingPongRouter := hteeteepee.NewRouter("pingpong-api")
+	pingPongRouter := hteeteepee.NewRouter("pingpong.api")
 
 	// Create the v1 controller
 	controller := v1.NewRestAPIController(uc)
