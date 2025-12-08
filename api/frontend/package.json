@@ -41,7 +41,7 @@
     "@vitejs/plugin-vue": "^6.0.2",
     "@vitejs/plugin-vue-jsx": "^5.1.1",
     "@vitest/coverage-v8": "4.0.10",
-    "@vitest/eslint-plugin": "^1.4.3",
+    "@vitest/eslint-plugin": "^1.5.2",
     "@vitest/ui": "^4.0.10",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-standard-with-typescript": "^9.2.0",
