@@ -1,3 +1,9 @@
+## v0.0.23 (2025-12-08)
+
+### Fix
+
+- **deps**: bump daisyui from 5.5.5 to 5.5.8 in /api/frontend (#65)
+
 ## v0.0.22 (2025-12-08)
 
 ### Fix
