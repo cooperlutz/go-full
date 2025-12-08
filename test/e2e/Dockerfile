@@ -2,14 +2,14 @@
 # https://github.com/playwright-community/playwright-go/blob/main/Dockerfile.example
 
 # Stage 1: Modules caching
-FROM golang:1.25.4 AS modules
+FROM golang:1.25.5 AS modules
 
 COPY go.mod go.sum /modules/
 WORKDIR /modules
 RUN go mod download
 
 # Stage 2: Build
-FROM golang:1.25.4 AS builder
+FROM golang:1.25.5 AS builder
 
 COPY --from=modules /go/pkg /go/pkg
 COPY . /workdir
