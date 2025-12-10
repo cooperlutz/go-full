@@ -15,7 +15,7 @@ func (r *PingPongPersistPostgresRepository) SavePingPong(ctx context.Context, p 
 	// telemetree: Add a tracing span for the SavePingPong operation
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.savepingpong",
 		[]attribute.KeyValue{
-			attribute.String("pingpong.message", p.Message),
+			attribute.String("pingpong.message", p.GetMessage()),
 		}...,
 	)
 	defer span.End()

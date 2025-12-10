@@ -9,6 +9,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 func TestMapToDB(t *testing.T) {
@@ -21,16 +22,7 @@ func TestMapToDB(t *testing.T) {
 	}{
 		{
 			name: "Valid PingPongEntity to DB Create Params",
-			pp: entity.PingPongEntity{
-				Message: "ping",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: sampleUUID,
-					CreatedAt:  sampleTime,
-					UpdatedAt:  sampleTime,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
+			pp:   fixtures.ValidPing,
 			want: postgresql.CreatePingPongParams{
 				PingpongID: pgtype.UUID{Bytes: sampleUUID, Valid: true},
 				PingOrPong: pgtype.Text{String: "ping", Valid: true},

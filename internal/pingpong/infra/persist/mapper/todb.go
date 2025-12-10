@@ -9,9 +9,9 @@ import (
 
 func MapToDB(pp entity.PingPongEntity) postgresql.CreatePingPongParams {
 	return postgresql.CreatePingPongParams{
-		PingpongID: pgtype.UUID{Bytes: pp.PingPongID, Valid: true},
-		PingOrPong: pgtype.Text{String: pp.Message, Valid: pp.Valid()},
-		CreatedAt:  pgtype.Timestamptz{Time: pp.CreatedAt, InfinityModifier: pgtype.Finite, Valid: true},
+		PingpongID: pgtype.UUID{Bytes: pp.GetIdUUID(), Valid: pp.Valid()},
+		PingOrPong: pgtype.Text{String: pp.GetMessage(), Valid: pp.Valid()},
+		CreatedAt:  pgtype.Timestamptz{Time: pp.GetCreatedAtTime(), InfinityModifier: pgtype.Finite, Valid: pp.Valid()},
 		DeletedAt:  pgtype.Timestamptz{},
 		Deleted:    false,
 	}

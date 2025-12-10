@@ -18,6 +18,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
 	"github.com/cooperlutz/go-full/pkg/types"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
+	"github.com/cooperlutz/go-full/test/fixtures"
 	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
 )
 
@@ -175,7 +176,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 							DeletedAt: nil,
 							CreatedAt: &testTime,
 							UpdatedAt: &testTime,
-							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000000"),
+							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000001"),
 						},
 						{
 							Message:   utilitee.StrPtr("Pong!"),
@@ -183,7 +184,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 							DeletedAt: nil,
 							CreatedAt: &testTime,
 							UpdatedAt: &testTime,
-							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000000"),
+							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000001"),
 						},
 					},
 				},
@@ -196,7 +197,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 		},
 	}
 
-	tempUUID, _ := uuid.Parse("00000000-0000-0000-0000-000000000000")
+	// tempUUID, _ := uuid.Parse("00000000-0000-0000-0000-000000000000")
 	ctx := t.Context()
 	// Mock the service
 	mock_svc := mocks.NewMockIPingPongService(t)
@@ -207,26 +208,8 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 	).Return(
 		query.FindAllQueryResponseRaw{
 			Entities: []entity.PingPongEntity{
-				{
-					Message: "Ping!",
-					PingPongMetadata: &entity.PingPongMetadata{
-						CreatedAt:  testTime,
-						UpdatedAt:  testTime,
-						PingPongID: tempUUID,
-						DeletedAt:  nil,
-						Deleted:    false,
-					},
-				},
-				{
-					Message: "Pong!",
-					PingPongMetadata: &entity.PingPongMetadata{
-						CreatedAt:  testTime,
-						UpdatedAt:  testTime,
-						PingPongID: tempUUID,
-						DeletedAt:  nil,
-						Deleted:    false,
-					},
-				},
+				fixtures.ValidReturningPing,
+				fixtures.ValidReturningPong,
 			},
 		},
 		nil,

@@ -1,75 +1,77 @@
 package entity
 
 import (
-	"time"
-
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/constant"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
+	"github.com/cooperlutz/go-full/pkg/base"
 )
-
-type PingPongMetadata struct {
-	PingPongID uuid.UUID  `json:"pingpong_id"`
-	CreatedAt  time.Time  `json:"created_at"`
-	UpdatedAt  time.Time  `json:"updated_at"`
-	DeletedAt  *time.Time `json:"deleted_at"`
-	Deleted    bool       `json:"deleted"`
-}
 
 type ListOfPingPongs struct {
 	PingPongs []PingPongEntity
 }
 
 type PingPongEntity struct {
-	Message string `json:"message"`
-	*PingPongMetadata
+	base.EntityMetadata
+	message string
 }
 
-func New(msg string) (*PingPongEntity, error) {
-	ent := &PingPongEntity{
-		Message: msg,
-		PingPongMetadata: &PingPongMetadata{
-			PingPongID: uuid.New(),
-			CreatedAt:  utilitee.RightNow(),
-			UpdatedAt:  utilitee.RightNow(),
-			DeletedAt:  nil,
-			Deleted:    false,
-		},
+func New(msg string) (PingPongEntity, error) {
+	ent := PingPongEntity{
+		message:        msg,
+		EntityMetadata: base.NewEntityMetadata(),
 	}
 
 	if err := ent.Validate(); err != nil {
-		return nil, err
+		return PingPongEntity{}, err
 	}
 
 	return ent, nil
 }
 
-func (e *PingPongEntity) Validate() error {
-	if e.Message != constant.PingMessage && e.Message != constant.PongMessage {
+// Validate checks if the PingPongEntity is valid.
+func (e PingPongEntity) Validate() error {
+	if e.message != constant.PingMessage && e.message != constant.PongMessage {
 		return exception.ErrPingPongMsgValidation{}
 	}
 
 	return nil
 }
 
-func (e *PingPongEntity) Valid() bool {
+// Valid returns true if the PingPongEntity is valid.
+func (e PingPongEntity) Valid() bool {
 	return e.Validate() == nil
 }
 
-func (e *PingPongEntity) GetMessage() string {
-	return e.Message
+// GetMessage returns the message of the PingPongEntity.
+func (e PingPongEntity) GetMessage() string {
+	return e.message
 }
 
-func (e *PingPongEntity) DetermineResponseMessage() string {
-	if e.Message == constant.PingMessage {
+// SetMessage sets the message of the PingPongEntity and marks it as updated.
+func (e *PingPongEntity) SetMessage(msg string) {
+	e.message = msg
+	e.MarkUpdated()
+}
+
+// DetermineResponseMessage returns the appropriate response message based on the current message.
+func (e PingPongEntity) DetermineResponseMessage() string {
+	if e.message == constant.PingMessage {
 		return constant.PongFunMessage
 	}
 
-	if e.Message == constant.PongMessage {
+	if e.message == constant.PongMessage {
 		return constant.PingFunMessage
 	}
 
 	return ""
+}
+
+func MapToEntity(
+	msg string,
+	metadata base.EntityMetadata,
+) PingPongEntity {
+	return PingPongEntity{
+		message:        msg,
+		EntityMetadata: metadata,
+	}
 }

@@ -8,15 +8,15 @@ import (
 )
 
 // MapFromCommandPingPong maps a PingPongCommand to a VALIDATED PingPongEntity, returning a validation error if invalid.
-func MapFromCommandPingPong(c command.PingPongCommand) (*entity.PingPongEntity, error) {
-	entity, err := entity.New(
+func MapFromCommandPingPong(c command.PingPongCommand) (entity.PingPongEntity, error) {
+	pingpong, err := entity.New(
 		c.Message,
 	)
 	if err != nil {
-		return nil, err
+		return entity.PingPongEntity{}, err
 	}
 
-	return entity, nil
+	return pingpong, nil
 }
 
 func MapToCommandResult(e entity.PingPongEntity) command.PingPongCommandResult {
@@ -39,12 +39,12 @@ func MapToResult(e entity.PingPongEntity) common.PingPongResult {
 
 func MapToRawResult(e entity.PingPongEntity) common.PingPongRawResult {
 	return common.PingPongRawResult{
-		ID:        e.PingPongID.String(),
-		Message:   e.Message,
-		CreatedAt: e.CreatedAt,
-		UpdatedAt: e.UpdatedAt,
-		Deleted:   e.Deleted,
-		DeletedAt: e.DeletedAt,
+		ID:        e.GetIdString(),
+		Message:   e.GetMessage(),
+		CreatedAt: e.GetCreatedAtTime(),
+		UpdatedAt: e.GetUpdatedAtTime(),
+		Deleted:   e.IsDeleted(),
+		DeletedAt: e.GetDeletedAtTime(),
 	}
 }
 

@@ -27,7 +27,10 @@ func TestTotalNumberOfPingPongs_Success(t *testing.T) {
 		mock.Anything,
 	).Return(expectedCount, nil)
 
+	// Act
 	returnedCount, err := repo.TotalNumberOfPingPongs(context.Background())
+
+	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, expectedCount, returnedCount.Quantity)
 }
@@ -45,7 +48,10 @@ func TestTotalNumberOfPings_Success(t *testing.T) {
 		mock.Anything,
 	).Return(expectedCount, nil)
 
+	// Act
 	returnedCount, err := repo.TotalNumberOfPings(context.Background())
+
+	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, expectedCount, returnedCount.Quantity)
 }
@@ -139,8 +145,10 @@ func TestTotalNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 		"CountPerDay",
 		mock.Anything,
 	).Return(resp, nil)
+
 	// Act
 	returnedCount, err := repo.TotalNumberOfPingPongsCreatedPerDay(context.Background())
+
 	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, expectedOutput, returnedCount)
