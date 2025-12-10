@@ -24,13 +24,13 @@
     "@tailwindcss/vite": "^4.1.17",
     "@vueuse/core": "^14.0.0",
     "chart.js": "^4.5.1",
-    "daisyui": "^5.5.5",
+    "daisyui": "^5.5.8",
     "lucide-vue-next": "^0.554.0",
     "marked": "^17.0.0",
     "sweetalert2": "^11.26.3",
     "tailwindcss": "^4.1.17",
     "uuid": "^13.0.0",
-    "vue": "^3.5.24",
+    "vue": "^3.5.25",
     "vue-chartjs": "^5.3.3",
     "vue-router": "^4.6.3"
   },
@@ -59,7 +59,7 @@
     "msw": "2.10.5",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
-    "vite": "^7.2.2",
+    "vite": "^7.2.7",
     "vitest": "^4.0.10",
     "vue-tsc": "^3.1.4"
   }

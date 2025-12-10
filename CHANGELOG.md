@@ -1,3 +1,21 @@
+## v0.0.24 (2025-12-08)
+
+### Fix
+
+- **deps-dev**: bump vite from 7.2.2 to 7.2.7 in /api/frontend (#63)
+
+## v0.0.23 (2025-12-08)
+
+### Fix
+
+- **deps**: bump daisyui from 5.5.5 to 5.5.8 in /api/frontend (#65)
+
+## v0.0.22 (2025-12-08)
+
+### Fix
+
+- bump go to 1.25.5 (#66)
+
 ## v0.0.21 (2025-11-25)
 
 ### Fix
