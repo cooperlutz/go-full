@@ -9,7 +9,7 @@ import (
 // PingPongEntity represents the PingPong entity with its metadata and message.
 // it represents the aggregate root for PingPong related operations.
 type PingPongEntity struct {
-	base.EntityMetadata
+	*base.EntityMetadata
 	message string
 }
 
@@ -74,7 +74,7 @@ type ListOfPingPongs struct {
 // It should ONLY be used for reconstructing entities from stored data.
 func MapToEntity(
 	msg string,
-	metadata base.EntityMetadata,
+	metadata *base.EntityMetadata,
 ) PingPongEntity {
 	return PingPongEntity{
 		message:        msg,

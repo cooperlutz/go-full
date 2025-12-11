@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cooperlutz/go-full/pkg/base"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/cooperlutz/go-full/pkg/base"
 )
 
 func Test_NewEntityMetadata(t *testing.T) {
-
 	newEntMeta := base.NewEntityMetadata()
 
 	newEntMetaId := newEntMeta.GetId()
@@ -67,7 +67,7 @@ func Test_NewEntityMetadata(t *testing.T) {
 	assert.IsType(t, base.UpdatedAt{}, newEntMetaUpdatedAt)
 
 	assert.NotNil(t, newEntMeta)
-	assert.IsType(t, base.EntityMetadata{}, newEntMeta)
+	assert.IsType(t, &base.EntityMetadata{}, newEntMeta)
 
 	assert.WithinDuration(t, time.Now(), newEntMetaCreatedAtTime, time.Second)
 	assert.WithinDuration(t, time.Now(), newEntMetaUpdatedAtTime, time.Second)
@@ -77,7 +77,6 @@ func Test_NewEntityMetadata(t *testing.T) {
 }
 
 func Test_EntityMetadata_MarkDeleted(t *testing.T) {
-
 	newEntMeta := base.NewEntityMetadata()
 
 	newEntMeta.MarkDeleted()
@@ -93,7 +92,6 @@ func Test_EntityMetadata_MarkDeleted(t *testing.T) {
 	assert.True(t, newEntMeta.IsDeleted())
 	assert.NotNil(t, newEntMetaDeletedAt)
 	assert.WithinDuration(t, time.Now(), *newEntMeta.GetDeletedAtTime(), time.Second)
-
 }
 
 func TestMapToEntityMetadata(t *testing.T) {
@@ -114,5 +112,4 @@ func TestMapToEntityMetadata(t *testing.T) {
 	)
 
 	assert.Equal(t, newUuid, mappedEntMeta.GetIdUUID())
-
 }

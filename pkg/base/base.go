@@ -18,8 +18,8 @@ type EntityMetadata struct {
 }
 
 // NewEntityMetadata creates a new EntityMetadata with default values.
-func NewEntityMetadata() EntityMetadata {
-	return EntityMetadata{
+func NewEntityMetadata() *EntityMetadata {
+	return &EntityMetadata{
 		entityId:  NewEntityId(),
 		createdAt: NewCreatedAt(),
 		updatedAt: NewUpdatedAt(),
@@ -110,8 +110,8 @@ func MapToEntityMetadata(
 	updatedAt UpdatedAt,
 	deleted DeletedFlag,
 	deletedAt *DeletedAt,
-) EntityMetadata {
-	return EntityMetadata{
+) *EntityMetadata {
+	return &EntityMetadata{
 		entityId:  id,
 		createdAt: createdAt,
 		updatedAt: updatedAt,
@@ -127,8 +127,8 @@ func MapToEntityMetadataFromCommonTypes(
 	updatedAt time.Time,
 	deleted bool,
 	deletedAt *time.Time,
-) EntityMetadata {
-	return EntityMetadata{
+) *EntityMetadata {
+	return &EntityMetadata{
 		entityId:  EntityIdFromUUID(id),
 		createdAt: CreatedAtFromTime(createdAt),
 		updatedAt: UpdatedAtFromTime(updatedAt),

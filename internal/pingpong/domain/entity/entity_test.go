@@ -12,9 +12,7 @@ import (
 	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
-var (
-	randomUUID = uuid.New()
-)
+var randomUUID = uuid.New()
 
 func TestPingPongEntity_Validate(t *testing.T) {
 	t.Parallel()
