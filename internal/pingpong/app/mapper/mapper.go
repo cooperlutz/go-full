@@ -61,7 +61,13 @@ func MapListToQueryResponse(l entity.ListOfPingPongs) query.FindAllQueryResponse
 }
 
 func MapListToQueryResponseRaw(l entity.ListOfPingPongs) query.FindAllQueryResponseRaw {
+	var resultingPingPongs []common.PingPongRawResult
+
+	for _, pp := range l.PingPongs {
+		resultingPingPongs = append(resultingPingPongs, MapToRawResult(pp))
+	}
+
 	return query.FindAllQueryResponseRaw{
-		Entities: l.PingPongs,
+		Entities: resultingPingPongs,
 	}
 }

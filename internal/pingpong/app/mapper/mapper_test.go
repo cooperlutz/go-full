@@ -153,7 +153,7 @@ func TestMapListToQueryResponseRaw(t *testing.T) {
 				},
 			},
 			want: query.FindAllQueryResponseRaw{
-				Entities: []entity.PingPongEntity{
+				Entities: []common.PingPongRawResult{
 					fixtures.ValidPing,
 					fixtures.ValidPong,
 				},
@@ -165,7 +165,7 @@ func TestMapListToQueryResponseRaw(t *testing.T) {
 				PingPongs: []entity.PingPongEntity{},
 			},
 			want: query.FindAllQueryResponseRaw{
-				Entities: []entity.PingPongEntity{},
+				Entities: []common.PingPongRawResult{},
 			},
 		},
 	}
