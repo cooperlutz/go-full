@@ -75,9 +75,9 @@ func (a *Application) Run() {
 	httpServer.RegisterController("/", webRouter)
 
 	/* -----------------------------------------------------------------------------------
-	Setup Service Routes
+	Setup Domain Module Routes
 
-	Each domain's router is created and registered with the main HTTP server handler.
+	Each domain module's router is created and registered with the main HTTP server handler.
 	the resulting mountpoint will be {root}/{service-name}/[routes defined in the service router]
 	----------------------------------------------------------------------------------- */
 	httpServer.RegisterController("/pingpong", pingPongModule.RestApi) // mounts `/pingpong/api/v1/ping-pong`

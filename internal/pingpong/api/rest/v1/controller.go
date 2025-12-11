@@ -19,9 +19,9 @@ type PingPongRestAPIControllerV1 struct {
 }
 
 // NewRestAPIController creates a new PingPongRestAPIControllerV1
-func NewRestAPIController(svc usecase.IPingPongUseCase) *PingPongRestAPIControllerV1 {
+func NewRestAPIController(uc usecase.IPingPongUseCase) *PingPongRestAPIControllerV1 {
 	return &PingPongRestAPIControllerV1{
-		UseCase: svc,
+		UseCase: uc,
 	}
 }
 
