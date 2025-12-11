@@ -96,8 +96,11 @@ func (m EntityMetadata) IsDeleted() bool {
 func (m *EntityMetadata) MarkDeleted() {
 	m.deleted = DeletedFlagFromBool(true)
 	now := utilitee.RightNow()
+
 	dAt := DeletedAtFromTime(&now)
 	m.deletedAt = dAt
+
+	m.MarkUpdated()
 }
 
 // MapToEntityMetadata maps the base metadata types to EntityMetadata.

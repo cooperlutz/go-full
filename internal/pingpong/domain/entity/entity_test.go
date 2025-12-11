@@ -9,31 +9,10 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
-	"github.com/cooperlutz/go-full/pkg/base"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 var (
-	varCreatedAt      = base.CreatedAtFromTime(time.Now())
-	varUpdatedAt      = base.UpdatedAtFromTime(time.Now())
-	varEntityMetadata = base.MapToEntityMetadata(
-		base.EntityIdFromUUID(uuid.UUID{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}),
-		varCreatedAt,
-		varUpdatedAt,
-		false,
-		nil,
-	)
-	validPing = entity.MapToEntity(
-		"ping",
-		varEntityMetadata,
-	)
-	validPong = entity.MapToEntity(
-		"pong",
-		varEntityMetadata,
-	)
-	invalidPingPong = entity.MapToEntity(
-		"ring",
-		varEntityMetadata,
-	)
 	randomUUID = uuid.New()
 )
 
@@ -45,8 +24,16 @@ func TestPingPongEntity_Validate(t *testing.T) {
 		entity   entity.PingPongEntity
 		expected error
 	}{
-		{"valid ping", validPing, nil},
-		{"valid pong", validPong, nil},
+		{
+			"valid ping",
+			fixtures.ValidPing,
+			nil,
+		},
+		{
+			"valid pong",
+			fixtures.ValidPong,
+			nil,
+		},
 		// {"invalid ping pong", invalidPingPong, exception.ErrPingPongMsgValidation{}},
 	}
 
@@ -68,17 +55,17 @@ func TestPingPongEntity_DetermineResponse(t *testing.T) {
 	}{
 		{
 			"ping returns Pong!",
-			validPing,
+			fixtures.ValidPing,
 			"Pong!",
 		},
 		{
 			"pong returns Ping!",
-			validPong,
+			fixtures.ValidPong,
 			"Ping!",
 		},
 		{
 			"a message that is not a ping or a pong returns an empty string",
-			invalidPingPong,
+			fixtures.InvalidPingPong,
 			"",
 		},
 	}
@@ -99,9 +86,19 @@ func TestPingPongEntity_Valid(t *testing.T) {
 		entity   entity.PingPongEntity
 		expected bool
 	}{
-		{"valid ping", validPing, true},
-		{"valid pong", validPong, true},
-		// {"invalid ping pong", invalidPingPong, false},
+		{
+			"valid ping",
+			fixtures.ValidPing,
+			true,
+		},
+		{
+			"valid pong",
+			fixtures.ValidPong,
+			true,
+		},
+		{
+			"invalid ping pong", fixtures.InvalidPingPong, false,
+		},
 	}
 
 	for _, tt := range tests {
@@ -120,8 +117,16 @@ func TestPingPongEntity_GetMessage(t *testing.T) {
 		entity   entity.PingPongEntity
 		expected string
 	}{
-		{"valid ping", validPing, "ping"},
-		{"valid pong", validPong, "pong"},
+		{
+			"valid ping",
+			fixtures.ValidPing,
+			"ping",
+		},
+		{
+			"valid pong",
+			fixtures.ValidPong,
+			"pong",
+		},
 	}
 
 	for _, tt := range tests {
@@ -202,12 +207,12 @@ func TestPingPongEntity_MultipleMutations(t *testing.T) {
 	}{
 		{
 			"valid ping",
-			validPing,
+			fixtures.ValidPing,
 			"ping",
 		},
 		{
 			"valid pong",
-			validPong,
+			fixtures.ValidPong,
 			"pong",
 		},
 	}
