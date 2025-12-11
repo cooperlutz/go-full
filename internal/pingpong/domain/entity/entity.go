@@ -6,15 +6,14 @@ import (
 	"github.com/cooperlutz/go-full/pkg/base"
 )
 
-type ListOfPingPongs struct {
-	PingPongs []PingPongEntity
-}
-
+// PingPongEntity represents the PingPong entity with its metadata and message.
+// it represents the aggregate root for PingPong related operations.
 type PingPongEntity struct {
 	base.EntityMetadata
 	message string
 }
 
+// New creates a new PingPongEntity with the given message.
 func New(msg string) (PingPongEntity, error) {
 	ent := PingPongEntity{
 		message:        msg,
@@ -66,6 +65,13 @@ func (e PingPongEntity) DetermineResponseMessage() string {
 	return ""
 }
 
+// ListOfPingPongs represents a collection of PingPong entities.
+type ListOfPingPongs struct {
+	PingPongs []PingPongEntity
+}
+
+// MapToEntity accepts the raw values from the given parameters to construct a PingPongEntity.
+// It should ONLY be used for reconstructing entities from stored data.
 func MapToEntity(
 	msg string,
 	metadata base.EntityMetadata,
