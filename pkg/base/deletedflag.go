@@ -1,5 +1,6 @@
 package base
 
+// DeletedFlag represents whether an entity is deleted.
 type DeletedFlag bool
 
 // bool returns the boolean value of the DeletedFlag.
