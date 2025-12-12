@@ -1,4 +1,4 @@
-package base
+package baseentitee
 
 import (
 	"github.com/google/uuid"

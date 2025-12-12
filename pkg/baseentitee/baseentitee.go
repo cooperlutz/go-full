@@ -1,4 +1,4 @@
-package base
+package baseentitee
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
-// EntityMetadata represents the base metadata object for an entity.
+// EntityMetadata represents the baseentitee metadata object for an entity.
 type EntityMetadata struct {
 	entityId  EntityId
 	createdAt CreatedAt
@@ -103,7 +103,7 @@ func (m *EntityMetadata) MarkDeleted() {
 	m.MarkUpdated()
 }
 
-// MapToEntityMetadata maps the base metadata types to EntityMetadata.
+// MapToEntityMetadata maps the baseentitee metadata types to EntityMetadata.
 func MapToEntityMetadata(
 	id EntityId,
 	createdAt CreatedAt,

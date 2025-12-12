@@ -5,7 +5,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
-	"github.com/cooperlutz/go-full/pkg/base"
+	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
 func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) entity.ListOfPingPongs {
@@ -32,7 +32,7 @@ func MapFromDB(p postgresql.Pingpong) entity.PingPongEntity {
 		deletedAtTime = &p.DeletedAt.Time
 	}
 
-	entityMetadata := base.MapToEntityMetadataFromCommonTypes(
+	entityMetadata := baseentitee.MapToEntityMetadataFromCommonTypes(
 		p.PingpongID.Bytes,
 		p.CreatedAt.Time,
 		p.UpdatedAt.Time,

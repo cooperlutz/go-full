@@ -3,13 +3,13 @@ package entity
 import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/constant"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
-	"github.com/cooperlutz/go-full/pkg/base"
+	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
 // PingPongEntity represents the PingPong entity with its metadata and message.
 // it represents the aggregate root for PingPong related operations.
 type PingPongEntity struct {
-	*base.EntityMetadata
+	*baseentitee.EntityMetadata
 	message string
 }
 
@@ -17,7 +17,7 @@ type PingPongEntity struct {
 func New(msg string) (PingPongEntity, error) {
 	ent := PingPongEntity{
 		message:        msg,
-		EntityMetadata: base.NewEntityMetadata(),
+		EntityMetadata: baseentitee.NewEntityMetadata(),
 	}
 
 	if err := ent.Validate(); err != nil {
@@ -52,7 +52,7 @@ func (e *PingPongEntity) SetMessage(msg string) {
 	e.MarkUpdated()
 }
 
-// DetermineResponseMessage returns the appropriate response message based on the current message.
+// DetermineResponseMessage returns the appropriate response message baseentiteed on the current message.
 func (e PingPongEntity) DetermineResponseMessage() string {
 	if e.message == constant.PingMessage {
 		return constant.PongFunMessage
@@ -74,7 +74,7 @@ type ListOfPingPongs struct {
 // It should ONLY be used for reconstructing entities from stored data.
 func MapToEntity(
 	msg string,
-	metadata *base.EntityMetadata,
+	metadata *baseentitee.EntityMetadata,
 ) PingPongEntity {
 	return PingPongEntity{
 		message:        msg,

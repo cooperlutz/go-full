@@ -1,4 +1,4 @@
-package base_test
+package baseentitee_test
 
 import (
 	"testing"
@@ -7,11 +7,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cooperlutz/go-full/pkg/base"
+	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
-func Test_NewEntityMetadata(t *testing.T) {
-	newEntMeta := base.NewEntityMetadata()
+func TestNewEntityMetadata(t *testing.T) {
+	newEntMeta := baseentitee.NewEntityMetadata()
 
 	newEntMetaId := newEntMeta.GetId()
 	newEntMetaIdUUID := newEntMeta.GetIdUUID()
@@ -25,7 +25,7 @@ func Test_NewEntityMetadata(t *testing.T) {
 	newEntMetaDeletedAtTime := newEntMeta.GetDeletedAtTime()
 
 	assert.NotNil(t, newEntMetaId)
-	assert.IsType(t, base.EntityId{}, newEntMetaId)
+	assert.IsType(t, baseentitee.EntityId{}, newEntMetaId)
 
 	assert.NotNil(t, newEntMetaIdUUID)
 	assert.IsType(t, newEntMetaIdUUID, newEntMetaIdUUID)
@@ -34,40 +34,40 @@ func Test_NewEntityMetadata(t *testing.T) {
 	assert.IsType(t, "", newEntMetaIdString)
 
 	assert.NotNil(t, newEntMetaCreatedAt)
-	assert.IsType(t, base.CreatedAt{}, newEntMetaCreatedAt)
+	assert.IsType(t, baseentitee.CreatedAt{}, newEntMetaCreatedAt)
 
 	assert.NotNil(t, newEntMetaCreatedAtTime)
 	assert.IsType(t, newEntMetaCreatedAtTime, newEntMetaCreatedAtTime)
 
 	assert.NotNil(t, newEntMetaUpdatedAt)
-	assert.IsType(t, base.UpdatedAt{}, newEntMetaUpdatedAt)
+	assert.IsType(t, baseentitee.UpdatedAt{}, newEntMetaUpdatedAt)
 
 	assert.NotNil(t, newEntMetaUpdatedAtTime)
 	assert.IsType(t, newEntMetaUpdatedAtTime, newEntMetaUpdatedAtTime)
 
 	assert.NotNil(t, newEntMetaDeletedFlag)
-	assert.IsType(t, base.DeletedFlag(false), newEntMetaDeletedFlag)
+	assert.IsType(t, baseentitee.DeletedFlag(false), newEntMetaDeletedFlag)
 
 	assert.Nil(t, newEntMetaDeletedAt)
-	assert.IsType(t, (*base.DeletedAt)(nil), newEntMetaDeletedAt)
+	assert.IsType(t, (*baseentitee.DeletedAt)(nil), newEntMetaDeletedAt)
 
 	assert.NotNil(t, newEntMetaDeletedFlag)
-	assert.IsType(t, base.DeletedFlag(true), newEntMetaDeletedFlag)
+	assert.IsType(t, baseentitee.DeletedFlag(true), newEntMetaDeletedFlag)
 
 	assert.Nil(t, newEntMetaDeletedAt)
-	assert.IsType(t, &base.DeletedAt{}, newEntMetaDeletedAt)
+	assert.IsType(t, &baseentitee.DeletedAt{}, newEntMetaDeletedAt)
 
 	assert.NotNil(t, newEntMetaId)
-	assert.IsType(t, base.EntityId{}, newEntMetaId)
+	assert.IsType(t, baseentitee.EntityId{}, newEntMetaId)
 
 	assert.NotNil(t, newEntMetaCreatedAt)
-	assert.IsType(t, base.CreatedAt{}, newEntMetaCreatedAt)
+	assert.IsType(t, baseentitee.CreatedAt{}, newEntMetaCreatedAt)
 
 	assert.NotNil(t, newEntMetaUpdatedAt)
-	assert.IsType(t, base.UpdatedAt{}, newEntMetaUpdatedAt)
+	assert.IsType(t, baseentitee.UpdatedAt{}, newEntMetaUpdatedAt)
 
 	assert.NotNil(t, newEntMeta)
-	assert.IsType(t, &base.EntityMetadata{}, newEntMeta)
+	assert.IsType(t, &baseentitee.EntityMetadata{}, newEntMeta)
 
 	assert.WithinDuration(t, time.Now(), newEntMetaCreatedAtTime, time.Second)
 	assert.WithinDuration(t, time.Now(), newEntMetaUpdatedAtTime, time.Second)
@@ -76,8 +76,8 @@ func Test_NewEntityMetadata(t *testing.T) {
 	assert.Nil(t, newEntMetaDeletedAtTime)
 }
 
-func Test_EntityMetadata_MarkDeleted(t *testing.T) {
-	newEntMeta := base.NewEntityMetadata()
+func TestEntityMetadata_MarkDeleted(t *testing.T) {
+	newEntMeta := baseentitee.NewEntityMetadata()
 
 	newEntMeta.MarkDeleted()
 
@@ -88,22 +88,22 @@ func Test_EntityMetadata_MarkDeleted(t *testing.T) {
 	// newEntMetaUpdatedAt := newEntMeta.GetUpdatedAt()
 
 	assert.NotNil(t, newEntMetaDeletedFlag)
-	assert.IsType(t, base.DeletedFlag(true), newEntMetaDeletedFlag)
+	assert.IsType(t, baseentitee.DeletedFlag(true), newEntMetaDeletedFlag)
 	assert.True(t, newEntMeta.IsDeleted())
 	assert.NotNil(t, newEntMetaDeletedAt)
 	assert.WithinDuration(t, time.Now(), *newEntMeta.GetDeletedAtTime(), time.Second)
 }
 
 func TestMapToEntityMetadata(t *testing.T) {
-	createdAt := base.NewCreatedAt()
-	updatedAt := base.NewUpdatedAt()
-	deletedFlag := base.DeletedFlagFromBool(true)
+	createdAt := baseentitee.NewCreatedAt()
+	updatedAt := baseentitee.NewUpdatedAt()
+	deletedFlag := baseentitee.DeletedFlagFromBool(true)
 	now := time.Now()
-	deletedAt := base.DeletedAtFromTime(&now)
+	deletedAt := baseentitee.DeletedAtFromTime(&now)
 	newUuid := uuid.New()
-	entId := base.EntityIdFromUUID(newUuid)
+	entId := baseentitee.EntityIdFromUUID(newUuid)
 
-	mappedEntMeta := base.MapToEntityMetadata(
+	mappedEntMeta := baseentitee.MapToEntityMetadata(
 		entId,
 		createdAt,
 		updatedAt,
@@ -112,4 +112,27 @@ func TestMapToEntityMetadata(t *testing.T) {
 	)
 
 	assert.Equal(t, newUuid, mappedEntMeta.GetIdUUID())
+}
+
+func TestMapToEntityMetadataFromCommonTypes(t *testing.T) {
+	createdAt := time.Now().Add(-2 * time.Hour)
+	updatedAt := time.Now().Add(-1 * time.Hour)
+	deletedFlag := true
+	now := time.Now()
+	deletedAt := &now
+	newUuid := uuid.New()
+
+	mappedEntMeta := baseentitee.MapToEntityMetadataFromCommonTypes(
+		newUuid,
+		createdAt,
+		updatedAt,
+		deletedFlag,
+		deletedAt,
+	)
+
+	assert.Equal(t, newUuid, mappedEntMeta.GetIdUUID())
+	assert.WithinDuration(t, createdAt, mappedEntMeta.GetCreatedAtTime(), time.Second)
+	assert.WithinDuration(t, updatedAt, mappedEntMeta.GetUpdatedAtTime(), time.Second)
+	assert.True(t, mappedEntMeta.IsDeleted())
+	assert.WithinDuration(t, *deletedAt, *mappedEntMeta.GetDeletedAtTime(), time.Second)
 }
