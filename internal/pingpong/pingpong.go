@@ -10,6 +10,8 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist"
 )
 
+// PingPongModule encapsulates the PingPong module's components, dependencies, interfaces
+// that is implemented within the core application to provide PingPong functionality.
 type PingPongModule struct {
 	PersistentRepo *persist.PingPongPersistPostgresRepository
 	UseCase        *usecase.PingPongUseCase

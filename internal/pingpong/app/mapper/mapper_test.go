@@ -154,8 +154,22 @@ func TestMapListToQueryResponseRaw(t *testing.T) {
 			},
 			want: query.FindAllQueryResponseRaw{
 				Entities: []common.PingPongRawResult{
-					fixtures.ValidPing,
-					fixtures.ValidPong,
+					{
+						ID:        fixtures.ValidPing.GetIdString(),
+						Message:   "ping",
+						CreatedAt: fixtures.ValidPing.GetCreatedAtTime(),
+						UpdatedAt: fixtures.ValidPing.GetUpdatedAtTime(),
+						Deleted:   false,
+						DeletedAt: nil,
+					},
+					{
+						ID:        fixtures.ValidPong.GetIdString(),
+						Message:   "pong",
+						CreatedAt: fixtures.ValidPong.GetCreatedAtTime(),
+						UpdatedAt: fixtures.ValidPong.GetUpdatedAtTime(),
+						Deleted:   false,
+						DeletedAt: nil,
+					},
 				},
 			},
 		},

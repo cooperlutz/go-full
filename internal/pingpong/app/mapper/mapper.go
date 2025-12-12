@@ -19,6 +19,7 @@ func MapFromCommandPingPong(c command.PingPongCommand) (entity.PingPongEntity, e
 	return pingpong, nil
 }
 
+// MapToCommandResult maps a PingPongEntity to a PingPongCommandResult.
 func MapToCommandResult(e entity.PingPongEntity) command.PingPongCommandResult {
 	res := MapToResult(e)
 
@@ -29,6 +30,7 @@ func MapToCommandResult(e entity.PingPongEntity) command.PingPongCommandResult {
 	return command
 }
 
+// MapToResult maps a PingPongEntity to a PingPongResult.
 func MapToResult(e entity.PingPongEntity) common.PingPongResult {
 	result := common.PingPongResult{
 		Message: e.GetMessage(),
@@ -37,6 +39,7 @@ func MapToResult(e entity.PingPongEntity) common.PingPongResult {
 	return result
 }
 
+// MapToRawResult maps a PingPongEntity to a PingPongRawResult.
 func MapToRawResult(e entity.PingPongEntity) common.PingPongRawResult {
 	return common.PingPongRawResult{
 		ID:        e.GetIdString(),
@@ -48,6 +51,7 @@ func MapToRawResult(e entity.PingPongEntity) common.PingPongRawResult {
 	}
 }
 
+// MapListToQueryResponse maps a ListOfPingPongs to a FindAllQueryResponse.
 func MapListToQueryResponse(l entity.ListOfPingPongs) query.FindAllQueryResponse {
 	var resultingPings []common.PingPongResult
 
@@ -60,7 +64,14 @@ func MapListToQueryResponse(l entity.ListOfPingPongs) query.FindAllQueryResponse
 	}
 }
 
+// MapListToQueryResponseRaw maps a ListOfPingPongs to a FindAllQueryResponseRaw.
 func MapListToQueryResponseRaw(l entity.ListOfPingPongs) query.FindAllQueryResponseRaw {
+	if len(l.PingPongs) == 0 {
+		return query.FindAllQueryResponseRaw{
+			Entities: []common.PingPongRawResult{},
+		}
+	}
+
 	var resultingPingPongs []common.PingPongRawResult
 
 	for _, pp := range l.PingPongs {

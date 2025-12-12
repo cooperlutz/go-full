@@ -9,6 +9,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/types"
 )
 
+// IPingPongRepository defines the interface for a PingPong repository.
 type IPingPongRepository interface {
 	// Commands
 	SavePingPong(ctx context.Context, p entity.PingPongEntity) error

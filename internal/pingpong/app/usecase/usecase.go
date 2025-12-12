@@ -31,16 +31,19 @@ type IPingPongUseCase interface {
 	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) // returns the total number of pingpongs created per day
 }
 
+// PingPongUseCase is the struct that implements the pingpong usecase interface.
 type PingPongUseCase struct {
 	Persist repository.IPingPongRepository
 }
 
+// NewPingPongUseCase creates a new instance of the PingPongUseCase.
 func NewPingPongUseCase(repo repository.IPingPongRepository) *PingPongUseCase {
 	return &PingPongUseCase{
 		Persist: repo,
 	}
 }
 
+// PingPong handles the PingPong command logic.
 func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.pingpong")
 	defer span.End()
@@ -56,7 +59,6 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 
 	outputResponseMessage := inputEntity.DetermineResponseMessage()
 
-	// Create the result to return
 	result := command.NewPingPongCommandResult(outputResponseMessage)
 
 	return result, nil
@@ -85,6 +87,7 @@ func (s *PingPongUseCase) FindOneByID(ctx context.Context, q query.FindOneByID) 
 	return response, nil
 }
 
+// FindAll retrieves all pingpong entities.
 func (s *PingPongUseCase) FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findall")
 	defer span.End()
@@ -113,6 +116,7 @@ func (s *PingPongUseCase) FindAllPings(ctx context.Context) (query.FindAllQueryR
 	return response, nil
 }
 
+// FindAllPongs retrieves all pong entities.
 func (s *PingPongUseCase) FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findallpongs")
 	defer span.End()
@@ -127,6 +131,7 @@ func (s *PingPongUseCase) FindAllPongs(ctx context.Context) (query.FindAllQueryR
 	return response, nil
 }
 
+// TotalNumberOfPingPongs retrieves the total number of pingpong entities.
 func (s *PingPongUseCase) TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpingpongs")
 	defer span.End()
@@ -139,6 +144,7 @@ func (s *PingPongUseCase) TotalNumberOfPingPongs(ctx context.Context) (types.Qua
 	return count, nil
 }
 
+// TotalNumberOfPings retrieves the total number of ping entities.
 func (s *PingPongUseCase) TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpings")
 	defer span.End()
@@ -151,6 +157,7 @@ func (s *PingPongUseCase) TotalNumberOfPings(ctx context.Context) (types.Quantit
 	return count, nil
 }
 
+// TotalNumberOfPongs retrieves the total number of pong entities.
 func (s *PingPongUseCase) TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpongs")
 	defer span.End()
@@ -163,6 +170,7 @@ func (s *PingPongUseCase) TotalNumberOfPongs(ctx context.Context) (types.Quantit
 	return count, nil
 }
 
+// TotalNumberOfPingPongsPerDay retrieves the total number of pingpong entities created per day.
 func (s *PingPongUseCase) TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpingpongspersday")
 	defer span.End()

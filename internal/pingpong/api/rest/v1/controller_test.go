@@ -14,11 +14,9 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
-	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
 	"github.com/cooperlutz/go-full/pkg/types"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
-	"github.com/cooperlutz/go-full/test/fixtures"
 	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
 )
 
@@ -207,9 +205,23 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 		ctx,
 	).Return(
 		query.FindAllQueryResponseRaw{
-			Entities: []entity.PingPongEntity{
-				fixtures.ValidReturningPing,
-				fixtures.ValidReturningPong,
+			Entities: []common.PingPongRawResult{
+				{
+					Message:   "Ping!",
+					CreatedAt: testTime,
+					UpdatedAt: testTime,
+					ID:        "00000000-0000-0000-0000-000000000001",
+					DeletedAt: nil,
+					Deleted:   false,
+				},
+				{
+					Message:   "Pong!",
+					CreatedAt: testTime,
+					UpdatedAt: testTime,
+					ID:        "00000000-0000-0000-0000-000000000001",
+					DeletedAt: nil,
+					Deleted:   false,
+				},
 			},
 		},
 		nil,
