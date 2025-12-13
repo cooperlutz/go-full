@@ -137,7 +137,7 @@ func TestPingPongEntity_GetMessage(t *testing.T) {
 
 func TestNewPingPong(t *testing.T) {
 	t.Parallel()
-
+	// Arrange
 	tests := []struct {
 		name              string
 		input             string
@@ -190,7 +190,10 @@ func TestNewPingPong(t *testing.T) {
 			assert.IsType(t, tt.expectedIDType, result.GetIdUUID())
 			assert.NoError(t, err)
 			assert.Equal(t, tt.expectedMessage, result.GetMessage())
-			assert.WithinDuration(t, tt.expectedCreatedAt, time.Now(), time.Second)
+			assert.Equal(t, tt.expectedDeleted, false)
+			assert.WithinDuration(t, tt.expectedCreatedAt, result.GetCreatedAtTime(), time.Second)
+			assert.WithinDuration(t, tt.expectedUpdatedAt, result.GetUpdatedAtTime(), time.Second)
+			assert.Equal(t, tt.expectedDeletedAt, result.GetDeletedAtTime())
 		})
 	}
 }
@@ -199,27 +202,46 @@ func TestPingPongEntity_MultipleMutations(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name     string
-		entity   entity.PingPongEntity
-		expected string
+		name                   string
+		entity                 entity.PingPongEntity
+		expectedInitialMessage string
+		newMessage             string
+		expectedNewMessage     string
 	}{
 		{
 			"valid ping",
 			fixtures.ValidPing,
 			"ping",
+			"pong",
+			"pong",
 		},
 		{
 			"valid pong",
 			fixtures.ValidPong,
 			"pong",
+			"ping",
+			"ping",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := tt.entity.GetMessage()
-			assert.Equal(t, tt.expected, result)
+			// Assert
+			assert.Equal(t, tt.expectedInitialMessage, tt.entity.GetMessage())
+
+			// Act
+			tt.entity.SetMessage(tt.newMessage)
+
+			// Act
+			updatedMessage := tt.entity.GetMessage()
+
+			// Assert
+			assert.Equal(t, tt.expectedNewMessage, updatedMessage)
+
+			// Act
 			tt.entity.MarkDeleted()
+
+			// Assert
 			assert.True(t, tt.entity.IsDeleted())
 			assert.NotNil(t, tt.entity.GetDeletedAt())
 			assert.WithinDuration(t, time.Now(), tt.entity.GetUpdatedAtTime(), time.Second)

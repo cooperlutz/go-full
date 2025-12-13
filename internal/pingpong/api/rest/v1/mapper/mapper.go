@@ -26,6 +26,7 @@ func MapToQueryFindOneByID(req server.GetFindOneByIDRequestObject) query.FindOne
 // MapFindAllToResponse maps a FindAllQueryResponse to an API response object.
 func MapFindAllToResponse(res query.FindAllQueryResponse) server.PingPongs {
 	var httpPings []server.PingPong
+
 	for _, p := range res.PingPongs {
 		httpPing := server.PingPong{
 			Message: &p.Message,

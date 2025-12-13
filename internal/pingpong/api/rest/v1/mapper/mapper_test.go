@@ -12,7 +12,62 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
 	"github.com/cooperlutz/go-full/pkg/types"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
+
+var (
+	ppRaw = []server.PingPongRaw{
+		{
+			Message:   utilitee.StrPtr("ping"),
+			CreatedAt: utilitee.TimePtr(time.Now()),
+			Deleted:   utilitee.BoolPtr(false),
+			UpdatedAt: utilitee.TimePtr(time.Now()),
+			DeletedAt: nil,
+			Id:        utilitee.StrPtr(uuid.New().String()),
+		},
+		{
+			Message:   utilitee.StrPtr("pong"),
+			CreatedAt: utilitee.TimePtr(time.Now()),
+			Deleted:   utilitee.BoolPtr(false),
+			UpdatedAt: utilitee.TimePtr(time.Now()),
+			DeletedAt: nil,
+			Id:        utilitee.StrPtr(uuid.New().String()),
+		},
+	}
+	pRaw = server.PingPongsRaw{
+		Pingpongs: &ppRaw,
+	}
+)
+
+func TestMapFindAllToResponseRaw(t *testing.T) {
+	res := query.FindAllQueryResponseRaw{
+		Entities: []common.PingPongRawResult{
+			{
+				ID:        *ppRaw[0].Id,
+				Message:   *ppRaw[0].Message,
+				CreatedAt: *ppRaw[0].CreatedAt,
+				UpdatedAt: *ppRaw[0].UpdatedAt,
+				DeletedAt: ppRaw[0].DeletedAt,
+				Deleted:   *ppRaw[0].Deleted,
+			},
+			{
+				ID:        *ppRaw[1].Id,
+				Message:   *ppRaw[1].Message,
+				CreatedAt: *ppRaw[1].CreatedAt,
+				UpdatedAt: *ppRaw[1].UpdatedAt,
+				DeletedAt: ppRaw[1].DeletedAt,
+				Deleted:   *ppRaw[1].Deleted,
+			},
+		},
+	}
+
+	httpRes := mapper.MapFindAllToResponseRaw(res)
+	assert.NotNil(t, httpRes.Pingpongs)
+	assert.Equal(t, pRaw, httpRes)
+	assert.Len(t, *httpRes.Pingpongs, 2)
+	assert.Equal(t, *ppRaw[0].Message, *(*httpRes.Pingpongs)[0].Message)
+	assert.Equal(t, *ppRaw[1].Message, *(*httpRes.Pingpongs)[1].Message)
+}
 
 func TestMapPingPongToCommand(t *testing.T) {
 	msg := "hello"

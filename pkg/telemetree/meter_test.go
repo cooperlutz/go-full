@@ -33,5 +33,6 @@ func TestInitMeter(t *testing.T) {
 		attribute.String("service.instance.id", "unique-instance-id"),
 	}
 
+	// Assert
 	assert.Subset(t, attrs, expected)
 }

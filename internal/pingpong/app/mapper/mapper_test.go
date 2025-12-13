@@ -18,6 +18,7 @@ import (
 func TestMapFromPingPongCommand(t *testing.T) {
 	t.Parallel()
 
+	// Arrange
 	tests := []struct {
 		name                string
 		command             command.PingPongCommand

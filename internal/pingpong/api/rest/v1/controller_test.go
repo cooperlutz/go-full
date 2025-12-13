@@ -93,7 +93,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 	ctx := t.Context()
 
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	pingCmdResult := command.PingPongCommandResult{
 		PingPongResult: &common.PingPongResult{Message: "Pong!"},
 	}
@@ -195,10 +195,10 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 		},
 	}
 
-	// tempUUID, _ := uuid.Parse("00000000-0000-0000-0000-000000000000")
 	ctx := t.Context()
+
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAll",
@@ -292,7 +292,7 @@ func TestPingPongRestAPIController_GetFindOneByID_Success(t *testing.T) {
 	ctx := t.Context()
 
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindOneByID",
@@ -359,7 +359,7 @@ func TestPingPongRestAPIController_GetFindOneByID_Failure(t *testing.T) {
 	}
 
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindOneByID",
@@ -415,7 +415,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAll",
@@ -486,7 +486,7 @@ func TestPingPongRestAPIController_GetPings(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAllPings",
@@ -554,7 +554,7 @@ func TestPingPongRestAPIController_GetPings_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAllPings",
@@ -625,7 +625,7 @@ func TestPingPongRestAPIController_GetPongs(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAllPongs",
@@ -693,7 +693,7 @@ func TestPingPongRestAPIController_GetPongs_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"FindAllPongs",
@@ -762,7 +762,7 @@ func TestPingPongRestAPIController_GetDailyDistribution(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPingPongsPerDay",
@@ -792,6 +792,65 @@ func TestPingPongRestAPIController_GetDailyDistribution(t *testing.T) {
 			// Assert
 			assert.Equal(t, tt.expectedServiceError, err)
 			assert.Equal(t, tt.expectedResponse, response)
+			// Assertions of the written response
+			response.VisitGetDailyDistributionResponse(rr)
+			assert.Equal(t, tt.expectedResponseCode, rr.Code)
+		})
+	}
+}
+
+// GetDailyDistribution
+func TestPingPongRestAPIController_GetDailyDistribution_Failure(t *testing.T) {
+	t.Parallel()
+	/*
+		Arrange
+	*/
+	errTemp := errors.New("temp error")
+
+	// Unit tests for the PingPongRestAPIController
+	tests := []struct {
+		testCaseName         string
+		param                v1_server.GetDailyDistributionRequestObject
+		expectedResponse     v1_server.GetDailyDistributionResponseObject
+		expectedResponseCode int
+		expectedServiceError error
+	}{
+		{
+			testCaseName:         "GET all pingpongs, receive Ping! and Pong!",
+			param:                v1_server.GetDailyDistributionRequestObject{},
+			expectedResponse:     v1_server.GetDailyDistributionResponseObject(nil),
+			expectedResponseCode: 400,
+			expectedServiceError: errTemp,
+		},
+	}
+
+	ctx := t.Context()
+	// Mock the service
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
+	// Define the expected behavior of the mock service
+	mock_svc.On(
+		"TotalNumberOfPingPongsPerDay",
+		ctx,
+	).Return(
+		[]types.MeasureCountbyDateTimeMetric{},
+		errTemp,
+	)
+	// Ensure that the mock expectations are met
+	defer mock_svc.AssertExpectations(t)
+
+	controller := v1.NewRestAPIController(mock_svc)
+	/*
+		Act & Assert
+	*/
+	for _, tt := range tests {
+		t.Run(tt.testCaseName, func(t *testing.T) {
+			ctx := t.Context()
+			rr := httptest.NewRecorder()
+			// Act
+			response, err := controller.GetDailyDistribution(ctx, tt.param)
+			// Assert
+			assert.Equal(t, tt.expectedServiceError, err)
+			// assert.Equal(t, tt.expectedResponse, response)
 			// Assertions of the written response
 			response.VisitGetDailyDistributionResponse(rr)
 			assert.Equal(t, tt.expectedResponseCode, rr.Code)
@@ -830,7 +889,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPingPongs",
@@ -888,7 +947,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPingPongs",
@@ -911,7 +970,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 			response, err := controller.GetTotalPingPongs(ctx, tt.param)
 			// Assert
 			assert.Error(t, err)
-			// assert.Equal(t, tt.expectedResponse, response)
+
 			// Assertions of the written response
 			response.VisitGetTotalPingPongsResponse(rr)
 			assert.Equal(t, tt.expectedResponseCode, rr.Code)
@@ -950,7 +1009,7 @@ func TestPingPongRestAPIController_GetTotalPings(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPings",
@@ -1009,7 +1068,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPings",
@@ -1032,7 +1091,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 			response, err := controller.GetTotalPings(ctx, tt.param)
 			// Assert
 			assert.Error(t, err)
-			// assert.Equal(t, tt.expectedResponse, response)
+
 			// Assertions of the written response
 			response.VisitGetTotalPingsResponse(rr)
 			assert.Equal(t, tt.expectedResponseCode, rr.Code)
@@ -1071,7 +1130,7 @@ func TestPingPongRestAPIController_GetTotalPongs(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPongs",
@@ -1130,7 +1189,7 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 
 	ctx := t.Context()
 	// Mock the service
-	mock_svc := mocks.NewMockIPingPongService(t)
+	mock_svc := mocks.NewMockIPingPongUseCase(t)
 	// Define the expected behavior of the mock service
 	mock_svc.On(
 		"TotalNumberOfPongs",
@@ -1153,7 +1212,6 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 			response, err := controller.GetTotalPongs(ctx, tt.param)
 			// Assert
 			assert.Error(t, err)
-			// assert.Equal(t, tt.expectedResponse, response)
 			// Assertions of the written response
 			response.VisitGetTotalPongsResponse(rr)
 			assert.Equal(t, tt.expectedResponseCode, rr.Code)

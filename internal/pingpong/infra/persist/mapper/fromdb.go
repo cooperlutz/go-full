@@ -26,6 +26,7 @@ func MapFromDBPingPongs(pingponglist []postgresql.Pingpong) entity.ListOfPingPon
 
 func MapFromDB(p postgresql.Pingpong) entity.PingPongEntity {
 	var deletedAtTime *time.Time
+
 	if p.DeletedAt.Time.IsZero() {
 		deletedAtTime = nil
 	} else {

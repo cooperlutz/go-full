@@ -21,7 +21,7 @@ func Test_StrPtr(t *testing.T) {
 	s := "hello"
 	ptr := utilitee.StrPtr(s)
 	assert.NotNil(t, ptr)
-	assert.Equal(t, s, *ptr)
+	assert.Equal(t, &s, ptr)
 }
 
 func Test_BoolPtr(t *testing.T) {
@@ -29,5 +29,13 @@ func Test_BoolPtr(t *testing.T) {
 	b := true
 	ptr := utilitee.BoolPtr(b)
 	assert.NotNil(t, ptr)
-	assert.Equal(t, b, *ptr)
+	assert.Equal(t, &b, ptr)
+}
+
+func Test_TimePtr(t *testing.T) {
+	t.Parallel()
+	timeVal := time.Now()
+	ptr := utilitee.TimePtr(timeVal)
+	assert.NotNil(t, ptr)
+	assert.Equal(t, &timeVal, ptr)
 }

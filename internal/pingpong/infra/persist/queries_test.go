@@ -18,7 +18,6 @@ import (
 func TestFindAll_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -46,7 +45,6 @@ func TestFindAll_Success(t *testing.T) {
 			fixtures.ValidPong,
 		},
 	}
-
 	mQuerier.On(
 		"FindAll",
 		mock.Anything,
@@ -63,7 +61,6 @@ func TestFindAll_Success(t *testing.T) {
 func TestFindAllPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -91,7 +88,6 @@ func TestFindAllPings_Success(t *testing.T) {
 			fixtures.ValidPing,
 		},
 	}
-
 	mQuerier.On(
 		"FindAllPing",
 		mock.Anything,
@@ -108,7 +104,6 @@ func TestFindAllPings_Success(t *testing.T) {
 func TestFindAllPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -136,7 +131,6 @@ func TestFindAllPongs_Success(t *testing.T) {
 			fixtures.ValidPong,
 		},
 	}
-
 	mQuerier.On(
 		"FindAllPong",
 		mock.Anything,
@@ -167,15 +161,12 @@ func TestFindOneByID_Success(t *testing.T) {
 		DeletedAt:  pgtype.Timestamptz{},
 		Deleted:    false,
 	}
-
 	expectedOutput := fixtures.ValidPing
-
 	mQuerier.On(
 		"FindOneByID",
 		mock.Anything,
 		mock.Anything,
 	).Return(mockResponse, nil)
-	// end Arrange
 
 	// Act
 	returnedCount, err := repo.FindOneByID(context.Background(), fixtures.ValidPing.GetIdUUID())

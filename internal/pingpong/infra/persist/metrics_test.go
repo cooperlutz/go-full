@@ -17,7 +17,6 @@ import (
 func TestTotalNumberOfPingPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -38,7 +37,6 @@ func TestTotalNumberOfPingPongs_Success(t *testing.T) {
 func TestTotalNumberOfPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -59,7 +57,6 @@ func TestTotalNumberOfPings_Success(t *testing.T) {
 func TestTotalNumberOfPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
@@ -77,13 +74,11 @@ func TestTotalNumberOfPongs_Success(t *testing.T) {
 func TestAverageNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	expectedOutput := types.QuantityMetric{Quantity: 8}
-
-	resp := []persist_postgres.FrequencyDistributionByDayRow{
+	mockResponse := []persist_postgres.FrequencyDistributionByDayRow{
 		{
 			CreationDate: pgtype.Date{Time: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC), Valid: true},
 			PingOrPong:   pgtype.Text{String: "ping", Valid: true},
@@ -100,11 +95,10 @@ func TestAverageNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 		"TotalNumberOfPingPongs",
 		mock.Anything,
 	).Return(expectedCount, nil)
-
 	mQuerier.On(
 		"FrequencyDistributionByDay",
 		mock.Anything,
-	).Return(resp, nil)
+	).Return(mockResponse, nil)
 	// Act
 	returnedCount, err := repo.AverageNumberOfPingPongsCreatedPerDay(context.Background())
 	// Assert
@@ -115,11 +109,9 @@ func TestAverageNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 func TestTotalNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
-
 	expectedOutput := []types.MeasureCountbyDateTimeMetric{
 		{
 			Count:    6,
@@ -130,8 +122,7 @@ func TestTotalNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 			DateTime: time.Date(2023, 10, 2, 0, 0, 0, 0, time.UTC),
 		},
 	}
-
-	resp := []persist_postgres.CountPerDayRow{
+	mockResponse := []persist_postgres.CountPerDayRow{
 		{
 			CreationDate: pgtype.Date{Time: time.Date(2023, 10, 1, 0, 0, 0, 0, time.UTC), Valid: true},
 			CountCreated: 6,
@@ -144,7 +135,7 @@ func TestTotalNumberOfPingPongsCreatedPerDay_Success(t *testing.T) {
 	mQuerier.On(
 		"CountPerDay",
 		mock.Anything,
-	).Return(resp, nil)
+	).Return(mockResponse, nil)
 
 	// Act
 	returnedCount, err := repo.TotalNumberOfPingPongsCreatedPerDay(context.Background())

@@ -9,7 +9,6 @@ import (
 )
 
 func MetricsHandler() http.Handler {
-	// router := chi.NewRouter()
 	reg := prometheus.NewRegistry()
 	reg.MustRegister(
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
