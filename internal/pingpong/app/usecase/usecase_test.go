@@ -19,13 +19,13 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/usecase"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/pkg/types"
+	"github.com/cooperlutz/go-full/test/fixtures"
 	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
 )
 
 var (
 	testTracerProvider *trace.TracerProvider
 	testExporter       *tracetest.InMemoryExporter
-	timeNow            = time.Now()
 	validPingPongID    = uuid.New()
 )
 
@@ -128,16 +128,7 @@ func TestPingPongUseCase_PingPong_OtelSpan(t *testing.T) {
 func TestPingPongUseCase_FindOneByID_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
-	mockRepo.On("FindOneByID", mock.Anything, validPingPongID).Return(entity.PingPongEntity{
-		Message: "pong",
-		PingPongMetadata: &entity.PingPongMetadata{
-			PingPongID: validPingPongID,
-			CreatedAt:  timeNow,
-			UpdatedAt:  timeNow,
-			DeletedAt:  nil,
-			Deleted:    false,
-		},
-	}, nil)
+	mockRepo.On("FindOneByID", mock.Anything, validPingPongID).Return(fixtures.ValidPong, nil)
 	defer mockRepo.AssertExpectations(t)
 
 	// Act
@@ -172,8 +163,8 @@ func TestPingPongUseCase_FindAll_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
 	mockRepo.On("FindAll", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{Message: "pong"},
-			{Message: "ping"},
+			fixtures.ValidPong,
+			fixtures.ValidPing,
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)
@@ -199,7 +190,7 @@ func TestPingPongUseCase_FindAllPings_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
 	mockRepo.On("FindAllPings", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{Message: "ping"},
+			fixtures.ValidPing,
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)
@@ -226,7 +217,7 @@ func TestPingPongUseCase_FindAllPongs_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
 	mockRepo.On("FindAllPongs", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{Message: "pong"},
+			fixtures.ValidPong,
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)

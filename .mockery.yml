@@ -23,7 +23,7 @@ packages:
     config:
       filename: mocks_api_v1.go
       all: true
-  github.com/cooperlutz/go-full/internal/pingpong/app/service:
+  github.com/cooperlutz/go-full/internal/pingpong/app/usecase:
     config:
-      filename: mocks_service.go
+      filename: mocks_usecase.go
       all: true

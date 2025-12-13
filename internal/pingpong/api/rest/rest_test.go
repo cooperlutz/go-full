@@ -19,7 +19,7 @@ import (
 func TestNewPingPongAPIRouter(t *testing.T) {
 	t.Parallel()
 
-	service := mocks.NewMockIPingPongService(t)
+	service := mocks.NewMockIPingPongUseCase(t)
 	router := rest.NewPingPongAPIRouter(service)
 	service.Mock.On("PingPong", mock.Anything, mock.Anything).Return(command.PingPongCommandResult{
 		PingPongResult: &common.PingPongResult{Message: "pong"},
