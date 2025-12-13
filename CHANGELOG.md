@@ -1,3 +1,9 @@
+## v0.0.26 (2025-12-13)
+
+### Fix
+
+- Base metadata, fixtures, tests (#68)
+
 ## v0.0.25 (2025-12-11)
 
 ### Fix
