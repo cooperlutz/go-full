@@ -8,6 +8,7 @@ import (
 )
 
 func TestNewPingPongPersistPostgresRepository(t *testing.T) {
+	// Arrange
 	unitTests := []struct {
 		name           string
 		expectedReturn *PingPongPersistPostgresRepository
@@ -19,9 +20,9 @@ func TestNewPingPongPersistPostgresRepository(t *testing.T) {
 	}
 	for _, tt := range unitTests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			repo := NewPingPongPostgresRepo(&pgxpool.Pool{})
 			// Assert
-			//
 			assert.NotNil(t, repo)
 			assert.IsType(t, tt.expectedReturn, repo)
 		})

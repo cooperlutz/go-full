@@ -21,7 +21,7 @@ var (
 func TestMapFromDB(t *testing.T) {
 	t.Parallel()
 
-	// now := time.Now()
+	// Arrange
 	tests := []struct {
 		name string
 		db   postgresql.Pingpong
@@ -55,40 +55,51 @@ func TestMapFromDB(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			got := MapFromDB(tt.db)
+			// Assert
 			assert.Equal(t, tt.want, got)
 		})
 	}
 }
 
 func TestMapFromDBPingPongs_EmptyInput(t *testing.T) {
+	// Arrange
+	// Act
 	result := MapFromDBPingPongs([]postgresql.Pingpong{})
+	// Assert
 	assert.NotNil(t, result.PingPongs)
 	assert.Equal(t, 0, len(result.PingPongs))
 }
 
 func TestMapFromDBPingPongs_SingleItem(t *testing.T) {
+	// Arrange
 	input := []postgresql.Pingpong{
 		{PingOrPong: pgtype.Text{String: "Ping"}},
 	}
 	expected := "Ping"
 
+	// Act
 	result := MapFromDBPingPongs(input)
 
+	// Assert
 	assert.NotNil(t, result.PingPongs)
 	assert.Equal(t, 1, len(result.PingPongs))
 	assert.Equal(t, expected, result.PingPongs[0].GetMessage())
 }
 
 func TestMapFromDBPingPongs_MultipleItems(t *testing.T) {
+	// Arrange
 	input := []postgresql.Pingpong{
 		{PingOrPong: pgtype.Text{String: "Ping", Valid: true}},
 		{PingOrPong: pgtype.Text{String: "Pong", Valid: true}},
 	}
 	expected := []string{"Ping", "Pong"}
 
+	// Act
 	result := MapFromDBPingPongs(input)
 
+	// Assert
 	assert.NotNil(t, result.PingPongs)
 	assert.Equal(t, len(expected), len(result.PingPongs))
 	assert.Equal(t, expected[0], result.PingPongs[0].GetMessage())
@@ -98,6 +109,7 @@ func TestMapFromDBPingPongs_MultipleItems(t *testing.T) {
 func TestMapFromDBPingPongRaw_DeletedAtSet(t *testing.T) {
 	t.Parallel()
 
+	// Arrange
 	id := uuid.New()
 	now := time.Now()
 	deletedAt := now.Add(1 * time.Hour)
@@ -110,8 +122,10 @@ func TestMapFromDBPingPongRaw_DeletedAtSet(t *testing.T) {
 		Deleted:    true,
 	}
 
+	// Act
 	result := MapFromDB(p)
 
+	// Assert
 	assert.NotNil(t, result)
 	assert.Equal(t, "pong", result.GetMessage())
 	assert.Equal(t, id, result.GetIdUUID())

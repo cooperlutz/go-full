@@ -15,6 +15,7 @@ import (
 func TestMapToDB(t *testing.T) {
 	t.Parallel()
 
+	// Arrange
 	tests := []struct {
 		name string
 		pp   entity.PingPongEntity
@@ -35,7 +36,9 @@ func TestMapToDB(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			got := MapToDB(tt.pp)
+			// Assert
 			assert.IsType(t, pgtype.UUID{}, got.PingpongID)
 			assert.Equal(t, tt.want.PingOrPong, got.PingOrPong)
 			assert.Equal(t, tt.want.Deleted, got.Deleted)

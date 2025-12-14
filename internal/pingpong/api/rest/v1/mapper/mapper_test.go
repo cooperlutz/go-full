@@ -12,71 +12,52 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
 	"github.com/cooperlutz/go-full/pkg/types"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
-)
-
-var (
-	ppRaw = []server.PingPongRaw{
-		{
-			Message:   utilitee.StrPtr("ping"),
-			CreatedAt: utilitee.TimePtr(time.Now()),
-			Deleted:   utilitee.BoolPtr(false),
-			UpdatedAt: utilitee.TimePtr(time.Now()),
-			DeletedAt: nil,
-			Id:        utilitee.StrPtr(uuid.New().String()),
-		},
-		{
-			Message:   utilitee.StrPtr("pong"),
-			CreatedAt: utilitee.TimePtr(time.Now()),
-			Deleted:   utilitee.BoolPtr(false),
-			UpdatedAt: utilitee.TimePtr(time.Now()),
-			DeletedAt: nil,
-			Id:        utilitee.StrPtr(uuid.New().String()),
-		},
-	}
-	pRaw = server.PingPongsRaw{
-		Pingpongs: &ppRaw,
-	}
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 func TestMapFindAllToResponseRaw(t *testing.T) {
+	// Arrange
 	res := query.FindAllQueryResponseRaw{
 		Entities: []common.PingPongRawResult{
 			{
-				ID:        *ppRaw[0].Id,
-				Message:   *ppRaw[0].Message,
-				CreatedAt: *ppRaw[0].CreatedAt,
-				UpdatedAt: *ppRaw[0].UpdatedAt,
-				DeletedAt: ppRaw[0].DeletedAt,
-				Deleted:   *ppRaw[0].Deleted,
+				ID:        *fixtures.RestApiV1PingPongRaw[0].Id,
+				Message:   *fixtures.RestApiV1PingPongRaw[0].Message,
+				CreatedAt: *fixtures.RestApiV1PingPongRaw[0].CreatedAt,
+				UpdatedAt: *fixtures.RestApiV1PingPongRaw[0].UpdatedAt,
+				DeletedAt: fixtures.RestApiV1PingPongRaw[0].DeletedAt,
+				Deleted:   *fixtures.RestApiV1PingPongRaw[0].Deleted,
 			},
 			{
-				ID:        *ppRaw[1].Id,
-				Message:   *ppRaw[1].Message,
-				CreatedAt: *ppRaw[1].CreatedAt,
-				UpdatedAt: *ppRaw[1].UpdatedAt,
-				DeletedAt: ppRaw[1].DeletedAt,
-				Deleted:   *ppRaw[1].Deleted,
+				ID:        *fixtures.RestApiV1PingPongRaw[1].Id,
+				Message:   *fixtures.RestApiV1PingPongRaw[1].Message,
+				CreatedAt: *fixtures.RestApiV1PingPongRaw[1].CreatedAt,
+				UpdatedAt: *fixtures.RestApiV1PingPongRaw[1].UpdatedAt,
+				DeletedAt: fixtures.RestApiV1PingPongRaw[1].DeletedAt,
+				Deleted:   *fixtures.RestApiV1PingPongRaw[1].Deleted,
 			},
 		},
 	}
-
+	// Act
 	httpRes := mapper.MapFindAllToResponseRaw(res)
+	// Assert
 	assert.NotNil(t, httpRes.Pingpongs)
-	assert.Equal(t, pRaw, httpRes)
+	assert.Equal(t, fixtures.RestApiV1PingPongsRaw, httpRes)
 	assert.Len(t, *httpRes.Pingpongs, 2)
-	assert.Equal(t, *ppRaw[0].Message, *(*httpRes.Pingpongs)[0].Message)
-	assert.Equal(t, *ppRaw[1].Message, *(*httpRes.Pingpongs)[1].Message)
+	assert.Equal(t, *fixtures.RestApiV1PingPongRaw[0].Message, *(*httpRes.Pingpongs)[0].Message)
+	assert.Equal(t, *fixtures.RestApiV1PingPongRaw[1].Message, *(*httpRes.Pingpongs)[1].Message)
 }
 
 func TestMapPingPongToCommand(t *testing.T) {
+	// Arrange
 	msg := "hello"
 	req := server.PingPongRequestObject{
 		JSONBody: &server.PingPongJSONRequestBody{
 			Message: &msg,
 		},
 	}
+	// Act
 	cmd := mapper.MapPingPongToCommand(req)
+	// Assert
 	assert.NotNil(t, cmd)
 	assert.Equal(t, msg, cmd.Message)
 }
@@ -100,27 +81,26 @@ func TestMapFindAllToResponse(t *testing.T) {
 }
 
 func TestMapMeasureCountByDateTimeToTrend(t *testing.T) {
+	// Arrange
 	dt1 := time.Date(2020, 1, 2, 3, 4, 5, 0, time.UTC)
 	dt2 := time.Date(2021, 6, 7, 8, 9, 10, 0, time.UTC)
-
 	input := []types.MeasureCountbyDateTimeMetric{
 		{DateTime: dt1, Count: 7},
 		{DateTime: dt2, Count: 13},
 	}
+	expectedKey1 := dt1.String()
+	expectedKey2 := dt2.String()
 
+	// Act
 	trend := mapper.MapMeasureCountByDateTimeToTrend(input)
 
+	// Assert
 	assert.NotNil(t, trend.DimensionKeys)
 	assert.NotNil(t, trend.DimensionValues)
 	assert.Len(t, *trend.DimensionKeys, 2)
 	assert.Len(t, *trend.DimensionValues, 2)
-
-	expectedKey1 := dt1.String()
-	expectedKey2 := dt2.String()
-
 	assert.Equal(t, expectedKey1, string((*trend.DimensionKeys)[0]))
 	assert.Equal(t, expectedKey2, string((*trend.DimensionKeys)[1]))
-
 	assert.Equal(t, server.TrendValue(7), (*trend.DimensionValues)[0])
 	assert.Equal(t, server.TrendValue(13), (*trend.DimensionValues)[1])
 }

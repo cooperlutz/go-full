@@ -58,6 +58,25 @@ func TestFindAll_Success(t *testing.T) {
 	assert.Equal(t, expectedOutput, returnedCount)
 }
 
+func TestFindAll_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAll",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAll(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
+}
+
 func TestFindAllPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
@@ -101,6 +120,25 @@ func TestFindAllPings_Success(t *testing.T) {
 	assert.Equal(t, expectedOutput, returnedCount)
 }
 
+func TestFindAllPings_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAllPing",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAllPings(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
+}
+
 func TestFindAllPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
@@ -139,6 +177,25 @@ func TestFindAllPongs_Success(t *testing.T) {
 	returnedCount, err := repo.FindAllPongs(context.Background())
 	assert.NoError(t, err)
 	assert.Equal(t, expectedOutput, returnedCount)
+}
+
+func TestFindAllPongs_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAllPong",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAllPongs(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
 }
 
 /*

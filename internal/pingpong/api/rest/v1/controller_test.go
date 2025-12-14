@@ -1,7 +1,6 @@
 package v1_test
 
 import (
-	"errors"
 	"net/http/httptest"
 	"testing"
 	"time"
@@ -336,7 +335,6 @@ func TestPingPongRestAPIController_GetFindOneByID_Failure(t *testing.T) {
 	t.Parallel()
 
 	// Arrange
-	tempError := errors.New("there's an error")
 	rr := httptest.NewRecorder()
 	ctx := t.Context()
 	// Unit tests for the PingPongRestAPIController
@@ -354,7 +352,7 @@ func TestPingPongRestAPIController_GetFindOneByID_Failure(t *testing.T) {
 			},
 			expectedResponse:     v1_server.GetFindOneByID400Response{},
 			expectedResponseCode: 400,
-			expectedServiceError: tempError,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -367,7 +365,7 @@ func TestPingPongRestAPIController_GetFindOneByID_Failure(t *testing.T) {
 		query.FindOneByID{ID: validPingPongID},
 	).Return(
 		query.FindOneByIDResponse{},
-		tempError,
+		assert.AnError,
 	)
 	// ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -394,7 +392,6 @@ func TestPingPongRestAPIController_GetFindAllPingPongs_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -409,7 +406,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs_Failure(t *testing.T) {
 			param:                v1_server.GetFindAllPingPongsRequestObject{},
 			expectedResponse:     v1_server.GetFindAllPingPongsResponseObject(nil),
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -421,11 +418,10 @@ func TestPingPongRestAPIController_GetFindAllPingPongs_Failure(t *testing.T) {
 		"FindAll",
 		ctx,
 	).Return(
-		query.FindAllQueryResponseRaw{}, errTemp,
+		query.FindAllQueryResponseRaw{}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
-
 	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
@@ -506,7 +502,6 @@ func TestPingPongRestAPIController_GetPings(t *testing.T) {
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
-
 	controller := v1.NewRestAPIController(mock_svc)
 	/*
 		Act & Assert
@@ -533,7 +528,6 @@ func TestPingPongRestAPIController_GetPings_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -548,7 +542,7 @@ func TestPingPongRestAPIController_GetPings_Failure(t *testing.T) {
 			param:                v1_server.GetPingsRequestObject{},
 			expectedResponse:     nil,
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -560,7 +554,7 @@ func TestPingPongRestAPIController_GetPings_Failure(t *testing.T) {
 		"FindAllPings",
 		ctx,
 	).Return(
-		query.FindAllQueryResponse{}, errTemp,
+		query.FindAllQueryResponse{}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -672,7 +666,6 @@ func TestPingPongRestAPIController_GetPongs_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -687,7 +680,7 @@ func TestPingPongRestAPIController_GetPongs_Failure(t *testing.T) {
 			param:                v1_server.GetPongsRequestObject{},
 			expectedResponse:     v1_server.GetPongsResponseObject(nil),
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -699,7 +692,7 @@ func TestPingPongRestAPIController_GetPongs_Failure(t *testing.T) {
 		"FindAllPongs",
 		ctx,
 	).Return(
-		query.FindAllQueryResponse{}, errTemp,
+		query.FindAllQueryResponse{}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -805,7 +798,6 @@ func TestPingPongRestAPIController_GetDailyDistribution_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -820,7 +812,7 @@ func TestPingPongRestAPIController_GetDailyDistribution_Failure(t *testing.T) {
 			param:                v1_server.GetDailyDistributionRequestObject{},
 			expectedResponse:     v1_server.GetDailyDistributionResponseObject(nil),
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -833,7 +825,7 @@ func TestPingPongRestAPIController_GetDailyDistribution_Failure(t *testing.T) {
 		ctx,
 	).Return(
 		[]types.MeasureCountbyDateTimeMetric{},
-		errTemp,
+		assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -926,7 +918,6 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -941,7 +932,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 			param:                v1_server.GetTotalPingPongsRequestObject{},
 			expectedResponse:     v1_server.GetTotalPingPongsResponseObject(nil),
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -953,7 +944,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs_Failure(t *testing.T) {
 		"TotalNumberOfPingPongs",
 		ctx,
 	).Return(
-		types.QuantityMetric{Quantity: 0}, errTemp,
+		types.QuantityMetric{Quantity: 0}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -1047,7 +1038,6 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -1062,7 +1052,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 			param:                v1_server.GetTotalPingsRequestObject{},
 			expectedResponse:     nil,
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -1074,7 +1064,7 @@ func TestPingPongRestAPIController_GetTotalPings_Failure(t *testing.T) {
 		"TotalNumberOfPings",
 		ctx,
 	).Return(
-		types.QuantityMetric{Quantity: 0}, errTemp,
+		types.QuantityMetric{Quantity: 0}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
@@ -1168,7 +1158,6 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 	/*
 		Arrange
 	*/
-	errTemp := errors.New("temp error")
 
 	// Unit tests for the PingPongRestAPIController
 	tests := []struct {
@@ -1183,7 +1172,7 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 			param:                v1_server.GetTotalPongsRequestObject{},
 			expectedResponse:     nil,
 			expectedResponseCode: 400,
-			expectedServiceError: errTemp,
+			expectedServiceError: assert.AnError,
 		},
 	}
 
@@ -1195,7 +1184,7 @@ func TestPingPongRestAPIController_GetTotalPongs_Failure(t *testing.T) {
 		"TotalNumberOfPongs",
 		ctx,
 	).Return(
-		types.QuantityMetric{Quantity: 0}, errTemp,
+		types.QuantityMetric{Quantity: 0}, assert.AnError,
 	)
 	// Ensure that the mock expectations are met
 	defer mock_svc.AssertExpectations(t)
