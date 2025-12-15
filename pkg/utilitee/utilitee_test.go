@@ -9,14 +9,14 @@ import (
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
-func Test_RightNow(t *testing.T) {
+func TestRightNow(t *testing.T) {
 	t.Parallel()
 	now := utilitee.RightNow()
 	otherNow := time.Now()
 	assert.WithinDuration(t, now, otherNow, 10*time.Millisecond)
 }
 
-func Test_StrPtr(t *testing.T) {
+func TestStrPtr(t *testing.T) {
 	t.Parallel()
 	s := "hello"
 	ptr := utilitee.StrPtr(s)
@@ -24,7 +24,7 @@ func Test_StrPtr(t *testing.T) {
 	assert.Equal(t, &s, ptr)
 }
 
-func Test_BoolPtr(t *testing.T) {
+func TestBoolPtr(t *testing.T) {
 	t.Parallel()
 	b := true
 	ptr := utilitee.BoolPtr(b)
@@ -32,7 +32,7 @@ func Test_BoolPtr(t *testing.T) {
 	assert.Equal(t, &b, ptr)
 }
 
-func Test_TimePtr(t *testing.T) {
+func TestTimePtr(t *testing.T) {
 	t.Parallel()
 	timeVal := time.Now()
 	ptr := utilitee.TimePtr(timeVal)

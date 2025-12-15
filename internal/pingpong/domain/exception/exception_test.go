@@ -10,7 +10,11 @@ import (
 
 func TestErrPingPongMsgValidation_Error(t *testing.T) {
 	t.Parallel()
+	// Arrange
 	err := exception.ErrPingPongMsgValidation{}
 	expectedMessage := "ya gotta send a ping or a pong"
-	assert.Equal(t, expectedMessage, err.Error())
+	// Act
+	returnedMessage := err.Error()
+	// Assert
+	assert.Equal(t, expectedMessage, returnedMessage)
 }
