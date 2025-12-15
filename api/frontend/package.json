@@ -55,7 +55,7 @@
     "eslint-plugin-vue": "^10.5.1",
     "globals": "^16.5.0",
     "happy-dom": "^20.0.10",
-    "knip": "^5.70.1",
+    "knip": "^5.73.4",
     "msw": "2.10.5",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3",
