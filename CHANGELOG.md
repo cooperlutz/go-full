@@ -1,3 +1,9 @@
+## v0.0.28 (2025-12-15)
+
+### Fix
+
+- **deps**: bump codecov/codecov-action from 5.5.1 to 5.5.2 (#70)
+
 ## v0.0.27 (2025-12-15)
 
 ### Fix
