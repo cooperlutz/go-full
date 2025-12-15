@@ -1,3 +1,9 @@
+## v0.0.29 (2025-12-15)
+
+### Fix
+
+- **deps**: bump sweetalert2 from 11.26.3 to 11.26.10 in /api/frontend (#79)
+
 ## v0.0.28 (2025-12-15)
 
 ### Fix
