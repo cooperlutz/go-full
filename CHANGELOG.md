@@ -1,3 +1,9 @@
+## v0.0.27 (2025-12-15)
+
+### Fix
+
+- cleaning up and adding tests across project (#69)
+
 ## v0.0.26 (2025-12-13)
 
 ### Fix
