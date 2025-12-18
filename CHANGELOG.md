@@ -1,3 +1,9 @@
+## v0.0.30 (2025-12-18)
+
+### Fix
+
+- **deps**: bump go.opentelemetry.io/otel/sdk from 1.38.0 to 1.39.0 (#76)
+
 ## v0.0.29 (2025-12-15)
 
 ### Fix
