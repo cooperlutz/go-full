@@ -1,3 +1,9 @@
+## v0.0.32 (2025-12-20)
+
+### Fix
+
+- consolidated version bumps (#81)
+
 ## v0.0.31 (2025-12-20)
 
 ### Fix
