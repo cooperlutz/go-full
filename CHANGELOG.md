@@ -1,3 +1,9 @@
+## v0.0.31 (2025-12-20)
+
+### Fix
+
+- adding in domain modelling docs (#80)
+
 ## v0.0.30 (2025-12-18)
 
 ### Fix
