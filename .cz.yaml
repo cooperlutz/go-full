@@ -6,3 +6,18 @@ commitizen:
   update_changelog_on_bump: true
   version_provider: scm
   version_scheme: semver2
+  customize:
+    bump_pattern: "^(break|new|fix|hotfix|ci|docs|chore|refactor|test|build|feat|style)"
+    bump_map:
+      break: MAJOR
+      new: MINOR
+      feat: MINOR
+      fix: PATCH
+      hotfix: PATCH
+      ci: PATCH
+      docs: PATCH
+      chore: PATCH
+      refactor: PATCH
+      test: PATCH
+      build: PATCH
+      style: PATCH
