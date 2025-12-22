@@ -1,3 +1,9 @@
+## v0.0.34 (2025-12-22)
+
+### Fix
+
+- **deps-dev**: bump @openapitools/openapi-generator-cli from 2.25.1 to 2.25.2 in /api/frontend (#83)
+
 ## v0.0.33 (2025-12-22)
 
 ### Fix
