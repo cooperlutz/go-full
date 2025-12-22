@@ -47,16 +47,14 @@ describe("PingPongTable", () => {
 
     const rows = wrapper.findAll("tbody tr");
     expect(rows.length).toBeGreaterThan(0);
-    if (rows.length > 0) {
-      const firstRowCells = rows[0]?.findAll("td");
-      expect(firstRowCells?.length).toBe(6);
-      expect(firstRowCells?.[0]?.text()).toBe(
-        "f660452b-4075-4eac-b87a-a5b1ce7bd428",
-      );
-      expect(firstRowCells?.[1]?.text()).toBe("pong");
-      expect(firstRowCells?.[4]?.text()).toBe("");
-      expect(firstRowCells?.[5]?.text()).toBe("false");
-    }
+    const firstRowCells = rows[0]?.findAll("td");
+    expect(firstRowCells?.length).toBe(6);
+    expect(firstRowCells?.[0]?.text()).toBe(
+      "f660452b-4075-4eac-b87a-a5b1ce7bd428",
+    );
+    expect(firstRowCells?.[1]?.text()).toBe("pong");
+    expect(firstRowCells?.[4]?.text()).toBe("");
+    expect(firstRowCells?.[5]?.text()).toBe("false");
   });
 
   it("shows loading state initially", async () => {
