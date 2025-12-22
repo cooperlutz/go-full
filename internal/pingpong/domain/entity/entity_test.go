@@ -9,31 +9,102 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
-var (
-	validPing       = &entity.PingPongEntity{Message: "ping"}
-	validPong       = &entity.PingPongEntity{Message: "pong"}
-	invalidPingPong = &entity.PingPongEntity{Message: "ring"}
-	randomUUID      = uuid.New()
-)
-
-func TestPingPongEntity_Validate(t *testing.T) {
+func TestNewPingPong(t *testing.T) {
 	t.Parallel()
-
+	// Arrange
 	tests := []struct {
-		name     string
-		entity   *entity.PingPongEntity
-		expected error
+		name              string
+		input             string
+		expectedMessage   string
+		expectedCreatedAt time.Time
+		expectedDeletedAt *time.Time
+		expectedUpdatedAt time.Time
+		expectedDeleted   bool
+		expectedError     error
 	}{
-		{"valid ping", validPing, nil},
-		{"valid pong", validPong, nil},
-		{"invalid ping pong", invalidPingPong, exception.ErrPingPongMsgValidation{}},
+		{
+			"create a new ping",
+			"ping",
+			"ping",
+			time.Now(),
+			nil,
+			time.Now(),
+			false,
+			nil,
+		},
+		{
+			"try to create a new ping, receive an error",
+			"purple",
+			"",
+			time.Now(),
+			nil,
+			time.Now(),
+			false,
+			exception.ErrPingPongMsgValidation{},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
+			result, err := entity.New(tt.input)
+
+			// Assert
+			if tt.expectedError != nil {
+				assert.ErrorIs(
+					t,
+					err,
+					tt.expectedError,
+				)
+				return
+			}
+			assert.IsType(t, uuid.New(), result.GetIdUUID())
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedMessage, result.GetMessage())
+			assert.Equal(t, tt.expectedDeleted, false)
+			assert.WithinDuration(t, tt.expectedCreatedAt, result.GetCreatedAtTime(), time.Second)
+			assert.WithinDuration(t, tt.expectedUpdatedAt, result.GetUpdatedAtTime(), time.Second)
+			assert.Equal(t, tt.expectedDeletedAt, result.GetDeletedAtTime())
+		})
+	}
+}
+
+func TestPingPongEntity_Validate(t *testing.T) {
+	t.Parallel()
+
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
+
+	tests := []struct {
+		name     string
+		entity   entity.PingPongEntity
+		expected error
+	}{
+		{
+			"check if pingpong entity ping is valid",
+			validPing,
+			nil,
+		},
+		{
+			"check if pingpong entity pong is valid",
+			validPong,
+			nil,
+		},
+		{
+			"invalid ping pong",
+			fixtures.InvalidPingPong,
+			exception.ErrPingPongMsgValidation{},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			err := tt.entity.Validate()
+			// Assert
 			assert.Equal(t, tt.expected, err)
 		})
 	}
@@ -41,10 +112,12 @@ func TestPingPongEntity_Validate(t *testing.T) {
 
 func TestPingPongEntity_DetermineResponse(t *testing.T) {
 	t.Parallel()
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
 
 	tests := []struct {
 		name                  string
-		entity                *entity.PingPongEntity
+		entity                entity.PingPongEntity
 		expectedReturnMessage string
 	}{
 		{
@@ -59,14 +132,16 @@ func TestPingPongEntity_DetermineResponse(t *testing.T) {
 		},
 		{
 			"a message that is not a ping or a pong returns an empty string",
-			invalidPingPong,
+			fixtures.InvalidPingPong,
 			"",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			result := tt.entity.DetermineResponseMessage()
+			// Assert
 			assert.Equal(t, tt.expectedReturnMessage, result)
 		})
 	}
@@ -74,20 +149,35 @@ func TestPingPongEntity_DetermineResponse(t *testing.T) {
 
 func TestPingPongEntity_Valid(t *testing.T) {
 	t.Parallel()
-
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
 	tests := []struct {
 		name     string
-		entity   *entity.PingPongEntity
+		entity   entity.PingPongEntity
 		expected bool
 	}{
-		{"valid ping", validPing, true},
-		{"valid pong", validPong, true},
-		{"invalid ping pong", invalidPingPong, false},
+		{
+			"check if pingpong entity ping is valid",
+			validPing,
+			true,
+		},
+		{
+			"check if pingpong entity pong is valid",
+			validPong,
+			true,
+		},
+		{
+			"invalid ping pong",
+			fixtures.InvalidPingPong,
+			false,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			result := tt.entity.Valid()
+			// Assert
 			assert.Equal(t, tt.expected, result)
 		})
 	}
@@ -95,80 +185,121 @@ func TestPingPongEntity_Valid(t *testing.T) {
 
 func TestPingPongEntity_GetMessage(t *testing.T) {
 	t.Parallel()
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
 
 	tests := []struct {
 		name     string
-		entity   *entity.PingPongEntity
+		entity   entity.PingPongEntity
 		expected string
 	}{
-		{"valid ping", validPing, "ping"},
-		{"valid pong", validPong, "pong"},
-		{"invalid ping pong", invalidPingPong, "ring"},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := tt.entity.GetMessage()
-			assert.Equal(t, tt.expected, result)
-		})
-	}
-}
-
-func TestNewPingPong(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name              string
-		input             string
-		expectedIDType    uuid.UUID
-		expectedMessage   string
-		expectedCreatedAt time.Time
-		expectedDeletedAt *time.Time
-		expectedUpdatedAt time.Time
-		expectedDeleted   bool
-		expectedError     error
-	}{
 		{
-			"create a new ping",
+			"get valid ping message",
+			validPing,
 			"ping",
-			randomUUID, // just checking type
-			"ping",
-			time.Now(),
-			nil,
-			time.Now(),
-			false,
-			nil,
 		},
 		{
-			"try to create a new ping, receive an error",
-			"purple",
-			randomUUID, // just checking type
-			"",
-			time.Now(),
-			nil,
-			time.Now(),
-			false,
-			exception.ErrPingPongMsgValidation{},
+			"get valid pong message",
+			validPong,
+			"pong",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			// Act
-			result, err := entity.New(tt.input)
+			result := tt.entity.GetMessage()
 			// Assert
-			if tt.expectedError != nil {
-				assert.ErrorIs(
-					t,
-					err,
-					tt.expectedError,
-				)
-				return
-			}
-			assert.IsType(t, tt.expectedIDType, result.PingPongMetadata.PingPongID)
-			assert.NoError(t, err)
-			assert.Equal(t, tt.expectedMessage, result.Message)
-			assert.WithinDuration(t, tt.expectedCreatedAt, time.Now(), time.Second)
+			assert.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestPingPongEntity_SetMessage(t *testing.T) {
+	t.Parallel()
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
+
+	tests := []struct {
+		name        string
+		entity      entity.PingPongEntity
+		newMessage  string
+		expectedMsg string
+	}{
+		{
+			"set valid ping message",
+			validPing,
+			"pong",
+			"pong",
+		},
+		{
+			"set valid pong message",
+			validPong,
+			"ping",
+			"ping",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Act
+			tt.entity.SetMessage(tt.newMessage)
+			result := tt.entity.GetMessage()
+			// Assert
+			assert.Equal(t, tt.expectedMsg, result)
+		})
+	}
+}
+
+func TestPingPongEntity_MultipleMutations(t *testing.T) {
+	t.Parallel()
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
+
+	tests := []struct {
+		name                   string
+		entity                 entity.PingPongEntity
+		expectedInitialMessage string
+		newMessage             string
+		expectedNewMessage     string
+	}{
+		{
+			"run multiple mutations on valid ping",
+			validPing,
+			"ping",
+			"pong",
+			"pong",
+		},
+		{
+			"run multiple mutations on valid pong",
+			validPong,
+			"pong",
+			"ping",
+			"ping",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Assert
+			assert.Equal(t, tt.expectedInitialMessage, tt.entity.GetMessage())
+
+			// Act
+			tt.entity.SetMessage(tt.newMessage)
+
+			// Act
+			updatedMessage := tt.entity.GetMessage()
+
+			// Assert
+			assert.Equal(t, tt.expectedNewMessage, updatedMessage)
+
+			// Act
+			tt.entity.MarkDeleted()
+
+			// Assert
+			assert.True(t, tt.entity.IsDeleted())
+			assert.NotNil(t, tt.entity.GetDeletedAt())
+			assert.WithinDuration(t, time.Now(), tt.entity.GetUpdatedAtTime(), time.Second)
 		})
 	}
 }

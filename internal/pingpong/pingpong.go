@@ -10,21 +10,23 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist"
 )
 
+// PingPongModule encapsulates the PingPong module's components, dependencies, interfaces
+// that is implemented within the core application to provide PingPong functionality.
 type PingPongModule struct {
 	PersistentRepo *persist.PingPongPersistPostgresRepository
-	Service        *usecase.PingPongUseCase
+	UseCase        *usecase.PingPongUseCase
 	RestApi        http.Handler
 }
 
 // NewModule - Initializes the PingPong module with its needed dependencies.
 func NewModule(pgconn *pgxpool.Pool) *PingPongModule {
 	repo := persist.NewPingPongPostgresRepo(pgconn)
-	svc := usecase.NewPingPongUseCase(repo)
-	api := rest.NewPingPongAPIRouter(svc)
+	uc := usecase.NewPingPongUseCase(repo)
+	api := rest.NewPingPongAPIRouter(uc)
 
 	module := &PingPongModule{
 		PersistentRepo: repo,
-		Service:        svc,
+		UseCase:        uc,
 		RestApi:        api,
 	}
 

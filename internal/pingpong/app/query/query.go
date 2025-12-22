@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
-	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 )
 
 type FindOneByID struct {
@@ -20,5 +19,5 @@ type FindAllQueryResponse struct {
 }
 
 type FindAllQueryResponseRaw struct {
-	Entities []entity.PingPongEntity
+	Entities []common.PingPongRawResult
 }

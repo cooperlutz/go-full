@@ -14,7 +14,7 @@ import (
 // ensure that we've conformed to the `IPingPongUseCase` with a compile-time check.
 var _ IPingPongUseCase = (*PingPongUseCase)(nil)
 
-// IPingPongUseCase is the interface that describes the pingpong service.
+// IPingPongUseCase is the interface that describes the pingpong pingpong.usecase.
 type IPingPongUseCase interface {
 	PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) // creates a new pingpong message
 
@@ -31,18 +31,21 @@ type IPingPongUseCase interface {
 	TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) // returns the total number of pingpongs created per day
 }
 
+// PingPongUseCase is the struct that implements the pingpong usecase interface.
 type PingPongUseCase struct {
 	Persist repository.IPingPongRepository
 }
 
+// NewPingPongUseCase creates a new instance of the PingPongUseCase.
 func NewPingPongUseCase(repo repository.IPingPongRepository) *PingPongUseCase {
 	return &PingPongUseCase{
 		Persist: repo,
 	}
 }
 
+// PingPong handles the PingPong command logic.
 func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.pingpong")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.pingpong")
 	defer span.End()
 
 	inputEntity, err := mapper.MapFromCommandPingPong(cmd)
@@ -50,13 +53,12 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 		return command.PingPongCommandResult{}, err
 	}
 
-	if err := s.Persist.SavePingPong(ctx, *inputEntity); err != nil {
+	if err := s.Persist.SavePingPong(ctx, inputEntity); err != nil {
 		return command.PingPongCommandResult{}, err
 	}
 
 	outputResponseMessage := inputEntity.DetermineResponseMessage()
 
-	// Create the result to return
 	result := command.NewPingPongCommandResult(outputResponseMessage)
 
 	return result, nil
@@ -66,7 +68,7 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 // here we implement the service layer logic.
 func (s *PingPongUseCase) FindOneByID(ctx context.Context, q query.FindOneByID) (query.FindOneByIDResponse, error) {
 	// update the context with a new span
-	ctx, span := telemetree.AddSpan(ctx, "service.findOneById")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findOneById")
 	defer span.End()
 
 	// execute the relevant method at the repository persistence layer
@@ -85,8 +87,9 @@ func (s *PingPongUseCase) FindOneByID(ctx context.Context, q query.FindOneByID) 
 	return response, nil
 }
 
+// FindAll retrieves all pingpong entities.
 func (s *PingPongUseCase) FindAll(ctx context.Context) (query.FindAllQueryResponseRaw, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.findall")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findall")
 	defer span.End()
 
 	allPings, err := s.Persist.FindAll(ctx)
@@ -100,7 +103,7 @@ func (s *PingPongUseCase) FindAll(ctx context.Context) (query.FindAllQueryRespon
 }
 
 func (s *PingPongUseCase) FindAllPings(ctx context.Context) (query.FindAllQueryResponse, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.findallpings")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findallpings")
 	defer span.End()
 
 	allPings, err := s.Persist.FindAllPings(ctx)
@@ -113,8 +116,9 @@ func (s *PingPongUseCase) FindAllPings(ctx context.Context) (query.FindAllQueryR
 	return response, nil
 }
 
+// FindAllPongs retrieves all pong entities.
 func (s *PingPongUseCase) FindAllPongs(ctx context.Context) (query.FindAllQueryResponse, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.findallpongs")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.findallpongs")
 	defer span.End()
 
 	allPongs, err := s.Persist.FindAllPongs(ctx)
@@ -127,8 +131,9 @@ func (s *PingPongUseCase) FindAllPongs(ctx context.Context) (query.FindAllQueryR
 	return response, nil
 }
 
+// TotalNumberOfPingPongs retrieves the total number of pingpong entities.
 func (s *PingPongUseCase) TotalNumberOfPingPongs(ctx context.Context) (types.QuantityMetric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpingpongs")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpingpongs")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPingPongs(ctx)
@@ -139,8 +144,9 @@ func (s *PingPongUseCase) TotalNumberOfPingPongs(ctx context.Context) (types.Qua
 	return count, nil
 }
 
+// TotalNumberOfPings retrieves the total number of ping entities.
 func (s *PingPongUseCase) TotalNumberOfPings(ctx context.Context) (types.QuantityMetric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpings")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpings")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPings(ctx)
@@ -151,8 +157,9 @@ func (s *PingPongUseCase) TotalNumberOfPings(ctx context.Context) (types.Quantit
 	return count, nil
 }
 
+// TotalNumberOfPongs retrieves the total number of pong entities.
 func (s *PingPongUseCase) TotalNumberOfPongs(ctx context.Context) (types.QuantityMetric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpongs")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpongs")
 	defer span.End()
 
 	count, err := s.Persist.TotalNumberOfPongs(ctx)
@@ -163,8 +170,9 @@ func (s *PingPongUseCase) TotalNumberOfPongs(ctx context.Context) (types.Quantit
 	return count, nil
 }
 
+// TotalNumberOfPingPongsPerDay retrieves the total number of pingpong entities created per day.
 func (s *PingPongUseCase) TotalNumberOfPingPongsPerDay(ctx context.Context) ([]types.MeasureCountbyDateTimeMetric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "service.totalnumberofpingpongspersday")
+	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.totalnumberofpingpongspersday")
 	defer span.End()
 
 	pingPongsPerDay, err := s.Persist.TotalNumberOfPingPongsCreatedPerDay(ctx)

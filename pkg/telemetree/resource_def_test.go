@@ -11,9 +11,9 @@ import (
 )
 
 func TestResourceDefinition(t *testing.T) {
+	// Arrange
 	config.ApplicationName = "my-service-name"
 	config.ApplicationVersion = "1.0.0"
-
 	expectedAttributes := []attribute.KeyValue{
 		{
 			Key:   "service.name",
@@ -30,6 +30,7 @@ func TestResourceDefinition(t *testing.T) {
 	}
 	rd, err := telemetree.ResourceDefinition()
 	rdAttributes := rd.Attributes()
+	// Assert
 	assert.NoError(t, err)
 	assert.ElementsMatch(t, expectedAttributes, rdAttributes)
 }

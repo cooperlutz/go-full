@@ -11,179 +11,164 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
+	"github.com/cooperlutz/go-full/test/fixtures"
 	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
 )
 
 func TestFindAll_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongID, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPing.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "ping", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongIDTwo, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPong.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "pong", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 	}
 	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{
-				Message: "ping",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongID,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
-			{
-				Message: "pong",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongIDTwo,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
+			fixtures.ValidPing,
+			fixtures.ValidPong,
 		},
 	}
-
 	mQuerier.On(
 		"FindAll",
 		mock.Anything,
 	).Return(mockResponse, nil)
 
+	// Act
 	returnedCount, err := repo.FindAll(context.Background())
+
+	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, expectedOutput, returnedCount)
+}
+
+func TestFindAll_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAll",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAll(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
 }
 
 func TestFindAllPings_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongID, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPing.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "ping", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongIDTwo, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPing.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "ping", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 	}
 	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{
-				Message: "ping",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongID,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
-			{
-				Message: "ping",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongIDTwo,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
+			fixtures.ValidPing,
+			fixtures.ValidPing,
 		},
 	}
-
 	mQuerier.On(
 		"FindAllPing",
 		mock.Anything,
 	).Return(mockResponse, nil)
 
+	// Act
 	returnedCount, err := repo.FindAllPings(context.Background())
+
+	// Assert
 	assert.NoError(t, err)
 	assert.Equal(t, expectedOutput, returnedCount)
+}
+
+func TestFindAllPings_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAllPing",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAllPings(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
 }
 
 func TestFindAllPongs_Success(t *testing.T) {
 	// Arrange
 	mQuerier := mocks.NewMockIQuerierPingPong(t)
-
 	repo := &PingPongPersistPostgresRepository{
 		query: mQuerier,
 	}
 	mockResponse := []persist_postgres.Pingpong{
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongID, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPong.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "pong", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 		{
-			PingpongID: pgtype.UUID{Bytes: validPingPongIDTwo, Valid: true},
+			PingpongID: pgtype.UUID{Bytes: fixtures.ValidPong.GetIdUUID(), Valid: true},
 			PingOrPong: pgtype.Text{String: "pong", Valid: true},
-			CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-			UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+			CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetCreatedAtTime(), Valid: true},
+			UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPong.GetUpdatedAtTime(), Valid: true},
 			DeletedAt:  pgtype.Timestamptz{},
 			Deleted:    false,
 		},
 	}
 	expectedOutput := entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
-			{
-				Message: "pong",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongID,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
-			{
-				Message: "pong",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: validPingPongIDTwo,
-					CreatedAt:  timeNow,
-					UpdatedAt:  timeNow,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
+			fixtures.ValidPong,
+			fixtures.ValidPong,
 		},
 	}
-
 	mQuerier.On(
 		"FindAllPong",
 		mock.Anything,
@@ -192,6 +177,25 @@ func TestFindAllPongs_Success(t *testing.T) {
 	returnedCount, err := repo.FindAllPongs(context.Background())
 	assert.NoError(t, err)
 	assert.Equal(t, expectedOutput, returnedCount)
+}
+
+func TestFindAllPongs_Failure(t *testing.T) {
+	// Arrange
+	mQuerier := mocks.NewMockIQuerierPingPong(t)
+	repo := &PingPongPersistPostgresRepository{
+		query: mQuerier,
+	}
+	mQuerier.On(
+		"FindAllPong",
+		mock.Anything,
+	).Return([]persist_postgres.Pingpong{}, assert.AnError)
+
+	// Act
+	returnedCount, err := repo.FindAllPongs(context.Background())
+
+	// Assert
+	assert.Error(t, err)
+	assert.Equal(t, entity.ListOfPingPongs{}, returnedCount)
 }
 
 /*
@@ -207,34 +211,22 @@ func TestFindOneByID_Success(t *testing.T) {
 		query: mQuerier,
 	}
 	mockResponse := persist_postgres.Pingpong{
-		PingpongID: pgtype.UUID{Bytes: validPingPongID, Valid: true},
+		PingpongID: pgtype.UUID{Bytes: fixtures.ValidPing.GetIdUUID(), Valid: true},
 		PingOrPong: pgtype.Text{String: "ping", Valid: true},
-		CreatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
-		UpdatedAt:  pgtype.Timestamptz{Time: timeNow, Valid: true},
+		CreatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetCreatedAtTime(), Valid: true},
+		UpdatedAt:  pgtype.Timestamptz{Time: fixtures.ValidPing.GetUpdatedAtTime(), Valid: true},
 		DeletedAt:  pgtype.Timestamptz{},
 		Deleted:    false,
 	}
-
-	expectedOutput := entity.PingPongEntity{
-		Message: "ping",
-		PingPongMetadata: &entity.PingPongMetadata{
-			PingPongID: validPingPongID,
-			CreatedAt:  timeNow,
-			UpdatedAt:  timeNow,
-			DeletedAt:  nil,
-			Deleted:    false,
-		},
-	}
-
+	expectedOutput := fixtures.ValidPing
 	mQuerier.On(
 		"FindOneByID",
 		mock.Anything,
 		mock.Anything,
 	).Return(mockResponse, nil)
-	// end Arrange
 
 	// Act
-	returnedCount, err := repo.FindOneByID(context.Background(), validPingPongID)
+	returnedCount, err := repo.FindOneByID(context.Background(), fixtures.ValidPing.GetIdUUID())
 
 	// Assert
 	assert.NoError(t, err)
@@ -254,12 +246,11 @@ func TestFindOneByID_Failure(t *testing.T) {
 	mQuerier.On(
 		"FindOneByID",
 		mock.Anything,
-		persist_postgres.FindOneByIDParams{PingpongID: pgtype.UUID{Bytes: validPingPongID, Valid: true}},
+		persist_postgres.FindOneByIDParams{PingpongID: pgtype.UUID{Bytes: fixtures.ValidPing.GetIdUUID(), Valid: true}},
 	).Return(mockResponse, tempError)
-	// end Arrange
 
 	// Act
-	returnedEntity, err := repo.FindOneByID(ctx, validPingPongID)
+	returnedEntity, err := repo.FindOneByID(ctx, fixtures.ValidPing.GetIdUUID())
 
 	// Assert
 	assert.Error(t, err)

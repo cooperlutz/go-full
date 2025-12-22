@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"go.opentelemetry.io/otel/attribute"
 
 	"github.com/cooperlutz/go-full/app/config"
@@ -11,49 +12,56 @@ import (
 )
 
 func TestInitTracer_Success(t *testing.T) {
-	// t.Parallel() DO NOT PARALLELIZE
+	t.Parallel()
 
+	// Arrange
 	cfg := config.Telemetry{
 		TraceEndpoint: "localhost:4318",
 	}
 	ctx := context.Background()
 
+	// Act
 	tp, err := telemetree.InitTracer(ctx, cfg)
-	if err != nil {
-		t.Fatalf("InitTracer returned error: %v", err)
-	}
-	if tp == nil {
-		t.Fatal("InitTracer returned nil TracerProvider")
-	}
+
+	// Assert
+	assert.NoError(t, err)
+	assert.NotNil(t, tp)
+
+	// Cleanup
+	defer func() {
+		_ = tp.Shutdown(ctx)
+	}()
 }
 
 func TestAddSpan_Basic(t *testing.T) {
+	t.Parallel()
+	// Arrange
 	ctx := context.Background()
 	spanName := "test-span"
 
 	newCtx, span := telemetree.AddSpan(ctx, spanName)
-	if newCtx == nil {
-		t.Error("AddSpan returned nil context")
-	}
-	if span == nil {
-		t.Error("AddSpan returned nil span")
-	}
-	// The Span type does not have a Name() method, so we cannot check the span name directly.
+	assert.NotNil(t, span)
+	assert.NotNil(t, newCtx)
+
+	// Cleanup
 	span.End()
 }
 
 func TestAddSpan_WithAttributes(t *testing.T) {
+	t.Parallel()
+	// Arrange
 	ctx := context.Background()
 	spanName := "span-with-attrs"
 	attr1 := attribute.String("key1", "value1")
 	attr2 := attribute.Int("key2", 42)
 
+	// Act
 	newCtx, span := telemetree.AddSpan(ctx, spanName, attr1, attr2)
-	if newCtx == nil {
-		t.Error("AddSpan returned nil context")
-	}
-	if span == nil {
-		t.Error("AddSpan returned nil span")
-	}
+
+	// Assert
+	assert.NotNil(t, span)
+	assert.NotNil(t, newCtx)
+
+	// Cleanup
 	span.End()
 }

@@ -10,9 +10,6 @@ import (
 )
 
 // TestNewPingPongCommandResult tests the NewPingPongCommandResult function.
-// Test Cases:
-//
-// 1. Success - passing a `Ping!` returns a PingPongCommandResult containing a `Ping!`
 func TestNewPingPongCommandResult(t *testing.T) {
 	t.Parallel()
 
@@ -43,9 +40,6 @@ func TestNewPingPongCommandResult(t *testing.T) {
 }
 
 // TestNewPingPongCommand tests the NewPingPongCommand function.
-// Test Cases:
-//
-// 1. Success - passing a `ping` returns a PingPongCommand containing a `ping`
 func TestNewPingPongCommand(t *testing.T) {
 	t.Parallel()
 

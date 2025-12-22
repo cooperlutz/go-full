@@ -1,3 +1,87 @@
+## v0.0.36 (2025-12-22)
+
+### Fix
+
+- **deps**: bump actions/upload-artifact from 5.0.0 to 6.0.0 (#71)
+
+## v0.0.35 (2025-12-22)
+
+### Fix
+
+- bumps in frontend (#88)
+
+## v0.0.34 (2025-12-22)
+
+### Fix
+
+- **deps-dev**: bump @openapitools/openapi-generator-cli from 2.25.1 to 2.25.2 in /api/frontend (#83)
+
+## v0.0.33 (2025-12-22)
+
+### Fix
+
+- commitizen configuration bump mapping (#86)
+
+## v0.0.32 (2025-12-20)
+
+### Fix
+
+- consolidated version bumps (#81)
+
+## v0.0.31 (2025-12-20)
+
+### Fix
+
+- adding in domain modelling docs (#80)
+
+## v0.0.30 (2025-12-18)
+
+### Fix
+
+- **deps**: bump go.opentelemetry.io/otel/sdk from 1.38.0 to 1.39.0 (#76)
+
+## v0.0.29 (2025-12-15)
+
+### Fix
+
+- **deps**: bump sweetalert2 from 11.26.3 to 11.26.10 in /api/frontend (#79)
+
+## v0.0.28 (2025-12-15)
+
+### Fix
+
+- **deps**: bump codecov/codecov-action from 5.5.1 to 5.5.2 (#70)
+
+## v0.0.27 (2025-12-15)
+
+### Fix
+
+- cleaning up and adding tests across project (#69)
+
+## v0.0.26 (2025-12-13)
+
+### Fix
+
+- Base metadata, fixtures, tests (#68)
+
+## v0.0.25 (2025-12-11)
+
+### Fix
+
+- Usecase tidying (#67)
+
+## v0.0.24 (2025-12-08)
+
+### Fix
+
+- **deps-dev**: bump vite from 7.2.2 to 7.2.7 in /api/frontend (#63)
+
+## v0.0.23 (2025-12-08)
+
+### Fix
+
+- **deps**: bump daisyui from 5.5.5 to 5.5.8 in /api/frontend (#65)
+
 ## v0.0.22 (2025-12-08)
 
 ### Fix

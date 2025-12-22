@@ -9,11 +9,13 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 func TestMapToDB(t *testing.T) {
 	t.Parallel()
 
+	// Arrange
 	tests := []struct {
 		name string
 		pp   entity.PingPongEntity
@@ -21,16 +23,7 @@ func TestMapToDB(t *testing.T) {
 	}{
 		{
 			name: "Valid PingPongEntity to DB Create Params",
-			pp: entity.PingPongEntity{
-				Message: "ping",
-				PingPongMetadata: &entity.PingPongMetadata{
-					PingPongID: sampleUUID,
-					CreatedAt:  sampleTime,
-					UpdatedAt:  sampleTime,
-					DeletedAt:  nil,
-					Deleted:    false,
-				},
-			},
+			pp:   fixtures.ValidPing,
 			want: postgresql.CreatePingPongParams{
 				PingpongID: pgtype.UUID{Bytes: sampleUUID, Valid: true},
 				PingOrPong: pgtype.Text{String: "ping", Valid: true},
@@ -43,7 +36,9 @@ func TestMapToDB(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			// Act
 			got := MapToDB(tt.pp)
+			// Assert
 			assert.IsType(t, pgtype.UUID{}, got.PingpongID)
 			assert.Equal(t, tt.want.PingOrPong, got.PingOrPong)
 			assert.Equal(t, tt.want.Deleted, got.Deleted)
