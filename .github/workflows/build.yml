@@ -42,6 +42,13 @@ jobs:
       - name: Run / Make CI
         run: make ci
 
+      # Verify that version bump and changelog generation would succeed
+      - name: Run / Bump version & generate changelog
+        uses: commitizen-tools/commitizen-action@bb4f1df6601e2a1a891506581b0c53acdc88e07d # v0.26.0
+        with:
+          push: false
+          dry_run: true
+
       - name: Test / Upload coverage to Codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         # Skip Codecov for Dependabot PRs
