@@ -1,3 +1,9 @@
+## v0.0.36 (2025-12-22)
+
+### Fix
+
+- **deps**: bump actions/upload-artifact from 5.0.0 to 6.0.0 (#71)
+
 ## v0.0.35 (2025-12-22)
 
 ### Fix
