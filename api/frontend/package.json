@@ -35,7 +35,7 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.25.1",
+    "@openapitools/openapi-generator-cli": "^2.25.2",
     "@tsconfig/node22": "^22.0.5",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
