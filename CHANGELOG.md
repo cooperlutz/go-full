@@ -1,3 +1,9 @@
+## v0.0.33 (2025-12-22)
+
+### Fix
+
+- commitizen configuration bump mapping (#86)
+
 ## v0.0.32 (2025-12-20)
 
 ### Fix
