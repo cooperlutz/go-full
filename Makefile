@@ -25,7 +25,7 @@ export APP_NAME
 ############################################################################
 #                             ALL                                          #
 ############################################################################
-all: install deps deps-audit gen build-fe lintfmt test cover-filter build-local ### run all setup tasks
+all: deps install deps-audit gen build-fe lintfmt test cover-filter build-local ### run all setup tasks
 .PHONY: all
 
 ############################################################################
@@ -33,7 +33,7 @@ all: install deps deps-audit gen build-fe lintfmt test cover-filter build-local 
 ############################################################################
 
 deps: ### go mod tidy + verify + vendor
-	go mod tidy && go mod verify && go mod vendor
+	go mod vendor && go mod tidy && go mod verify
 	$(PNPM) deps
 .PHONY: deps
 
