@@ -24,7 +24,7 @@ Decompose the domain into sub-domains - loosely-coupled parts of the domain.
 
 Strategically map out your sub-domains to identify core domains: the parts of the domain which have the greatest potential for business differentiation or strategic significance.
 
-![Wardley Map](./_templates/wardley_map.drawio.png)
+![Wardley Map](./_templates/wardley_mapping_canvas.drawio.png)
 
 ## Connect
 
