@@ -1,3 +1,9 @@
+## v0.0.38 (2025-12-31)
+
+### Fix
+
+- cleanup modularization of generated mocks (#90)
+
 ## v0.0.37 (2025-12-22)
 
 ### Fix
