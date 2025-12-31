@@ -1,10 +1,11 @@
 package persist
 
 import (
+	"github.com/jackc/pgx/v5/pgxpool"
+
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/repository"
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/pkg/deebee"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 // Ensure PingPongPersistPostgresRepository implements the IPingPongRepository interface.
