@@ -13,7 +13,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/api/rest"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
-	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
+	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
 // Test that /api/v1/ping returns 200 and "pong"

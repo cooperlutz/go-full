@@ -3,13 +3,12 @@ package persist
 import (
 	"context"
 
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
-
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist/mapper"
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // FindAll - Query all pingpongs from DB and return a list of PingPongEntity.

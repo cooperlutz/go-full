@@ -12,7 +12,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
+	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
 func TestFindAll_Success(t *testing.T) {

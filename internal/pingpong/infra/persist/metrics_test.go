@@ -11,7 +11,7 @@ import (
 
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/pkg/types"
-	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
+	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
 func TestTotalNumberOfPingPongs_Success(t *testing.T) {
