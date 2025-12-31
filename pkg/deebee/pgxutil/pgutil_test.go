@@ -33,7 +33,7 @@ func TestUUIDToPgtypeUUID(t *testing.T) {
 	pgUUID := pgxutil.UUIDToPgtypeUUID(id)
 
 	assert.True(t, pgUUID.Valid)
-	assert.Equal(t, id, pgUUID.Bytes)
+	assert.Equal(t, [16]byte(id[:]), pgUUID.Bytes)
 }
 
 func TestStrToPgtypeText(t *testing.T) {
