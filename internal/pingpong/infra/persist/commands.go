@@ -3,11 +3,10 @@ package persist
 import (
 	"context"
 
-	"go.opentelemetry.io/otel/attribute"
-
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/persist/mapper"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 // SavePingPong - Save a PingPong entity to the database.

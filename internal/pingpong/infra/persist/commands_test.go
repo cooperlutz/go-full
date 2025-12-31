@@ -12,7 +12,7 @@ import (
 
 	persist_postgres "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
+	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
 var timeNow = time.Now()

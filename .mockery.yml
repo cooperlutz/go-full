@@ -1,5 +1,5 @@
 all: false
-dir: test/mocks/pingpong
+dir: test/mocks/
 force-file-write: true
 formatter: goimports
 include-auto-generated: false
@@ -11,19 +11,16 @@ require-template-schema-exists: true
 template: testify
 template-schema: '{{.Template}}.schema.json'
 packages:
+# PingPong Module
   github.com/cooperlutz/go-full/internal/pingpong/domain/repository:
     config:
-      filename: mocks_repo.go
+      filename: mocks_pingpong_repo.gen.go
       all: true
   github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres:
     config:
-      filename: mocks_postgres_repo.go
-      all: true
-  github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/server:
-    config:
-      filename: mocks_api_v1.go
+      filename: mocks_pingpong_postgres_repo.gen.go
       all: true
   github.com/cooperlutz/go-full/internal/pingpong/app/usecase:
     config:
-      filename: mocks_usecase.go
+      filename: mocks_pingpong_usecase.gen.go
       all: true

@@ -16,7 +16,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
 	"github.com/cooperlutz/go-full/pkg/types"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
-	mocks "github.com/cooperlutz/go-full/test/mocks/pingpong"
+	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
 var (

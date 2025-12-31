@@ -1,10 +1,9 @@
 package mapper
 
 import (
-	"github.com/jackc/pgx/v5/pgtype"
-
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	postgresql "github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func MapToDB(pp entity.PingPongEntity) postgresql.CreatePingPongParams {
