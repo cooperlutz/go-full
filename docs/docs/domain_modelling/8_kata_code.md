@@ -1,4 +1,4 @@
-# Code
+# Making the Grade: Code
 
 Code the domain model.
 

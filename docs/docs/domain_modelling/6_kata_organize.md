@@ -1,4 +1,4 @@
-# Organize
+# Making the Grade: Organize
 
 Organize autonomous teams that are optimized for fast flow and aligned with context boundaries.
 

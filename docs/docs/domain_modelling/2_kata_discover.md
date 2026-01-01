@@ -1,4 +1,4 @@
-# Discover
+# Making the Grade: Discover
 
 Discover the domain visually and collaboratively.
 

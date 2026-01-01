@@ -1,4 +1,4 @@
-# Define
+# Making the Grade: Define
 
 Define the roles and responsibilities of each [bounded context](https://martinfowler.com/bliki/BoundedContext.html).
 

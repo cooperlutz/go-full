@@ -1,4 +1,4 @@
-# Connect
+# Making the Grade: Connect
 
 Connect the sub-domains into a loosely-coupled architecture which fulfills end-to-end business use-cases.
 
