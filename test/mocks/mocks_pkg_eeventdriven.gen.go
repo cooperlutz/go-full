@@ -38,8 +38,8 @@ func (_m *MockIPubSubEventProcessor) EXPECT() *MockIPubSubEventProcessor_Expecte
 }
 
 // EmitEvent provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, structPayload interface{}) error {
-	ret := _mock.Called(topic, structPayload)
+func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, payload interface{}) error {
+	ret := _mock.Called(topic, payload)
 
 	if len(ret) == 0 {
 		panic("no return value specified for EmitEvent")
@@ -47,7 +47,7 @@ func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, structPayload in
 
 	var r0 error
 	if returnFunc, ok := ret.Get(0).(func(string, interface{}) error); ok {
-		r0 = returnFunc(topic, structPayload)
+		r0 = returnFunc(topic, payload)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -61,12 +61,12 @@ type MockIPubSubEventProcessor_EmitEvent_Call struct {
 
 // EmitEvent is a helper method to define mock.On call
 //   - topic string
-//   - structPayload interface{}
-func (_e *MockIPubSubEventProcessor_Expecter) EmitEvent(topic interface{}, structPayload interface{}) *MockIPubSubEventProcessor_EmitEvent_Call {
-	return &MockIPubSubEventProcessor_EmitEvent_Call{Call: _e.mock.On("EmitEvent", topic, structPayload)}
+//   - payload interface{}
+func (_e *MockIPubSubEventProcessor_Expecter) EmitEvent(topic interface{}, payload interface{}) *MockIPubSubEventProcessor_EmitEvent_Call {
+	return &MockIPubSubEventProcessor_EmitEvent_Call{Call: _e.mock.On("EmitEvent", topic, payload)}
 }
 
-func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Run(run func(topic string, structPayload interface{})) *MockIPubSubEventProcessor_EmitEvent_Call {
+func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Run(run func(topic string, payload interface{})) *MockIPubSubEventProcessor_EmitEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 string
 		if args[0] != nil {
@@ -89,17 +89,17 @@ func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Return(err error) *MockIPubS
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_EmitEvent_Call) RunAndReturn(run func(topic string, structPayload interface{}) error) *MockIPubSubEventProcessor_EmitEvent_Call {
+func (_c *MockIPubSubEventProcessor_EmitEvent_Call) RunAndReturn(run func(topic string, payload interface{}) error) *MockIPubSubEventProcessor_EmitEvent_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// RegisterHandlers provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) RegisterHandlers() error {
+// RegisterSubscriberHandlers provides a mock function for the type MockIPubSubEventProcessor
+func (_mock *MockIPubSubEventProcessor) RegisterSubscriberHandlers() error {
 	ret := _mock.Called()
 
 	if len(ret) == 0 {
-		panic("no return value specified for RegisterHandlers")
+		panic("no return value specified for RegisterSubscriberHandlers")
 	}
 
 	var r0 error
@@ -111,29 +111,29 @@ func (_mock *MockIPubSubEventProcessor) RegisterHandlers() error {
 	return r0
 }
 
-// MockIPubSubEventProcessor_RegisterHandlers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RegisterHandlers'
-type MockIPubSubEventProcessor_RegisterHandlers_Call struct {
+// MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'RegisterSubscriberHandlers'
+type MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call struct {
 	*mock.Call
 }
 
-// RegisterHandlers is a helper method to define mock.On call
-func (_e *MockIPubSubEventProcessor_Expecter) RegisterHandlers() *MockIPubSubEventProcessor_RegisterHandlers_Call {
-	return &MockIPubSubEventProcessor_RegisterHandlers_Call{Call: _e.mock.On("RegisterHandlers")}
+// RegisterSubscriberHandlers is a helper method to define mock.On call
+func (_e *MockIPubSubEventProcessor_Expecter) RegisterSubscriberHandlers() *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call {
+	return &MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call{Call: _e.mock.On("RegisterSubscriberHandlers")}
 }
 
-func (_c *MockIPubSubEventProcessor_RegisterHandlers_Call) Run(run func()) *MockIPubSubEventProcessor_RegisterHandlers_Call {
+func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) Run(run func()) *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run()
 	})
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_RegisterHandlers_Call) Return(err error) *MockIPubSubEventProcessor_RegisterHandlers_Call {
+func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) Return(err error) *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call {
 	_c.Call.Return(err)
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_RegisterHandlers_Call) RunAndReturn(run func() error) *MockIPubSubEventProcessor_RegisterHandlers_Call {
+func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) RunAndReturn(run func() error) *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call {
 	_c.Call.Return(run)
 	return _c
 }

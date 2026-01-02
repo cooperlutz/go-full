@@ -58,7 +58,7 @@ func TestPingPongUseCase_PingPong_Success(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
 	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(nil)
-	mockPubSub.On("EmitEvent", mock.Anything, mock.AnythingOfType("event.PingPongCreatedEvent")).Return(nil)
+	mockPubSub.On("EmitEvent", mock.Anything, mock.AnythingOfType("event.PingReceived")).Return(nil)
 	defer mockRepo.AssertExpectations(t)
 	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	cmd := command.PingPongCommand{Message: "ping"}
@@ -113,6 +113,7 @@ func TestPingPongUseCase_PingPong_OtelSpan(t *testing.T) {
 	defer mockRepo.AssertExpectations(t)
 
 	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
+	mockPubSub.On("EmitEvent", mock.Anything, mock.AnythingOfType("event.PingReceived")).Return(nil)
 	cmd := command.PingPongCommand{Message: "ping"}
 
 	// Act

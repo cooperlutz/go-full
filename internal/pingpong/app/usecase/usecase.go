@@ -66,7 +66,10 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 		inputEntity.GetMessage(),
 	)
 
-	s.Events.EmitEvent("pingpong", ev)
+	err = s.Events.EmitEvent("pingpong", ev)
+	if err != nil {
+		return command.PingPongCommandResult{}, err
+	}
 
 	outputResponseMessage := inputEntity.DetermineResponseMessage()
 

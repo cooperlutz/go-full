@@ -54,7 +54,10 @@ func (a *Application) Run() {
 	----------------------------------------------------------------------------------- */
 
 	// PingPong
-	pingPongModule := pingpong.NewModule(conn)
+	pingPongModule, err := pingpong.NewModule(conn)
+	if err != nil {
+		os.Exit(1)
+	}
 
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
@@ -87,12 +90,11 @@ func (a *Application) Run() {
 	Run the HTTP server
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
-	wg.Add(2)
+	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
 
 	go httpServer.Run(&wg)
-	pingPongModule.PubSub.RegisterHandlers()
+
 	pingPongModule.PubSub.Run(&wg)
 
 	wg.Wait()
-
 }

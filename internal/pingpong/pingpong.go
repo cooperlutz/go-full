@@ -21,9 +21,14 @@ type PingPongModule struct {
 }
 
 // NewModule - Initializes the PingPong module with its needed dependencies.
-func NewModule(pgconn *pgxpool.Pool) *PingPongModule {
+func NewModule(pgconn *pgxpool.Pool) (*PingPongModule, error) {
 	repo := persist.NewPingPongPostgresRepo(pgconn)
-	ps := pubsub.New(pgconn, repo)
+
+	ps, err := pubsub.New(pgconn, repo)
+	if err != nil {
+		return nil, err
+	}
+
 	uc := usecase.NewPingPongUseCase(repo, ps)
 	api := rest.NewPingPongAPIRouter(uc)
 
@@ -34,5 +39,10 @@ func NewModule(pgconn *pgxpool.Pool) *PingPongModule {
 		PubSub:         ps,
 	}
 
-	return module
+	err = module.PubSub.RegisterSubscriberHandlers()
+	if err != nil {
+		return nil, err
+	}
+
+	return module, nil
 }

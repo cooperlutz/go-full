@@ -14,9 +14,10 @@ func TestNewModule(t *testing.T) {
 	var dummyPool *pgxpool.Pool
 
 	// Act
-	module := pingpong.NewModule(dummyPool)
+	module, err := pingpong.NewModule(dummyPool)
 
 	// Assert
+	assert.NoError(t, err)
 	assert.NotNil(t, module)
 	assert.NotNil(t, module.RestApi)
 	assert.NotNil(t, module.UseCase)
