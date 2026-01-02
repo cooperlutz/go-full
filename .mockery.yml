@@ -11,6 +11,11 @@ require-template-schema-exists: true
 template: testify
 template-schema: '{{.Template}}.schema.json'
 packages:
+# Core Application Package Module
+  github.com/cooperlutz/go-full/pkg/eeventdriven:
+    config:
+      filename: mocks_eeventdriven.gen.go
+      all: true
 # PingPong Module
   github.com/cooperlutz/go-full/internal/pingpong/domain/repository:
     config:

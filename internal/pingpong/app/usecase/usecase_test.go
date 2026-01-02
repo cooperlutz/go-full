@@ -47,6 +47,7 @@ func TestNewPingPongUseCaseWithMockRepo(t *testing.T) {
 	uc := usecase.NewPingPongUseCase(
 		// Use the mock repository
 		mocks.NewMockIPingPongRepository(t),
+		mocks.NewMockIPubSubEventProcessor(t),
 	)
 	assert.NotNil(t, uc)
 }
@@ -55,9 +56,11 @@ func TestNewPingPongUseCaseWithMockRepo(t *testing.T) {
 func TestPingPongUseCase_PingPong_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(nil)
+	mockPubSub.On("EmitEvent", mock.Anything, mock.AnythingOfType("event.PingPongCreatedEvent")).Return(nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	cmd := command.PingPongCommand{Message: "ping"}
 	// Act
 	result, err := useCase.PingPong(context.Background(), cmd)
@@ -72,12 +75,13 @@ func TestPingPongUseCase_PingPong_Success(t *testing.T) {
 // Test error from mapper
 func TestPingPongUseCase_PingPong_MapperError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	defer mockRepo.AssertExpectations(t)
 
 	// Simulate invalid command (assuming mapper returns error for invalid message)
 	cmd := command.PingPongCommand{Message: "invalid"}
 
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	_, err := useCase.PingPong(context.Background(), cmd)
 
 	assert.Error(t, err)
@@ -86,11 +90,12 @@ func TestPingPongUseCase_PingPong_MapperError(t *testing.T) {
 // Test error from repository
 func TestPingPongUseCase_PingPong_RepoError(t *testing.T) {
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(assert.AnError)
 	defer mockRepo.AssertExpectations(t)
 
 	cmd := command.PingPongCommand{Message: "ping"}
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 
 	_, err := useCase.PingPong(context.Background(), cmd)
 
@@ -103,10 +108,11 @@ func TestPingPongUseCase_PingPong_OtelSpan(t *testing.T) {
 	testExporter.Reset()
 
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("SavePingPong", mock.Anything, mock.AnythingOfType("entity.PingPongEntity")).Return(nil)
 	defer mockRepo.AssertExpectations(t)
 
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	cmd := command.PingPongCommand{Message: "ping"}
 
 	// Act
@@ -127,11 +133,12 @@ func TestPingPongUseCase_PingPong_OtelSpan(t *testing.T) {
 func TestPingPongUseCase_FindOneByID_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindOneByID", mock.Anything, validPingPongID).Return(fixtures.ValidPong, nil)
 	defer mockRepo.AssertExpectations(t)
 
 	// Act
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	resp, err := useCase.FindOneByID(context.Background(), query.FindOneByID{ID: validPingPongID})
 
 	// Assert
@@ -142,6 +149,7 @@ func TestPingPongUseCase_FindOneByID_Success(t *testing.T) {
 func TestPingPongUseCase_FindOneByID_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	ctx := context.Background()
 
 	expectedResponse := query.FindOneByIDResponse{}
@@ -149,7 +157,7 @@ func TestPingPongUseCase_FindOneByID_RepoError(t *testing.T) {
 	defer mockRepo.AssertExpectations(t)
 
 	// Act
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	resp, err := useCase.FindOneByID(ctx, query.FindOneByID{ID: validPingPongID})
 
 	// Assert
@@ -160,6 +168,7 @@ func TestPingPongUseCase_FindOneByID_RepoError(t *testing.T) {
 func TestPingPongUseCase_FindAll_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAll", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			fixtures.ValidPong,
@@ -167,7 +176,7 @@ func TestPingPongUseCase_FindAll_Success(t *testing.T) {
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	resp, err := useCase.FindAll(context.Background())
 	// Assert
@@ -178,9 +187,10 @@ func TestPingPongUseCase_FindAll_Success(t *testing.T) {
 func TestPingPongUseCase_FindAll_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAll", mock.Anything).Return(entity.ListOfPingPongs{}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	_, err := useCase.FindAll(context.Background())
 	// Assert
@@ -190,13 +200,14 @@ func TestPingPongUseCase_FindAll_RepoError(t *testing.T) {
 func TestPingPongUseCase_FindAllPings_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllPings", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			fixtures.ValidPing,
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	resp, err := useCase.FindAllPings(context.Background())
 	// Assert
@@ -207,9 +218,10 @@ func TestPingPongUseCase_FindAllPings_Success(t *testing.T) {
 func TestPingPongUseCase_FindAllPings_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllPings", mock.Anything).Return(entity.ListOfPingPongs{}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	_, err := useCase.FindAllPings(context.Background())
 	// Assert
@@ -219,13 +231,14 @@ func TestPingPongUseCase_FindAllPings_RepoError(t *testing.T) {
 func TestPingPongUseCase_FindAllPongs_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllPongs", mock.Anything).Return(entity.ListOfPingPongs{
 		PingPongs: []entity.PingPongEntity{
 			fixtures.ValidPong,
 		},
 	}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	resp, err := useCase.FindAllPongs(context.Background())
 	// Assert
@@ -236,9 +249,10 @@ func TestPingPongUseCase_FindAllPongs_Success(t *testing.T) {
 func TestPingPongUseCase_FindAllPongs_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllPongs", mock.Anything).Return(entity.ListOfPingPongs{}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	_, err := useCase.FindAllPongs(context.Background())
 	// Assert
@@ -248,9 +262,10 @@ func TestPingPongUseCase_FindAllPongs_RepoError(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPingPongs_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 10}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 
 	// Act
 	count, err := useCase.TotalNumberOfPingPongs(context.Background())
@@ -263,9 +278,10 @@ func TestPingPongUseCase_TotalNumberOfPingPongs_Success(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPingPongs_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPingPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	count, err := useCase.TotalNumberOfPingPongs(context.Background())
 	// Assert
@@ -276,9 +292,10 @@ func TestPingPongUseCase_TotalNumberOfPingPongs_RepoError(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPings_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(types.QuantityMetric{Quantity: 10}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	count, err := useCase.TotalNumberOfPings(context.Background())
 	// Assert
@@ -289,9 +306,10 @@ func TestPingPongUseCase_TotalNumberOfPings_Success(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPings_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPings", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	count, err := useCase.TotalNumberOfPings(context.Background())
 	// Assert
@@ -302,9 +320,10 @@ func TestPingPongUseCase_TotalNumberOfPings_RepoError(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPongs_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 15}, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	count, err := useCase.TotalNumberOfPongs(context.Background())
 	// Assert
@@ -315,10 +334,11 @@ func TestPingPongUseCase_TotalNumberOfPongs_Success(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPongs_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPongs", mock.Anything).Return(types.QuantityMetric{Quantity: 0}, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
 
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	count, err := useCase.TotalNumberOfPongs(context.Background())
 	// Assert
@@ -329,6 +349,7 @@ func TestPingPongUseCase_TotalNumberOfPongs_RepoError(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPingPongsPerDay_Success(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	date1, _ := time.Parse("2006-01-02", "2024-06-01")
 	date2, _ := time.Parse("2006-01-02", "2024-06-02")
 	expected := []types.MeasureCountbyDateTimeMetric{
@@ -337,7 +358,7 @@ func TestPingPongUseCase_TotalNumberOfPingPongsPerDay_Success(t *testing.T) {
 	}
 	mockRepo.On("TotalNumberOfPingPongsCreatedPerDay", mock.Anything).Return(expected, nil)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	result, err := useCase.TotalNumberOfPingPongsPerDay(context.Background())
 	// Assert
@@ -348,9 +369,10 @@ func TestPingPongUseCase_TotalNumberOfPingPongsPerDay_Success(t *testing.T) {
 func TestPingPongUseCase_TotalNumberOfPingPongsPerDay_RepoError(t *testing.T) {
 	// Arrange
 	mockRepo := mocks.NewMockIPingPongRepository(t)
+	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("TotalNumberOfPingPongsCreatedPerDay", mock.Anything).Return(nil, assert.AnError)
 	defer mockRepo.AssertExpectations(t)
-	useCase := usecase.NewPingPongUseCase(mockRepo)
+	useCase := usecase.NewPingPongUseCase(mockRepo, mockPubSub)
 	// Act
 	result, err := useCase.TotalNumberOfPingPongsPerDay(context.Background())
 	// Assert
