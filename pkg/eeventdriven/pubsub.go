@@ -11,6 +11,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/message/router/middleware"
 
+	"github.com/cooperlutz/go-full/app/config"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 )
 
@@ -22,6 +23,7 @@ type IPubSubEventProcessor interface {
 
 // BasePgsqlPubSubProcessor provides foundational Pub/Sub capabilities using Watermill and PostgreSQL.
 type BasePgsqlPubSubProcessor struct {
+	Config     config.Config
 	db         deebee.IDatabase
 	router     *message.Router
 	publisher  *sql.Publisher

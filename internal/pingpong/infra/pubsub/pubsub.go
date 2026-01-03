@@ -6,6 +6,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/repository"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 // Ensure EventProcessor implements the IPubSubEventProcessor interface.
@@ -43,6 +44,14 @@ func (pp *PingPongPubSub) RegisterSubscriberHandlers() error {
 		"pingpong",
 		pp.GetPublisher(),
 		func(msg *message.Message) ([]*message.Message, error) {
+			ctx, span := telemetree.AddSpan(
+				msg.Context(),
+				"pingpong.pubsub.handler",
+			)
+			defer span.End()
+
+			msg.SetContext(ctx)
+
 			msg.Ack()
 
 			return []*message.Message{msg}, nil

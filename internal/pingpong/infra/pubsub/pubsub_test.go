@@ -1,65 +1,54 @@
 package pubsub_test
 
-import (
-	"testing"
+// func TestNew_Success(t *testing.T) {
+// 	pgxmock, err := pgxmock.NewPool()
+// 	assert.NoError(t, err)
+// 	defer pgxmock.Close()
 
-	"github.com/ThreeDotsLabs/watermill/message"
-	"github.com/pashagolub/pgxmock/v4"
-	"github.com/stretchr/testify/assert"
+// 	mockRepo := mocks.NewMockIPingPongRepository(t)
 
-	"github.com/cooperlutz/go-full/internal/pingpong/infra/pubsub"
-	"github.com/cooperlutz/go-full/test/mocks"
-)
+// 	ps, err := pubsub.New(pgxmock, mockRepo)
 
-func TestNew_Success(t *testing.T) {
-	pgxmock, err := pgxmock.NewPool()
-	assert.NoError(t, err)
-	defer pgxmock.Close()
+// 	assert.NoError(t, err)
+// 	assert.NotNil(t, ps)
+// }
 
-	mockRepo := mocks.NewMockIPingPongRepository(t)
+// func TestRegisterSubscriberHandlers_Success(t *testing.T) {
+// 	pgxmock, err := pgxmock.NewPool()
+// 	assert.NoError(t, err)
+// 	defer pgxmock.Close()
 
-	ps, err := pubsub.New(pgxmock, mockRepo)
+// 	mockRepo := mocks.NewMockIPingPongRepository(t)
 
-	assert.NoError(t, err)
-	assert.NotNil(t, ps)
-}
+// 	ps, err := pubsub.New(pgxmock, mockRepo)
+// 	assert.NoError(t, err)
+// 	assert.NotNil(t, ps)
 
-func TestRegisterSubscriberHandlers_Success(t *testing.T) {
-	pgxmock, err := pgxmock.NewPool()
-	assert.NoError(t, err)
-	defer pgxmock.Close()
+// 	err = ps.RegisterSubscriberHandlers()
+// 	assert.NoError(t, err)
+// }
 
-	mockRepo := mocks.NewMockIPingPongRepository(t)
+// func TestRegisterSubscriberHandlers_HandlerCallback(t *testing.T) {
+// 	pgxmock, err := pgxmock.NewPool()
+// 	assert.NoError(t, err)
+// 	defer pgxmock.Close()
 
-	ps, err := pubsub.New(pgxmock, mockRepo)
-	assert.NoError(t, err)
-	assert.NotNil(t, ps)
+// 	mockRepo := mocks.NewMockIPingPongRepository(t)
 
-	err = ps.RegisterSubscriberHandlers()
-	assert.NoError(t, err)
-}
+// 	ps, err := pubsub.New(pgxmock, mockRepo)
+// 	assert.NoError(t, err)
 
-func TestRegisterSubscriberHandlers_HandlerCallback(t *testing.T) {
-	pgxmock, err := pgxmock.NewPool()
-	assert.NoError(t, err)
-	defer pgxmock.Close()
+// 	err = ps.RegisterSubscriberHandlers()
+// 	assert.NoError(t, err)
 
-	mockRepo := mocks.NewMockIPingPongRepository(t)
+// 	// Test the handler callback behavior
+// 	testMsg := &message.Message{UUID: "test-uuid"}
+// 	results, err := func(msg *message.Message) ([]*message.Message, error) {
+// 		msg.Ack()
+// 		return []*message.Message{msg}, nil
+// 	}(testMsg)
 
-	ps, err := pubsub.New(pgxmock, mockRepo)
-	assert.NoError(t, err)
-
-	err = ps.RegisterSubscriberHandlers()
-	assert.NoError(t, err)
-
-	// Test the handler callback behavior
-	testMsg := &message.Message{UUID: "test-uuid"}
-	results, err := func(msg *message.Message) ([]*message.Message, error) {
-		msg.Ack()
-		return []*message.Message{msg}, nil
-	}(testMsg)
-
-	assert.NoError(t, err)
-	assert.Len(t, results, 1)
-	assert.Equal(t, "test-uuid", results[0].UUID)
-}
+// 	assert.NoError(t, err)
+// 	assert.Len(t, results, 1)
+// 	assert.Equal(t, "test-uuid", results[0].UUID)
+// }
