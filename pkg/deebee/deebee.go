@@ -12,4 +12,5 @@ type IDatabase interface {
 	Query(context.Context, string, ...interface{}) (pgx.Rows, error)
 	QueryRow(context.Context, string, ...interface{}) pgx.Row
 	Begin(ctx context.Context) (pgx.Tx, error)
+	BeginTx(ctx context.Context, options pgx.TxOptions) (pgx.Tx, error)
 }

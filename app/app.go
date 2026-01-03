@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"os"
+	"sync"
 
 	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -49,11 +50,14 @@ func (a *Application) Run() {
 	/* -----------------------------------------------------------------------------------
 	Modular Service Initializations:
 
-	Create a new instance of the PingPongService, injecting the Postgres repository as a dependency.
+	Create a new instance of the PingPongService, injecting the Postgres connection as a dependency.
 	----------------------------------------------------------------------------------- */
 
 	// PingPong
-	pingPongModule := pingpong.NewModule(conn)
+	pingPongModule, err := pingpong.NewModule(conn)
+	if err != nil {
+		os.Exit(1)
+	}
 
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
@@ -83,7 +87,14 @@ func (a *Application) Run() {
 	httpServer.RegisterController("/pingpong", pingPongModule.RestApi) // mounts `/pingpong/api/v1/ping-pong`
 
 	/* -----------------------------------------------------------------------------------
-	Run the HTTP server
+	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
-	httpServer.Run()
+	var wg sync.WaitGroup
+	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
+
+	go httpServer.Run(&wg)
+
+	pingPongModule.PubSub.Run(&wg)
+
+	wg.Wait()
 }

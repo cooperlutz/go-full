@@ -31,7 +31,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 			},
 			expectedCfg: config.Config{
 				App: config.App{
-					Name:    "default",
+					Name:    "go-full",
 					Version: "",
 				},
 				HTTP: config.HTTP{
@@ -66,7 +66,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 			},
 			expectedCfg: config.Config{
 				App: config.App{
-					Name:    "default",
+					Name:    "go-full",
 					Version: "",
 				},
 				HTTP: config.HTTP{

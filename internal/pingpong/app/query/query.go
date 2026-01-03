@@ -1,8 +1,9 @@
 package query
 
 import (
-	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
 	"github.com/google/uuid"
+
+	"github.com/cooperlutz/go-full/internal/pingpong/app/common"
 )
 
 type FindOneByID struct {

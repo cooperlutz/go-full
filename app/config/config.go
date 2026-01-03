@@ -8,7 +8,7 @@ import (
 
 var (
 	ApplicationVersion string             //nolint:gochecknoglobals // set via build flags
-	ApplicationName    string = "default" //nolint:gochecknoglobals // set via build flags
+	ApplicationName    string = "go-full" //nolint:gochecknoglobals // set via build flags
 )
 
 // Config.App settings.

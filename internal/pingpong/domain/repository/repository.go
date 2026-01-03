@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 
+	"github.com/google/uuid"
+
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/pkg/types"
-	"github.com/google/uuid"
 )
 
 // IPingPongRepository defines the interface for a PingPong repository.
