@@ -26,17 +26,17 @@ type BasePgsqlPubSubProcessor struct {
 	Config     config.Config
 	db         deebee.IDatabase
 	router     *message.Router
-	publisher  *sql.Publisher
+	publisher  message.Publisher
 	subscriber *sql.Subscriber
 }
 
 // New initializes a new BasePgsqlPubSubProcessor with the given PostgreSQL connection pool.
-func New(db deebee.IDatabase) (*BasePgsqlPubSubProcessor, error) {
+func NewPubSub(db deebee.IDatabase) (*BasePgsqlPubSubProcessor, error) {
 	logger := watermill.NewStdLogger(false, false)
 
-	router, err := message.NewRouter(message.RouterConfig{}, logger)
+	router, err := InitTracedRouter()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	router.AddMiddleware(middleware.Recoverer)
@@ -59,7 +59,7 @@ func New(db deebee.IDatabase) (*BasePgsqlPubSubProcessor, error) {
 		return nil, err
 	}
 
-	ps.SetSubscriber(subscriber)
+	ps.setSubscriber(subscriber)
 
 	publisher, err := sql.NewPublisher(
 		sql.BeginnerFromPgx(ps.GetDB()),
@@ -72,7 +72,7 @@ func New(db deebee.IDatabase) (*BasePgsqlPubSubProcessor, error) {
 		return nil, err
 	}
 
-	ps.SetPublisher(publisher)
+	ps.setPublisher(publisher)
 
 	return ps, nil
 }
@@ -83,12 +83,12 @@ func (bps BasePgsqlPubSubProcessor) GetDB() deebee.IDatabase {
 }
 
 // SetPublisher sets the SQL publisher for the Pub/Sub processor.
-func (bps *BasePgsqlPubSubProcessor) SetPublisher(publisher *sql.Publisher) {
-	bps.publisher = publisher
+func (bps *BasePgsqlPubSubProcessor) setPublisher(publisher message.Publisher) {
+	bps.publisher = NewPublisherDecorator(publisher)
 }
 
 // GetPublisher returns the SQL publisher for the Pub/Sub processor.
-func (bps BasePgsqlPubSubProcessor) GetPublisher() *sql.Publisher {
+func (bps BasePgsqlPubSubProcessor) GetPublisher() message.Publisher {
 	return bps.publisher
 }
 
@@ -98,7 +98,7 @@ func (bps BasePgsqlPubSubProcessor) GetSubscriber() *sql.Subscriber {
 }
 
 // SetSubscriber sets the SQL subscriber for the Pub/Sub processor.
-func (bps *BasePgsqlPubSubProcessor) SetSubscriber(subscriber *sql.Subscriber) {
+func (bps *BasePgsqlPubSubProcessor) setSubscriber(subscriber *sql.Subscriber) {
 	bps.subscriber = subscriber
 }
 

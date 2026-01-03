@@ -6,7 +6,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/repository"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
-	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 // Ensure EventProcessor implements the IPubSubEventProcessor interface.
@@ -20,7 +19,7 @@ type PingPongPubSub struct {
 
 // New - Creates a new instance of PingPongPubSub with the provided database connection and repository.
 func New(db deebee.IDatabase, repo repository.IPingPongRepository) (*PingPongPubSub, error) {
-	basePS, err := eeventdriven.New(db)
+	basePS, err := eeventdriven.NewPubSub(db)
 	if err != nil {
 		return nil, err
 	}
@@ -37,25 +36,22 @@ func New(db deebee.IDatabase, repo repository.IPingPongRepository) (*PingPongPub
 func (pp *PingPongPubSub) RegisterSubscriberHandlers() error {
 	router := pp.GetRouter()
 
-	router.AddHandler(
+	router.AddConsumerHandler(
 		"handler",
 		"pingpong",
 		pp.GetSubscriber(),
-		"pingpong",
-		pp.GetPublisher(),
-		func(msg *message.Message) ([]*message.Message, error) {
-			ctx, span := telemetree.AddSpan(
-				msg.Context(),
-				"pingpong.pubsub.handler",
-			)
-			defer span.End()
+		eeventdriven.TraceConsumerHandler(func(msg *message.Message) error {
+			// ctx, span := telemetree.AddSpan(
+			// 	msg.Context(),
+			// 	"pingpong.pubsub.handler",
+			// )
+			// defer span.End()
 
-			msg.SetContext(ctx)
-
+			// msg.SetContext(ctx)
 			msg.Ack()
 
-			return []*message.Message{msg}, nil
-		},
+			return nil
+		}),
 	)
 
 	return nil
