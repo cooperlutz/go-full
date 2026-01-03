@@ -1,3 +1,9 @@
+## v0.0.41 (2026-01-03)
+
+### Fix
+
+- PubSub Events implementation (#93)
+
 ## v0.0.40 (2025-12-31)
 
 ### Fix
