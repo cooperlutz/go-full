@@ -41,13 +41,6 @@ func (pp *PingPongPubSub) RegisterSubscriberHandlers() error {
 		"pingpong",
 		pp.GetSubscriber(),
 		eeventdriven.TraceConsumerHandler(func(msg *message.Message) error {
-			// ctx, span := telemetree.AddSpan(
-			// 	msg.Context(),
-			// 	"pingpong.pubsub.handler",
-			// )
-			// defer span.End()
-
-			// msg.SetContext(ctx)
 			msg.Ack()
 
 			return nil

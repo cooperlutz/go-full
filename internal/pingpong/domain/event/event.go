@@ -1,12 +1,12 @@
 package event
 
-type PingReceived struct {
+type PingPongReceived struct {
 	PingID  string
 	Message string
 }
 
-func NewPingPongReceived(pingID, message string) PingReceived {
-	return PingReceived{
+func NewPingPongReceived(pingID, message string) PingPongReceived {
+	return PingPongReceived{
 		PingID:  pingID,
 		Message: message,
 	}

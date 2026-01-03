@@ -50,7 +50,7 @@ func (a *Application) Run() {
 	/* -----------------------------------------------------------------------------------
 	Modular Service Initializations:
 
-	Create a new instance of the PingPongService, injecting the Postgres repository as a dependency.
+	Create a new instance of the PingPongService, injecting the Postgres connection as a dependency.
 	----------------------------------------------------------------------------------- */
 
 	// PingPong
@@ -87,7 +87,7 @@ func (a *Application) Run() {
 	httpServer.RegisterController("/pingpong", pingPongModule.RestApi) // mounts `/pingpong/api/v1/ping-pong`
 
 	/* -----------------------------------------------------------------------------------
-	Run the HTTP server
+	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
 	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
