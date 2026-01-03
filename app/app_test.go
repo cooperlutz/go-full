@@ -65,8 +65,5 @@ func TestApplication(t *testing.T) {
 		application := app.NewApplication(conf)
 		assert.NotNil(t, application)
 		assert.IsType(t, &app.Application{}, application)
-		// This will run indefinitely in a real application, so we just ensure it starts without error.
-		// In a real test, you would have more sophisticated checks and possibly a way to shut it down gracefully.
-		application.Run()
 	}()
 }

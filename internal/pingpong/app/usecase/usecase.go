@@ -6,7 +6,9 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/mapper"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
+	"github.com/cooperlutz/go-full/internal/pingpong/domain/event"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/repository"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 	"github.com/cooperlutz/go-full/pkg/types"
 )
@@ -34,12 +36,14 @@ type IPingPongUseCase interface {
 // PingPongUseCase is the struct that implements the pingpong usecase interface.
 type PingPongUseCase struct {
 	Persist repository.IPingPongRepository
+	Events  eeventdriven.IPubSubEventProcessor
 }
 
 // NewPingPongUseCase creates a new instance of the PingPongUseCase.
-func NewPingPongUseCase(repo repository.IPingPongRepository) *PingPongUseCase {
+func NewPingPongUseCase(repo repository.IPingPongRepository, events eeventdriven.IPubSubEventProcessor) *PingPongUseCase {
 	return &PingPongUseCase{
 		Persist: repo,
+		Events:  events,
 	}
 }
 
@@ -54,6 +58,16 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 	}
 
 	if err := s.Persist.SavePingPong(ctx, inputEntity); err != nil {
+		return command.PingPongCommandResult{}, err
+	}
+
+	ev := event.NewPingPongReceived(
+		inputEntity.GetIdString(),
+		inputEntity.GetMessage(),
+	)
+
+	err = s.Events.EmitEvent("pingpong", ev)
+	if err != nil {
 		return command.PingPongCommandResult{}, err
 	}
 

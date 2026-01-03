@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
 	"time"
 
@@ -53,7 +54,8 @@ func (s *HTTPServer) RegisterController(serviceEndpoint string, handler http.Han
 	s.Router.Mount(serviceEndpoint, handler)
 }
 
-func (s *HTTPServer) Run() {
+func (s *HTTPServer) Run(wg *sync.WaitGroup) {
+	defer wg.Done()
 	// Set the server handler
 	s.Server.Handler = s.Router
 
