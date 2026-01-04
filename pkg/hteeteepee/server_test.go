@@ -3,7 +3,6 @@ package hteeteepee_test
 import (
 	"net/http"
 	"net/http/httptest"
-	"sync"
 	"testing"
 	"time"
 
@@ -122,5 +121,5 @@ func TestHTTPServer_Run(t *testing.T) {
 		},
 	}, chi.NewRouter())
 
-	go server.Run(&sync.WaitGroup{})
+	go server.Run()
 }

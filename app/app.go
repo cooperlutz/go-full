@@ -3,7 +3,6 @@ package app
 import (
 	"context"
 	"os"
-	"sync"
 
 	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -89,12 +88,7 @@ func (a *Application) Run() {
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
-	var wg sync.WaitGroup
-	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
+	httpServer.Run()
 
-	go httpServer.Run(&wg)
-
-	pingPongModule.PubSub.Run(&wg)
-
-	wg.Wait()
+	pingPongModule.PubSub.Run()
 }
