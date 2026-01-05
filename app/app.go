@@ -91,15 +91,17 @@ func (a *Application) Run() {
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
 	// We increment the WaitGroup counter by 2 for the two servers we plan to run.
-	wg.Add(2)
+	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
 
 	go func() {
 		defer wg.Done()
+
 		httpServer.Run()
 	}()
 
 	go func() {
 		defer wg.Done()
+
 		pingPongModule.PubSub.Run()
 	}()
 

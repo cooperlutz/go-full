@@ -53,6 +53,7 @@ func (s *PingPongUseCase) emitEvents(events []interface{}) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
