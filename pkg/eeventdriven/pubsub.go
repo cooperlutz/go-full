@@ -3,8 +3,6 @@ package eeventdriven
 import (
 	"context"
 	"encoding/json"
-	"log"
-	"sync"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-sql/v4/pkg/sql"
@@ -17,7 +15,7 @@ import (
 
 type IPubSubEventProcessor interface {
 	EmitEvent(topic string, payload interface{}) error
-	Run(wg *sync.WaitGroup)
+	Run()
 	RegisterSubscriberHandlers() error
 }
 
@@ -129,12 +127,9 @@ func (bps *BasePgsqlPubSubProcessor) RegisterSubscriberHandlers() error {
 }
 
 // Run starts the Pub/Sub processor's router.
-func (bps *BasePgsqlPubSubProcessor) Run(wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	go func() {
-		if err := bps.router.Run(context.Background()); err != nil {
-			log.Fatal(err)
-		}
-	}()
+func (bps *BasePgsqlPubSubProcessor) Run() {
+	err := bps.router.Run(context.Background())
+	if err != nil {
+		panic(err)
+	}
 }

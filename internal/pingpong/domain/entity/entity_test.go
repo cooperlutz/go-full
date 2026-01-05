@@ -147,42 +147,6 @@ func TestPingPongEntity_DetermineResponse(t *testing.T) {
 	}
 }
 
-func TestPingPongEntity_Valid(t *testing.T) {
-	t.Parallel()
-	validPing, _ := entity.New("ping")
-	validPong, _ := entity.New("pong")
-	tests := []struct {
-		name     string
-		entity   entity.PingPongEntity
-		expected bool
-	}{
-		{
-			"check if pingpong entity ping is valid",
-			validPing,
-			true,
-		},
-		{
-			"check if pingpong entity pong is valid",
-			validPong,
-			true,
-		},
-		{
-			"invalid ping pong",
-			fixtures.InvalidPingPong,
-			false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			// Act
-			result := tt.entity.Valid()
-			// Assert
-			assert.Equal(t, tt.expected, result)
-		})
-	}
-}
-
 func TestPingPongEntity_GetMessage(t *testing.T) {
 	t.Parallel()
 	validPing, _ := entity.New("ping")

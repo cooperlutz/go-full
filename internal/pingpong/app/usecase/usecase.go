@@ -6,7 +6,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/mapper"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
-	"github.com/cooperlutz/go-full/internal/pingpong/domain/event"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/repository"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
@@ -47,6 +46,17 @@ func NewPingPongUseCase(repo repository.IPingPongRepository, events eeventdriven
 	}
 }
 
+func (s *PingPongUseCase) emitEvents(events []interface{}) error {
+	for _, ev := range events {
+		err := s.Events.EmitEvent("pingpong", ev)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // PingPong handles the PingPong command logic.
 func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongCommand) (command.PingPongCommandResult, error) {
 	ctx, span := telemetree.AddSpan(ctx, "pingpong.usecase.pingpong")
@@ -61,13 +71,17 @@ func (s *PingPongUseCase) PingPong(ctx context.Context, cmd command.PingPongComm
 		return command.PingPongCommandResult{}, err
 	}
 
-	ev := event.NewPingPongReceived(
-		inputEntity.GetIdString(),
-		inputEntity.GetMessage(),
-	)
+	// ev := event.NewPingPongReceived(
+	// 	inputEntity.GetIdString(),
+	// 	inputEntity.GetMessage(),
+	// )
 
-	err = s.Events.EmitEvent("pingpong", ev)
-	if err != nil {
+	// err = s.Events.EmitEvent("pingpong", ev)
+	// if err != nil {
+	// 	return command.PingPongCommandResult{}, err
+	// }
+
+	if err := s.emitEvents(inputEntity.GetDomainEvents()); err != nil {
 		return command.PingPongCommandResult{}, err
 	}
 
