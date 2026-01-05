@@ -267,3 +267,57 @@ func TestPingPongEntity_MultipleMutations(t *testing.T) {
 		})
 	}
 }
+
+func TestPingPongEntity_GetDomainEvents(t *testing.T) {
+	t.Parallel()
+
+	validPing, _ := entity.New("ping")
+	validPong, _ := entity.New("pong")
+
+	tests := []struct {
+		name              string
+		entity            entity.PingPongEntity
+		expectedNumEvents int
+	}{
+		{
+			"newly created entity has one domain event",
+			validPing,
+			1,
+		},
+		{
+			"entity created with pong message has one domain event",
+			validPong,
+			1,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Arrange
+			ent := tt.entity
+
+			// Act
+			events := ent.GetDomainEventsAndClear()
+
+			// Assert
+			assert.Len(t, events, tt.expectedNumEvents)
+			assert.NotNil(t, events)
+		})
+	}
+}
+
+func TestPingPongEntity_MapToEntity_NoDomainEvents(t *testing.T) {
+	t.Parallel()
+
+	// Arrange
+	metadata := fixtures.ValidMetadata
+
+	// Act
+	ent := entity.MapToEntity("ping", metadata)
+	events := ent.GetDomainEventsAndClear()
+
+	// Assert
+	assert.Len(t, events, 0)
+	assert.Empty(t, events)
+	assert.Nil(t, events)
+}
