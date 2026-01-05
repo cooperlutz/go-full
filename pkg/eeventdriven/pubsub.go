@@ -129,7 +129,9 @@ func (bps *BasePgsqlPubSubProcessor) RegisterSubscriberHandlers() error {
 
 // Run starts the Pub/Sub processor's router.
 func (bps *BasePgsqlPubSubProcessor) Run() {
-	if err := bps.router.Run(context.Background()); err != nil {
-		log.Fatal(err)
-	}
+	go func() {
+		if err := bps.router.Run(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+	}()
 }
