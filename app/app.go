@@ -27,7 +27,7 @@ func NewApplication(conf config.Config) *Application {
 }
 
 // this is where all of the wiring happens.
-func (a *Application) Run() {
+func (a *Application) Run() { //nolint:funlen // main application run function
 	/* -----------------------------------------------------------------------------------
 	System Initializations:
 	----------------------------------------------------------------------------------- */
