@@ -15,6 +15,8 @@ type EntityMetadata struct {
 	updatedAt UpdatedAt
 	deletedAt *DeletedAt
 	deleted   DeletedFlag
+
+	events []interface{} // Domain events associated with the entity
 }
 
 // NewEntityMetadata creates a new EntityMetadata with default values.
@@ -101,6 +103,30 @@ func (m *EntityMetadata) MarkDeleted() {
 	m.deletedAt = dAt
 
 	m.MarkUpdated()
+}
+
+// GetDomainEventsAndClear retrieves and clears the domain events associated with the entity.
+func (e *EntityMetadata) GetDomainEventsAndClear() []interface{} {
+	// set events to a new slice and return the old one
+	if !e.domainEventsExist() {
+		return nil
+	}
+
+	events := e.events
+	// this clears the events by assigning a new slice with a length of 0
+	e.events = []interface{}{}
+
+	return events
+}
+
+// domainEventsExist checks if there are any domain events associated with the entity.
+func (e EntityMetadata) domainEventsExist() bool {
+	return len(e.events) > 0
+}
+
+// raiseDomainEvent appends a new domain event to the entity's event list.
+func (e *EntityMetadata) RaiseDomainEvent(event interface{}) {
+	e.events = append(e.events, event)
 }
 
 // MapToEntityMetadata maps the baseentitee metadata types to EntityMetadata.

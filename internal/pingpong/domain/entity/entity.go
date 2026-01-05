@@ -12,7 +12,6 @@ import (
 type PingPongEntity struct {
 	*baseentitee.EntityMetadata
 	message string
-	events  []interface{} // Domain events associated with the entity
 }
 
 // New creates a new PingPongEntity with the given message.
@@ -26,20 +25,12 @@ func New(msg string) (PingPongEntity, error) {
 		return PingPongEntity{}, err
 	}
 
-	ent.raiseDomainEvent(event.NewPingPongReceived(
+	ent.RaiseDomainEvent(event.NewPingPongReceived(
 		ent.GetIdString(),
 		ent.GetMessage(),
 	))
 
 	return ent, nil
-}
-
-func (e PingPongEntity) GetDomainEvents() []interface{} {
-	return e.events
-}
-
-func (e *PingPongEntity) raiseDomainEvent(event interface{}) {
-	e.events = append(e.events, event)
 }
 
 // Validate checks if the PingPongEntity is valid.
