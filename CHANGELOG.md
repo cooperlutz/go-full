@@ -1,3 +1,9 @@
+## v0.0.42 (2026-01-05)
+
+### Fix
+
+- cleanup pubsub and http server runners (#94)
+
 ## v0.0.41 (2026-01-03)
 
 ### Fix
