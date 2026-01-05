@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"os"
+	"sync"
 
 	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -88,7 +89,19 @@ func (a *Application) Run() {
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
-	httpServer.Run()
+	var wg sync.WaitGroup
+	// We increment the WaitGroup counter by 2 for the two servers we plan to run.
+	wg.Add(2)
 
-	pingPongModule.PubSub.Run()
+	go func() {
+		defer wg.Done()
+		httpServer.Run()
+	}()
+
+	go func() {
+		defer wg.Done()
+		pingPongModule.PubSub.Run()
+	}()
+
+	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)
 }

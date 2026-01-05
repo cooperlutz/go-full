@@ -3,7 +3,6 @@ package eeventdriven
 import (
 	"context"
 	"encoding/json"
-	"log"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-sql/v4/pkg/sql"
@@ -129,9 +128,8 @@ func (bps *BasePgsqlPubSubProcessor) RegisterSubscriberHandlers() error {
 
 // Run starts the Pub/Sub processor's router.
 func (bps *BasePgsqlPubSubProcessor) Run() {
-	go func() {
-		if err := bps.router.Run(context.Background()); err != nil {
-			log.Fatal(err)
-		}
-	}()
+	err := bps.router.Run(context.Background())
+	if err != nil {
+		panic(err)
+	}
 }
