@@ -1,3 +1,9 @@
+## v0.0.45 (2026-01-07)
+
+### Fix
+
+- **deps**: bump tailwindcss from 4.1.17 to 4.1.18 in /api/frontend (#95)
+
 ## v0.0.44 (2026-01-07)
 
 ### Fix
