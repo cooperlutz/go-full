@@ -1,3 +1,15 @@
+## v0.0.43 (2026-01-05)
+
+### Fix
+
+- add methods for raising and storing domain events in base entity (#100)
+
+## v0.0.42 (2026-01-05)
+
+### Fix
+
+- cleanup pubsub and http server runners (#94)
+
 ## v0.0.41 (2026-01-03)
 
 ### Fix

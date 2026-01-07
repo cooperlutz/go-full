@@ -2,6 +2,7 @@ package entity
 
 import (
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/constant"
+	"github.com/cooperlutz/go-full/internal/pingpong/domain/event"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
@@ -24,6 +25,11 @@ func New(msg string) (PingPongEntity, error) {
 		return PingPongEntity{}, err
 	}
 
+	ent.RaiseDomainEvent(event.NewPingPongReceived(
+		ent.GetIdString(),
+		ent.GetMessage(),
+	))
+
 	return ent, nil
 }
 
@@ -34,11 +40,6 @@ func (e PingPongEntity) Validate() error {
 	}
 
 	return nil
-}
-
-// Valid returns true if the PingPongEntity is valid.
-func (e PingPongEntity) Valid() bool {
-	return e.Validate() == nil
 }
 
 // GetMessage returns the message of the PingPongEntity.

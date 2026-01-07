@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	"sync"
-
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -139,8 +137,8 @@ func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) RunAndRetur
 }
 
 // Run provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) Run(wg *sync.WaitGroup) {
-	_mock.Called(wg)
+func (_mock *MockIPubSubEventProcessor) Run() {
+	_mock.Called()
 	return
 }
 
@@ -150,20 +148,13 @@ type MockIPubSubEventProcessor_Run_Call struct {
 }
 
 // Run is a helper method to define mock.On call
-//   - wg *sync.WaitGroup
-func (_e *MockIPubSubEventProcessor_Expecter) Run(wg interface{}) *MockIPubSubEventProcessor_Run_Call {
-	return &MockIPubSubEventProcessor_Run_Call{Call: _e.mock.On("Run", wg)}
+func (_e *MockIPubSubEventProcessor_Expecter) Run() *MockIPubSubEventProcessor_Run_Call {
+	return &MockIPubSubEventProcessor_Run_Call{Call: _e.mock.On("Run")}
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) Run(run func(wg *sync.WaitGroup)) *MockIPubSubEventProcessor_Run_Call {
+func (_c *MockIPubSubEventProcessor_Run_Call) Run(run func()) *MockIPubSubEventProcessor_Run_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 *sync.WaitGroup
-		if args[0] != nil {
-			arg0 = args[0].(*sync.WaitGroup)
-		}
-		run(
-			arg0,
-		)
+		run()
 	})
 	return _c
 }
@@ -173,7 +164,7 @@ func (_c *MockIPubSubEventProcessor_Run_Call) Return() *MockIPubSubEventProcesso
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func(wg *sync.WaitGroup)) *MockIPubSubEventProcessor_Run_Call {
+func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func()) *MockIPubSubEventProcessor_Run_Call {
 	_c.Run(run)
 	return _c
 }

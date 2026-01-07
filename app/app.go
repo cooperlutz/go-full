@@ -27,7 +27,7 @@ func NewApplication(conf config.Config) *Application {
 }
 
 // this is where all of the wiring happens.
-func (a *Application) Run() {
+func (a *Application) Run() { //nolint:funlen // main application run function
 	/* -----------------------------------------------------------------------------------
 	System Initializations:
 	----------------------------------------------------------------------------------- */
@@ -90,11 +90,20 @@ func (a *Application) Run() {
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
+	// We increment the WaitGroup counter by 2 for the two servers we plan to run.
 	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
 
-	go httpServer.Run(&wg)
+	go func() {
+		defer wg.Done()
 
-	pingPongModule.PubSub.Run(&wg)
+		httpServer.Run()
+	}()
 
-	wg.Wait()
+	go func() {
+		defer wg.Done()
+
+		pingPongModule.PubSub.Run()
+	}()
+
+	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)
 }

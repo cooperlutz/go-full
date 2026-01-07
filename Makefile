@@ -178,7 +178,7 @@ compose: release-local run ### run docker compose
 .PHONY: compose
 
 compose-down: ### stop docker compose
-	docker compose -f ./deploy/compose/docker-compose.yml down
+	docker compose -f ./deploy/compose/docker-compose.yml down -v
 .PHONY: compose-down
 
 run: ### Run Local

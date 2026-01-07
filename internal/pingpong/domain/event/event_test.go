@@ -12,6 +12,6 @@ func TestNewPingPongReceived(t *testing.T) {
 
 	event := NewPingPongReceived(pingID, message)
 
-	assert.Equal(t, pingID, event.PingID)
+	assert.Equal(t, pingID, event.PingPongID)
 	assert.Equal(t, message, event.Message)
 }
