@@ -1,3 +1,9 @@
+## v0.0.44 (2026-01-07)
+
+### Fix
+
+- bump frontend deps from dependabot (#101)
+
 ## v0.0.43 (2026-01-05)
 
 ### Fix
