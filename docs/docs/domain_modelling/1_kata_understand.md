@@ -1,4 +1,4 @@
-# Kata: Understand
+# Making the Grade: Understand
 
 ## Making The Grade: Business Model Canvas
 
