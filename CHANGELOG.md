@@ -1,3 +1,9 @@
+## v0.0.46 (2026-01-10)
+
+### Fix
+
+- correction of domain modeling links (#103)
+
 ## v0.0.45 (2026-01-07)
 
 ### Fix
