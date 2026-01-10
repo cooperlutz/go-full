@@ -28,6 +28,7 @@ func NewExam(name string, gradeLevel valueobject.GradeLevel, questions *[]ExamQu
 	e.RaiseDomainEvent(
 		event.ExamAddedToLibrary{ExamID: e.GetIdString()},
 	)
+
 	return e
 }
 

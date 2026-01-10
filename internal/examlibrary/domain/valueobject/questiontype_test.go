@@ -3,8 +3,9 @@ package valueobject
 import (
 	"testing"
 
-	"github.com/cooperlutz/go-full/internal/examlibrary/domain/exception"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/cooperlutz/go-full/internal/examlibrary/domain/exception"
 )
 
 func TestQuestionTypeString(t *testing.T) {

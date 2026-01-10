@@ -11,6 +11,14 @@
         "additionalProperties": {
           "withInterfaces": true
         }
+      },
+      "examlibrary": { 
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/src/examlibrary/services",
+        "inputSpec": "../rest/examlibrary/v1/api.yaml",
+        "additionalProperties": {
+          "withInterfaces": true
+        }
       }
     }
   }
