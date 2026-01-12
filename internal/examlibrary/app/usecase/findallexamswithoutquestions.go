@@ -8,8 +8,9 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// FindAllExamsWithoutQuestions finds all exams without their questions.
 func (uc *examLibraryUseCase) FindAllExamsWithoutQuestions(ctx context.Context, qry query.FindAllExamsWithoutQuestions) (query.FindAllExamsWithoutQuestionsResponse, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findoneexambyid")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findallexamswithoutquestions")
 	defer span.End()
 
 	entity, err := uc.Persist.FindAllExams(ctx)

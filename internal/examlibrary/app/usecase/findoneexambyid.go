@@ -10,6 +10,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// FindOneExamByID finds one exam by its ID.
 func (uc *examLibraryUseCase) FindOneExamByID(ctx context.Context, qry query.FindOneExamByID) (query.FindOneExamByIDResponse, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findoneexambyid")
 	defer span.End()

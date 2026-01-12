@@ -8,6 +8,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// SaveExam saves an exam to the database.
 func (r *examLibraryPersistPostgresRepository) SaveExam(ctx context.Context, exam entity.Exam) error {
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.saveExam")
 	defer span.End()

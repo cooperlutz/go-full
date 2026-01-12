@@ -2,6 +2,7 @@ package common
 
 import "github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
 
+// ExamQuestion represents a question in an exam.
 type ExamQuestion struct {
 	Index           int
 	QuestionText    string
@@ -11,6 +12,7 @@ type ExamQuestion struct {
 	ResponseOptions *[]string
 }
 
+// NewExamQuestion creates a new ExamQuestion.
 func NewExamQuestion(
 	index int,
 	questionText string,
@@ -29,6 +31,7 @@ func NewExamQuestion(
 	}
 }
 
+// MapToDomainExamQuestion maps a common ExamQuestion to a domain ExamQuestion.
 func MapToCommonExamQuestion(eq entity.ExamQuestion) ExamQuestion {
 	return ExamQuestion{
 		Index:           eq.GetIndex(),

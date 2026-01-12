@@ -8,6 +8,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// AddExamToLibrary adds a new exam to the library.
 func (uc *examLibraryUseCase) AddExamToLibrary(ctx context.Context, cmd command.AddExamToLibrary) (command.AddExamToLibraryResult, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.addexamtolibrary")
 	defer span.End()

@@ -53,6 +53,7 @@ func FromDomainExamToAppAddExamToLibraryResult(exam entity.Exam) command.AddExam
 	)
 }
 
+// FromDomainExamToAppFindOneExamByIDResponse maps a domain Exam to an app FindOneExamByIDResponse.
 func FromDomainExamToAppFindOneExamByIDResponse(exam entity.Exam) query.FindOneExamByIDResponse {
 	var questions []common.ExamQuestion
 
@@ -70,6 +71,7 @@ func FromDomainExamToAppFindOneExamByIDResponse(exam entity.Exam) query.FindOneE
 	}
 }
 
+// FromDomainExamsToAppFindAllExamsWithoutQuestionsResponse maps a slice of domain Exams to an app FindAllExamsWithoutQuestionsResponse.
 func FromDomainExamsToAppFindAllExamsWithoutQuestionsResponse(exams []entity.Exam) query.FindAllExamsWithoutQuestionsResponse {
 	var results []query.ExamWithoutQuestions
 	for _, exam := range exams {
@@ -85,6 +87,7 @@ func FromDomainExamsToAppFindAllExamsWithoutQuestionsResponse(exams []entity.Exa
 	}
 }
 
+// FromDomainExamsToAppFindAllExamsWithQuestionsResponse maps a slice of domain Exams to an app FindAllExamsWithQuestionsResponse.
 func FromDomainExamsToAppFindAllExamsWithQuestionsResponse(exams []entity.Exam) query.FindAllExamsWithQuestionsResponse {
 	var results []query.ExamWithQuestions
 

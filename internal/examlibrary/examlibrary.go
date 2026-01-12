@@ -22,7 +22,7 @@ type ExamLibraryModule struct {
 	PubSub         eeventdriven.IPubSubEventProcessor
 }
 
-// NewModule - Initializes the PingPong module with its needed dependencies.
+// NewModule - Initializes the Exam Library module with its needed dependencies.
 func NewModule(pgconn *pgxpool.Pool) (*ExamLibraryModule, error) {
 	repo := persist.NewExamLibraryPostgresRepo(pgconn)
 

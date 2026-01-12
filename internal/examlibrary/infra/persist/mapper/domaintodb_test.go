@@ -53,12 +53,6 @@ func TestFromDomainExamQuestionToDB(t *testing.T) {
 			input:    fixtures.ValidDomainExam.GetQuestions()[0],
 			expected: fixtures.ValidDBExamQuestion,
 		},
-		// {
-		// 	name:     "maps another ExamQuestion entity to DB params",
-		// 	examId:   fixtures.ValidDomainExam.GetIdUUID().String(),
-		// 	input:    fixtures.ValidDomainExam.GetQuestions()[1],
-		// 	expected: fixtures.ValidDBExamQuestion,
-		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

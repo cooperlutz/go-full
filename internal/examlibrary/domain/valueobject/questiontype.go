@@ -2,6 +2,8 @@ package valueobject
 
 import "github.com/cooperlutz/go-full/internal/examlibrary/domain/exception"
 
+// QuestionType represents the type of a question in an exam.
+// It is defined as an enumeration.
 type QuestionType int
 
 const (

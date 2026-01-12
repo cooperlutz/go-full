@@ -8,6 +8,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// FindAllExamsWithQuestions finds all exams with their questions.
 func (uc *examLibraryUseCase) FindAllExamsWithQuestions(ctx context.Context, qry query.FindAllExamsWithQuestions) (query.FindAllExamsWithQuestionsResponse, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findallexamswithquestions")
 	defer span.End()

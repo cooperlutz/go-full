@@ -9,6 +9,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
+// FromDomainExamToDB maps a domain exam entity to a database exam.
 func FromDomainExamToDB(exam entity.Exam) persist_postgres.SaveExamParams {
 	createdAt := exam.GetCreatedAtTime()
 	updatedAt := exam.GetUpdatedAtTime()
@@ -27,6 +28,7 @@ func FromDomainExamToDB(exam entity.Exam) persist_postgres.SaveExamParams {
 	return examParams
 }
 
+// FromDomainExamQuestionToDB maps a domain exam question entity to a database exam question.
 func FromDomainExamQuestionToDB(examId uuid.UUID, question entity.ExamQuestion) persist_postgres.SaveExamQuestionParams {
 	createdAt := question.GetCreatedAtTime()
 	updatedAt := question.GetUpdatedAtTime()
@@ -49,48 +51,3 @@ func FromDomainExamQuestionToDB(examId uuid.UUID, question entity.ExamQuestion) 
 		QuestionType:   question.GetQuestionType().String(),
 	}
 }
-
-// func MapFromDBQuestion(
-// 	question persist_postgres.ExamQuestion,
-// 	options []persist_postgres.ExamQuestionOption,
-// ) entity.ExamQuestion {
-// 	var optionEntities []entity.ExamQuestionOption
-
-// 	for _, o := range options {
-// 		optionEntity := MapFromDBQuestionOption(o)
-// 		optionEntities = append(optionEntities, optionEntity)
-// 	}
-
-// 	qType, ok := vo.QuestionTypeFromString(question.QuestionType)
-// 	if !ok {
-// 		qType = vo.QuestionUnknown
-// 	}
-
-// 	questionEntity := entity.ExamQuestionFromRaw(
-// 		question.ExamQuestionID.Bytes,
-// 		question.CreatedAt.Time,
-// 		question.UpdatedAt.Time,
-// 		question.Deleted,
-// 		pgxutil.TimestampzToTimePtr(question.DeletedAt),
-// 		question.QuestionText,
-// 		qType,
-// 		question.PointValue,
-// 		optionEntities,
-// 	)
-
-// 	return questionEntity
-// }
-
-// func MapFromDB(exam persist_postgres.Exam, questions *[]entity.ExamQuestion) entity.Exam {
-// 	e := entity.MapToExamEntity(
-// 		exam.ExamID.Bytes,
-// 		exam.CreatedAt.Time,
-// 		exam.UpdatedAt.Time,
-// 		exam.Deleted,
-// 		pgxutil.TimestampzToTimePtr(exam.DeletedAt),
-// 		exam.Name,
-// 		questions,
-// 	)
-
-// 	return e
-// }

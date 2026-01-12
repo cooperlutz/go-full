@@ -10,6 +10,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// FindAllExams finds all exams in the database.
 func (r *examLibraryPersistPostgresRepository) FindAllExams(ctx context.Context) ([]entity.Exam, error) {
 	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findAllExams")
 	defer span.End()

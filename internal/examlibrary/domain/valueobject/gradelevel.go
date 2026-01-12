@@ -1,5 +1,6 @@
 package valueobject
 
+// GradeLevel represents the educational grade level.
 type GradeLevel int
 
 const (

@@ -7,6 +7,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )
 
+// FromDBExamToDomain maps a database exam to a domain exam entity.
 func FromDBExamToDomain(dbExam persist_postgres.ExamLibraryExam) entity.Exam {
 	examEntity := entity.MapToExamEntity(
 		dbExam.ExamID.Bytes,
@@ -22,6 +23,7 @@ func FromDBExamToDomain(dbExam persist_postgres.ExamLibraryExam) entity.Exam {
 	return examEntity
 }
 
+// FromDBExamQuestionToDomain maps a database exam question to a domain exam question entity.
 func FromDBExamQuestionToDomain(dbQuestion persist_postgres.ExamLibraryExamQuestion) (entity.ExamQuestion, error) {
 	questionEntity, err := entity.MapToExamQuestion(
 		dbQuestion.ExamQuestionID.Bytes,

@@ -10,6 +10,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
+// ExamQuestion represents a question entity within an exam.
 type ExamQuestion struct {
 	*baseentitee.EntityMetadata
 	index           int
@@ -20,30 +21,37 @@ type ExamQuestion struct {
 	responseOptions *[]string
 }
 
+// GetIndex returns the index of the question in the exam.
 func (eq ExamQuestion) GetIndex() int {
 	return eq.index
 }
 
+// GetQuestionText returns the text of the question.
 func (eq ExamQuestion) GetQuestionText() string {
 	return eq.questionText
 }
 
+// GetQuestionType returns the type of the question.
 func (eq ExamQuestion) GetQuestionType() valueobject.QuestionType {
 	return eq.questionType
 }
 
+// GetPossiblePoints returns the possible points for the question.
 func (eq ExamQuestion) GetPossiblePoints() int {
 	return eq.possiblePoints
 }
 
+// GetCorrectAnswer returns the correct answer for the question.
 func (eq ExamQuestion) GetCorrectAnswer() *string {
 	return eq.correctAnswer
 }
 
+// GetResponseOptions returns the response options for the question.
 func (eq ExamQuestion) GetResponseOptions() *[]string {
 	return eq.responseOptions
 }
 
+// NewExamQuestion creates a new ExamQuestion entity.
 func NewExamQuestion(
 	index int,
 	questionText string,
@@ -63,6 +71,8 @@ func NewExamQuestion(
 	}
 }
 
+// MapToExamQuestion maps raw data to an ExamQuestion entity.
+// This is typically used when reconstructing an ExamQuestion from persistent storage.
 func MapToExamQuestion(
 	id uuid.UUID,
 	createdAt time.Time,
