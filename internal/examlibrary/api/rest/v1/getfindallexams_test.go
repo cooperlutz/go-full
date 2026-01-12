@@ -4,14 +4,15 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+
 	v1 "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1"
 	v1_server "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 	"github.com/cooperlutz/go-full/test/mocks"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {

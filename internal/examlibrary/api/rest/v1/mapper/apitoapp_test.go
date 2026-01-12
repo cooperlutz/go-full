@@ -3,13 +3,14 @@ package mapper_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/mapper"
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestFromApiExamQuestionToAppExamQuestion(t *testing.T) {

@@ -1,19 +1,18 @@
 package fixtures
 
 import (
+	"github.com/google/uuid"
+
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
-	"github.com/google/uuid"
 )
 
 func ptrQuestionType(qt server.QuestionType) *server.QuestionType { return &qt }
 
-var (
-	ValidUUID = uuid.UUID([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-)
+var ValidUUID = uuid.UUID([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 
 var (
 	ValidApiExamQuestionMultipleChoice = server.ExamQuestion{
