@@ -29,3 +29,17 @@ packages:
     config:
       filename: mocks_pingpong_usecase.gen.go
       all: true
+
+# Exam Library Module
+  github.com/cooperlutz/go-full/internal/examlibrary/domain/repository:
+    config:
+      filename: mocks_examlibrary_repo.gen.go
+      all: true
+  github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres:
+    config:
+      filename: mocks_examlibrary_postgres_repo.gen.go
+      all: true
+  github.com/cooperlutz/go-full/internal/examlibrary/app/usecase:
+    config:
+      filename: mocks_examlibrary_usecase.gen.go
+      all: true

@@ -149,26 +149,6 @@ components:
           description: The name of the Exam
           type: string
           example: Sample Exam
-        createdAt:
-          description: The creation timestamp of the entity
-          type: string
-          format: date-time
-          example: '2023-10-01T12:00:00Z'
-        updatedAt:
-          description: The last update timestamp of the entity
-          type: string
-          format: date-time
-          example: '2023-10-01T12:00:00Z'
-        deleted:
-          description: Indicates if the entity is deleted
-          type: boolean
-          example: false
-        deletedAt:
-          description: The deletion timestamp of the entity, if applicable
-          type: string
-          format: date-time
-          nullable: true
-          example: null
         gradeLevel:
           description: The grade level for which the exam is intended
           type: integer
@@ -177,22 +157,26 @@ components:
       description: A question within an Exam, including the question text, possible answers, and the correct answer.
       type: object
       properties:
-        id:
-          type: string
-          example: 1a2b3c4d-5e6f-7890-1234-56789abcdef0
-        examID:
-          type: string
-          example: 49a6d644-34d5-4c2d-8abc-8fda8a114bd4
+        index:
+          description: The index of the question in the exam
+          type: integer
+          example: 1
         questionText:
           description: The text of the question
           type: string
           example: What animal is known to bark?
+        questionType:
+          $ref: '#/components/schemas/QuestionType'
         possibleAnswers:
           description: A list of possible answers for the question
           type: array
           items:
             type: string
           example: ['dog', 'cat', 'bird', 'fish']
+        possiblePoints:
+          description: The points possible for answering the question correctly
+          type: integer
+          example: 5
         correctAnswer:
           description: The correct answer to the question
           type: string
@@ -212,3 +196,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ExamMetadata'
+    QuestionType:
+      description: The type of question (e.g., multiple-choice, true/false).
+      type: string
+      enum:
+        - multiple-choice
+        - short-answer
+        - essay

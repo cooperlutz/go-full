@@ -14,7 +14,6 @@ import (
 	"net/url"
 	"path"
 	"strings"
-	"time"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
@@ -28,17 +27,15 @@ const (
 	Basic_authScopes = "basic_auth.Scopes"
 )
 
+// Defines values for QuestionType.
+const (
+	Essay          QuestionType = "essay"
+	MultipleChoice QuestionType = "multiple-choice"
+	ShortAnswer    QuestionType = "short-answer"
+)
+
 // Exam defines model for Exam.
 type Exam struct {
-	// CreatedAt The creation timestamp of the entity
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-
-	// Deleted Indicates if the entity is deleted
-	Deleted *bool `json:"deleted,omitempty"`
-
-	// DeletedAt The deletion timestamp of the entity, if applicable
-	DeletedAt *time.Time `json:"deletedAt"`
-
 	// GradeLevel The grade level for which the exam is intended
 	GradeLevel *int    `json:"gradeLevel,omitempty"`
 	Id         *string `json:"id,omitempty"`
@@ -46,49 +43,44 @@ type Exam struct {
 	// Name The name of the Exam
 	Name      *string         `json:"name,omitempty"`
 	Questions *[]ExamQuestion `json:"questions,omitempty"`
-
-	// UpdatedAt The last update timestamp of the entity
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 
 // ExamMetadata An Exam entity containing exam metadata
 type ExamMetadata struct {
-	// CreatedAt The creation timestamp of the entity
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-
-	// Deleted Indicates if the entity is deleted
-	Deleted *bool `json:"deleted,omitempty"`
-
-	// DeletedAt The deletion timestamp of the entity, if applicable
-	DeletedAt *time.Time `json:"deletedAt"`
-
 	// GradeLevel The grade level for which the exam is intended
 	GradeLevel *int    `json:"gradeLevel,omitempty"`
 	Id         *string `json:"id,omitempty"`
 
 	// Name The name of the Exam
 	Name *string `json:"name,omitempty"`
-
-	// UpdatedAt The last update timestamp of the entity
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 
 // ExamQuestion A question within an Exam, including the question text, possible answers, and the correct answer.
 type ExamQuestion struct {
 	// CorrectAnswer The correct answer to the question
 	CorrectAnswer *string `json:"correctAnswer,omitempty"`
-	ExamID        *string `json:"examID,omitempty"`
-	Id            *string `json:"id,omitempty"`
+
+	// Index The index of the question in the exam
+	Index *int `json:"index,omitempty"`
 
 	// PossibleAnswers A list of possible answers for the question
 	PossibleAnswers *[]string `json:"possibleAnswers,omitempty"`
 
+	// PossiblePoints The points possible for answering the question correctly
+	PossiblePoints *int `json:"possiblePoints,omitempty"`
+
 	// QuestionText The text of the question
 	QuestionText *string `json:"questionText,omitempty"`
+
+	// QuestionType The type of question (e.g., multiple-choice, true/false).
+	QuestionType *QuestionType `json:"questionType,omitempty"`
 }
 
 // Exams A list of Exam entities.
 type Exams = []ExamMetadata
+
+// QuestionType The type of question (e.g., multiple-choice, true/false).
+type QuestionType string
 
 // PostAddExamToLibraryJSONRequestBody defines body for PostAddExamToLibrary for application/json ContentType.
 type PostAddExamToLibraryJSONRequestBody = Exam
@@ -575,26 +567,26 @@ func (sh *strictHandler) GetFindOneByID(w http.ResponseWriter, r *http.Request, 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"AA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

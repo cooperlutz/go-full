@@ -19,6 +19,30 @@ type ExamQuestion struct {
 	responseOptions *[]string
 }
 
+func (eq ExamQuestion) GetIndex() int {
+	return eq.index
+}
+
+func (eq ExamQuestion) GetQuestionText() string {
+	return eq.questionText
+}
+
+func (eq ExamQuestion) GetQuestionType() valueobject.QuestionType {
+	return eq.questionType
+}
+
+func (eq ExamQuestion) GetPossiblePoints() int {
+	return eq.possiblePoints
+}
+
+func (eq ExamQuestion) GetCorrectAnswer() *string {
+	return eq.correctAnswer
+}
+
+func (eq ExamQuestion) GetResponseOptions() *[]string {
+	return eq.responseOptions
+}
+
 func NewExamQuestion(
 	questionText string,
 	questionType valueobject.QuestionType,

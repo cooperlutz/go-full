@@ -21,3 +21,7 @@ func BoolPtr(b bool) *bool {
 func TimePtr(t time.Time) *time.Time {
 	return &t
 }
+
+func IntPtr(i int) *int {
+	return &i
+}

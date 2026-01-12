@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"time"
 
 	"github.com/oapi-codegen/runtime"
 	openapi_types "github.com/oapi-codegen/runtime/types"
@@ -23,17 +22,15 @@ const (
 	Basic_authScopes = "basic_auth.Scopes"
 )
 
+// Defines values for QuestionType.
+const (
+	Essay          QuestionType = "essay"
+	MultipleChoice QuestionType = "multiple-choice"
+	ShortAnswer    QuestionType = "short-answer"
+)
+
 // Exam defines model for Exam.
 type Exam struct {
-	// CreatedAt The creation timestamp of the entity
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-
-	// Deleted Indicates if the entity is deleted
-	Deleted *bool `json:"deleted,omitempty"`
-
-	// DeletedAt The deletion timestamp of the entity, if applicable
-	DeletedAt *time.Time `json:"deletedAt"`
-
 	// GradeLevel The grade level for which the exam is intended
 	GradeLevel *int    `json:"gradeLevel,omitempty"`
 	Id         *string `json:"id,omitempty"`
@@ -41,49 +38,44 @@ type Exam struct {
 	// Name The name of the Exam
 	Name      *string         `json:"name,omitempty"`
 	Questions *[]ExamQuestion `json:"questions,omitempty"`
-
-	// UpdatedAt The last update timestamp of the entity
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 
 // ExamMetadata An Exam entity containing exam metadata
 type ExamMetadata struct {
-	// CreatedAt The creation timestamp of the entity
-	CreatedAt *time.Time `json:"createdAt,omitempty"`
-
-	// Deleted Indicates if the entity is deleted
-	Deleted *bool `json:"deleted,omitempty"`
-
-	// DeletedAt The deletion timestamp of the entity, if applicable
-	DeletedAt *time.Time `json:"deletedAt"`
-
 	// GradeLevel The grade level for which the exam is intended
 	GradeLevel *int    `json:"gradeLevel,omitempty"`
 	Id         *string `json:"id,omitempty"`
 
 	// Name The name of the Exam
 	Name *string `json:"name,omitempty"`
-
-	// UpdatedAt The last update timestamp of the entity
-	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
 }
 
 // ExamQuestion A question within an Exam, including the question text, possible answers, and the correct answer.
 type ExamQuestion struct {
 	// CorrectAnswer The correct answer to the question
 	CorrectAnswer *string `json:"correctAnswer,omitempty"`
-	ExamID        *string `json:"examID,omitempty"`
-	Id            *string `json:"id,omitempty"`
+
+	// Index The index of the question in the exam
+	Index *int `json:"index,omitempty"`
 
 	// PossibleAnswers A list of possible answers for the question
 	PossibleAnswers *[]string `json:"possibleAnswers,omitempty"`
 
+	// PossiblePoints The points possible for answering the question correctly
+	PossiblePoints *int `json:"possiblePoints,omitempty"`
+
 	// QuestionText The text of the question
 	QuestionText *string `json:"questionText,omitempty"`
+
+	// QuestionType The type of question (e.g., multiple-choice, true/false).
+	QuestionType *QuestionType `json:"questionType,omitempty"`
 }
 
 // Exams A list of Exam entities.
 type Exams = []ExamMetadata
+
+// QuestionType The type of question (e.g., multiple-choice, true/false).
+type QuestionType string
 
 // PostAddExamToLibraryJSONRequestBody defines body for PostAddExamToLibrary for application/json ContentType.
 type PostAddExamToLibraryJSONRequestBody = Exam
