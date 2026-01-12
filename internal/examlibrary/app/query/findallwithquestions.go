@@ -1,5 +1,7 @@
 package query
 
+import "github.com/cooperlutz/go-full/internal/examlibrary/app/common"
+
 type FindAllExamsWithQuestions struct{}
 
 type FindAllExamsWithQuestionsResponse struct {
@@ -7,11 +9,8 @@ type FindAllExamsWithQuestionsResponse struct {
 }
 
 type ExamWithQuestions struct {
-	ExamID    string
-	Questions []Question
-}
-
-type Question struct {
-	QuestionID string
-	Content    string
+	ExamID     string
+	Name       string
+	GradeLevel int
+	Questions  []common.ExamQuestion
 }

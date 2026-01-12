@@ -11,6 +11,7 @@ import (
 )
 
 func TestNewExamQuestion(t *testing.T) {
+	ind := 1
 	questionText := "What is 2 + 2?"
 	questionType := valueobject.QuestionMultipleChoice
 	possiblePoints := 5
@@ -18,6 +19,7 @@ func TestNewExamQuestion(t *testing.T) {
 	options := []string{"3", "4", "5", "6"}
 
 	examQuestion := NewExamQuestion(
+		ind,
 		questionText,
 		questionType,
 		possiblePoints,
@@ -25,6 +27,7 @@ func TestNewExamQuestion(t *testing.T) {
 		&options,
 	)
 
+	assert.Equal(t, ind, examQuestion.index)
 	assert.Equal(t, questionText, examQuestion.questionText)
 	assert.Equal(t, questionType, examQuestion.questionType)
 	assert.Equal(t, possiblePoints, examQuestion.possiblePoints)
@@ -34,6 +37,7 @@ func TestNewExamQuestion(t *testing.T) {
 
 func TestMapToExamQuestion(t *testing.T) {
 	id := uuid.New()
+	ind := 1
 	createdAt := time.Now()
 	updatedAt := time.Now()
 	deleted := false
@@ -55,10 +59,11 @@ func TestMapToExamQuestion(t *testing.T) {
 		possiblePoints,
 		&correctAnswer,
 		&options,
-		0,
+		ind,
 	)
 
 	assert.Equal(t, id, examQuestion.GetIdUUID())
+	assert.Equal(t, ind, examQuestion.GetIndex())
 	assert.Equal(t, questionText, examQuestion.questionText)
 	assert.Equal(t, questionType, examQuestion.questionType)
 	assert.Equal(t, possiblePoints, examQuestion.possiblePoints)

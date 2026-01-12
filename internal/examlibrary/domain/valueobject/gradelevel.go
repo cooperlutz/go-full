@@ -31,3 +31,7 @@ var gradeLevelName = map[GradeLevel]string{ //nolint:gochecknoglobals // global 
 func (gl GradeLevel) String() string {
 	return gradeLevelName[gl]
 }
+
+func (gl GradeLevel) Int() int {
+	return int(gl)
+}

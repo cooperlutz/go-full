@@ -37,8 +37,12 @@ func (e *Exam) AddQuestion(question ExamQuestion) {
 	e.MarkUpdated()
 }
 
-func (e Exam) GetQuestions() *[]ExamQuestion {
-	return e.questions
+func (e Exam) GetQuestions() []ExamQuestion {
+	if e.questions == nil {
+		return []ExamQuestion{}
+	}
+
+	return *e.questions
 }
 
 func (e Exam) GetQuestionByIndex(index int) (ExamQuestion, error) {
@@ -61,6 +65,10 @@ func (e Exam) GetQuestionById(id uuid.UUID) (*ExamQuestion, error) {
 
 func (e *Exam) GetName() string {
 	return e.name
+}
+
+func (e *Exam) GetGradeLevel() valueobject.GradeLevel {
+	return e.gradeLevel
 }
 
 func MapToExamEntity(

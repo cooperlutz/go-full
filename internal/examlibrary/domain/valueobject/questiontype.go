@@ -12,14 +12,18 @@ const (
 )
 
 var questionName = map[QuestionType]string{ //nolint:gochecknoglobals // global is ok here
-	QuestionMultipleChoice: "multiple_choice",
+	QuestionMultipleChoice: "multiple-choice",
 	QuestionEssay:          "essay",
-	QuestionShortAnswer:    "short_answer",
+	QuestionShortAnswer:    "short-answer",
 	QuestionUnknown:        "unknown",
 }
 
 func (qt QuestionType) String() string {
 	return questionName[qt]
+}
+
+func (qt QuestionType) Int() int {
+	return int(qt)
 }
 
 func QuestionTypeFromString(s string) (QuestionType, error) {

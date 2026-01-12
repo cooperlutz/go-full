@@ -44,6 +44,7 @@ func (eq ExamQuestion) GetResponseOptions() *[]string {
 }
 
 func NewExamQuestion(
+	index int,
 	questionText string,
 	questionType valueobject.QuestionType,
 	possiblePoints int,
@@ -52,6 +53,7 @@ func NewExamQuestion(
 ) *ExamQuestion {
 	return &ExamQuestion{
 		EntityMetadata:  baseentitee.NewEntityMetadata(),
+		index:           index,
 		questionText:    questionText,
 		questionType:    questionType,
 		possiblePoints:  possiblePoints,

@@ -145,7 +145,7 @@ func TestExam_GetQuestions(t *testing.T) {
 		&questions,
 	)
 	// Assertions
-	assert.Equal(t, &questions, exam.GetQuestions())
+	assert.Equal(t, questions, exam.GetQuestions())
 }
 
 func TestExam_AddQuestion(t *testing.T) {
@@ -169,8 +169,8 @@ func TestExam_AddQuestion(t *testing.T) {
 	// Act
 	exam.AddQuestion(newQuestion)
 	// Assertions
-	assert.Equal(t, 1, len(*exam.GetQuestions()))
-	assert.Equal(t, newQuestion, (*exam.GetQuestions())[0])
+	assert.Equal(t, 1, len(exam.GetQuestions()))
+	assert.Equal(t, newQuestion, (exam.GetQuestions())[0])
 }
 
 func TestMapToExamEntity(t *testing.T) {

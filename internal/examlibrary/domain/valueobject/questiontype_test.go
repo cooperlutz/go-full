@@ -17,7 +17,7 @@ func TestQuestionTypeString(t *testing.T) {
 		{
 			name:     "multiple choice",
 			qt:       QuestionMultipleChoice,
-			expected: "multiple_choice",
+			expected: "multiple-choice",
 		},
 		{
 			name:     "essay",
@@ -27,7 +27,7 @@ func TestQuestionTypeString(t *testing.T) {
 		{
 			name:     "short answer",
 			qt:       QuestionShortAnswer,
-			expected: "short_answer",
+			expected: "short-answer",
 		},
 		{
 			name:     "unknown",
@@ -55,7 +55,7 @@ func TestQuestionTypeFromString(t *testing.T) {
 	}{
 		{
 			name:        "valid multiple choice",
-			input:       "multiple_choice",
+			input:       "multiple-choice",
 			expected:    QuestionMultipleChoice,
 			expectedErr: nil,
 		},
@@ -67,7 +67,7 @@ func TestQuestionTypeFromString(t *testing.T) {
 		},
 		{
 			name:        "valid short answer",
-			input:       "short_answer",
+			input:       "short-answer",
 			expected:    QuestionShortAnswer,
 			expectedErr: nil,
 		},
@@ -79,7 +79,7 @@ func TestQuestionTypeFromString(t *testing.T) {
 		},
 		{
 			name:        "invalid string",
-			input:       "invalid_type",
+			input:       "invalid-type",
 			expected:    QuestionUnknown,
 			expectedErr: exception.ErrInvalidQuestionType{},
 		},

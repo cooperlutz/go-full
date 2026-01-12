@@ -7,6 +7,8 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
+	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
+	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
@@ -106,50 +108,93 @@ var (
 		GradeLevel: &ValidAppExamWithoutQuestions.GradeLevel,
 	}
 	ValidAppFindOneExamByIDResponse = query.FindOneExamByIDResponse{
-		ExamID:     "123e4567-e89b-12d3-a456-426614174000",
+		ExamID:     ValidMetadata.GetIdString(),
 		Name:       "Sample Exam",
 		GradeLevel: 10,
-		Questions: &[]common.ExamQuestion{
-			common.NewExamQuestion(
-				1,
-				"What is 2 + 2?",
-				"multiple-choice",
-				5,
-				utilitee.StrPtr("4"),
-				&[]string{"3", "4", "5", "6"},
-			),
-		},
+		Questions:  &ValidAppExamQuestions,
 	}
 	ValidApiExam = server.Exam{
 		Id:         &ValidAppFindOneExamByIDResponse.ExamID,
 		Name:       &ValidAppFindOneExamByIDResponse.Name,
 		GradeLevel: &ValidAppFindOneExamByIDResponse.GradeLevel,
-		Questions: &[]server.ExamQuestion{
-			{
-				Index:          utilitee.IntPtr(1),
-				QuestionText:   utilitee.StrPtr("What is 2 + 2?"),
-				QuestionType:   ptrQuestionType(server.MultipleChoice),
-				PossiblePoints: utilitee.IntPtr(5),
-				CorrectAnswer:  utilitee.StrPtr("4"),
-				PossibleAnswers: &[]string{
-					"3", "4", "5", "6",
-				},
-			},
-		},
+		Questions:  &ValidApiExamQuestions,
 	}
 	ValidAppCommandAddExamToLibraryResult = command.AddExamToLibraryResult{
-		ExamID:     "123e4567-e89b-12d3-a456-426614174000",
+		ExamID:     ValidMetadata.GetIdString(),
 		Name:       "Sample Exam",
 		GradeLevel: 10,
-		Questions: []common.ExamQuestion{
-			common.NewExamQuestion(
-				1,
-				"What is 2 + 2?",
-				"multiple-choice",
-				5,
-				utilitee.StrPtr("4"),
-				&[]string{"3", "4", "5", "6"},
-			),
-		},
+		Questions:  ValidAppExamQuestions,
 	}
+	ValidAppCommandAddExamToLibrary = command.NewAddExamToLibrary(
+		"Sample Exam",
+		10,
+		ValidAppExamQuestions,
+	)
+	ValidDomainExamQuestions = []entity.ExamQuestion{
+		entity.MapToExamQuestion(
+			ValidMetadata.GetIdUUID(),
+			ValidMetadata.GetCreatedAtTime(),
+			ValidMetadata.GetUpdatedAtTime(),
+			ValidMetadata.IsDeleted(),
+			ValidMetadata.GetDeletedAtTime(),
+			"What animal is known to bark?",
+			valueobject.QuestionMultipleChoice,
+			5,
+			utilitee.StrPtr("dog"),
+			&[]string{"dog", "cat", "bird", "fish"},
+			1,
+		),
+		entity.MapToExamQuestion(
+			ValidMetadata.GetIdUUID(),
+			ValidMetadata.GetCreatedAtTime(),
+			ValidMetadata.GetUpdatedAtTime(),
+			ValidMetadata.IsDeleted(),
+			ValidMetadata.GetDeletedAtTime(),
+			"Describe photosynthesis",
+			valueobject.QuestionShortAnswer,
+			10,
+			nil,
+			nil,
+			2,
+		),
+		entity.MapToExamQuestion(
+			ValidMetadata.GetIdUUID(),
+			ValidMetadata.GetCreatedAtTime(),
+			ValidMetadata.GetUpdatedAtTime(),
+			ValidMetadata.IsDeleted(),
+			ValidMetadata.GetDeletedAtTime(),
+			"Explain the theory of relativity",
+			valueobject.QuestionEssay,
+			15,
+			nil,
+			nil,
+			3,
+		),
+	}
+	ValidDomainExam = entity.MapToExamEntity(
+		ValidMetadata.GetIdUUID(),
+		ValidMetadata.GetCreatedAtTime(),
+		ValidMetadata.GetUpdatedAtTime(),
+		ValidMetadata.IsDeleted(),
+		ValidMetadata.GetDeletedAtTime(),
+		"Sample Exam",
+		10,
+		&ValidDomainExamQuestions,
+	)
+	ValidDomainExamWithNoQuestions = entity.MapToExamEntity(
+		ValidMetadata.GetIdUUID(),
+		ValidMetadata.GetCreatedAtTime(),
+		ValidMetadata.GetUpdatedAtTime(),
+		ValidMetadata.IsDeleted(),
+		ValidMetadata.GetDeletedAtTime(),
+		"Sample Exam",
+		10,
+		nil,
+	)
+	ValidAppCommandAddExamToLibraryResultWithNoQuestions = command.NewAddExamToLibraryResult(
+		ValidMetadata.GetIdString(),
+		"Sample Exam",
+		10,
+		[]common.ExamQuestion{},
+	)
 )
