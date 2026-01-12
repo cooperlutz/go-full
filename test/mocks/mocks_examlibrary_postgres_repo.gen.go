@@ -39,6 +39,268 @@ func (_m *MockIQuerierExamLibrary) EXPECT() *MockIQuerierExamLibrary_Expecter {
 	return &MockIQuerierExamLibrary_Expecter{mock: &_m.Mock}
 }
 
+// FindAllExamQuestions provides a mock function for the type MockIQuerierExamLibrary
+func (_mock *MockIQuerierExamLibrary) FindAllExamQuestions(ctx context.Context, arg persist_postgres.FindAllExamQuestionsParams) ([]persist_postgres.ExamLibraryExamQuestion, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindAllExamQuestions")
+	}
+
+	var r0 []persist_postgres.ExamLibraryExamQuestion
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindAllExamQuestionsParams) ([]persist_postgres.ExamLibraryExamQuestion, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindAllExamQuestionsParams) []persist_postgres.ExamLibraryExamQuestion); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]persist_postgres.ExamLibraryExamQuestion)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, persist_postgres.FindAllExamQuestionsParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamLibrary_FindAllExamQuestions_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllExamQuestions'
+type MockIQuerierExamLibrary_FindAllExamQuestions_Call struct {
+	*mock.Call
+}
+
+// FindAllExamQuestions is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.FindAllExamQuestionsParams
+func (_e *MockIQuerierExamLibrary_Expecter) FindAllExamQuestions(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
+	return &MockIQuerierExamLibrary_FindAllExamQuestions_Call{Call: _e.mock.On("FindAllExamQuestions", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExamQuestions_Call) Run(run func(ctx context.Context, arg persist_postgres.FindAllExamQuestionsParams)) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.FindAllExamQuestionsParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.FindAllExamQuestionsParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExamQuestions_Call) Return(examLibraryExamQuestions []persist_postgres.ExamLibraryExamQuestion, err error) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
+	_c.Call.Return(examLibraryExamQuestions, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExamQuestions_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.FindAllExamQuestionsParams) ([]persist_postgres.ExamLibraryExamQuestion, error)) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindAllExams provides a mock function for the type MockIQuerierExamLibrary
+func (_mock *MockIQuerierExamLibrary) FindAllExams(ctx context.Context) ([]persist_postgres.ExamLibraryExam, error) {
+	ret := _mock.Called(ctx)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindAllExams")
+	}
+
+	var r0 []persist_postgres.ExamLibraryExam
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]persist_postgres.ExamLibraryExam, error)); ok {
+		return returnFunc(ctx)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context) []persist_postgres.ExamLibraryExam); ok {
+		r0 = returnFunc(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]persist_postgres.ExamLibraryExam)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = returnFunc(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamLibrary_FindAllExams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllExams'
+type MockIQuerierExamLibrary_FindAllExams_Call struct {
+	*mock.Call
+}
+
+// FindAllExams is a helper method to define mock.On call
+//   - ctx context.Context
+func (_e *MockIQuerierExamLibrary_Expecter) FindAllExams(ctx interface{}) *MockIQuerierExamLibrary_FindAllExams_Call {
+	return &MockIQuerierExamLibrary_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx)}
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExams_Call) Run(run func(ctx context.Context)) *MockIQuerierExamLibrary_FindAllExams_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExams_Call) Return(examLibraryExams []persist_postgres.ExamLibraryExam, err error) *MockIQuerierExamLibrary_FindAllExams_Call {
+	_c.Call.Return(examLibraryExams, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindAllExams_Call) RunAndReturn(run func(ctx context.Context) ([]persist_postgres.ExamLibraryExam, error)) *MockIQuerierExamLibrary_FindAllExams_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindExamByID provides a mock function for the type MockIQuerierExamLibrary
+func (_mock *MockIQuerierExamLibrary) FindExamByID(ctx context.Context, arg persist_postgres.FindExamByIDParams) (persist_postgres.ExamLibraryExam, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindExamByID")
+	}
+
+	var r0 persist_postgres.ExamLibraryExam
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindExamByIDParams) (persist_postgres.ExamLibraryExam, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindExamByIDParams) persist_postgres.ExamLibraryExam); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(persist_postgres.ExamLibraryExam)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, persist_postgres.FindExamByIDParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamLibrary_FindExamByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindExamByID'
+type MockIQuerierExamLibrary_FindExamByID_Call struct {
+	*mock.Call
+}
+
+// FindExamByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.FindExamByIDParams
+func (_e *MockIQuerierExamLibrary_Expecter) FindExamByID(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindExamByID_Call {
+	return &MockIQuerierExamLibrary_FindExamByID_Call{Call: _e.mock.On("FindExamByID", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamByID_Call) Run(run func(ctx context.Context, arg persist_postgres.FindExamByIDParams)) *MockIQuerierExamLibrary_FindExamByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.FindExamByIDParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.FindExamByIDParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamByID_Call) Return(examLibraryExam persist_postgres.ExamLibraryExam, err error) *MockIQuerierExamLibrary_FindExamByID_Call {
+	_c.Call.Return(examLibraryExam, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamByID_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.FindExamByIDParams) (persist_postgres.ExamLibraryExam, error)) *MockIQuerierExamLibrary_FindExamByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindExamQuestionByID provides a mock function for the type MockIQuerierExamLibrary
+func (_mock *MockIQuerierExamLibrary) FindExamQuestionByID(ctx context.Context, arg persist_postgres.FindExamQuestionByIDParams) (persist_postgres.ExamLibraryExamQuestion, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindExamQuestionByID")
+	}
+
+	var r0 persist_postgres.ExamLibraryExamQuestion
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindExamQuestionByIDParams) (persist_postgres.ExamLibraryExamQuestion, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.FindExamQuestionByIDParams) persist_postgres.ExamLibraryExamQuestion); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Get(0).(persist_postgres.ExamLibraryExamQuestion)
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, persist_postgres.FindExamQuestionByIDParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamLibrary_FindExamQuestionByID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindExamQuestionByID'
+type MockIQuerierExamLibrary_FindExamQuestionByID_Call struct {
+	*mock.Call
+}
+
+// FindExamQuestionByID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.FindExamQuestionByIDParams
+func (_e *MockIQuerierExamLibrary_Expecter) FindExamQuestionByID(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
+	return &MockIQuerierExamLibrary_FindExamQuestionByID_Call{Call: _e.mock.On("FindExamQuestionByID", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamQuestionByID_Call) Run(run func(ctx context.Context, arg persist_postgres.FindExamQuestionByIDParams)) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.FindExamQuestionByIDParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.FindExamQuestionByIDParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamQuestionByID_Call) Return(examLibraryExamQuestion persist_postgres.ExamLibraryExamQuestion, err error) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
+	_c.Call.Return(examLibraryExamQuestion, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_FindExamQuestionByID_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.FindExamQuestionByIDParams) (persist_postgres.ExamLibraryExamQuestion, error)) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // SaveExam provides a mock function for the type MockIQuerierExamLibrary
 func (_mock *MockIQuerierExamLibrary) SaveExam(ctx context.Context, arg persist_postgres.SaveExamParams) error {
 	ret := _mock.Called(ctx, arg)
@@ -92,6 +354,63 @@ func (_c *MockIQuerierExamLibrary_SaveExam_Call) Return(err error) *MockIQuerier
 }
 
 func (_c *MockIQuerierExamLibrary_SaveExam_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.SaveExamParams) error) *MockIQuerierExamLibrary_SaveExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// SaveExamQuestion provides a mock function for the type MockIQuerierExamLibrary
+func (_mock *MockIQuerierExamLibrary) SaveExamQuestion(ctx context.Context, arg persist_postgres.SaveExamQuestionParams) error {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SaveExamQuestion")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, persist_postgres.SaveExamQuestionParams) error); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockIQuerierExamLibrary_SaveExamQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SaveExamQuestion'
+type MockIQuerierExamLibrary_SaveExamQuestion_Call struct {
+	*mock.Call
+}
+
+// SaveExamQuestion is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg persist_postgres.SaveExamQuestionParams
+func (_e *MockIQuerierExamLibrary_Expecter) SaveExamQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
+	return &MockIQuerierExamLibrary_SaveExamQuestion_Call{Call: _e.mock.On("SaveExamQuestion", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamLibrary_SaveExamQuestion_Call) Run(run func(ctx context.Context, arg persist_postgres.SaveExamQuestionParams)) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 persist_postgres.SaveExamQuestionParams
+		if args[1] != nil {
+			arg1 = args[1].(persist_postgres.SaveExamQuestionParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_SaveExamQuestion_Call) Return(err error) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockIQuerierExamLibrary_SaveExamQuestion_Call) RunAndReturn(run func(ctx context.Context, arg persist_postgres.SaveExamQuestionParams) error) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
 	_c.Call.Return(run)
 	return _c
 }

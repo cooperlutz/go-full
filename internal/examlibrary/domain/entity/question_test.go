@@ -43,12 +43,12 @@ func TestMapToExamQuestion(t *testing.T) {
 	deleted := false
 	var deletedAt *time.Time = nil
 	questionText := "What is 2 + 2?"
-	questionType := valueobject.QuestionMultipleChoice
+	questionType := "multiple-choice"
 	possiblePoints := 5
 	correctAnswer := "4"
 	options := []string{"3", "4", "5", "6"}
 
-	examQuestion := MapToExamQuestion(
+	examQuestion, err := MapToExamQuestion(
 		id,
 		createdAt,
 		updatedAt,
@@ -61,11 +61,11 @@ func TestMapToExamQuestion(t *testing.T) {
 		&options,
 		ind,
 	)
-
+	assert.NoError(t, err)
 	assert.Equal(t, id, examQuestion.GetIdUUID())
 	assert.Equal(t, ind, examQuestion.GetIndex())
 	assert.Equal(t, questionText, examQuestion.questionText)
-	assert.Equal(t, questionType, examQuestion.questionType)
+	assert.Equal(t, valueobject.QuestionMultipleChoice, examQuestion.questionType)
 	assert.Equal(t, possiblePoints, examQuestion.possiblePoints)
 	assert.Equal(t, &correctAnswer, examQuestion.correctAnswer)
 	assert.Equal(t, &options, examQuestion.responseOptions)

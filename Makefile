@@ -102,11 +102,9 @@ pre-commit: deps deps-audit gen lint format ### run pre-commit
 	$(PNPM) pre-commit
 .PHONY: pre-commit
 
-MIGMODULE=pingpong
-MIGDBTYPE=postgres
+
 MIGNAME=init_schema
-migrate-create:  ### create new migration, run it like this "make migrate-create MIGMODULE=pingpong MIGDBTYPE=postgres MIGNAME=init_schema"
-	@echo "Creating $(MIGNAME) migration for $(MIGMODULE)/$(MIGDBTYPE) database!"
+migrate-create:  ### create new migration, run it like this "make migrate-create MIGNAME=init_schema"
 	migrate create -ext sql -dir db/migrations $(MIGNAME)
 .PHONY: migrate-create
 	

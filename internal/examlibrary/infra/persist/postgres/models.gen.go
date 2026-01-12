@@ -15,7 +15,7 @@ type ExamLibraryExam struct {
 	DeletedAt  pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
 	Deleted    bool               `db:"deleted" json:"deleted"`
 	Name       string             `db:"name" json:"name"`
-	GradeLevel pgtype.Text        `db:"grade_level" json:"grade_level"`
+	GradeLevel pgtype.Int4        `db:"grade_level" json:"grade_level"`
 }
 
 type ExamLibraryExamQuestion struct {
@@ -27,7 +27,7 @@ type ExamLibraryExamQuestion struct {
 	ExamID          pgtype.UUID        `db:"exam_id" json:"exam_id"`
 	Index           int32              `db:"index" json:"index"`
 	QuestionText    string             `db:"question_text" json:"question_text"`
-	AnswerText      string             `db:"answer_text" json:"answer_text"`
+	AnswerText      pgtype.Text        `db:"answer_text" json:"answer_text"`
 	QuestionType    string             `db:"question_type" json:"question_type"`
 	PossiblePoints  int32              `db:"possible_points" json:"possible_points"`
 	ResponseOptions []string           `db:"response_options" json:"response_options"`

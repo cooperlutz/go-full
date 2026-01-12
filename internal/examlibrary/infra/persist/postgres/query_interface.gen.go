@@ -9,6 +9,23 @@ import (
 )
 
 type Querier interface {
+	//FindAllExamQuestions
+	//
+	//  SELECT exam_question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_text, answer_text, question_type, possible_points, response_options FROM exam_library.exam_questions
+	//  WHERE exam_id = $1
+	FindAllExamQuestions(ctx context.Context, arg FindAllExamQuestionsParams) ([]ExamLibraryExamQuestion, error)
+	//FindAllExams
+	//
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams
+	FindAllExams(ctx context.Context) ([]ExamLibraryExam, error)
+	//FindExamByID
+	//
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams WHERE exam_id = $1
+	FindExamByID(ctx context.Context, arg FindExamByIDParams) (ExamLibraryExam, error)
+	//FindExamQuestionByID
+	//
+	//  SELECT exam_question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_text, answer_text, question_type, possible_points, response_options FROM exam_library.exam_questions WHERE exam_question_id = $1
+	FindExamQuestionByID(ctx context.Context, arg FindExamQuestionByIDParams) (ExamLibraryExamQuestion, error)
 	//SaveExam
 	//
 	//  INSERT INTO exam_library.exams (
@@ -29,6 +46,36 @@ type Querier interface {
 	//      $7
 	//  )
 	SaveExam(ctx context.Context, arg SaveExamParams) error
+	//SaveExamQuestion
+	//
+	//  INSERT INTO exam_library.exam_questions (
+	//      exam_question_id,
+	//      created_at,
+	//      updated_at,
+	//      deleted_at,
+	//      deleted,
+	//      exam_id,
+	//      index,
+	//      question_text,
+	//      answer_text,
+	//      question_type,
+	//      possible_points,
+	//      response_options
+	//  ) VALUES (
+	//      $1,
+	//      $2,
+	//      $3,
+	//      $4,
+	//      $5,
+	//      $6,
+	//      $7,
+	//      $8,
+	//      $9,
+	//      $10,
+	//      $11,
+	//      $12
+	//  )
+	SaveExamQuestion(ctx context.Context, arg SaveExamQuestionParams) error
 }
 
 var _ Querier = (*Queries)(nil)

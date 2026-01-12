@@ -12,55 +12,6 @@ import (
 	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
-// func TestFromAppQuestionTypeToDomainQuestionType(t *testing.T) {
-// 	// Arrange
-// 	tests := []struct {
-// 		name        string
-// 		input       string
-// 		expected    valueobject.QuestionType
-// 		errExpected bool
-// 	}{
-// 		{
-// 			name:        "converts multiple-choice question type",
-// 			input:       "multiple-choice",
-// 			expected:    valueobject.QuestionMultipleChoice,
-// 			errExpected: false,
-// 		},
-// 		{
-// 			name:        "converts short-answer question type",
-// 			input:       "short-answer",
-// 			expected:    valueobject.QuestionShortAnswer,
-// 			errExpected: false,
-// 		},
-// 		{
-// 			name:        "converts essay question type",
-// 			input:       "essay",
-// 			expected:    valueobject.QuestionEssay,
-// 			errExpected: false,
-// 		},
-// 		{
-// 			name:        "returns error for unknown question type",
-// 			input:       "asdfghjkl",
-// 			expected:    valueobject.QuestionUnknown,
-// 			errExpected: true,
-// 		},
-// 	}
-
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			// Act
-// 			result, err := mapper.FromAppQuestionTypeToDomainQuestionType(tt.input)
-// 			// Assert
-// 			if tt.errExpected {
-// 				assert.Error(t, err)
-// 			} else {
-// 				assert.NoError(t, err)
-// 			}
-// 			assert.Equal(t, tt.expected, result)
-// 		})
-// 	}
-// }
-
 func TestFromAppAddExamToLibraryToDomainExam(t *testing.T) {
 	// Arrange
 	tests := []struct {

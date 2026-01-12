@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS exam_library.exam_questions (
     -- 
     index INT NOT NULL,
     question_text TEXT NOT NULL,
-    answer_text TEXT NOT NULL,
+    answer_text TEXT,
     question_type TEXT NOT NULL,
     possible_points INT NOT NULL,
     response_options TEXT[]

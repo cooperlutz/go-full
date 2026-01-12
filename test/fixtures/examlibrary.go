@@ -2,13 +2,15 @@ package fixtures
 
 import (
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
-	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
+	examlibrary_postgres "github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres"
+	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
@@ -130,46 +132,63 @@ var (
 		10,
 		ValidAppExamQuestions,
 	)
+	ValidDomainExamQuestionMultipleChoice, _ = entity.MapToExamQuestion(
+		ValidMetadata.GetIdUUID(),
+		ValidMetadata.GetCreatedAtTime(),
+		ValidMetadata.GetUpdatedAtTime(),
+		ValidMetadata.IsDeleted(),
+		ValidMetadata.GetDeletedAtTime(),
+		"What animal is known to bark?",
+		"multiple-choice",
+		5,
+		utilitee.StrPtr("dog"),
+		&[]string{"dog", "cat", "bird", "fish"},
+		1,
+	)
+	ValidDomainExamQuestionShortAnswer, _ = entity.MapToExamQuestion(
+		ValidMetadata.GetIdUUID(),
+		ValidMetadata.GetCreatedAtTime(),
+		ValidMetadata.GetUpdatedAtTime(),
+		ValidMetadata.IsDeleted(),
+		ValidMetadata.GetDeletedAtTime(),
+		"Describe photosynthesis",
+		"short-answer",
+		10,
+		nil,
+		nil,
+		2,
+	)
+	ValidDomainExamQuestionEssay, _ = entity.MapToExamQuestion(
+		ValidMetadata.GetIdUUID(),
+		ValidMetadata.GetCreatedAtTime(),
+		ValidMetadata.GetUpdatedAtTime(),
+		ValidMetadata.IsDeleted(),
+		ValidMetadata.GetDeletedAtTime(),
+		"Explain the theory of relativity",
+		"essay",
+		15,
+		nil,
+		nil,
+		3,
+	)
 	ValidDomainExamQuestions = []entity.ExamQuestion{
-		entity.MapToExamQuestion(
-			ValidMetadata.GetIdUUID(),
-			ValidMetadata.GetCreatedAtTime(),
-			ValidMetadata.GetUpdatedAtTime(),
-			ValidMetadata.IsDeleted(),
-			ValidMetadata.GetDeletedAtTime(),
-			"What animal is known to bark?",
-			valueobject.QuestionMultipleChoice,
-			5,
-			utilitee.StrPtr("dog"),
-			&[]string{"dog", "cat", "bird", "fish"},
-			1,
-		),
-		entity.MapToExamQuestion(
-			ValidMetadata.GetIdUUID(),
-			ValidMetadata.GetCreatedAtTime(),
-			ValidMetadata.GetUpdatedAtTime(),
-			ValidMetadata.IsDeleted(),
-			ValidMetadata.GetDeletedAtTime(),
-			"Describe photosynthesis",
-			valueobject.QuestionShortAnswer,
-			10,
-			nil,
-			nil,
-			2,
-		),
-		entity.MapToExamQuestion(
-			ValidMetadata.GetIdUUID(),
-			ValidMetadata.GetCreatedAtTime(),
-			ValidMetadata.GetUpdatedAtTime(),
-			ValidMetadata.IsDeleted(),
-			ValidMetadata.GetDeletedAtTime(),
-			"Explain the theory of relativity",
-			valueobject.QuestionEssay,
-			15,
-			nil,
-			nil,
-			3,
-		),
+		ValidDomainExamQuestionMultipleChoice,
+		ValidDomainExamQuestionShortAnswer,
+		ValidDomainExamQuestionEssay,
+	}
+
+	ValidDBExamQuestionShortAnswer = examlibrary_postgres.SaveExamQuestionParams{
+		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[1].GetIdUUID()),
+		CreatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
+		UpdatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamUpdatedAt),
+		DeletedAt:      pgxutil.TimeToTimestampz(ValidDomainExamQuestions[1].GetDeletedAtTime()),
+		Deleted:        ValidDomainExamQuestions[1].IsDeleted(),
+		ExamID:         pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
+		Index:          int32(ValidDomainExamQuestions[1].GetIndex()),
+		QuestionText:   ValidDomainExamQuestions[1].GetQuestionText(),
+		AnswerText:     pgtype.Text{Valid: false},
+		PossiblePoints: int32(ValidDomainExamQuestions[1].GetPossiblePoints()),
+		QuestionType:   ValidDomainExamQuestions[1].GetQuestionType().String(),
 	}
 	ValidDomainExam = entity.MapToExamEntity(
 		ValidMetadata.GetIdUUID(),
@@ -181,6 +200,58 @@ var (
 		10,
 		&ValidDomainExamQuestions,
 	)
+	ValidDBExamCreatedAt = ValidMetadata.GetCreatedAtTime()
+	ValidDBExamUpdatedAt = ValidMetadata.GetUpdatedAtTime()
+	ValidDBExam          = examlibrary_postgres.SaveExamParams{
+		ExamID:     pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
+		CreatedAt:  pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
+		UpdatedAt:  pgxutil.TimeToTimestampz(&ValidDBExamUpdatedAt),
+		DeletedAt:  pgxutil.TimeToTimestampz(ValidMetadata.GetDeletedAtTime()),
+		Deleted:    ValidMetadata.IsDeleted(),
+		Name:       "Sample Exam",
+		GradeLevel: pgtype.Int4{Int32: 10, Valid: true},
+	}
+	ValidDBExamLibraryExam = examlibrary_postgres.ExamLibraryExam{
+		ExamID:    pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
+		CreatedAt: pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
+		UpdatedAt: pgxutil.TimeToTimestampz(&ValidDBExamUpdatedAt),
+		Deleted:   ValidMetadata.IsDeleted(),
+		DeletedAt: pgxutil.TimeToTimestampz(ValidMetadata.GetDeletedAtTime()),
+		Name:      "Sample Exam",
+		GradeLevel: pgtype.Int4{
+			Int32: 10,
+			Valid: true,
+		},
+	}
+	ValidDBExamQuestionMultipleChoice = examlibrary_postgres.ExamLibraryExamQuestion{
+		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[0].GetIdUUID()),
+		CreatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
+		UpdatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamUpdatedAt),
+		DeletedAt:      pgxutil.TimeToTimestampz(ValidDomainExamQuestions[0].GetDeletedAtTime()),
+		Deleted:        ValidDomainExamQuestions[0].IsDeleted(),
+		ExamID:         pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
+		Index:          int32(ValidDomainExamQuestions[0].GetIndex()),
+		QuestionText:   ValidDomainExamQuestions[0].GetQuestionText(),
+		AnswerText: pgtype.Text{
+			String: *ValidDomainExamQuestions[0].GetCorrectAnswer(),
+			Valid:  true,
+		},
+		PossiblePoints: int32(ValidDomainExamQuestions[0].GetPossiblePoints()),
+		QuestionType:   ValidDomainExamQuestions[0].GetQuestionType().String(),
+	}
+	ValidDBExamQuestion = examlibrary_postgres.SaveExamQuestionParams{
+		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[0].GetIdUUID()),
+		CreatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
+		UpdatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamUpdatedAt),
+		DeletedAt:      pgxutil.TimeToTimestampz(ValidDomainExamQuestions[0].GetDeletedAtTime()),
+		Deleted:        ValidDomainExamQuestions[0].IsDeleted(),
+		ExamID:         pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
+		Index:          int32(ValidDomainExamQuestions[0].GetIndex()),
+		QuestionText:   ValidDomainExamQuestions[0].GetQuestionText(),
+		AnswerText:     pgxutil.StrToPgtypeText(ValidDomainExamQuestions[0].GetCorrectAnswer()),
+		PossiblePoints: int32(ValidDomainExamQuestions[0].GetPossiblePoints()),
+		QuestionType:   ValidDomainExamQuestions[0].GetQuestionType().String(),
+	}
 	ValidDomainExamWithNoQuestions = entity.MapToExamEntity(
 		ValidMetadata.GetIdUUID(),
 		ValidMetadata.GetCreatedAtTime(),

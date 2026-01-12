@@ -33,6 +33,10 @@ func NewExam(name string, gradeLevel valueobject.GradeLevel, questions *[]ExamQu
 }
 
 func (e *Exam) AddQuestion(question ExamQuestion) {
+	if e.questions == nil {
+		e.questions = &[]ExamQuestion{}
+	}
+
 	*e.questions = append(*e.questions, question)
 	e.MarkUpdated()
 }

@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS exam_library.exams (
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     -- 
     name TEXT NOT NULL,
-    grade_level TEXT
+    grade_level INT
 );

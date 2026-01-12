@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/cooperlutz/go-full/internal/examlibrary/domain/exception"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
@@ -69,12 +70,17 @@ func MapToExamQuestion(
 	deleted bool,
 	deletedAt *time.Time,
 	questionText string,
-	questionType valueobject.QuestionType,
+	questionType string,
 	possiblePoints int,
 	correctAnswer *string,
 	responseOptions *[]string,
 	index int,
-) ExamQuestion {
+) (ExamQuestion, error) {
+	qtype, err := valueobject.QuestionTypeFromString(questionType)
+	if err != nil {
+		return ExamQuestion{}, exception.ErrInvalidQuestionType{}
+	}
+
 	return ExamQuestion{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
 			id,
@@ -84,10 +90,10 @@ func MapToExamQuestion(
 			deletedAt,
 		),
 		questionText:    questionText,
-		questionType:    questionType,
+		questionType:    qtype,
 		possiblePoints:  possiblePoints,
 		correctAnswer:   correctAnswer,
 		responseOptions: responseOptions,
 		index:           index,
-	}
+	}, nil
 }

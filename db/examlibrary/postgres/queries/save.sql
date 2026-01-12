@@ -17,7 +17,7 @@ INSERT INTO exam_library.exams (
     $7
 );
 
--- SaveExamQuestion :exec
+-- name: SaveExamQuestion :exec
 INSERT INTO exam_library.exam_questions (
     exam_question_id,
     created_at,

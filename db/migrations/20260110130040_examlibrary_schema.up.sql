@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS exam_library.exam_questions (
     -- 
     index INT NOT NULL,
     question_text TEXT NOT NULL,
-    answer_text TEXT NOT NULL,
+    answer_text TEXT NULL,
     question_type TEXT NOT NULL,
     possible_points INT NOT NULL,
     response_options TEXT[]
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS exam_library.exams (
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     -- 
     name TEXT NOT NULL,
-    grade_level TEXT
+    grade_level INT
 );
 
 -- create relationship between exam_questions and exams
