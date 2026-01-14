@@ -47,3 +47,15 @@ func TestStrToPgtypeText(t *testing.T) {
 	pgTextNil := pgxutil.StrToPgtypeText(nilStr)
 	assert.False(t, pgTextNil.Valid)
 }
+
+func TestIntToPgtypeInt4(t *testing.T) {
+	val := 100
+	pgInt := pgxutil.IntToPgtypeInt4(&val)
+
+	assert.True(t, pgInt.Valid)
+	assert.Equal(t, int32(val), pgInt.Int32)
+
+	var nilInt *int
+	pgIntNil := pgxutil.IntToPgtypeInt4(nilInt)
+	assert.False(t, pgIntNil.Valid)
+}

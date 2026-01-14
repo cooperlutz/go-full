@@ -150,11 +150,10 @@ func TestExam_GetQuestions(t *testing.T) {
 
 func TestExam_AddQuestion(t *testing.T) {
 	// Arrange
-	questions := []ExamQuestion{}
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
-		&questions,
+		nil,
 	)
 	meta := baseentitee.NewEntityMetadata()
 	newQuestion := ExamQuestion{
@@ -171,6 +170,17 @@ func TestExam_AddQuestion(t *testing.T) {
 	// Assertions
 	assert.Equal(t, 1, len(exam.GetQuestions()))
 	assert.Equal(t, newQuestion, (exam.GetQuestions())[0])
+}
+
+func TestExam_GetGradeLevel(t *testing.T) {
+	// Act
+	exam := NewExam(
+		"Animal Exam",
+		valueobject.GradeLevelThird,
+		&questions,
+	)
+	// Assertions
+	assert.Equal(t, valueobject.GradeLevelThird, exam.GetGradeLevel())
 }
 
 func TestMapToExamEntity(t *testing.T) {
