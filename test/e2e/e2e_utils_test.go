@@ -54,7 +54,19 @@ func seedTestData() error {
 	 ('5f41e894-b63c-48e3-a4e2-07fb3df0068b'::uuid,'ping','2025-11-10 13:49:20.123703-06',NULL,NULL,false),
 	 ('2e8993b7-56c9-4363-a291-bc3e86c108a5'::uuid,'ping','2025-11-10 16:52:16.798368-06',NULL,NULL,false),
 	 ('d1d22514-5f53-4d40-890b-5350602b3b5f'::uuid,'ping','2025-11-10 16:52:17.451034-06',NULL,NULL,false)
-     ON CONFLICT (pingpong_id) DO NOTHING;`
+     ON CONFLICT (pingpong_id) DO NOTHING;
+	 
+	INSERT INTO exam_library.exams
+	(exam_id, created_at, updated_at, deleted_at, deleted, "name", grade_level)
+	VALUES('11111111-1111-1111-1111-111111111111'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, 'Sample Exam', 5)
+	ON CONFLICT (exam_id) DO NOTHING;
+
+	INSERT INTO exam_library.exam_questions
+	(exam_question_id, created_at, updated_at, deleted_at, deleted, exam_id, "index", question_text, answer_text, question_type, possible_points, response_options)
+	VALUES('22222222-2222-2222-2222-222222222222'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, '11111111-1111-1111-1111-111111111111'::uuid, 
+	 1, 'What is the capital of France?', 'Paris', 'multiple-choice', 5,  ARRAY['Berlin', 'Madrid', 'Paris', 'Rome']::text[])
+	 ON CONFLICT (exam_question_id) DO NOTHING;
+	 `
 
 	_, err = conn.Exec(ctx, sqlStatement)
 	if err != nil {

@@ -1,0 +1,42 @@
+<script setup lang="ts">
+/*
+This view displays an overview of a specific exam, fetching its details based on the exam ID from the route parameters.
+It uses the useFindExamByID composable to retrieve the exam data and handles loading and error states.
+*/
+import { useRoute } from "vue-router";
+import { onMounted, ref } from "vue";
+import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+
+import { useFindExamByID } from "~/examlibrary/composables/useGetFindOne";
+import type { Exam } from "../services";
+
+const lookupOutput = ref<Exam>();
+const route = useRoute();
+const examId = route.params.id as string;
+const { error, loading, lookup } = useFindExamByID();
+onMounted(async () => {
+  const response = await lookup(examId);
+  lookupOutput.value = response;
+});
+</script>
+
+<template>
+  <PageHeader title="Exam Overview" :disable-menu="true" />
+  <div v-if="loading">Loading exam...</div>
+  <div v-else-if="error" id="exam-overview-error">
+    Error loading exam: {{ error }}
+  </div>
+  <div v-else>
+    <div
+      class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid"
+    >
+      <div class="card-body">
+        <h2 class="card-title">Exam Details</h2>
+        <p><b>ID:</b> {{ lookupOutput?.id }}</p>
+        <p><b>Name:</b> {{ lookupOutput?.name }}</p>
+        <p><b>Grade Level:</b> {{ lookupOutput?.gradeLevel }}</p>
+      </div>
+      <button class="btn btn-success">Start Exam</button>
+    </div>
+  </div>
+</template>

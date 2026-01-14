@@ -1,6 +1,6 @@
 <template>
   <a href="/ping-pong">
-    <div class="card w-96 bg-base-100 card-xl shadow-sm">
+    <div class="card w-full bg-base-100 card-xl shadow-sm">
       <div class="card-body border border-neutral">
         <div class="flex gap-4">
           <img src="/logo.svg" width="48" height="48" />

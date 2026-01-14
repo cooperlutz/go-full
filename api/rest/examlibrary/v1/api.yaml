@@ -1,0 +1,205 @@
+# Source: https://github.com/Redocly/openapi-template/blob/gh-pages/openapi.yaml
+openapi: 3.0.2
+info:
+  version: '1.0.0' # Your API version
+  # It can be any string but it is better to use semantic versioning: http://semver.org/
+  # Warning: OpenAPI requires the version to be a string, but without quotation marks YAML can recognize it as a number.
+  
+  title: Exam Library # Replace with your API title
+  # Keep it simple. Don't add "API" or version at the end of the string.
+
+  # termsOfService: 'https://localhost:8080/terms/' # [Optional] Replace with an URL to your ToS
+  # contact:
+  #   email: contact@localhost:8080 # [Optional] Replace with your contact email
+  #   url: 'http://localhost:8080/contact' # [Optional] Replace with link to your contact form
+  # license:
+  #   name: Apache 2.0
+  #   url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  # x-logo:
+  #   url: 'https://redocly.github.io/openapi-template/logo.png'
+  
+  # # Describe your API here, you can use GFM (https://guides.github.com/features/mastering-markdown) here
+  # description: |
+  #   This is an **example** API to demonstrate features of OpenAPI specification
+  #   # Introduction
+  #   This API definition is intended to to be a good starting point for describing your API in 
+  #   [OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md).
+  #   It also demonstrates features of [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) tool and 
+  #   [Redoc](https://github.com/Redocly/Redoc) documentation engine. So beyond the standard OpenAPI syntax we use a few 
+  #   [vendor extensions](https://github.com/Redocly/Redoc/blob/master/docs/redoc-vendor-extensions.md).
+
+  #   # OpenAPI Specification
+  #   The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
+  #   allows both humans and computers to discover and understand the capabilities of the service without access to source
+  #   code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
+  #   understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
+  #   interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
+# externalDocs:
+#   description: Find out how to create a GitHub repo for your OpenAPI definition.
+#   url: 'https://github.com/Rebilly/generator-openapi-repo'
+
+# A list of tags used by the definition with additional metadata.
+# The order of the tags can be used to reflect on their order by the parsing tools.
+tags:
+  - name: examlibrary
+    description: Exam library operations
+servers:
+  - url: 'http://localhost:8080/examlibrary/api/v1'
+  - url: 'https://localhost:8080/examlibrary/api/v1'
+
+# Holds the relative paths to the individual endpoints. The path is appended to the
+# basePath in order to construct the full URL. 
+paths:
+  /exams:
+    get:
+      tags:
+        - examlibrary
+      summary: Get all Exams
+      description: Retrieve all Exams
+      operationId: getFindAllExams
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exams'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+    post: # documentation for POST operation for this path
+      tags:
+        - examlibrary
+      summary: Add a new Exam to the Library
+      description: Create a new Exam with the provided details
+      operationId: postAddExamToLibrary
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+      requestBody:
+        required: true
+        description: Exam to add to the library
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exam'
+  /exams/{examID}:
+    get:
+      tags:
+        - examlibrary # the tag or tags will correlate with the api class defined in the api/frontend/{module}/services/apis
+      summary: Get an Exam by ID
+      description: Retrieve a single Exam by its ID
+      operationId: getFindOneByID # the operationId corelates to the function name withihn the Go server, Go Client, and TS Client implemented within the module's frontend services
+      security:
+        - api_key: []
+        - basic_auth: []
+      parameters:
+        - name: examID
+          in: path
+          description: The ID of the Exam to retrieve
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+# An object to hold reusable parts that can be used across the definition
+components:
+  headers:
+    X-Request-Id:
+      schema:
+        type: string
+        description: The unique identifier for the request.
+  schemas:
+    ExamMetadata:
+      description: An Exam entity containing exam metadata
+      type: object
+      properties:
+        id:
+          type: string
+          example: 49a6d644-34d5-4c2d-8abc-8fda8a114bd4
+        name:
+          description: The name of the Exam
+          type: string
+          example: Sample Exam
+        gradeLevel:
+          description: The grade level for which the exam is intended
+          type: integer
+          example: 10
+    ExamQuestion:
+      description: A question within an Exam, including the question text, possible answers, and the correct answer.
+      type: object
+      properties:
+        index:
+          description: The index of the question in the exam
+          type: integer
+          example: 1
+        questionText:
+          description: The text of the question
+          type: string
+          example: What animal is known to bark?
+        questionType:
+          $ref: '#/components/schemas/QuestionType'
+        possibleAnswers:
+          description: A list of possible answers for the question
+          type: array
+          items:
+            type: string
+          example: ['dog', 'cat', 'bird', 'fish']
+        possiblePoints:
+          description: The points possible for answering the question correctly
+          type: integer
+          example: 5
+        correctAnswer:
+          description: The correct answer to the question
+          type: string
+          example: dog
+    Exam:
+      description: An Exam entity including its associated questions.
+      allOf:
+        - $ref: '#/components/schemas/ExamMetadata'
+        - type: object
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExamQuestion'
+    Exams:
+      description: A list of Exam entities.
+      type: array
+      items:
+        $ref: '#/components/schemas/ExamMetadata'
+    QuestionType:
+      description: The type of question (e.g., multiple-choice, true/false).
+      type: string
+      enum:
+        - multiple-choice
+        - short-answer
+        - essay

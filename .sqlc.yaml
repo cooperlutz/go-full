@@ -37,3 +37,38 @@ sql:
       # rename:
       # overrides:
 
+- name: examlibrary_persist_postgres
+  schema: /db/examlibrary/postgres/schemas/
+  queries: /db/examlibrary/postgres/queries/
+  engine: postgresql
+  analyzer:
+    database: false
+  rules:
+  - sqlc/db-prepare
+  - postgresql-query-too-costly
+  strict_function_checks: false
+  strict_order_by: true
+  gen:
+    go:
+      package: persist_postgres
+      out: /internal/examlibrary/infra/persist/postgres
+      sql_package: pgx/v5
+      sql_driver: github.com/jackc/pgx/v5
+      json_tags_id_uppercase: false
+      emit_db_tags: true
+      emit_json_tags: true
+      emit_sql_as_comment: true
+      emit_prepared_queries: false
+      emit_interface: true
+      emit_exact_table_names: false
+      emit_methods_with_db_argument: false
+      emit_pointers_for_null_types: false
+      omit_unused_structs: false
+      output_batch_file_name: batch.gen.go
+      output_db_file_name: postgres.gen
+      output_files_suffix: .gen
+      output_models_file_name: models.gen.go
+      output_querier_file_name: query_interface.gen.go
+      query_parameter_limit: 0 # always return a struct, even if its empty
+      # rename:
+      # overrides:

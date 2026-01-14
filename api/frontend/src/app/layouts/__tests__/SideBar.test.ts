@@ -6,7 +6,7 @@ describe("SideBar.vue", () => {
   it("renders two sidebar items, each with an icon and name", () => {
     const wrapper = mount(SideBar);
     const sidebarItems = wrapper.findAll(".sidebar-item");
-    expect(sidebarItems.length).toBe(2);
+    expect(sidebarItems.length).toBe(3);
     sidebarItems.forEach((item) => {
       expect(item.find("svg").exists()).toBe(true);
       expect(item.text()).toBeTruthy();

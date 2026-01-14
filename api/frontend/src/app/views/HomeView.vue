@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 import DashboardCard from "~/pingpong/components/DashboardCard.vue";
+import ExamLibraryDashboardCard from "~/examlibrary/components/DashboardCard.vue";
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import DashboardCard from "~/pingpong/components/DashboardCard.vue";
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4"
   >
     <DashboardCard />
+    <ExamLibraryDashboardCard />
   </div>
 </template>

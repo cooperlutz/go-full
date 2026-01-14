@@ -1,5 +1,6 @@
 // Route imports
 import pingpongRoutes from "~/pingpong/router";
+import examLibraryRoutes from "~/examlibrary/router";
 // View imports
 import HomeView from "~/app/views/HomeView.vue";
 
@@ -14,6 +15,6 @@ const appRoutes = [
   },
 ];
 
-const protectedRoutes = [...appRoutes, ...pingpongRoutes];
+const protectedRoutes = [...appRoutes, ...pingpongRoutes, ...examLibraryRoutes];
 
 export default protectedRoutes;

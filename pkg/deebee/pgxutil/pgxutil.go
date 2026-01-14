@@ -5,6 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
+
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // TimeToTimestampz converts a time.Time pointer to a pgx Timestamptz type.
@@ -37,4 +39,14 @@ func StrToPgtypeText(s *string) pgtype.Text {
 	}
 
 	return pgtype.Text{String: *s, Valid: true}
+}
+
+// IntToPgtypeInt4 converts an int pointer to a pgx Int4 type.
+func IntToPgtypeInt4(i *int) pgtype.Int4 {
+	// Check for overflow/underflow
+	if i == nil || utilitee.SafeIntToInt32(i) == 0 {
+		return pgtype.Int4{Int32: 0, Valid: false}
+	}
+
+	return pgtype.Int4{Int32: utilitee.SafeIntToInt32(i), Valid: true}
 }

@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import { ref, h } from "vue";
-import { Icon, LayoutDashboard, type LucideIcon } from "lucide-vue-next";
+import {
+  Icon,
+  LayoutDashboard,
+  LibraryBig,
+  type LucideIcon,
+} from "lucide-vue-next";
 import { batBall } from "@lucide/lab";
 
 // Create a functional component for the custom icon
@@ -16,6 +21,7 @@ type SidebarItem = {
 const sidebarItems = ref<SidebarItem[]>([
   { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { name: "Ping Pong", url: "/ping-pong", icon: PingPongIcon },
+  { name: "Exam Library", url: "/exam-library", icon: LibraryBig },
 ]);
 </script>
 
