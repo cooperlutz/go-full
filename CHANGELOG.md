@@ -1,3 +1,9 @@
+## v0.1.0 (2026-01-14)
+
+### Feat
+
+- implementation of exam library bounded context (#110)
+
 ## v0.0.46 (2026-01-10)
 
 ### Fix
