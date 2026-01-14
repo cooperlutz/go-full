@@ -39,3 +39,38 @@ func TestTimePtr(t *testing.T) {
 	assert.NotNil(t, ptr)
 	assert.Equal(t, &timeVal, ptr)
 }
+
+func TestSafeIntToInt32(t *testing.T) {
+	t.Parallel()
+
+	// Test with nil pointer
+	var nilIntPtr *int
+	result := utilitee.SafeIntToInt32(nilIntPtr)
+	assert.Equal(t, int32(0), result)
+
+	// Test with valid int pointer within int32 range
+	validInt := 12345
+	validIntPtr := &validInt
+	result = utilitee.SafeIntToInt32(validIntPtr)
+	assert.Equal(t, int32(12345), result)
+
+	// Test with int pointer exceeding int32 max value
+	largeInt := int(^uint32(0)>>1) + 1 // One more than max int32
+	largeIntPtr := &largeInt
+	result = utilitee.SafeIntToInt32(largeIntPtr)
+	assert.Equal(t, int32(0), result)
+
+	// Test with int pointer below int32 min value
+	smallInt := -int(^uint32(0)>>1) - 2 // One less than min int32
+	smallIntPtr := &smallInt
+	result = utilitee.SafeIntToInt32(smallIntPtr)
+	assert.Equal(t, int32(0), result)
+}
+
+func TestIntPtr(t *testing.T) {
+	t.Parallel()
+	i := 486
+	ptr := utilitee.IntPtr(i)
+	assert.NotNil(t, ptr)
+	assert.Equal(t, &i, ptr)
+}

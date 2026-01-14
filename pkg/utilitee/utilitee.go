@@ -25,10 +25,12 @@ func TimePtr(t time.Time) *time.Time {
 	return &t
 }
 
+// IntPtr returns a pointer to the given int value.
 func IntPtr(i int) *int {
 	return &i
 }
 
+// SafeIntToInt32 safely converts an *int to int32, returning 0 if the pointer is nil or if the value is out of int32 bounds.
 func SafeIntToInt32(i *int) int32 {
 	if i == nil {
 		return 0
