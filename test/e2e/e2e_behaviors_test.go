@@ -115,3 +115,32 @@ func TestUserInputsAndSendsAnInvalidPing(t *testing.T) {
 	numPingsAfterAction := len(*pingsAfterAction.JSON200.Pingpongs)
 	assert.Equal(t, numPingsBefore, numPingsAfterAction, "Expected number of pings to remain the same")
 }
+
+/*
+Scenario: A user accesses the Exam Library application UI and is able to view the list of exams available
+
+Given:
+- a user accesses the system UI
+
+When:
+- the user navigates to the exam library page
+
+Then:
+- a table of exams is displayed to the user
+*/
+func TestUserViewsExamLibrary(t *testing.T) {
+	// Arrange
+	_, page := newBrowserContextAndPage(t, defaultBrowserContextOptions)
+
+	// Act
+	_, err := page.Goto(serverAddr + "/exam-library")
+	assert.NoError(t, err, "Error navigating to Exam Library page: %v", err)
+
+	// Assert
+	tableLocator := page.Locator("#exam-library-table")
+	assert.NotNil(t, tableLocator, "Exam Library table locator should not be nil")
+
+	tableExists, err := tableLocator.IsVisible()
+	assert.NoError(t, err, "Error checking visibility of Exam Library table: %v", err)
+	assert.True(t, tableExists, "Exam Library table should be visible on the page")
+}

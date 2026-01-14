@@ -1,3 +1,19 @@
+/*
+The Exam Library Module encapuslates the functionality related to the Exam Library bounded context.
+
+The Architecture follows a layered / Clean approach, separating concerns into distinct layers:
+
+1. API Layer: Contains HTTP handlers and routing logic.
+
+2. Domain Layer: Contains the core business logic and domain entities.
+
+3. Application Layer: Contains use cases that orchestrate domain entities to fulfill application requirements.
+
+4. Infrastructure Layer: Contains implementations for data persistence and Pub Sub integrations.
+
+Each layer interacts only with the layer directly below it, ensuring a clear separation of concerns and maintainability.
+Dependencies are inverted using interfaces to promote loose coupling between layers.
+*/
 package examlibrary
 
 import (

@@ -21,6 +21,7 @@
     "types": [
       "vitest/globals",
       "sweetalert2",
+      "node"
     ],
     "paths": {
       "~/*": [

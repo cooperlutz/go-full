@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from "../runtime";
+import type { QuestionType } from "./QuestionType";
+import {
+  QuestionTypeFromJSON,
+  QuestionTypeFromJSONTyped,
+  QuestionTypeToJSON,
+  QuestionTypeToJSONTyped,
+} from "./QuestionType";
+
 /**
  * A question within an Exam, including the question text, possible answers, and the correct answer.
  * @export
@@ -20,17 +28,11 @@ import { mapValues } from "../runtime";
  */
 export interface ExamQuestion {
   /**
-   *
-   * @type {string}
+   * The index of the question in the exam
+   * @type {number}
    * @memberof ExamQuestion
    */
-  id?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ExamQuestion
-   */
-  examID?: string;
+  index?: number;
   /**
    * The text of the question
    * @type {string}
@@ -38,11 +40,23 @@ export interface ExamQuestion {
    */
   questionText?: string;
   /**
+   *
+   * @type {QuestionType}
+   * @memberof ExamQuestion
+   */
+  questionType?: QuestionType;
+  /**
    * A list of possible answers for the question
    * @type {Array<string>}
    * @memberof ExamQuestion
    */
   possibleAnswers?: Array<string>;
+  /**
+   * The points possible for answering the question correctly
+   * @type {number}
+   * @memberof ExamQuestion
+   */
+  possiblePoints?: number;
   /**
    * The correct answer to the question
    * @type {string}
@@ -70,12 +84,17 @@ export function ExamQuestionFromJSONTyped(
     return json;
   }
   return {
-    id: json["id"] == null ? undefined : json["id"],
-    examID: json["examID"] == null ? undefined : json["examID"],
+    index: json["index"] == null ? undefined : json["index"],
     questionText:
       json["questionText"] == null ? undefined : json["questionText"],
+    questionType:
+      json["questionType"] == null
+        ? undefined
+        : QuestionTypeFromJSON(json["questionType"]),
     possibleAnswers:
       json["possibleAnswers"] == null ? undefined : json["possibleAnswers"],
+    possiblePoints:
+      json["possiblePoints"] == null ? undefined : json["possiblePoints"],
     correctAnswer:
       json["correctAnswer"] == null ? undefined : json["correctAnswer"],
   };
@@ -94,10 +113,11 @@ export function ExamQuestionToJSONTyped(
   }
 
   return {
-    id: value["id"],
-    examID: value["examID"],
+    index: value["index"],
     questionText: value["questionText"],
+    questionType: QuestionTypeToJSON(value["questionType"]),
     possibleAnswers: value["possibleAnswers"],
+    possiblePoints: value["possiblePoints"],
     correctAnswer: value["correctAnswer"],
   };
 }

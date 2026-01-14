@@ -32,30 +32,6 @@ export interface ExamMetadata {
    */
   name?: string;
   /**
-   * The creation timestamp of the entity
-   * @type {Date}
-   * @memberof ExamMetadata
-   */
-  createdAt?: Date;
-  /**
-   * The last update timestamp of the entity
-   * @type {Date}
-   * @memberof ExamMetadata
-   */
-  updatedAt?: Date;
-  /**
-   * Indicates if the entity is deleted
-   * @type {boolean}
-   * @memberof ExamMetadata
-   */
-  deleted?: boolean;
-  /**
-   * The deletion timestamp of the entity, if applicable
-   * @type {Date}
-   * @memberof ExamMetadata
-   */
-  deletedAt?: Date | null;
-  /**
    * The grade level for which the exam is intended
    * @type {number}
    * @memberof ExamMetadata
@@ -84,13 +60,6 @@ export function ExamMetadataFromJSONTyped(
   return {
     id: json["id"] == null ? undefined : json["id"],
     name: json["name"] == null ? undefined : json["name"],
-    createdAt:
-      json["createdAt"] == null ? undefined : new Date(json["createdAt"]),
-    updatedAt:
-      json["updatedAt"] == null ? undefined : new Date(json["updatedAt"]),
-    deleted: json["deleted"] == null ? undefined : json["deleted"],
-    deletedAt:
-      json["deletedAt"] == null ? undefined : new Date(json["deletedAt"]),
     gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
   };
 }
@@ -110,15 +79,6 @@ export function ExamMetadataToJSONTyped(
   return {
     id: value["id"],
     name: value["name"],
-    createdAt:
-      value["createdAt"] == null ? undefined : value["createdAt"].toISOString(),
-    updatedAt:
-      value["updatedAt"] == null ? undefined : value["updatedAt"].toISOString(),
-    deleted: value["deleted"],
-    deletedAt:
-      value["deletedAt"] === null
-        ? null
-        : (value["deletedAt"] as any)?.toISOString(),
     gradeLevel: value["gradeLevel"],
   };
 }

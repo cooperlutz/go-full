@@ -1,13 +1,17 @@
+<script lang="ts" setup>
+import { LibraryBig } from "lucide-vue-next";
+</script>
+
 <template>
-  <a href="/ping-pong">
+  <a href="/exam-library">
     <div class="card w-full bg-base-100 card-xl shadow-sm">
       <div class="card-body border border-neutral">
         <div class="flex gap-4">
-          <img src="/logo.svg" width="48" height="48" />
-          <h2 class="card-title">Ping Pong</h2>
+          <LibraryBig />
+          <h2 class="card-title">Exam Library</h2>
         </div>
         <hr />
-        <p>Application of the Ping Pong Module</p>
+        <p>Explore the exam library</p>
       </div>
     </div>
   </a>

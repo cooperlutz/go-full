@@ -1,11 +1,9 @@
 <script lang="ts" setup>
-import { defineProps } from "vue";
-
 import PageHeaderBreadcrumbs from "~/app/components/PageHeader/PageHeaderBreadcrumbs.vue";
 import PageHeaderMenu from "~/app/components/PageHeader/PageHeaderMenu.vue";
 import SectionDivider from "~/app/components/SectionDivider/SectionDivider.vue";
 
-const props = defineProps({
+defineProps({
   title: String,
   subtitle: String,
   description: String,
@@ -19,13 +17,13 @@ const props = defineProps({
 <template>
   <div class="flex flex-row justify-between w-full mb-4">
     <PageHeaderBreadcrumbs />
-    <PageHeaderMenu v-if="!props.disableMenu" />
+    <PageHeaderMenu v-if="!disableMenu" />
   </div>
   <!-- page header -->
   <div class="columns-2 w-full">
     <!-- page title -->
     <h1 class="text-4xl font-bold tracking-tight sm:text-3xl py-2">
-      {{ props.title }}
+      {{ title }}
     </h1>
   </div>
   <!-- spacer -->
@@ -33,14 +31,14 @@ const props = defineProps({
   <!-- intro text -->
   <div class="flex flex-col">
     <p class="text-lg">
-      {{ props.subtitle }}
+      {{ subtitle }}
     </p>
   </div>
 
   <div class="mt-2" />
   <div class="flex flex-col">
     <p class="text-md text-base-content/70">
-      {{ props.description }}
+      {{ description }}
     </p>
   </div>
   <!-- spacer with divider -->

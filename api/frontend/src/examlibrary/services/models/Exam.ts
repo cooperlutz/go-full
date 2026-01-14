@@ -40,30 +40,6 @@ export interface Exam {
    */
   name?: string;
   /**
-   * The creation timestamp of the entity
-   * @type {Date}
-   * @memberof Exam
-   */
-  createdAt?: Date;
-  /**
-   * The last update timestamp of the entity
-   * @type {Date}
-   * @memberof Exam
-   */
-  updatedAt?: Date;
-  /**
-   * Indicates if the entity is deleted
-   * @type {boolean}
-   * @memberof Exam
-   */
-  deleted?: boolean;
-  /**
-   * The deletion timestamp of the entity, if applicable
-   * @type {Date}
-   * @memberof Exam
-   */
-  deletedAt?: Date | null;
-  /**
    * The grade level for which the exam is intended
    * @type {number}
    * @memberof Exam
@@ -98,13 +74,6 @@ export function ExamFromJSONTyped(
   return {
     id: json["id"] == null ? undefined : json["id"],
     name: json["name"] == null ? undefined : json["name"],
-    createdAt:
-      json["createdAt"] == null ? undefined : new Date(json["createdAt"]),
-    updatedAt:
-      json["updatedAt"] == null ? undefined : new Date(json["updatedAt"]),
-    deleted: json["deleted"] == null ? undefined : json["deleted"],
-    deletedAt:
-      json["deletedAt"] == null ? undefined : new Date(json["deletedAt"]),
     gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
     questions:
       json["questions"] == null
@@ -128,15 +97,6 @@ export function ExamToJSONTyped(
   return {
     id: value["id"],
     name: value["name"],
-    createdAt:
-      value["createdAt"] == null ? undefined : value["createdAt"].toISOString(),
-    updatedAt:
-      value["updatedAt"] == null ? undefined : value["updatedAt"].toISOString(),
-    deleted: value["deleted"],
-    deletedAt:
-      value["deletedAt"] === null
-        ? null
-        : (value["deletedAt"] as any)?.toISOString(),
     gradeLevel: value["gradeLevel"],
     questions:
       value["questions"] == null

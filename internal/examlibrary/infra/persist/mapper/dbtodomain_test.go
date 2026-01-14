@@ -37,3 +37,32 @@ func TestFromDBExamToDomain(t *testing.T) {
 		})
 	}
 }
+
+func TestFromDBExamQuestionToDomain(t *testing.T) {
+	// Arrange
+	tests := []struct {
+		name     string
+		input    persist_postgres.ExamLibraryExamQuestion
+		expected entity.ExamQuestion
+	}{
+		{
+			name:     "maps DB ExamQuestion to domain ExamQuestion",
+			input:    fixtures.ValidDBExamQuestionMultipleChoice,
+			expected: fixtures.ValidDomainExamQuestionMultipleChoice,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Act
+			result, err := mapper.FromDBExamQuestionToDomain(tt.input)
+			assert.NoError(t, err)
+			// Assert
+			assert.Equal(t, tt.expected.GetIndex(), result.GetIndex())
+			assert.Equal(t, tt.expected.GetQuestionText(), result.GetQuestionText())
+			assert.Equal(t, tt.expected.GetQuestionType(), result.GetQuestionType())
+			assert.Equal(t, tt.expected.GetPossiblePoints(), result.GetPossiblePoints())
+			assert.Equal(t, tt.expected.GetCorrectAnswer(), result.GetCorrectAnswer())
+			assert.Equal(t, tt.expected.GetResponseOptions(), result.GetResponseOptions())
+		})
+	}
+}

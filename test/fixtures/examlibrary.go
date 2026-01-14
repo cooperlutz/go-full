@@ -76,9 +76,15 @@ var (
 		ValidAppExamQuestionEssay,
 	}
 	ValidAppExamWithoutQuestions = query.ExamWithoutQuestions{
-		ExamID:     "123e4567-e89b-12d3-a456-426614174000",
+		ExamID:     "00000000-0000-0000-0000-000000000001",
 		Name:       "Sample Exam",
 		GradeLevel: 10,
+	}
+	ValidAppExamWithQuestions = query.ExamWithQuestions{
+		ExamID:     "00000000-0000-0000-0000-000000000001",
+		Name:       "Sample Exam",
+		GradeLevel: 10,
+		Questions:  ValidAppExamQuestions,
 	}
 	ValidAppExamsWithoutQuestions = []query.ExamWithoutQuestions{
 		{
@@ -223,6 +229,7 @@ var (
 			Valid: true,
 		},
 	}
+	responseOpts                      = ValidDomainExamQuestions[0].GetResponseOptions()
 	ValidDBExamQuestionMultipleChoice = examlibrary_postgres.ExamLibraryExamQuestion{
 		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[0].GetIdUUID()),
 		CreatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
@@ -236,8 +243,9 @@ var (
 			String: *ValidDomainExamQuestions[0].GetCorrectAnswer(),
 			Valid:  true,
 		},
-		PossiblePoints: int32(ValidDomainExamQuestions[0].GetPossiblePoints()),
-		QuestionType:   ValidDomainExamQuestions[0].GetQuestionType().String(),
+		PossiblePoints:  int32(ValidDomainExamQuestions[0].GetPossiblePoints()),
+		QuestionType:    ValidDomainExamQuestions[0].GetQuestionType().String(),
+		ResponseOptions: *responseOpts,
 	}
 	ValidDBExamQuestion = examlibrary_postgres.SaveExamQuestionParams{
 		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[0].GetIdUUID()),

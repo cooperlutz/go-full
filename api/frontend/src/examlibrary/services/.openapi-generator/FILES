@@ -1,9 +1,9 @@
-.openapi-generator-ignore
 apis/ExamlibraryApi.ts
 apis/index.ts
 index.ts
 models/Exam.ts
 models/ExamMetadata.ts
 models/ExamQuestion.ts
+models/QuestionType.ts
 models/index.ts
 runtime.ts

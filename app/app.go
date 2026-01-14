@@ -10,6 +10,7 @@ import (
 
 	"github.com/cooperlutz/go-full/api/frontend"
 	"github.com/cooperlutz/go-full/app/config"
+	"github.com/cooperlutz/go-full/internal/examlibrary"
 	"github.com/cooperlutz/go-full/internal/pingpong"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
@@ -59,6 +60,12 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	// Exam Library
+	examLibraryModule, err := examlibrary.NewModule(conn)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
 
@@ -84,14 +91,15 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	Each domain module's router is created and registered with the main HTTP server handler.
 	the resulting mountpoint will be {root}/{service-name}/[routes defined in the service router]
 	----------------------------------------------------------------------------------- */
-	httpServer.RegisterController("/pingpong", pingPongModule.RestApi) // mounts `/pingpong/api/v1/ping-pong`
+	httpServer.RegisterController("/pingpong", pingPongModule.RestApi)       // mounts `/pingpong/api/v1/ping-pong`
+	httpServer.RegisterController("/examlibrary", examLibraryModule.RestApi) // mounts `/examlibrary/api/v1/exam-library`
 
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
-	// We increment the WaitGroup counter by 2 for the two servers we plan to run.
-	wg.Add(2) //nolint:mnd // we have two goroutines to wait for
+	// We increment the WaitGroup counter by 3 for the three servers we plan to run.
+	wg.Add(3) //nolint:mnd // we have three goroutines to wait for
 
 	go func() {
 		defer wg.Done()
@@ -103,6 +111,11 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		defer wg.Done()
 
 		pingPongModule.PubSub.Run()
+	}()
+	go func() {
+		defer wg.Done()
+
+		examLibraryModule.PubSub.Run()
 	}()
 
 	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)
