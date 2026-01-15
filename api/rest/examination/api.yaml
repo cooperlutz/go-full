@@ -1,0 +1,46 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Examination API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /api/v1/exams/available:
+    get:
+      operationId: getAvailableExams
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Exam:
+      type: object
+      properties:
+        name:
+          type: string
+        gradeLevel:
+          type: integer
+          format: int32
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -16,6 +16,7 @@ packages:
     config:
       filename: mocks_pkg_eeventdriven.gen.go
       all: true
+
 # PingPong Module
   github.com/cooperlutz/go-full/internal/pingpong/domain/repository:
     config:
@@ -43,3 +44,19 @@ packages:
     config:
       filename: mocks_examlibrary_usecase.gen.go
       all: true
+
+# Examination Module
+  github.com/cooperlutz/go-full/internal/examination/domain/examination:
+    config:
+      filename: mocks_examination_domain.gen.go
+      all: true
+  github.com/cooperlutz/go-full/internal/examination/adapters/outbound:
+    config:
+      filename: mocks_examination_adapters_outbound.gen.go
+      all: true
+      include-auto-generated: true
+  github.com/cooperlutz/go-full/internal/examination/adapters/inbound:
+    config:
+      filename: mocks_examination_adapters_inbound.gen.go
+      all: true
+      include-auto-generated: true
