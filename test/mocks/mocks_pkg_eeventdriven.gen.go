@@ -5,6 +5,8 @@
 package mocks
 
 import (
+	"github.com/ThreeDotsLabs/watermill-sql/v4/pkg/sql"
+	"github.com/ThreeDotsLabs/watermill/message"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -88,6 +90,98 @@ func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Return(err error) *MockIPubS
 }
 
 func (_c *MockIPubSubEventProcessor_EmitEvent_Call) RunAndReturn(run func(topic string, payload interface{}) error) *MockIPubSubEventProcessor_EmitEvent_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetRouter provides a mock function for the type MockIPubSubEventProcessor
+func (_mock *MockIPubSubEventProcessor) GetRouter() *message.Router {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetRouter")
+	}
+
+	var r0 *message.Router
+	if returnFunc, ok := ret.Get(0).(func() *message.Router); ok {
+		r0 = returnFunc()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*message.Router)
+		}
+	}
+	return r0
+}
+
+// MockIPubSubEventProcessor_GetRouter_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetRouter'
+type MockIPubSubEventProcessor_GetRouter_Call struct {
+	*mock.Call
+}
+
+// GetRouter is a helper method to define mock.On call
+func (_e *MockIPubSubEventProcessor_Expecter) GetRouter() *MockIPubSubEventProcessor_GetRouter_Call {
+	return &MockIPubSubEventProcessor_GetRouter_Call{Call: _e.mock.On("GetRouter")}
+}
+
+func (_c *MockIPubSubEventProcessor_GetRouter_Call) Run(run func()) *MockIPubSubEventProcessor_GetRouter_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockIPubSubEventProcessor_GetRouter_Call) Return(router *message.Router) *MockIPubSubEventProcessor_GetRouter_Call {
+	_c.Call.Return(router)
+	return _c
+}
+
+func (_c *MockIPubSubEventProcessor_GetRouter_Call) RunAndReturn(run func() *message.Router) *MockIPubSubEventProcessor_GetRouter_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetSubscriber provides a mock function for the type MockIPubSubEventProcessor
+func (_mock *MockIPubSubEventProcessor) GetSubscriber() *sql.Subscriber {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetSubscriber")
+	}
+
+	var r0 *sql.Subscriber
+	if returnFunc, ok := ret.Get(0).(func() *sql.Subscriber); ok {
+		r0 = returnFunc()
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*sql.Subscriber)
+		}
+	}
+	return r0
+}
+
+// MockIPubSubEventProcessor_GetSubscriber_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSubscriber'
+type MockIPubSubEventProcessor_GetSubscriber_Call struct {
+	*mock.Call
+}
+
+// GetSubscriber is a helper method to define mock.On call
+func (_e *MockIPubSubEventProcessor_Expecter) GetSubscriber() *MockIPubSubEventProcessor_GetSubscriber_Call {
+	return &MockIPubSubEventProcessor_GetSubscriber_Call{Call: _e.mock.On("GetSubscriber")}
+}
+
+func (_c *MockIPubSubEventProcessor_GetSubscriber_Call) Run(run func()) *MockIPubSubEventProcessor_GetSubscriber_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run()
+	})
+	return _c
+}
+
+func (_c *MockIPubSubEventProcessor_GetSubscriber_Call) Return(subscriber *sql.Subscriber) *MockIPubSubEventProcessor_GetSubscriber_Call {
+	_c.Call.Return(subscriber)
+	return _c
+}
+
+func (_c *MockIPubSubEventProcessor_GetSubscriber_Call) RunAndReturn(run func() *sql.Subscriber) *MockIPubSubEventProcessor_GetSubscriber_Call {
 	_c.Call.Return(run)
 	return _c
 }

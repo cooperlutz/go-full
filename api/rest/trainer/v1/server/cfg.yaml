@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+package: ports
+output: ../../../../../internal/trainer/ports/rest.gen.go
+generate:
+  embedded-spec: true
+  strict-server: true
+  models: true
+  chi-server: true # compatible with net/http

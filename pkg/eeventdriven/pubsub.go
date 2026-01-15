@@ -17,6 +17,8 @@ type IPubSubEventProcessor interface {
 	EmitEvent(topic string, payload interface{}) error
 	Run()
 	RegisterSubscriberHandlers() error
+	GetRouter() *message.Router
+	GetSubscriber() *sql.Subscriber
 }
 
 // BasePgsqlPubSubProcessor provides foundational Pub/Sub capabilities using Watermill and PostgreSQL.

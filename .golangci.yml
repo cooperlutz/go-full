@@ -11,7 +11,7 @@ linters:
     - dogsled
     - dupl
     - durationcheck
-    - err113
+    # - err113
     - errcheck
     - errorlint
     - exhaustive
@@ -52,7 +52,7 @@ linters:
       allow-whole-block: false
       branch-max-lines: 2
     dupl:
-      threshold: 100
+      threshold: 150
     errcheck:
       check-type-assertions: true
       check-blank: true

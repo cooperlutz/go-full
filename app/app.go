@@ -12,6 +12,7 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 	"github.com/cooperlutz/go-full/internal/examlibrary"
 	"github.com/cooperlutz/go-full/internal/pingpong"
+	"github.com/cooperlutz/go-full/internal/trainer"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
@@ -66,6 +67,11 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	trainerModule, err := trainer.NewModule(conn)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
 
@@ -93,7 +99,7 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	----------------------------------------------------------------------------------- */
 	httpServer.RegisterController("/pingpong", pingPongModule.RestApi)       // mounts `/pingpong/api/v1/ping-pong`
 	httpServer.RegisterController("/examlibrary", examLibraryModule.RestApi) // mounts `/examlibrary/api/v1/exam-library`
-
+	httpServer.RegisterController("/trainer", trainerModule.RestApi)         // mounts `/trainer/api/v1/trainer`
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
