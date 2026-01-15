@@ -1,3 +1,9 @@
+## v0.1.4 (2026-01-15)
+
+### Fix
+
+- **deps-dev**: bump vite from 7.2.7 to 7.3.1 in /api/frontend (#104)
+
 ## v0.1.3 (2026-01-15)
 
 ### Fix
