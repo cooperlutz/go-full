@@ -1,3 +1,9 @@
+## v0.1.5 (2026-01-15)
+
+### Fix
+
+- **deps**: bump @vueuse/core from 14.0.0 to 14.1.0 in /api/frontend (#105)
+
 ## v0.1.4 (2026-01-15)
 
 ### Fix
