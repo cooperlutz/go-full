@@ -18,14 +18,8 @@ type ExaminationModule struct {
 
 // NewModule - Initializes the Examination module with its needed dependencies.
 func NewModule(pgconn *pgxpool.Pool) (*ExaminationModule, error) {
-	basePS, err := eeventdriven.NewPubSub(pgconn)
-	if err != nil {
-		return nil, err
-	}
-
 	application := app.NewApplication(
 		pgconn,
-		basePS,
 	)
 	router := hteeteepee.NewRouter(
 		"examination",
@@ -39,7 +33,7 @@ func NewModule(pgconn *pgxpool.Pool) (*ExaminationModule, error) {
 	)
 	module := &ExaminationModule{
 		RestApi: handler,
-		PubSub:  basePS,
+		PubSub:  nil,
 	}
 
 	return module, nil

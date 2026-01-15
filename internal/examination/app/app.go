@@ -4,7 +4,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/examination/adapters/outbound"
 	"github.com/cooperlutz/go-full/internal/examination/app/query"
 	"github.com/cooperlutz/go-full/pkg/deebee"
-	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 )
 
 type Application struct {
@@ -15,8 +14,9 @@ type Queries struct {
 	AvailableExams query.AvailableExamsHandler
 }
 
-func NewApplication(pgconn deebee.IDatabase, basePS *eeventdriven.BasePgsqlPubSubProcessor) Application {
-	examinationRepository := outbound.New(pgconn)
+// NewApplication initializes the Examination application with its dependencies.
+func NewApplication(pgconn deebee.IDatabase) Application {
+	examinationRepository := outbound.NewPostgresAdapter(pgconn)
 	app := Application{
 		Queries: Queries{
 			AvailableExams: query.NewAvailableExamsHandler(examinationRepository),

@@ -1,20 +1,10 @@
 package outbound
 
 import (
-	"context"
-
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 )
 
-func (q *Queries) FindAll(ctx context.Context) ([]examination.Exam, error) {
-	exams, err := q.FindAllExams(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return ExaminationExamsToDomain(exams), nil
-}
-
+// ToDomain maps the ExaminationExam to the domain entity.
 func (e ExaminationExam) ToDomain() examination.Exam {
 	return examination.Exam{
 		Name:       e.Name,
@@ -22,6 +12,7 @@ func (e ExaminationExam) ToDomain() examination.Exam {
 	}
 }
 
+// ExaminationExamsToDomain maps a slice of ExaminationExam to a slice of domain Exam entities.
 func ExaminationExamsToDomain(exams []ExaminationExam) []examination.Exam {
 	domainExams := make([]examination.Exam, len(exams))
 	for i, exam := range exams {
