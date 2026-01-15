@@ -1,3 +1,9 @@
+## v0.1.2 (2026-01-15)
+
+### Fix
+
+- **deps-dev**: bump knip from 5.76.0 to 5.80.2 in /api/frontend (#106)
+
 ## v0.1.1 (2026-01-15)
 
 ### Fix
