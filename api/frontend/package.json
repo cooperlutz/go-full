@@ -22,7 +22,7 @@
   "dependencies": {
     "@lucide/lab": "^0.1.2",
     "@tailwindcss/vite": "^4.1.18",
-    "@vueuse/core": "^14.0.0",
+    "@vueuse/core": "^14.1.0",
     "chart.js": "^4.5.1",
     "daisyui": "^5.5.8",
     "lucide-vue-next": "^0.562.0",
