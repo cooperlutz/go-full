@@ -1,3 +1,9 @@
+## v0.1.10 (2026-01-16)
+
+### Fix
+
+- simplify frontend navbar and sidebar (#115)
+
 ## v0.1.9 (2026-01-16)
 
 ### Fix
