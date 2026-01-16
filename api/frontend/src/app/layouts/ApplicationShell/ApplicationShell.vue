@@ -1,32 +1,116 @@
 <script setup lang="ts">
-import NavBar from "~/app/layouts/ApplicationShell/NavBar/NavBar.vue";
-import Footer from "~/app/layouts/ApplicationShell/Footer/FooterPrimary.vue";
+import { ref, h } from "vue";
+import {
+  Icon,
+  LayoutDashboard,
+  LibraryBig,
+  type LucideIcon,
+  PanelLeftClose,
+  Settings,
+  File,
+} from "lucide-vue-next";
+import { batBall } from "@lucide/lab";
 
-import SideBar from "~/app/layouts/ApplicationShell/SideBar/SideBar.vue";
+import Footer from "~/app/layouts/ApplicationShell/Footer/FooterPrimary.vue";
+import LogoName from "./NavBar/NavBarLogo.vue";
+import CONFIG from "~/app/config";
+
+// Create a functional component for the custom icon
+const PingPongIcon = () => h(Icon, { name: "ping-pong", iconNode: batBall });
+
+type SidebarItem = {
+  name: string;
+  url?: string;
+  icon?: LucideIcon;
+};
+
+const topSidebarItems = ref<SidebarItem[]>([
+  { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { name: "Ping Pong", url: "/ping-pong", icon: PingPongIcon },
+  { name: "Exam Library", url: "/exam-library", icon: LibraryBig },
+]);
+const bottomSidebarItems = ref<SidebarItem[]>([
+  { name: "Docs", url: CONFIG.DOCS_URL, icon: File },
+  { name: "Settings", url: "/settings", icon: Settings },
+]);
 </script>
 
 <template>
   <div id="app-shell" class="antialiased">
-    <NavBar />
-    <SideBar>
-      <template v-slot:content>
+    <div class="drawer lg:drawer-open">
+      <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+      <div id="main-content" class="drawer-content">
+        <!-- Navbar -->
+        <nav class="navbar w-full bg-info fixed top-0 z-50">
+          <label
+            for="my-drawer-4"
+            aria-label="open sidebar"
+            class="btn btn-square btn-ghost"
+          >
+            <!-- Sidebar toggle icon -->
+            <PanelLeftClose />
+          </label>
+          <div class="px-4">
+            <LogoName />
+          </div>
+        </nav>
+        <!-- Page content here -->
         <main>
-          <div class="flex pt-8 overflow-hidden">
-            <div
-              id="main-content"
-              class="relative w-full h-full min-h-screen overflow-y-auto ml-64 flex flex-col items-start bg-base-100"
-            >
-              <div class="w-full max-w-7xl p-10">
-                <!-- Router View for Main Content -->
-                <router-view v-slot="{ Component }">
-                  <component :is="Component" />
-                </router-view>
-              </div>
-              <Footer />
-            </div>
+          <div class="w-full max-w-7xl p-10 mt-10">
+            <!-- Router View for Main Content -->
+            <router-view v-slot="{ Component }">
+              <component :is="Component" />
+            </router-view>
           </div>
         </main>
-      </template>
-    </SideBar>
+        <Footer />
+      </div>
+
+      <div class="drawer-side is-drawer-close:overflow-visible">
+        <label
+          for="my-drawer-4"
+          aria-label="close sidebar"
+          class="drawer-overlay"
+        ></label>
+        <div
+          class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-64"
+        >
+          <!-- Sidebar content here -->
+          <ul id="sidebar-top" class="menu w-full grow">
+            <li v-for="item in topSidebarItems" :key="item.name">
+              <a :href="item.url" class="hover:link hover:text-info">
+                <button>
+                  <component
+                    :is="item.icon"
+                    :size="16"
+                    class="h-6 w-6"
+                  ></component>
+                </button>
+                <span class="is-drawer-close:hidden">
+                  {{ item.name }}
+                </span>
+              </a>
+            </li>
+          </ul>
+          <!-- Bottom Sidebar Items -->
+          <ul id="sidebar-bottom" class="menu w-full">
+            <li v-for="item in bottomSidebarItems" :key="item.name">
+              <a :href="item.url" class="hover:link hover:text-info">
+                <button>
+                  <component
+                    :is="item.icon"
+                    :size="16"
+                    class="h-6 w-6"
+                  ></component>
+                </button>
+                <span class="is-drawer-close:hidden">
+                  {{ item.name }}
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
