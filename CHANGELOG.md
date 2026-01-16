@@ -1,3 +1,9 @@
+## v0.1.8 (2026-01-16)
+
+### Fix
+
+- correction of frontend dir in azd preprovision (#113)
+
 ## v0.1.7 (2026-01-16)
 
 ### Fix
