@@ -9,7 +9,10 @@
         "value": "${AZURE_LOCATION}"
       },
       "dbPassword": {
-        "value": "${DB_PASSWORD}"
+        "value": "${DB_PASSWORD}",
+        "metadata": {
+          "description": "The administrator password for the database."
+        }
       },
       "containerRegPat": {
         "value": "${CONTAINER_REG_PAT}"
