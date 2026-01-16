@@ -6,7 +6,7 @@ metadata:
 hooks:
   preprovision: 
     shell: sh
-    run: pnpm -C ../../web run build
+    run: pnpm -C ../../api/frontend run build
 services:
   app:
     project: ../../
