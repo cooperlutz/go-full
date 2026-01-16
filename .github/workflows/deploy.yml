@@ -69,6 +69,7 @@ jobs:
       - name: Deploy / Provision Immutable Azure Infrastructure
         run: azd provision -C ./deploy/azure --no-prompt --no-state
         env:
+          APP_NAME: "go-full"
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           CONTAINER_REG_PAT: ${{ secrets.CONTAINER_REG_PAT }}
           CONTAINER_REG_USERNAME: ${{ vars.CONTAINER_REG_USERNAME }}
