@@ -1,3 +1,9 @@
+## v0.1.6 (2026-01-16)
+
+### Fix
+
+- **deps-dev**: bump happy-dom from 20.0.10 to 20.1.0 in /api/frontend (#108)
+
 ## v0.1.5 (2026-01-15)
 
 ### Fix
