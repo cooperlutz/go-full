@@ -1,6 +1,6 @@
 # Docs: https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/azd-schema
 # Raw Schema: https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
-name: pingpong
+name: go-full
 metadata:
   template: none
 hooks:
