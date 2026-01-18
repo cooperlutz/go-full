@@ -1,3 +1,9 @@
+## v0.1.13 (2026-01-18)
+
+### Fix
+
+- fix env var in deploy action (#118)
+
 ## v0.1.12 (2026-01-18)
 
 ### Fix
