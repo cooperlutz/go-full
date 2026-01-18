@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 env:
-  REGISTRY: ghcr.io
+  CONTAINER_IMAGE: ghcr.io/cooperlutz/go-full:latest
   IMAGE_NAME: ${{ github.repository }}
   AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
   AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
@@ -79,7 +79,7 @@ jobs:
           DB_NAME: ${{ vars.DB_NAME }}
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
-          IMAGE_TAG: "latest"
+          CONTAINER_IMAGE: ${{ env.CONTAINER_IMAGE }}
 
       - name: Output AZD Info
         run: azd show -C ./deploy/azure

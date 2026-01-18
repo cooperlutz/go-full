@@ -125,9 +125,6 @@ azd-show: ### run Azure Developer CLI
 	azd show -C ${AZD_CONF}
 .PHONY: azd-show
 
-azd-deploy: ### run azd deployment
-	azd deploy -C ${AZD_CONF} --debug
-
 azd-down: ### run azd down
 	azd down -C ${AZD_CONF} --debug
 

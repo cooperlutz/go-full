@@ -3,14 +3,11 @@ param location string = resourceGroup().location
 param tags object = {}
 param logAnalyticsWorkspaceName string
 
-/*
-  RESOURCES
-*/
+/* RESOURCES */
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-03-01' = {
   name: name
   location: location
   tags: tags
-  
   properties: {
     appLogsConfiguration: {
       destination: 'log-analytics'
@@ -19,7 +16,6 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2022-03-01'
         sharedKey: logAnalyticsWorkspace.listKeys().primarySharedKey
       }
     }
-    
   }
 }
 
@@ -27,8 +23,7 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10
   name: logAnalyticsWorkspaceName
 }
 
-/*
-  OUTPUTS
-*/
+/* OUTPUTS */
 output defaultDomain string = containerAppsEnvironment.properties.defaultDomain
 output name string = containerAppsEnvironment.name
+output ipAddress string = containerAppsEnvironment.properties.staticIp

@@ -3,10 +3,16 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "name": {
-        "value": "${AZURE_ENV_NAME}"
+        "value": "${AZURE_ENV_NAME}",
+        "metadata": {
+          "description":"Azure environment name (e.g. dev, test, prod)"
+        }
       },
       "location": {
-        "value": "${AZURE_LOCATION}"
+        "value": "${AZURE_LOCATION}",
+        "metadata": {
+          "description":"Azure location for all resources"
+        }
       },
       "dbPassword": {
         "value": "${DB_PASSWORD}",
@@ -15,34 +21,64 @@
         }
       },
       "containerRegPat": {
-        "value": "${CONTAINER_REG_PAT}"
+        "value": "${CONTAINER_REG_PAT}",
+        "metadata": {
+          "description": "Personal Access Token for the container registry"
+        }
       },
       "containerRegUserName": {
-        "value": "${CONTAINER_REG_USERNAME}"
+        "value": "${CONTAINER_REG_USERNAME}",
+        "metadata": {
+          "description": "Username for accessing the container registry"
+        }
       },
       "applicationName": {
-        "value": "${APP_NAME}"
+        "value": "${APPLICATION_NAME}",
+        "metadata": {
+          "description": "The name of the application to deploy."
+        }
       },
       "allowedInboundIP" : {
-        "value": "${INBOUND_IP_ALLOW}"
+        "value": "${ALLOWED_INBOUND_IP}",
+        "metadata": {
+          "description": "The allowed inbound IP address for accessing the application."
+        }
       },
       "databaseAdminUser": {
-        "value": "${DB_USER}"
+        "value": "${DB_USER}",
+        "metadata": {
+          "description": "The administrator username for the database."
+        }
       },
       "databaseType": {
-        "value": "${DB_TYPE}"
+        "value": "${DB_TYPE}",
+        "metadata": {
+          "description": "The type of database to deploy (e.g., postgres)."
+        }
       },
       "databaseName": {
-        "value": "${DB_NAME}"
+        "value": "${DB_NAME}",
+        "metadata": {
+          "description": "The name of the database to create."
+        }
       },
       "databaseSSLMode": {
-        "value": "${DB_SSLMODE}"
+        "value": "${DB_SSLMODE}",
+        "metadata": {
+          "description": "The SSL mode for database connections."
+        }
       },
       "httpPort": {
-        "value": "${HTTP_PORT}"
+        "value": "${HTTP_PORT}",
+        "metadata": {
+          "description": "The HTTP port for the application."
+        }
       },
-      "imageTag": {
-        "value": "${IMAGE_TAG}"
+      "containerImage": {
+        "value": "${CONTAINER_IMAGE}",
+        "metadata": {
+          "description": "The container image tag to deploy. Should include the full image path. E.g. ghcr.io/username/repo:tag"
+        }
       }
     }
   }

@@ -18,7 +18,7 @@ param containerRegPat string
 param containerRegUserName string
 
 @description('IP Address or CIDR range allowed to access the application')
-param allowedInboundIP string 
+param allowedInboundIP string
 
 @description('Name of the overall application')
 param applicationName string
@@ -27,7 +27,7 @@ param applicationName string
 param databaseAdminUser string
 
 @description('Tag of the container image to deploy as defined in the container registry')
-param imageTag string
+param containerImage string
 
 @description('Type of database to use. Supported values: postgres')
 param databaseType string
@@ -41,14 +41,15 @@ param databaseSSLMode string
 @description('HTTP port for the application')
 param httpPort string
 
-/*
-  VARIABLES
-*/
-var resourceToken = toLower(uniqueString(subscription().id, name, location))
+/* VARIABLES */
 
+// General metadata
+var resourceToken = toLower(uniqueString(subscription().id, name))
 var prefix = '${applicationName}-${name}-${resourceToken}'
 var resourceGroupName = '${prefix}-rg'
-var tags = { 'azd-env-name': name }
+var tags = {
+  'azd-env-name': name
+}
 // Observability
 var appInsightsName = replace('${take(prefix,19)}-ai', '--', '-')
 var logAnalyticsName = replace('${take(prefix,19)}-la', '--', '-')
@@ -56,8 +57,6 @@ var logAnalyticsName = replace('${take(prefix,19)}-la', '--', '-')
 var containerAppsEnvironmentName = '${prefix}-containerapps-env'
 var containerRegSecretName = 'ghcr-pat'
 var containerRegServer = 'ghcr.io'
-var containerImageName = '${containerRegServer}/cooperlutz/go-full:${imageTag}'
-// var containerImageName = imageTag
 var ghRegistry = {
   server: containerRegServer
   username: containerRegUserName
@@ -66,11 +65,8 @@ var ghRegistry = {
 var containerAppName = replace('${take('${applicationName}',19)}-ca', '--', '-')
 var serviceIdentityName = '${prefix}-identity'
 // Database
+var dbNameWithoutSlash = replace(databaseName, '/', '')
 var postgresServerName = replace('${take(prefix,18)}-psql', '--', '-')
-
-var databases = [
-  databaseName
-]
 var postgresVersion = '16'
 var dbSizeInGB = 32
 var dbServerSku = {
@@ -78,38 +74,16 @@ var dbServerSku = {
   tier: 'Burstable'
 }
 
-/*
-  RESOURCES
-*/
+/* RESOURCES */
+
+@description('Resource Group to contain all resources')
 resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: resourceGroupName
   location: location
   tags: tags
 }
 
-/*
-  MODULES
-*/
-module postgresServer 'database/postgresql.bicep' = {
-  name: 'postgresql'
-  scope: rg
-  params: {
-    name: postgresServerName
-    location: location
-    tags: tags
-    sku: dbServerSku
-    storage: {
-      storageSizeGB: dbSizeInGB
-    }
-    version: postgresVersion
-    administratorLogin: databaseAdminUser
-    administratorLoginPassword: dbPassword
-    allowAzureIPsFirewall: true
-    allowAllIPsFirewall: true
-    databaseNames: databases
-  }
-}
-
+@description('Log Analytics workspace for monitoring')
 module logAnalytics 'observability/log-analytics.bicep' = {
   name: 'logAnalytics'
   scope: rg
@@ -120,6 +94,7 @@ module logAnalytics 'observability/log-analytics.bicep' = {
   }
 }
 
+@description('Application Insights for monitoring')
 module applicationInsights 'observability/application-insights.bicep' = {
   name: 'applicationInsights'
   scope: rg
@@ -131,8 +106,8 @@ module applicationInsights 'observability/application-insights.bicep' = {
   }
 }
 
-// Container apps host (including container registry)
-module containerApps 'app/container-apps.bicep' = {
+@description('Container Apps environment')
+module containerApps 'containers/container-apps.bicep' = {
   name: 'container-apps'
   scope: rg
   params: {
@@ -144,9 +119,36 @@ module containerApps 'app/container-apps.bicep' = {
   }
 }
 
-// Web frontend
-module web 'app.bicep' = {
-  name: 'web'
+@description('append the container apps environment IP to allowed inbound IPs for the database')
+var allowedInboundIPs = [
+  allowedInboundIP
+  containerApps.outputs.environmentIpAddress
+]
+
+/* MODULES */
+@description('PostgreSQL database server')
+module postgresServer 'database/postgresql.bicep' = {
+  name: 'postgresql'
+  scope: rg
+  params: {
+    name: postgresServerName
+    location: location
+    tags: tags
+    sku: dbServerSku
+    storage: {
+      storageSizeGB: dbSizeInGB
+    }
+    allowedSingleIPs: allowedInboundIPs
+    version: postgresVersion
+    administratorLoginUserName: databaseAdminUser
+    administratorLoginPassword: dbPassword
+    databaseName: dbNameWithoutSlash
+  }
+}
+
+@description('application workload')
+module app 'app/app.bicep' = {
+  name: 'app'
   scope: rg
   params: {
     name: containerAppName
@@ -154,12 +156,12 @@ module web 'app.bicep' = {
     tags: tags
     identityName: serviceIdentityName
     registryCreds: ghRegistry
-    containerImageName: containerImageName
+    containerImageName: containerImage
     containerAppsEnvironmentName: containerApps.outputs.environmentName
     postgresDomainName: postgresServer.outputs.POSTGRES_DOMAIN_NAME
     postgresUser: databaseAdminUser
     postgresPassword: dbPassword
-    postgresDatabaseName: databaseName
+    postgresDatabaseName: dbNameWithoutSlash
     containerRegPat: containerRegPat
     containerRegSecretName: containerRegSecretName
     allowedInboundIP: allowedInboundIP
@@ -168,12 +170,3 @@ module web 'app.bicep' = {
     dbType: databaseType
   }
 }
-/*
-  OUTPUTS
-*/
-output postgresServerName string = postgresServer.outputs.POSTGRES_SERVER_NAME
-output postgresDomainName string = postgresServer.outputs.POSTGRES_DOMAIN_NAME
-output postgresAdminUsername string = postgresServer.outputs.POSTGRES_ADMIN_USERNAME
-output AZURE_RESOURCE_GROUP string = rg.name
-output POSTGRES_SERVER_NAME string = postgresServer.outputs.POSTGRES_SERVER_NAME
-output POSTGRES_SERVER_USERNAME string = postgresServer.outputs.POSTGRES_ADMIN_USERNAME

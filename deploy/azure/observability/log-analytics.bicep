@@ -10,9 +10,7 @@ param tags object = {}
 @description('The number of days to retain logs')
 param retentionInDays int = 30
 
-/*
-  RESOURCES
-*/
+/* RESOURCES */
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   name: name
   location: location
@@ -28,8 +26,6 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
   }
 }
 
-/*
-  OUTPUTS
-*/
+/* OUTPUTS */
 output id string = logAnalytics.id
 output name string = logAnalytics.name
