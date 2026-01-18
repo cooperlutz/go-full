@@ -10,9 +10,7 @@ param tags object = {}
 @description('The resource ID of the Log Analytics workspace')
 param workspaceResourceId string
 
-/*
-  RESOURCES
-*/
+/* RESOURCES */
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: name
   location: location
@@ -27,10 +25,3 @@ resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: workspaceResourceId
   }
 }
-
-/*
-  OUTPUTS
-*/
-output connectionString string = applicationInsights.properties.ConnectionString
-output instrumentationKey string = applicationInsights.properties.InstrumentationKey
-output name string = applicationInsights.name

@@ -19,18 +19,14 @@ param postgresPassword string
 @secure()
 param containerRegPat string
 
-/*
-  RESOURCES
-*/
+/* RESOURCES */
 resource webIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
   location: location
 }
 
-/*
-  MODULES
-*/
-module app 'app/container-app-upsert.bicep' = {
+/* MODULES */
+module app '../containers/container-app-upsert.bicep' = {
   name: '${serviceName}-container-app-module'
   params: {
     name: name
@@ -39,6 +35,7 @@ module app 'app/container-app-upsert.bicep' = {
     identityName: webIdentity.name
     registryCreds: registryCreds
     imageName: containerImageName
+    containerName: serviceName
     containerAppsEnvironmentName: containerAppsEnvironmentName
     allowedInboundIP: allowedInboundIP
     env: [
@@ -104,11 +101,3 @@ module app 'app/container-app-upsert.bicep' = {
     ]
   }
 }
-
-/*
-  OUTPUTS
-*/
-output SERVICE_WEB_IDENTITY_PRINCIPAL_ID string = webIdentity.properties.principalId
-output SERVICE_WEB_NAME string = app.outputs.name
-output SERVICE_WEB_URI string = app.outputs.uri
-output SERVICE_WEB_IMAGE_NAME string = app.outputs.imageName
