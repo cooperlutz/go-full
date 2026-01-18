@@ -1,3 +1,9 @@
+## v0.1.12 (2026-01-18)
+
+### Fix
+
+- rename env var in github action (#117)
+
 ## v0.1.11 (2026-01-18)
 
 ### Fix
