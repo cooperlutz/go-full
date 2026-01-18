@@ -73,7 +73,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           CONTAINER_REG_PAT: ${{ secrets.CONTAINER_REG_PAT }}
           CONTAINER_REG_USERNAME: ${{ vars.CONTAINER_REG_USERNAME }}
-          INBOUND_IP_ALLOW: ${{ vars.INBOUND_IP_ALLOW }}
+          ALLOWED_INBOUND_IP: ${{ vars.ALLOWED_INBOUND_IP }}
           DB_USER: ${{ vars.DB_USER }}
           DB_TYPE: ${{ vars.DB_TYPE }}
           DB_NAME: ${{ vars.DB_NAME }}
