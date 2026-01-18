@@ -1,3 +1,9 @@
+## v0.1.14 (2026-01-18)
+
+### Fix
+
+- set inbound ip as secret rather than var in deploy pipeline (#119)
+
 ## v0.1.13 (2026-01-18)
 
 ### Fix
