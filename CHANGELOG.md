@@ -1,3 +1,9 @@
+## v0.1.11 (2026-01-18)
+
+### Fix
+
+- overhaul azure deployment (#116)
+
 ## v0.1.10 (2026-01-16)
 
 ### Fix
