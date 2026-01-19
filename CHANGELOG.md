@@ -1,3 +1,9 @@
+## v0.1.15 (2026-01-19)
+
+### Fix
+
+- restructuring docs and adding relevant deployment documentation (#129)
+
 ## v0.1.14 (2026-01-18)
 
 ### Fix
