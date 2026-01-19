@@ -6,4 +6,4 @@ The frontend application is packaged into relevant build files utilizing Vite, o
 
 The backend application serves these files according to the logic defined within `/api/frontend/frontend.go`
 
-![build](../_img/build.drawio.png)
+![build](../../_img/build.drawio.png)
