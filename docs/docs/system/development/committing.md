@@ -4,7 +4,7 @@ We use [Commitizen](https://commitizen-tools.github.io/commitizen/) to standardi
 
 Commits should be made against local feature branches, and pull requests should be created to merge changes into `main`.
 
-![commit](../_img/commit.drawio.png)
+![commit](../../_img/commit.drawio.png)
 
 ## Make a Commit
 

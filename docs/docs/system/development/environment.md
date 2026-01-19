@@ -1,8 +1,8 @@
 # Development Environment
 
-**Relevant Decision Ref:** [ADR-00008](../decisions/00008_dev_env.md)
+**Relevant Decision Ref:** [ADR-00008](../../decisions/00008_dev_env.md)
 
-![dev environment](../_img/dev_env.drawio.png)
+![dev environment](../../_img/dev_env.drawio.png)
 
 - Nginx: Proxy & Load Balancer enabling container communication and routing
 - App: Compiled Go backend application container
