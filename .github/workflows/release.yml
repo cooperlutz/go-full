@@ -55,7 +55,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Bump version & generate changelog
-        uses: commitizen-tools/commitizen-action@bb4f1df6601e2a1a891506581b0c53acdc88e07d # v0.26.0
+        uses: commitizen-tools/commitizen-action@2e8226b3e7e141ae28de9942957f267eb5d68fb6 # v0.27.0
         with:
           push: false
           
