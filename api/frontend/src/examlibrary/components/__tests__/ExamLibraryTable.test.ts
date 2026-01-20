@@ -50,17 +50,12 @@ describe("ExamLibraryTable", () => {
     await nextTick();
 
     // Assert
-    expect(wrapper.text()).toContain("Loading exams...");
+    expect(wrapper.find("#exam-table-loading").exists()).toBe(true);
   });
 
   it("shows error message on fetch failure", async () => {
     // Arrange
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-        statusText: "Internal Server Error",
-      } as Response),
-    ) as unknown as typeof fetch;
+    global.fetch = vi.fn(() => Promise.reject(new Error("ruh roh")));
 
     const wrapper = mount(ExamLibraryTable);
 
@@ -70,7 +65,7 @@ describe("ExamLibraryTable", () => {
 
     // Assert
     expect(wrapper.text()).toContain(
-      "Error loading exams: ResponseError: Response returned an error code",
+      "FetchError: The request failed and the interceptors did not return an alternative response",
     );
   });
 });
