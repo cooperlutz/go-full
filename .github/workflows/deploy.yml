@@ -6,8 +6,8 @@ name: Deploy
 # TODO: ideally, trigger on tags for production releases. however, Azure Container Apps GitHub integration does not support dynamic tag refs
 # https://learn.microsoft.com/en-us/azure/container-apps/github-actions
 on:
-  # push:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
