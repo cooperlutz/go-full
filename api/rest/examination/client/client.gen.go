@@ -21,8 +21,8 @@ type Error struct {
 
 // Exam defines model for Exam.
 type Exam struct {
-	GradeLevel *int32  `json:"gradeLevel,omitempty"`
-	Name       *string `json:"name,omitempty"`
+	ExamId    *string `json:"examId,omitempty"`
+	StudentId *string `json:"studentId,omitempty"`
 }
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function

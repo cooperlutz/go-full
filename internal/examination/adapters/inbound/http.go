@@ -30,8 +30,8 @@ func (h HttpServer) GetAvailableExams(ctx context.Context, request GetAvailableE
 	var responseExams []Exam
 	for _, e := range exams {
 		responseExams = append(responseExams, Exam{
-			Name:       &e.Name,
-			GradeLevel: &e.GradeLevel,
+			ExamId:    &e.ExamId,
+			StudentId: &e.StudentId,
 		})
 	}
 

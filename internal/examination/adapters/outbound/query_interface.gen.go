@@ -11,7 +11,7 @@ import (
 type Querier interface {
 	//FindAllExams
 	//
-	//  SELECT name, grade_level FROM examination.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams
 	FindAllExams(ctx context.Context) ([]ExaminationExam, error)
 }
 

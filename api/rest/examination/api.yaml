@@ -31,11 +31,10 @@ components:
     Exam:
       type: object
       properties:
-        name:
+        examId:
           type: string
-        gradeLevel:
-          type: integer
-          format: int32
+        studentId:
+          type: string
     Error:
       type: object
       properties:
