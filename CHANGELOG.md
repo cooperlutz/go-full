@@ -1,3 +1,9 @@
+## v0.1.16 (2026-01-20)
+
+### Fix
+
+- examination domain implementation (#130)
+
 ## v0.1.15 (2026-01-19)
 
 ### Fix
