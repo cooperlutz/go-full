@@ -10,12 +10,12 @@ import (
 )
 
 const findAllExams = `-- name: FindAllExams :many
-SELECT name, grade_level FROM examination.exams
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams
 `
 
 // FindAllExams
 //
-//	SELECT name, grade_level FROM examination.exams
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams
 func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 	rows, err := q.db.Query(ctx, findAllExams)
 	if err != nil {
@@ -25,7 +25,17 @@ func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 	var items []ExaminationExam
 	for rows.Next() {
 		var i ExaminationExam
-		if err := rows.Scan(&i.Name, &i.GradeLevel); err != nil {
+		if err := rows.Scan(
+			&i.ExamID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+			&i.Deleted,
+			&i.StudentID,
+			&i.Completed,
+			&i.CompletedAt,
+			&i.StartedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

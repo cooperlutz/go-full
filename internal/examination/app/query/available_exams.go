@@ -7,8 +7,8 @@ import (
 )
 
 type Exam struct {
-	Name       string
-	GradeLevel int32
+	ExamId    string
+	StudentId string
 }
 
 type AvailableExamsReadModel interface {
@@ -33,8 +33,8 @@ func (h AvailableExamsHandler) Handle(ctx context.Context) (d []Exam, err error)
 
 	for _, e := range exams {
 		d = append(d, Exam{
-			Name:       e.Name,
-			GradeLevel: e.GradeLevel,
+			ExamId:    e.GetIdString(),
+			StudentId: e.GetStudentIdString(),
 		})
 	}
 

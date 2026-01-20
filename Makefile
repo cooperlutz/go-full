@@ -196,7 +196,7 @@ install-brews: ### install brew packages
 	brew install mockery
 	brew install goreleaser
 # deployment tools
-	brew tap azure/azd && brew install azd
+	brew tap azure/azd
 .PHONY: install-brews
 
 install-tools: ### install tools

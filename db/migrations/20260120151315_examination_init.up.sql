@@ -5,10 +5,5 @@ CREATE TABLE IF NOT EXISTS examination.exams (
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ,
     deleted_at TIMESTAMPTZ,
-    deleted BOOLEAN NOT NULL DEFAULT FALSE,
-    -- 
-    student_id UUID NOT NULL,
-    completed BOOLEAN NOT NULL DEFAULT FALSE,
-    completed_at TIMESTAMPTZ,
-    started_at TIMESTAMPTZ
+    deleted BOOLEAN NOT NULL DEFAULT FALSE
 );

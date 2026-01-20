@@ -28,8 +28,8 @@ type Error struct {
 
 // Exam defines model for Exam.
 type Exam struct {
-	GradeLevel *int32  `json:"gradeLevel,omitempty"`
-	Name       *string `json:"name,omitempty"`
+	ExamId    *string `json:"examId,omitempty"`
+	StudentId *string `json:"studentId,omitempty"`
 }
 
 // ServerInterface represents all server handlers.
@@ -282,13 +282,13 @@ func (sh *strictHandler) GetAvailableExams(w http.ResponseWriter, r *http.Reques
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/5RSPW/cMAz9KwHb0YicZNOWISgCdOhedGBk2lagL1A84wLD/72gfM4NBYrLJB757j3y",
-	"Pa/gciw5UZIKdoXqZorYyhfmzFoUzoVYPLW2ywPpO2aOKGDBJ3l6hA7ko9D+kyZi2DqIVCtODX0ZVmGf",
-	"Jti2T3h+eycnin45Y/xXbmIc6CctFG4UTRhvU9SWT2NuYC9BZ7qDTyg+p7vnX6/QwUJcfU5g4eG+v+9V",
-	"IRdKWDxYeGqtDgrK3LY1WLxZHgydMVaDC/qAb6HtM5Hoo7c1/tcBLPwgeT5Aql2hA6Zacqr7+Y99v5ue",
-	"hFIjwFKCd43CvFfd7EhNKy8U2x+/M41g4Zu55msu4Zrm9NUQZMYP9WPrYKART0G+pPlfqfYRXairY19k",
-	"d/OU6FzICQ13dGAUVYnVcrC/VzhxAAuzSKnWmHXOVTTdTV3WaJC9GtfuPYZafx4BITsMOlL6P9vfAAAA",
-	"//8TmRJ07gIAAA==",
+	"H4sIAAAAAAAC/5RSPU/kQAz9K8h3ZcQs0E1HgU5015+uMBPvZtB8yXZWi6L895MnGyhAJ1GN1377nt9z",
+	"Fgg1t1qoqIBfQMJEGXv5xFzZisa1EWuk3g51JHuPlTMqeIhFH+5hAH1rtP2kEzGsA2QSwVNHX4eiHMsJ",
+	"1vUdXl9eKaihny6YP8vRBfPz+AXFAKLzSEW/nH4WsFYsx9rBUZPNTDIW1FjLzePvZxjgTCyxFvBwd3u4",
+	"PZhMbVSwRfDw0FsDNNSpL+ewRXe+c7akODxjTPiSuuETqT1mpfPblvCL9HEHmbbAAEzSapHN7f3hsGVc",
+	"lEonwNZSDJ3CvYptth/JqqiU+x9/Mh3Bww/3cU53vaXrwX4Egsz4ZnmsA4x0xDnptzT/K9W/mSu1BI5N",
+	"tzTnQpdGQWm8oR1jKCG2yMH/WWDmBB4m1SbeuWWqogUzrZaynQY5WnDd7z60+t0EpBow2cjo/67/AgAA",
+	"///xdFOE3QIAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

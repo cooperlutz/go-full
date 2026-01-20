@@ -1,0 +1,2 @@
+ALTER TABLE examination.exams
+    ADD COLUMN completed BOOLEAN NOT NULL DEFAULT FALSE;
