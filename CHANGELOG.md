@@ -1,3 +1,9 @@
+## v0.1.18 (2026-01-20)
+
+### Fix
+
+- minor tweak to table err message in order to have a viewable res… (#132)
+
 ## v0.1.17 (2026-01-20)
 
 ### Fix
