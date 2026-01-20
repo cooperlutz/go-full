@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { TriangleAlert } from "lucide-vue-next";
+import { CircleX } from "lucide-vue-next";
 
 import { type ExamMetadata } from "~/examlibrary/services";
 import { useGetFindAllExams } from "~/examlibrary/composables/useGetFindAllExams";
@@ -51,15 +51,11 @@ onMounted(async () => {
       </tbody>
     </table>
 
-    <div v-else-if="!error && allExams == null" id="exam-table-no-exams">
-      <div role="alert" class="alert alert-warning">
-        <TriangleAlert />
-        <span>Warning: No exams found.</span>
-      </div>
-    </div>
-
     <div v-else-if="error" id="exam-table-error">
-      Error loading exams: {{ error }}
+      <div role="alert" class="alert alert-error">
+        <CircleX />
+        Error loading exams, library may be empty. Error message: {{ error }}
+      </div>
     </div>
 
     <div v-else id="exam-table-unknown-state">How did you get here?</div>
