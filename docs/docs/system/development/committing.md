@@ -13,3 +13,5 @@ In order to make a commit, simply run:
 ```shell
 make commit
 ```
+
+This `make` command will invoke Commitizen, which will prompt you for the necessary information to create a standardized commit message adhering to the Conventional Commits specification.

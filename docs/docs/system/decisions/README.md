@@ -1,4 +1,4 @@
-# Decisions
+# Decisions (ADRs)
 
 We document decisions as [Architecture Decision Records](https://adr.github.io/), leveraging the format as defined and popularized by [Michael Nygard](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions). However, we are interpreting and adapting the concept of ADRs beyond strictly **architecture**, and making documented decisions inclusive of implementations and / or other relevant decisions that are worthy of documenting. ADRs provide a simple and concise format and its generally good practice to document decisions and the decision making process in just about any context.
 
