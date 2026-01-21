@@ -1,3 +1,9 @@
+## v0.1.20 (2026-01-21)
+
+### Fix
+
+- making messages an optional list when calling telemetree.RecordError (#135)
+
 ## v0.1.19 (2026-01-21)
 
 ### Fix
