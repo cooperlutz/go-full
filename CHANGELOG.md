@@ -1,3 +1,9 @@
+## v0.1.19 (2026-01-21)
+
+### Fix
+
+- general improvements to docs content (#133)
+
 ## v0.1.18 (2026-01-20)
 
 ### Fix
