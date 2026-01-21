@@ -21,17 +21,6 @@ This project adopts and adheres to the [Domain-Driven Design](https://martinfowl
 
 ![modular mono](../_img/modular_monolith.drawio.png)
 
-## Layered Clean Architecture
-
-Similar to Domain-Driven Design, we adopt the principles of [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) to ensure separation of concerns and maintainability. The system is structured into distinct layers, each with specific responsibilities:
-
-- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent of any external systems or frameworks.
-- **Application Layer**: Contains application services that orchestrate domain logic and handle use cases.
-- **Interface Layer**: Contains the API controllers and routes that handle incoming requests and responses.
-- **Infrastructure Layer**: Contains implementations for data access, external services, and other infrastructure concerns
-
-![clean layers](../_img/clean_layers.drawio.png)
-
 ## Mono Repo Project Layout / Structure
 
 This project is intentionally structured as a monorepo to display how all of the various pieces of the system are stitched together. We can follow the logical flow of the system from frontend view all the way through the backend database queries and every layer in between.

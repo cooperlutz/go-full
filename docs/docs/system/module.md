@@ -2,6 +2,36 @@
 
 As noted in [ADR-00002](../decisions/00002_system_arch.md), the system architecture adopts a modular monolith approach, adhering to principles of Domain-Driven Design (DDD).
 
+## Architecture Styles
+
+Individual modules are given freedom to choose their architectural style, however, we encourage the adoption of [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) or [Hexagonal Architecture](https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/) styles to ensure separation of concerns and promote maintainability.
+
+### Clean Architecture
+
+The module is structured into distinct layers, each with specific responsibilities:
+
+- **Domain Layer**: Contains the core business logic and domain entities. This layer is independent of any external systems or frameworks.
+- **Application Layer**: Contains application services that orchestrate domain logic and handle use cases.
+- **Interface Layer**: Contains the API controllers and routes that handle incoming requests and responses.
+- **Infrastructure Layer**: Contains implementations for data access, external services, and other infrastructure concerns
+
+![clean layers](../_img/clean_layers.drawio.png)
+
+Reference Module: [Exam Library](https://github.com/cooperlutz/go-full/tree/main/internal/examlibrary)
+
+### Hexagonal Architecture
+
+The module is designed around the concept of ports and adapters, allowing for flexibility and easy integration with external systems:
+
+- **Core Domain**: Contains the business logic and domain entities.
+- **Ports**: Define interfaces for communication between the core domain and external systems.
+- **Adapters**: Implement the ports to interact with external systems such as databases, APIs, and user interfaces.
+
+![hexagonal](../_img/hexagonal.png)
+
+Reference Module: [Examination](https://github.com/cooperlutz/go-full/tree/main/internal/examination)
+    - [Based on ThreeDotLabs' interpretation via Wild Workouts](https://github.com/ThreeDotsLabs/wild-workouts-go-ddd-example/tree/master)
+
 ## Module Structure
 
 Each system module is structured to encapsulate the various layers of the application, ensuring separation of concerns and maintainability. The typical structure of a module is as follows:

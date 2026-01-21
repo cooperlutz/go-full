@@ -2,6 +2,10 @@
 
 ## Developing
 
+Exemplar Pull Requests:
+
+- [Adding a New e2e Feature](https://github.com/cooperlutz/go-full/pull/35)
+
 ![sdlc](../../_img/sdlc.drawio.png)
 
-<!-- TODO add e2e dev process along with an exemplar branch -->
+This diagram illustrates the ideal development workflow for contributing code to the project.
