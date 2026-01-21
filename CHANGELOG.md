@@ -1,3 +1,9 @@
+## v0.1.21 (2026-01-21)
+
+### Fix
+
+- improvement to event marshaling to make eeventdriven pkg more flexible (#134)
+
 ## v0.1.20 (2026-01-21)
 
 ### Fix
