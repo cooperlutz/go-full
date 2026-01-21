@@ -72,11 +72,17 @@ func AddSpan(ctx context.Context, spanName string, keyValues ...attribute.KeyVal
 }
 
 // RecordError records an error in the current span.
-func RecordError(ctx context.Context, err error, msg string) {
+func RecordError(ctx context.Context, err error, messages ...string) {
 	span := trace.SpanFromContext(ctx)
 	if span == nil {
 		return
 	}
 
-	span.SetStatus(codes.Error, msg)
+	if len(messages) > 0 {
+		for _, msg := range messages {
+			span.AddEvent(msg)
+		}
+	}
+
+	span.SetStatus(codes.Error, err.Error())
 }
