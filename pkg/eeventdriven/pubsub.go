@@ -2,7 +2,6 @@ package eeventdriven
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill-sql/v4/pkg/sql"
@@ -102,12 +101,11 @@ func (bps *BasePgsqlPubSubProcessor) setSubscriber(subscriber *sql.Subscriber) {
 
 // EmitEvent publishes an event with the given topic and payload.
 func (bps *BasePgsqlPubSubProcessor) EmitEvent(topic string, payload interface{}) error {
-	marshaled, err := json.Marshal(payload)
+	msg, err := EventPayloadToMessage(payload)
 	if err != nil {
 		return err
 	}
 
-	msg := message.NewMessage(watermill.NewUUID(), marshaled)
 	if err := bps.publisher.Publish(topic, msg); err != nil {
 		return err
 	}
