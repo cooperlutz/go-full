@@ -4,6 +4,7 @@ repo_url: https://github.com/cooperlutz/go-full
 
 theme:
   name: material
+  custom_dir: overrides
   features:
   - content.code.annotate
   - content.code.copy
