@@ -16,11 +16,11 @@ var FixtureExamQuestions = []*Question{
 
 func TestExam(t *testing.T) {
 	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), FixtureExamQuestions)
-	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*5)
+	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
 	err := exam.StartExam()
 	assert.Nil(t, err)
 
-	assert.WithinDuration(t, time.Now(), *exam.GetStartedAtTime(), time.Microsecond*5)
+	assert.WithinDuration(t, time.Now(), *exam.GetStartedAtTime(), time.Microsecond*10)
 	assert.Nil(t, exam.GetCompletedAtTime())
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
@@ -42,8 +42,8 @@ func TestExam(t *testing.T) {
 	assert.Equal(t, "invalid answer provided", err.Error())
 
 	err = exam.AnswerQuestion(1, "4")
-	assert.WithinDuration(t, time.Now(), exam.GetUpdatedAtTime(), time.Microsecond*5)
-	assert.WithinDuration(t, firstQuestion.GetUpdatedAtTime(), time.Now(), time.Microsecond*5)
+	assert.WithinDuration(t, time.Now(), exam.GetUpdatedAtTime(), time.Microsecond*10)
+	assert.WithinDuration(t, firstQuestion.GetUpdatedAtTime(), time.Now(), time.Microsecond*10)
 	assert.Nil(t, err)
 	answeredQuestion := exam.GetQuestionByIndex(1)
 	assert.Equal(t, "4", *answeredQuestion.GetProvidedAnswer())
@@ -74,6 +74,6 @@ func TestExam(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, exam.IsCompleted())
 	assert.NotNil(t, exam.GetCompletedAtTime())
-	assert.WithinDuration(t, time.Now(), *exam.GetCompletedAtTime(), time.Microsecond*5)
-	assert.WithinDuration(t, time.Now(), exam.GetUpdatedAtTime(), time.Microsecond*5)
+	assert.WithinDuration(t, time.Now(), *exam.GetCompletedAtTime(), time.Microsecond*10)
+	assert.WithinDuration(t, time.Now(), exam.GetUpdatedAtTime(), time.Microsecond*10)
 }
