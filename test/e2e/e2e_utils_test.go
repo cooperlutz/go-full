@@ -74,3 +74,30 @@ func seedTestData() error {
 	}
 	return nil
 }
+
+func countOfExaminationEvents() (int64, error) {
+	ctx := context.Background()
+
+	cfg, err := config.LoadConfigFromEnvVars()
+	if err != nil {
+		return 0, err
+	}
+
+	conn, err := pgx.Connect(ctx, cfg.DB.GetDSN())
+	if err != nil {
+		return 0, err
+	}
+	defer conn.Close(ctx)
+
+	const sqlStatement = `
+	SELECT Count(*) FROM public.watermill_examination;
+	`
+
+	row := conn.QueryRow(ctx, sqlStatement)
+	var count int64
+	err = row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}

@@ -44,5 +44,4 @@ func TestEventPayloadToMessage_JsonDecodeError(t *testing.T) {
 	got, err := EventPayloadToMessage(payload)
 	assert.Error(t, err)
 	assert.Nil(t, got)
-
 }

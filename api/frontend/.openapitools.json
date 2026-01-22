@@ -19,6 +19,14 @@
         "additionalProperties": {
           "withInterfaces": true
         }
+      },
+      "examination": { 
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/src/examination/services",
+        "inputSpec": "../rest/examination/api.yaml",
+        "additionalProperties": {
+          "withInterfaces": true
+        }
       }
     }
   }

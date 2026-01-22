@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -143,4 +144,52 @@ func TestUserViewsExamLibrary(t *testing.T) {
 	tableExists, err := tableLocator.IsVisible()
 	assert.NoError(t, err, "Error checking visibility of Exam Library table: %v", err)
 	assert.True(t, tableExists, "Exam Library table should be visible on the page")
+}
+
+/*
+Scenario: A user accesses an Exam from the Exam Library application UI and is able to start taking the exam
+
+Given:
+- a student user accesses the system UI
+
+When:
+- the user navigates to an exam detail page
+- and the user clicks the "Start Exam" button
+
+Then:
+- the exam is started for the student
+
+Implementation Notes:
+1. Go to /exam-library/{examId} within the frontend UI
+2. Click the "Start Exam" button
+3. An exam should be created within the examination system for the student, verified via the API + database check
+4. An exam started event should be published to the message bus, verified via querying the 'watermill_examination' table in the database
+*/
+func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
+	// Arrange
+	randomStudentId := uuid.New().String()
+	ctx := context.Background()
+	countOfExaminationEventsBefore, err := countOfExaminationEvents()
+	examsBefore, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
+	countOfExaminationExamsBefore := len(*examsBefore.JSON200)
+
+	_, page := newBrowserContextAndPage(t, defaultBrowserContextOptions)
+	_, err = page.Goto(serverAddr + "/exam-library/11111111-1111-1111-1111-111111111111")
+	assert.NoError(t, err)
+	modalButtons, err := page.Locator("#start_exam_button").All()
+	err = modalButtons[0].Click()
+	assert.NoError(t, err)
+	err = page.Locator("#student-id-input").Fill(randomStudentId)
+	assert.NoError(t, err)
+	buttons, err := page.Locator("#start-button").All()
+	err = buttons[0].Click()
+	assert.NoError(t, err)
+
+	// Assert
+	countOfExaminationEventsAfter, err := countOfExaminationEvents()
+	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
+	countOfExaminationExamsAfter := len(*examsAfter.JSON200)
+	assert.NoError(t, err)
+	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter)
+	assert.Equal(t, countOfExaminationEventsBefore+1, countOfExaminationEventsAfter)
 }

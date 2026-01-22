@@ -38,6 +38,63 @@ func (_m *MockRepository) EXPECT() *MockRepository_Expecter {
 	return &MockRepository_Expecter{mock: &_m.Mock}
 }
 
+// AddExam provides a mock function for the type MockRepository
+func (_mock *MockRepository) AddExam(ctx context.Context, exam *examination.Exam) error {
+	ret := _mock.Called(ctx, exam)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddExam")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *examination.Exam) error); ok {
+		r0 = returnFunc(ctx, exam)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockRepository_AddExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddExam'
+type MockRepository_AddExam_Call struct {
+	*mock.Call
+}
+
+// AddExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - exam *examination.Exam
+func (_e *MockRepository_Expecter) AddExam(ctx interface{}, exam interface{}) *MockRepository_AddExam_Call {
+	return &MockRepository_AddExam_Call{Call: _e.mock.On("AddExam", ctx, exam)}
+}
+
+func (_c *MockRepository_AddExam_Call) Run(run func(ctx context.Context, exam *examination.Exam)) *MockRepository_AddExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *examination.Exam
+		if args[1] != nil {
+			arg1 = args[1].(*examination.Exam)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockRepository_AddExam_Call) Return(err error) *MockRepository_AddExam_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockRepository_AddExam_Call) RunAndReturn(run func(ctx context.Context, exam *examination.Exam) error) *MockRepository_AddExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FindAll provides a mock function for the type MockRepository
 func (_mock *MockRepository) FindAll(ctx context.Context) ([]examination.Exam, error) {
 	ret := _mock.Called(ctx)

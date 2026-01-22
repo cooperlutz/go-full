@@ -4,6 +4,7 @@
 package api_client
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -21,9 +22,18 @@ type Error struct {
 
 // Exam defines model for Exam.
 type Exam struct {
-	ExamId    *string `json:"examId,omitempty"`
-	StudentId *string `json:"studentId,omitempty"`
+	ExamId    string `json:"examId"`
+	StudentId string `json:"studentId"`
 }
+
+// StartExam defines model for StartExam.
+type StartExam struct {
+	LibraryExamId string `json:"libraryExamId"`
+	StudentId     string `json:"studentId"`
+}
+
+// StartNewExamJSONRequestBody defines body for StartNewExam for application/json ContentType.
+type StartNewExamJSONRequestBody = StartExam
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -100,10 +110,39 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 type ClientInterface interface {
 	// GetAvailableExams request
 	GetAvailableExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// StartNewExamWithBody request with any body
+	StartNewExamWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	StartNewExam(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) GetAvailableExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetAvailableExamsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) StartNewExamWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewStartNewExamRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) StartNewExam(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewStartNewExamRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +162,7 @@ func NewGetAvailableExamsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/available")
+	operationPath := fmt.Sprintf("/api/v1/exams")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -137,6 +176,46 @@ func NewGetAvailableExamsRequest(server string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewStartNewExamRequest calls the generic StartNewExam builder with application/json body
+func NewStartNewExamRequest(server string, body StartNewExamJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewStartNewExamRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewStartNewExamRequestWithBody generates requests for StartNewExam with any type of body
+func NewStartNewExamRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -186,6 +265,11 @@ func WithBaseURL(baseURL string) ClientOption {
 type ClientWithResponsesInterface interface {
 	// GetAvailableExamsWithResponse request
 	GetAvailableExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAvailableExamsResponse, error)
+
+	// StartNewExamWithBodyWithResponse request with any body
+	StartNewExamWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error)
+
+	StartNewExamWithResponse(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error)
 }
 
 type GetAvailableExamsResponse struct {
@@ -211,6 +295,29 @@ func (r GetAvailableExamsResponse) StatusCode() int {
 	return 0
 }
 
+type StartNewExamResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *Exam
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r StartNewExamResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r StartNewExamResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 // GetAvailableExamsWithResponse request returning *GetAvailableExamsResponse
 func (c *ClientWithResponses) GetAvailableExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAvailableExamsResponse, error) {
 	rsp, err := c.GetAvailableExams(ctx, reqEditors...)
@@ -218,6 +325,23 @@ func (c *ClientWithResponses) GetAvailableExamsWithResponse(ctx context.Context,
 		return nil, err
 	}
 	return ParseGetAvailableExamsResponse(rsp)
+}
+
+// StartNewExamWithBodyWithResponse request with arbitrary body returning *StartNewExamResponse
+func (c *ClientWithResponses) StartNewExamWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error) {
+	rsp, err := c.StartNewExamWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseStartNewExamResponse(rsp)
+}
+
+func (c *ClientWithResponses) StartNewExamWithResponse(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error) {
+	rsp, err := c.StartNewExam(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseStartNewExamResponse(rsp)
 }
 
 // ParseGetAvailableExamsResponse parses an HTTP response from a GetAvailableExamsWithResponse call
@@ -240,6 +364,39 @@ func ParseGetAvailableExamsResponse(rsp *http.Response) (*GetAvailableExamsRespo
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseStartNewExamResponse parses an HTTP response from a StartNewExamWithResponse call
+func ParseStartNewExamResponse(rsp *http.Response) (*StartNewExamResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &StartNewExamResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Exam
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
 		var dest Error

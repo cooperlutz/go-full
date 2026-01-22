@@ -9,9 +9,9 @@ import (
 )
 
 var FixtureExamQuestions = []*Question{
-	NewQuestion(1, "What is 2 + 2?", QuestionMultipleChoice, "", &[]string{"3", "4", "5"}),
-	NewQuestion(2, "What is the capital of France?", QuestionShortAnswer, "", nil),
-	NewQuestion(3, "Write an essay", QuestionEssay, "", nil),
+	NewQuestion(1, "What is 2 + 2?", QuestionMultipleChoice, &[]string{"3", "4", "5"}),
+	NewQuestion(2, "What is the capital of France?", QuestionShortAnswer, nil),
+	NewQuestion(3, "Write an essay", QuestionEssay, nil),
 }
 
 func TestExam(t *testing.T) {
@@ -46,7 +46,7 @@ func TestExam(t *testing.T) {
 	assert.WithinDuration(t, firstQuestion.GetUpdatedAtTime(), time.Now(), time.Microsecond*5)
 	assert.Nil(t, err)
 	answeredQuestion := exam.GetQuestionByIndex(1)
-	assert.Equal(t, "4", answeredQuestion.GetProvidedAnswer())
+	assert.Equal(t, "4", *answeredQuestion.GetProvidedAnswer())
 
 	err = exam.FinishExam()
 	assert.Error(t, err)

@@ -9,6 +9,30 @@ import (
 )
 
 type Querier interface {
+	//AddExam
+	//
+	//  INSERT INTO examination.exams (
+	//      exam_id,
+	//      created_at,
+	//      updated_at,
+	//      deleted_at,
+	//      deleted,
+	//      student_id,
+	//      completed,
+	//      completed_at,
+	//      started_at
+	//  ) VALUES (
+	//      $1,
+	//      $2,
+	//      $3,
+	//      $4,
+	//      $5,
+	//      $6,
+	//      $7,
+	//      $8,
+	//      $9
+	//  )
+	AddExam(ctx context.Context, arg AddExamParams) error
 	//FindAllExams
 	//
 	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams

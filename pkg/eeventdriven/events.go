@@ -12,6 +12,8 @@ func EventPayloadToMessage(payload interface{}) (*message.Message, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	msg := message.NewMessage(watermill.NewUUID(), marshaled)
+
 	return msg, nil
 }
