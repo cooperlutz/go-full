@@ -1,3 +1,9 @@
+## v0.1.23 (2026-01-22)
+
+### Fix
+
+- add announcement bar about event driven & improve the docs about it (#138)
+
 ## v0.1.22 (2026-01-22)
 
 ### Fix
