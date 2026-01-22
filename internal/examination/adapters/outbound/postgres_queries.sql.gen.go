@@ -7,7 +7,83 @@ package outbound
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const addExam = `-- name: AddExam :exec
+INSERT INTO examination.exams (
+    exam_id,
+    created_at,
+    updated_at,
+    deleted_at,
+    deleted,
+    student_id,
+    completed,
+    completed_at,
+    started_at
+) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6,
+    $7,
+    $8,
+    $9
+)
+`
+
+type AddExamParams struct {
+	ExamID      pgtype.UUID        `db:"exam_id" json:"exam_id"`
+	CreatedAt   pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt   pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	DeletedAt   pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
+	Deleted     bool               `db:"deleted" json:"deleted"`
+	StudentID   pgtype.UUID        `db:"student_id" json:"student_id"`
+	Completed   bool               `db:"completed" json:"completed"`
+	CompletedAt pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
+	StartedAt   pgtype.Timestamptz `db:"started_at" json:"started_at"`
+}
+
+// AddExam
+//
+//	INSERT INTO examination.exams (
+//	    exam_id,
+//	    created_at,
+//	    updated_at,
+//	    deleted_at,
+//	    deleted,
+//	    student_id,
+//	    completed,
+//	    completed_at,
+//	    started_at
+//	) VALUES (
+//	    $1,
+//	    $2,
+//	    $3,
+//	    $4,
+//	    $5,
+//	    $6,
+//	    $7,
+//	    $8,
+//	    $9
+//	)
+func (q *Queries) AddExam(ctx context.Context, arg AddExamParams) error {
+	_, err := q.db.Exec(ctx, addExam,
+		arg.ExamID,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.DeletedAt,
+		arg.Deleted,
+		arg.StudentID,
+		arg.Completed,
+		arg.CompletedAt,
+		arg.StartedAt,
+	)
+	return err
+}
 
 const findAllExams = `-- name: FindAllExams :many
 SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams

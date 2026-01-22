@@ -1,3 +1,10 @@
+/*
+Package examination contains the module associated with the Examination domain.
+the examination module is responsible for managing the lifecycle of exams throughout the test-taking process
+
+The Examination module adopts a hexagonal architecture pattern
+The Examination module prioritizes and focuses on e2e tests, rather than unit tests
+*/
 package examination
 
 import (
@@ -7,33 +14,44 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/examination/adapters/inbound"
 	"github.com/cooperlutz/go-full/internal/examination/app"
-	"github.com/cooperlutz/go-full/pkg/eeventdriven"
+	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
 type ExaminationModule struct {
-	RestApi http.Handler
-	PubSub  eeventdriven.IPubSubEventProcessor
+	RestApi             http.Handler
+	SubscriberInterface inbound.SqlSubscriberAdapter
 }
 
 // NewModule - Initializes the Examination module with its needed dependencies.
-func NewModule(pgconn *pgxpool.Pool) (*ExaminationModule, error) {
-	application := app.NewApplication(
+func NewModule(pgconn *pgxpool.Pool, examLibraryUseCase usecase.IExamLibraryUseCase) (*ExaminationModule, error) {
+	application, err := app.NewApplication(
 		pgconn,
+		examLibraryUseCase,
 	)
-	router := hteeteepee.NewRouter(
-		"examination",
-	)
-	api := inbound.NewHttpServer(
+	if err != nil {
+		return nil, err
+	}
+
+	apiServer := inbound.NewHttpServer(
 		application,
 	)
-	handler := inbound.HandlerFromMux(
-		api.StrictHandler(),
-		router,
-	)
+
+	subscriber, err := inbound.NewSqlSubscriberAdapter(pgconn)
+	if err != nil {
+		return nil, err
+	}
+
+	subscriber.RegisterEventHandler(application.Events.NoOp.Handle())
+
 	module := &ExaminationModule{
-		RestApi: handler,
-		PubSub:  nil,
+		RestApi: inbound.HandlerFromMux(
+			apiServer.StrictHandler(),
+			hteeteepee.NewRouter(
+				"examination",
+			),
+		),
+		SubscriberInterface: subscriber,
 	}
 
 	return module, nil

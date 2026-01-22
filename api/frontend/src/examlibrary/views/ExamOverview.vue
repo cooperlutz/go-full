@@ -7,6 +7,7 @@ import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
+import StartExamModal from "~/examination/components/StartExamModal.vue";
 import { useFindExamByID } from "~/examlibrary/composables/useGetFindOne";
 import type { Exam } from "../services";
 
@@ -36,7 +37,7 @@ onMounted(async () => {
         <p><b>Name:</b> {{ lookupOutput?.name }}</p>
         <p><b>Grade Level:</b> {{ lookupOutput?.gradeLevel }}</p>
       </div>
-      <button class="btn btn-success">Start Exam</button>
+      <StartExamModal :examId="lookupOutput?.id ?? ''" />
     </div>
   </div>
 </template>

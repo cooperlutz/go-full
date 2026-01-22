@@ -7,6 +7,7 @@ import (
 
 	"github.com/playwright-community/playwright-go"
 
+	examination_api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
 	examLibrary_api_client_v1 "github.com/cooperlutz/go-full/api/rest/examlibrary/v1/client"
 	pingpong_api_client_v1 "github.com/cooperlutz/go-full/api/rest/pingpong/v1/client"
 )
@@ -17,6 +18,7 @@ var (
 	browser                      playwright.Browser
 	pingpongApiClient            *pingpong_api_client_v1.ClientWithResponses
 	examLibraryApiClient         *examLibrary_api_client_v1.ClientWithResponses
+	examinationApiClient         *examination_api_client.ClientWithResponses
 	defaultBrowserContextOptions = playwright.BrowserNewContextOptions{}
 )
 
@@ -34,6 +36,11 @@ func TestMain(m *testing.M) {
 	examLibraryApiClient, err = examLibrary_api_client_v1.NewClientWithResponses(serverAddr + "/examlibrary/api/v1")
 	if err != nil {
 		slog.Error("Error creating examLibrary api client:", slog.String("error", err.Error()))
+	}
+
+	examinationApiClient, err = examination_api_client.NewClientWithResponses(serverAddr + "/examination")
+	if err != nil {
+		slog.Error("Error creating examination api client:", slog.String("error", err.Error()))
 	}
 
 	exitCode := m.Run()

@@ -9,34 +9,6 @@ import (
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
-func MapToExam(
-	id uuid.UUID,
-	createdAt time.Time,
-	updatedAt time.Time,
-	deleted bool,
-	deletedAt *time.Time,
-	studentId uuid.UUID,
-	startedAt *time.Time,
-	completedAt *time.Time,
-	completed bool,
-	questions []*Question,
-) Exam {
-	return Exam{
-		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
-			id,
-			createdAt,
-			updatedAt,
-			deleted,
-			deletedAt,
-		),
-		studentId:   studentId,
-		startedAt:   startedAt,
-		completedAt: completedAt,
-		completed:   completed,
-		questions:   questions,
-	}
-}
-
 type Exam struct {
 	*baseentitee.EntityMetadata
 	studentId   uuid.UUID
@@ -84,6 +56,10 @@ func (e Exam) IsCompleted() bool {
 	return e.completed
 }
 
+func (e Exam) GetStudentIdUUID() uuid.UUID {
+	return e.studentId
+}
+
 func (e Exam) GetStartedAtTime() *time.Time {
 	return e.startedAt
 }
@@ -98,7 +74,7 @@ type Question struct {
 	answered        bool
 	questionText    string
 	questionType    QuestionType
-	providedAnswer  string
+	providedAnswer  *string
 	responseOptions *[]string
 }
 
@@ -118,7 +94,7 @@ func (q Question) GetQuestionType() QuestionType {
 }
 
 // GetProvidedAnswer returns the provided answer for the question.
-func (q Question) GetProvidedAnswer() string {
+func (q Question) GetProvidedAnswer() *string {
 	return q.providedAnswer
 }
 
@@ -132,7 +108,6 @@ func NewQuestion(
 	index int32,
 	questionText string,
 	questionType QuestionType,
-	providedAnswer string,
 	options *[]string,
 ) *Question {
 	return &Question{
@@ -140,7 +115,6 @@ func NewQuestion(
 		index:           index,
 		questionText:    questionText,
 		questionType:    questionType,
-		providedAnswer:  providedAnswer,
 		responseOptions: options,
 	}
 }
@@ -149,41 +123,6 @@ type ErrInvalidQuestionType struct{}
 
 func (e ErrInvalidQuestionType) Error() string {
 	return "invalid question type"
-}
-
-// MapToQuestion maps raw data to a Question entity.
-// This is typically used when reconstructing a Question from persistent storage.
-func MapToQuestion(
-	id uuid.UUID,
-	createdAt time.Time,
-	updatedAt time.Time,
-	deleted bool,
-	deletedAt *time.Time,
-	questionText string,
-	questionType string,
-	providedAnswer string,
-	responseOptions *[]string,
-	index int32,
-) (*Question, error) {
-	qtype, err := QuestionTypeFromString(questionType)
-	if err != nil {
-		return nil, ErrInvalidQuestionType{}
-	}
-
-	return &Question{
-		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
-			id,
-			createdAt,
-			updatedAt,
-			deleted,
-			deletedAt,
-		),
-		questionText:    questionText,
-		questionType:    qtype,
-		providedAnswer:  providedAnswer,
-		responseOptions: responseOptions,
-		index:           index,
-	}, nil
 }
 
 // QuestionType represents the type of a question in an exam.

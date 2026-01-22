@@ -12,7 +12,7 @@ func (q *Question) setAnswer(answer string) error {
 		return ErrInvalidAnswer{}
 	}
 
-	q.providedAnswer = answer
+	q.providedAnswer = &answer
 	q.answered = true
 	q.MarkUpdated()
 

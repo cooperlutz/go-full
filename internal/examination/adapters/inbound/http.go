@@ -4,18 +4,24 @@ import (
 	"context"
 
 	"github.com/cooperlutz/go-full/internal/examination/app"
+	"github.com/cooperlutz/go-full/internal/examination/app/command"
+	"github.com/cooperlutz/go-full/internal/examination/app/event"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// HttpServer represents the HTTP server for the Examination module.
 type HttpServer struct {
 	app app.Application
 }
 
+// NewHttpServer creates a new HttpServer instance with the provided Examination application.
 func NewHttpServer(application app.Application) HttpServer {
 	return HttpServer{
 		app: application,
 	}
 }
 
+// StrictHandler returns a strict HTTP handler for the Examination module.
 func (h HttpServer) StrictHandler() ServerInterface {
 	return NewStrictHandler(h, nil)
 }
@@ -30,10 +36,37 @@ func (h HttpServer) GetAvailableExams(ctx context.Context, request GetAvailableE
 	var responseExams []Exam
 	for _, e := range exams {
 		responseExams = append(responseExams, Exam{
-			ExamId:    &e.ExamId,
-			StudentId: &e.StudentId,
+			ExamId:    e.ExamId,
+			StudentId: e.StudentId,
 		})
 	}
 
 	return GetAvailableExams200JSONResponse(responseExams), nil
+}
+
+// (POST /api/v1/exams).
+func (h HttpServer) StartNewExam(ctx context.Context, request StartNewExamRequestObject) (StartNewExamResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.startnewexam")
+	defer span.End()
+
+	exam, err := h.app.Commands.StartExam.Handle(ctx, command.StartExam{
+		StudentId:     request.Body.StudentId,
+		ExamLibraryID: request.Body.LibraryExamId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	err = h.app.Events.ExamStarted.Handle(ctx, event.ExamStarted{
+		ExamID:    exam.GetIdString(),
+		StudentID: exam.GetStudentIdString(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return StartNewExam201JSONResponse{
+		ExamId:    exam.GetIdString(),
+		StudentId: exam.GetStudentIdString(),
+	}, nil
 }

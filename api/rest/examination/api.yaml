@@ -8,11 +8,12 @@ servers:
       hostname:
         default: localhost
 paths:
-  /api/v1/exams/available:
+  /api/v1/exams:
     get:
       operationId: getAvailableExams
       responses:
         '200':
+          description: A list of exams
           content:
             application/json:
               schema:
@@ -25,16 +26,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    post:
+      operationId: startNewExam
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartExam'
+
+      responses:
+        '201':
+          description: Exam created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
+
+    StartExam:
+      type: object
+      required:
+        - studentId
+        - libraryExamId
+      properties:
+        studentId:
+          type: string
+        libraryExamId:
+          type: string
+
     Exam:
       type: object
+      required:
+        - examId
+        - studentId
       properties:
         examId:
           type: string
         studentId:
           type: string
+
     Error:
       type: object
       properties:

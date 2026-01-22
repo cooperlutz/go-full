@@ -10,6 +10,7 @@ import (
 
 	"github.com/cooperlutz/go-full/api/frontend"
 	"github.com/cooperlutz/go-full/app/config"
+	"github.com/cooperlutz/go-full/internal/examination"
 	"github.com/cooperlutz/go-full/internal/examlibrary"
 	"github.com/cooperlutz/go-full/internal/pingpong"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
@@ -66,6 +67,12 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	// Examination
+	examinationModule, err := examination.NewModule(conn, examLibraryModule.UseCase)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
 
@@ -93,13 +100,13 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	----------------------------------------------------------------------------------- */
 	httpServer.RegisterController("/pingpong", pingPongModule.RestApi)       // mounts `/pingpong/api/v1/ping-pong`
 	httpServer.RegisterController("/examlibrary", examLibraryModule.RestApi) // mounts `/examlibrary/api/v1/exam-library`
-
+	httpServer.RegisterController("/examination", examinationModule.RestApi) // mounts `/examination/api/v1/examination`
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
 	var wg sync.WaitGroup
-	// We increment the WaitGroup counter by 3 for the three servers we plan to run.
-	wg.Add(3) //nolint:mnd // we have three goroutines to wait for
+	// We increment the WaitGroup counter by 4 for the four servers we plan to run.
+	wg.Add(4) //nolint:mnd // we have four goroutines to wait for
 
 	go func() {
 		defer wg.Done()
@@ -116,6 +123,11 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		defer wg.Done()
 
 		examLibraryModule.PubSub.Run()
+	}()
+	go func() {
+		defer wg.Done()
+
+		examinationModule.SubscriberInterface.Start()
 	}()
 
 	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)

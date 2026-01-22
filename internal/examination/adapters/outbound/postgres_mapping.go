@@ -30,3 +30,22 @@ func ExaminationExamsToDomain(exams []ExaminationExam) []examination.Exam {
 
 	return domainExams
 }
+
+// ExaminationExamToDB maps a domain Exam entity to the ExaminationExam database model.
+func ExaminationExamToDB(exam *examination.Exam) ExaminationExam {
+	createdAt := exam.GetCreatedAtTime()
+	updatedAt := exam.GetUpdatedAtTime()
+	deletedAt := exam.GetDeletedAtTime()
+
+	return ExaminationExam{
+		ExamID:      pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
+		CreatedAt:   pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:   pgxutil.TimeToTimestampz(&updatedAt),
+		Deleted:     exam.IsDeleted(),
+		DeletedAt:   pgxutil.TimeToTimestampz(deletedAt),
+		StudentID:   pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
+		StartedAt:   pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
+		CompletedAt: pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
+		Completed:   exam.IsCompleted(),
+	}
+}

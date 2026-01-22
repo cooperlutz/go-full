@@ -305,6 +305,63 @@ func (_m *MockQuerier) EXPECT() *MockQuerier_Expecter {
 	return &MockQuerier_Expecter{mock: &_m.Mock}
 }
 
+// AddExam provides a mock function for the type MockQuerier
+func (_mock *MockQuerier) AddExam(ctx context.Context, arg outbound.AddExamParams) error {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddExam")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.AddExamParams) error); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockQuerier_AddExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddExam'
+type MockQuerier_AddExam_Call struct {
+	*mock.Call
+}
+
+// AddExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.AddExamParams
+func (_e *MockQuerier_Expecter) AddExam(ctx interface{}, arg interface{}) *MockQuerier_AddExam_Call {
+	return &MockQuerier_AddExam_Call{Call: _e.mock.On("AddExam", ctx, arg)}
+}
+
+func (_c *MockQuerier_AddExam_Call) Run(run func(ctx context.Context, arg outbound.AddExamParams)) *MockQuerier_AddExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.AddExamParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.AddExamParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockQuerier_AddExam_Call) Return(err error) *MockQuerier_AddExam_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockQuerier_AddExam_Call) RunAndReturn(run func(ctx context.Context, arg outbound.AddExamParams) error) *MockQuerier_AddExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FindAllExams provides a mock function for the type MockQuerier
 func (_mock *MockQuerier) FindAllExams(ctx context.Context) ([]outbound.ExaminationExam, error) {
 	ret := _mock.Called(ctx)
@@ -392,6 +449,63 @@ type MockIQuerierExamination_Expecter struct {
 
 func (_m *MockIQuerierExamination) EXPECT() *MockIQuerierExamination_Expecter {
 	return &MockIQuerierExamination_Expecter{mock: &_m.Mock}
+}
+
+// AddExam provides a mock function for the type MockIQuerierExamination
+func (_mock *MockIQuerierExamination) AddExam(ctx context.Context, arg outbound.AddExamParams) error {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddExam")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.AddExamParams) error); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockIQuerierExamination_AddExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddExam'
+type MockIQuerierExamination_AddExam_Call struct {
+	*mock.Call
+}
+
+// AddExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.AddExamParams
+func (_e *MockIQuerierExamination_Expecter) AddExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_AddExam_Call {
+	return &MockIQuerierExamination_AddExam_Call{Call: _e.mock.On("AddExam", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamination_AddExam_Call) Run(run func(ctx context.Context, arg outbound.AddExamParams)) *MockIQuerierExamination_AddExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.AddExamParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.AddExamParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamination_AddExam_Call) Return(err error) *MockIQuerierExamination_AddExam_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockIQuerierExamination_AddExam_Call) RunAndReturn(run func(ctx context.Context, arg outbound.AddExamParams) error) *MockIQuerierExamination_AddExam_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // FindAllExams provides a mock function for the type MockIQuerierExamination
