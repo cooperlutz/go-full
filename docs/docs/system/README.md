@@ -21,6 +21,16 @@ This project adopts and adheres to the [Domain-Driven Design](https://martinfowl
 
 ![modular mono](../_img/modular_monolith.drawio.png)
 
+## Event-Driven
+
+The system provides capabilities to support event-driven architecture patterns through the use of an event bus in the form of PostgreSQL tables. This is facilitated via implementation of the [Watermill](https://watermill.io/) framework. Read more about the decision: [ADR-00005](./decisions/00009_event_driven.md)
+
+In order to reduce Direct dependency on Watermill, the [eeventdriven package](https://pkg.go.dev/github.com/cooperlutz/go-full@v0.1.22/pkg/eeventdriven) is provided to abstract away the Watermill implementation details from the rest of the system. This allows for easier swapping of the underlying api in the future, if desired.
+
+The below [Component Diagram](https://c4model.com/diagrams/component) illustrates how the event-driven components are integrated into the overall system architecture.
+
+![event driven](../_img/representative_component_diagram_eventdriven.drawio.png)
+
 ## Mono Repo Project Layout / Structure
 
 This project is intentionally structured as a monorepo to display how all of the various pieces of the system are stitched together. We can follow the logical flow of the system from frontend view all the way through the backend database queries and every layer in between.
