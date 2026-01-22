@@ -1,3 +1,9 @@
+## v0.1.22 (2026-01-22)
+
+### Fix
+
+- add some headers to some domain modelling docs (#136)
+
 ## v0.1.21 (2026-01-21)
 
 ### Fix
