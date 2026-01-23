@@ -1,3 +1,9 @@
+## v0.1.26 (2026-01-23)
+
+### Fix
+
+- **deps**: bump github.com/exaring/otelpgx from 0.9.4 to 0.10.0 (#122)
+
 ## v0.1.25 (2026-01-23)
 
 ### Fix
