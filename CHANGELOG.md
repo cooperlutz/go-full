@@ -1,3 +1,9 @@
+## v0.1.25 (2026-01-23)
+
+### Fix
+
+- **deps**: bump github.com/go-chi/chi/v5 from 5.2.3 to 5.2.4 (#124)
+
 ## v0.1.24 (2026-01-22)
 
 ### Fix
