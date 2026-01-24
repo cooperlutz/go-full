@@ -1,3 +1,9 @@
+## v0.1.27 (2026-01-24)
+
+### Fix
+
+- fix missing questions in db for examinations (#139)
+
 ## v0.1.26 (2026-01-23)
 
 ### Fix
