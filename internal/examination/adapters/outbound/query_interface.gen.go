@@ -33,10 +33,45 @@ type Querier interface {
 	//      $9
 	//  )
 	AddExam(ctx context.Context, arg AddExamParams) error
+	//AddQuestion
+	//
+	//  INSERT INTO examination.questions (
+	//      question_id,
+	//      created_at,
+	//      updated_at,
+	//      deleted_at,
+	//      deleted,
+	//      exam_id,
+	//      index,
+	//      answered,
+	//      question_text,
+	//      question_type,
+	//      provided_answer,
+	//      response_options
+	//  ) VALUES (
+	//      $1,
+	//      $2,
+	//      $3,
+	//      $4,
+	//      $5,
+	//      $6,
+	//      $7,
+	//      $8,
+	//      $9,
+	//      $10,
+	//      $11,
+	//      $12
+	//  )
+	AddQuestion(ctx context.Context, arg AddQuestionParams) error
 	//FindAllExams
 	//
 	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams
 	FindAllExams(ctx context.Context) ([]ExaminationExam, error)
+	//FindQuestionsForExam
+	//
+	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions
+	//  WHERE exam_id = $1
+	FindQuestionsForExam(ctx context.Context, arg FindQuestionsForExamParams) ([]ExaminationQuestion, error)
 }
 
 var _ Querier = (*Queries)(nil)

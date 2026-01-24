@@ -169,9 +169,17 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	// Arrange
 	randomStudentId := uuid.New().String()
 	ctx := context.Background()
-	countOfExaminationEventsBefore, err := countOfExaminationEvents()
+	queryCountOfExaminationEvents := func() (int64, error) {
+		return countOfQuery("public", "watermill_examination")
+	}
+	queryCountOfExaminationQuestions := func() (int64, error) {
+		return countOfQuery("examination", "questions")
+	}
+	countOfExaminationEventsBefore, err := queryCountOfExaminationEvents()
 	examsBefore, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsBefore := len(*examsBefore.JSON200)
+	countOfExaminationQuestionsBefore, err := queryCountOfExaminationQuestions()
+	assert.NoError(t, err)
 
 	_, page := newBrowserContextAndPage(t, defaultBrowserContextOptions)
 	_, err = page.Goto(serverAddr + "/exam-library/11111111-1111-1111-1111-111111111111")
@@ -186,10 +194,12 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Assert
-	countOfExaminationEventsAfter, err := countOfExaminationEvents()
+	countOfExaminationEventsAfter, err := queryCountOfExaminationEvents()
+	countOfExaminationQuestionsAfter, err := queryCountOfExaminationQuestions()
 	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsAfter := len(*examsAfter.JSON200)
 	assert.NoError(t, err)
 	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter)
 	assert.Equal(t, countOfExaminationEventsBefore+1, countOfExaminationEventsAfter)
+	assert.Greater(t, countOfExaminationQuestionsAfter, countOfExaminationQuestionsBefore)
 }

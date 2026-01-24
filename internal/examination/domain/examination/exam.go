@@ -83,6 +83,11 @@ func (q Question) GetIndex() int32 {
 	return q.index
 }
 
+// IsAnswered returns whether the question has been answered.
+func (q Question) IsAnswered() bool {
+	return q.answered
+}
+
 // GetQuestionText returns the text of the question.
 func (q Question) GetQuestionText() string {
 	return q.questionText

@@ -1,6 +1,8 @@
 package outbound
 
 import (
+	"github.com/google/uuid"
+
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )
@@ -35,17 +37,36 @@ func ExaminationExamsToDomain(exams []ExaminationExam) []examination.Exam {
 func ExaminationExamToDB(exam *examination.Exam) ExaminationExam {
 	createdAt := exam.GetCreatedAtTime()
 	updatedAt := exam.GetUpdatedAtTime()
-	deletedAt := exam.GetDeletedAtTime()
 
 	return ExaminationExam{
 		ExamID:      pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
 		CreatedAt:   pgxutil.TimeToTimestampz(&createdAt),
 		UpdatedAt:   pgxutil.TimeToTimestampz(&updatedAt),
 		Deleted:     exam.IsDeleted(),
-		DeletedAt:   pgxutil.TimeToTimestampz(deletedAt),
+		DeletedAt:   pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
 		StudentID:   pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
 		StartedAt:   pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
 		CompletedAt: pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
 		Completed:   exam.IsCompleted(),
+	}
+}
+
+func ExaminationQuestionToDB(question *examination.Question, examID uuid.UUID) ExaminationQuestion {
+	createdAt := question.GetCreatedAtTime()
+	updatedAt := question.GetUpdatedAtTime()
+
+	return ExaminationQuestion{
+		QuestionID:      pgxutil.UUIDToPgtypeUUID(question.GetIdUUID()),
+		CreatedAt:       pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:       pgxutil.TimeToTimestampz(&updatedAt),
+		Deleted:         question.IsDeleted(),
+		DeletedAt:       pgxutil.TimeToTimestampz(question.GetDeletedAtTime()),
+		ExamID:          pgxutil.UUIDToPgtypeUUID(examID),
+		Index:           question.GetIndex(),
+		Answered:        question.IsAnswered(),
+		QuestionText:    question.GetQuestionText(),
+		QuestionType:    question.GetQuestionType().String(),
+		ProvidedAnswer:  pgxutil.StrToPgtypeText(question.GetProvidedAnswer()),
+		ResponseOptions: *question.GetResponseOptions(),
 	}
 }
