@@ -85,6 +85,98 @@ func (q *Queries) AddExam(ctx context.Context, arg AddExamParams) error {
 	return err
 }
 
+const addQuestion = `-- name: AddQuestion :exec
+INSERT INTO examination.questions (
+    question_id,
+    created_at,
+    updated_at,
+    deleted_at,
+    deleted,
+    exam_id,
+    index,
+    answered,
+    question_text,
+    question_type,
+    provided_answer,
+    response_options
+) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5,
+    $6,
+    $7,
+    $8,
+    $9,
+    $10,
+    $11,
+    $12
+)
+`
+
+type AddQuestionParams struct {
+	QuestionID      pgtype.UUID        `db:"question_id" json:"question_id"`
+	CreatedAt       pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt       pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	DeletedAt       pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
+	Deleted         bool               `db:"deleted" json:"deleted"`
+	ExamID          pgtype.UUID        `db:"exam_id" json:"exam_id"`
+	Index           int32              `db:"index" json:"index"`
+	Answered        bool               `db:"answered" json:"answered"`
+	QuestionText    string             `db:"question_text" json:"question_text"`
+	QuestionType    string             `db:"question_type" json:"question_type"`
+	ProvidedAnswer  pgtype.Text        `db:"provided_answer" json:"provided_answer"`
+	ResponseOptions []string           `db:"response_options" json:"response_options"`
+}
+
+// AddQuestion
+//
+//	INSERT INTO examination.questions (
+//	    question_id,
+//	    created_at,
+//	    updated_at,
+//	    deleted_at,
+//	    deleted,
+//	    exam_id,
+//	    index,
+//	    answered,
+//	    question_text,
+//	    question_type,
+//	    provided_answer,
+//	    response_options
+//	) VALUES (
+//	    $1,
+//	    $2,
+//	    $3,
+//	    $4,
+//	    $5,
+//	    $6,
+//	    $7,
+//	    $8,
+//	    $9,
+//	    $10,
+//	    $11,
+//	    $12
+//	)
+func (q *Queries) AddQuestion(ctx context.Context, arg AddQuestionParams) error {
+	_, err := q.db.Exec(ctx, addQuestion,
+		arg.QuestionID,
+		arg.CreatedAt,
+		arg.UpdatedAt,
+		arg.DeletedAt,
+		arg.Deleted,
+		arg.ExamID,
+		arg.Index,
+		arg.Answered,
+		arg.QuestionText,
+		arg.QuestionType,
+		arg.ProvidedAnswer,
+		arg.ResponseOptions,
+	)
+	return err
+}
+
 const findAllExams = `-- name: FindAllExams :many
 SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, completed, completed_at, started_at FROM examination.exams
 `
@@ -111,6 +203,52 @@ func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 			&i.Completed,
 			&i.CompletedAt,
 			&i.StartedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const findQuestionsForExam = `-- name: FindQuestionsForExam :many
+SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions
+WHERE exam_id = $1
+`
+
+type FindQuestionsForExamParams struct {
+	ExamID pgtype.UUID `db:"exam_id" json:"exam_id"`
+}
+
+// FindQuestionsForExam
+//
+//	SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions
+//	WHERE exam_id = $1
+func (q *Queries) FindQuestionsForExam(ctx context.Context, arg FindQuestionsForExamParams) ([]ExaminationQuestion, error) {
+	rows, err := q.db.Query(ctx, findQuestionsForExam, arg.ExamID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ExaminationQuestion
+	for rows.Next() {
+		var i ExaminationQuestion
+		if err := rows.Scan(
+			&i.QuestionID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+			&i.Deleted,
+			&i.ExamID,
+			&i.Index,
+			&i.Answered,
+			&i.QuestionText,
+			&i.QuestionType,
+			&i.ProvidedAnswer,
+			&i.ResponseOptions,
 		); err != nil {
 			return nil, err
 		}

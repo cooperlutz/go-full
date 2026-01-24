@@ -362,6 +362,63 @@ func (_c *MockQuerier_AddExam_Call) RunAndReturn(run func(ctx context.Context, a
 	return _c
 }
 
+// AddQuestion provides a mock function for the type MockQuerier
+func (_mock *MockQuerier) AddQuestion(ctx context.Context, arg outbound.AddQuestionParams) error {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddQuestion")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.AddQuestionParams) error); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockQuerier_AddQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddQuestion'
+type MockQuerier_AddQuestion_Call struct {
+	*mock.Call
+}
+
+// AddQuestion is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.AddQuestionParams
+func (_e *MockQuerier_Expecter) AddQuestion(ctx interface{}, arg interface{}) *MockQuerier_AddQuestion_Call {
+	return &MockQuerier_AddQuestion_Call{Call: _e.mock.On("AddQuestion", ctx, arg)}
+}
+
+func (_c *MockQuerier_AddQuestion_Call) Run(run func(ctx context.Context, arg outbound.AddQuestionParams)) *MockQuerier_AddQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.AddQuestionParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.AddQuestionParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockQuerier_AddQuestion_Call) Return(err error) *MockQuerier_AddQuestion_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockQuerier_AddQuestion_Call) RunAndReturn(run func(ctx context.Context, arg outbound.AddQuestionParams) error) *MockQuerier_AddQuestion_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FindAllExams provides a mock function for the type MockQuerier
 func (_mock *MockQuerier) FindAllExams(ctx context.Context) ([]outbound.ExaminationExam, error) {
 	ret := _mock.Called(ctx)
@@ -420,6 +477,74 @@ func (_c *MockQuerier_FindAllExams_Call) Return(examinationExams []outbound.Exam
 }
 
 func (_c *MockQuerier_FindAllExams_Call) RunAndReturn(run func(ctx context.Context) ([]outbound.ExaminationExam, error)) *MockQuerier_FindAllExams_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindQuestionsForExam provides a mock function for the type MockQuerier
+func (_mock *MockQuerier) FindQuestionsForExam(ctx context.Context, arg outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindQuestionsForExam")
+	}
+
+	var r0 []outbound.ExaminationQuestion
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.FindQuestionsForExamParams) []outbound.ExaminationQuestion); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]outbound.ExaminationQuestion)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, outbound.FindQuestionsForExamParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockQuerier_FindQuestionsForExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindQuestionsForExam'
+type MockQuerier_FindQuestionsForExam_Call struct {
+	*mock.Call
+}
+
+// FindQuestionsForExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.FindQuestionsForExamParams
+func (_e *MockQuerier_Expecter) FindQuestionsForExam(ctx interface{}, arg interface{}) *MockQuerier_FindQuestionsForExam_Call {
+	return &MockQuerier_FindQuestionsForExam_Call{Call: _e.mock.On("FindQuestionsForExam", ctx, arg)}
+}
+
+func (_c *MockQuerier_FindQuestionsForExam_Call) Run(run func(ctx context.Context, arg outbound.FindQuestionsForExamParams)) *MockQuerier_FindQuestionsForExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.FindQuestionsForExamParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.FindQuestionsForExamParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockQuerier_FindQuestionsForExam_Call) Return(examinationQuestions []outbound.ExaminationQuestion, err error) *MockQuerier_FindQuestionsForExam_Call {
+	_c.Call.Return(examinationQuestions, err)
+	return _c
+}
+
+func (_c *MockQuerier_FindQuestionsForExam_Call) RunAndReturn(run func(ctx context.Context, arg outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error)) *MockQuerier_FindQuestionsForExam_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -508,6 +633,63 @@ func (_c *MockIQuerierExamination_AddExam_Call) RunAndReturn(run func(ctx contex
 	return _c
 }
 
+// AddQuestion provides a mock function for the type MockIQuerierExamination
+func (_mock *MockIQuerierExamination) AddQuestion(ctx context.Context, arg outbound.AddQuestionParams) error {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AddQuestion")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.AddQuestionParams) error); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockIQuerierExamination_AddQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddQuestion'
+type MockIQuerierExamination_AddQuestion_Call struct {
+	*mock.Call
+}
+
+// AddQuestion is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.AddQuestionParams
+func (_e *MockIQuerierExamination_Expecter) AddQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamination_AddQuestion_Call {
+	return &MockIQuerierExamination_AddQuestion_Call{Call: _e.mock.On("AddQuestion", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamination_AddQuestion_Call) Run(run func(ctx context.Context, arg outbound.AddQuestionParams)) *MockIQuerierExamination_AddQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.AddQuestionParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.AddQuestionParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamination_AddQuestion_Call) Return(err error) *MockIQuerierExamination_AddQuestion_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockIQuerierExamination_AddQuestion_Call) RunAndReturn(run func(ctx context.Context, arg outbound.AddQuestionParams) error) *MockIQuerierExamination_AddQuestion_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FindAllExams provides a mock function for the type MockIQuerierExamination
 func (_mock *MockIQuerierExamination) FindAllExams(ctx context.Context) ([]outbound.ExaminationExam, error) {
 	ret := _mock.Called(ctx)
@@ -566,6 +748,74 @@ func (_c *MockIQuerierExamination_FindAllExams_Call) Return(examinationExams []o
 }
 
 func (_c *MockIQuerierExamination_FindAllExams_Call) RunAndReturn(run func(ctx context.Context) ([]outbound.ExaminationExam, error)) *MockIQuerierExamination_FindAllExams_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindQuestionsForExam provides a mock function for the type MockIQuerierExamination
+func (_mock *MockIQuerierExamination) FindQuestionsForExam(ctx context.Context, arg outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error) {
+	ret := _mock.Called(ctx, arg)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindQuestionsForExam")
+	}
+
+	var r0 []outbound.ExaminationQuestion
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error)); ok {
+		return returnFunc(ctx, arg)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, outbound.FindQuestionsForExamParams) []outbound.ExaminationQuestion); ok {
+		r0 = returnFunc(ctx, arg)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]outbound.ExaminationQuestion)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, outbound.FindQuestionsForExamParams) error); ok {
+		r1 = returnFunc(ctx, arg)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamination_FindQuestionsForExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindQuestionsForExam'
+type MockIQuerierExamination_FindQuestionsForExam_Call struct {
+	*mock.Call
+}
+
+// FindQuestionsForExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - arg outbound.FindQuestionsForExamParams
+func (_e *MockIQuerierExamination_Expecter) FindQuestionsForExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_FindQuestionsForExam_Call {
+	return &MockIQuerierExamination_FindQuestionsForExam_Call{Call: _e.mock.On("FindQuestionsForExam", ctx, arg)}
+}
+
+func (_c *MockIQuerierExamination_FindQuestionsForExam_Call) Run(run func(ctx context.Context, arg outbound.FindQuestionsForExamParams)) *MockIQuerierExamination_FindQuestionsForExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 outbound.FindQuestionsForExamParams
+		if args[1] != nil {
+			arg1 = args[1].(outbound.FindQuestionsForExamParams)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamination_FindQuestionsForExam_Call) Return(examinationQuestions []outbound.ExaminationQuestion, err error) *MockIQuerierExamination_FindQuestionsForExam_Call {
+	_c.Call.Return(examinationQuestions, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamination_FindQuestionsForExam_Call) RunAndReturn(run func(ctx context.Context, arg outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error)) *MockIQuerierExamination_FindQuestionsForExam_Call {
 	_c.Call.Return(run)
 	return _c
 }

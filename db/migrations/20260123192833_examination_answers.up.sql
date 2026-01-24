@@ -1,0 +1,22 @@
+
+CREATE TABLE IF NOT EXISTS examination.questions (
+    question_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    exam_id UUID NOT NULL,
+    -- 
+    index INT NOT NULL,
+    answered BOOLEAN NOT NULL DEFAULT FALSE,
+    question_text TEXT NOT NULL,
+    question_type TEXT NOT NULL,
+    provided_answer TEXT,
+    response_options TEXT[]
+);
+
+ALTER TABLE examination.questions
+ADD CONSTRAINT fk_exam
+FOREIGN KEY (exam_id)
+REFERENCES examination.exams (exam_id)
+ON DELETE CASCADE;

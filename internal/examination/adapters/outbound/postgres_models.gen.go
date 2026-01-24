@@ -19,3 +19,18 @@ type ExaminationExam struct {
 	CompletedAt pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
 	StartedAt   pgtype.Timestamptz `db:"started_at" json:"started_at"`
 }
+
+type ExaminationQuestion struct {
+	QuestionID      pgtype.UUID        `db:"question_id" json:"question_id"`
+	CreatedAt       pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt       pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	DeletedAt       pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
+	Deleted         bool               `db:"deleted" json:"deleted"`
+	ExamID          pgtype.UUID        `db:"exam_id" json:"exam_id"`
+	Index           int32              `db:"index" json:"index"`
+	Answered        bool               `db:"answered" json:"answered"`
+	QuestionText    string             `db:"question_text" json:"question_text"`
+	QuestionType    string             `db:"question_type" json:"question_type"`
+	ProvidedAnswer  pgtype.Text        `db:"provided_answer" json:"provided_answer"`
+	ResponseOptions []string           `db:"response_options" json:"response_options"`
+}

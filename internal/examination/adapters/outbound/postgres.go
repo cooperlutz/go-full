@@ -21,6 +21,9 @@ func NewPostgresAdapter(db DBTX) PostgresAdapter {
 
 // FindAll retrieves all exams from the database and maps them to domain entities.
 func (p PostgresAdapter) FindAll(ctx context.Context) ([]examination.Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findall")
+	defer span.End()
+
 	exams, err := p.Handler.FindAllExams(ctx)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
@@ -43,6 +46,32 @@ func (p PostgresAdapter) AddExam(ctx context.Context, exam *examination.Exam) er
 		telemetree.RecordError(ctx, err)
 
 		return err
+	}
+
+	err = p.addQuestions(ctx, exam)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
+	return nil
+}
+
+// addQuestions adds questions associated with an exam to the database.
+func (p PostgresAdapter) addQuestions(ctx context.Context, exam *examination.Exam) error {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.addquestions")
+	defer span.End()
+
+	for _, question := range exam.GetQuestions() {
+		dbQuestion := ExaminationQuestionToDB(question, exam.GetIdUUID())
+
+		err := p.Handler.AddQuestion(ctx, AddQuestionParams(dbQuestion))
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return err
+		}
 	}
 
 	return nil

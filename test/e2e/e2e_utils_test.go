@@ -75,7 +75,7 @@ func seedTestData() error {
 	return nil
 }
 
-func countOfExaminationEvents() (int64, error) {
+func countOfQuery(schema string, table string) (int64, error) {
 	ctx := context.Background()
 
 	cfg, err := config.LoadConfigFromEnvVars()
@@ -89,9 +89,7 @@ func countOfExaminationEvents() (int64, error) {
 	}
 	defer conn.Close(ctx)
 
-	const sqlStatement = `
-	SELECT Count(*) FROM public.watermill_examination;
-	`
+	sqlStatement := `SELECT COUNT(*) FROM ` + schema + `.` + table + `;`
 
 	row := conn.QueryRow(ctx, sqlStatement)
 	var count int64
