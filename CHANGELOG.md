@@ -1,3 +1,9 @@
+## v0.1.29 (2026-01-26)
+
+### Fix
+
+- outline team topology rather than context mapping, add dora check (#145)
+
 ## v0.1.28 (2026-01-24)
 
 ### Fix
