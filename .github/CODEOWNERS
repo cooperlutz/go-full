@@ -1,0 +1,57 @@
+# Shared / All Teams
+# /docs/
+# /examples/
+# /test/
+# /pkg/
+# /db/migrations/   # everyone needs access to create migrations
+# .mockery.yml   # everyone needs access to update mocks
+# .sqlc.yaml   # everyone needs access to update sqlc config
+# go.mod   # everyone needs access to update dependencies
+# go.sum   # everyone needs access to update dependencies
+# Makefile   # everyone needs access to build commands
+# README.md   # everyone needs access to update documentation
+
+# Enabling Team / Product Architecture Team
+*  @go-full/product-architecture-team
+*   @cooperlutz
+
+# Platform Team / The Go-Full Platform Team
+/api/   @go-full/platform-team
+/app/   @go-full/platform-team
+/cmd/   @go-full/platform-team
+/db/   @go-full/platform-team
+/configs/   @go-full/platform-team
+/build/   @go-full/platform-team
+/deploy/   @go-full/platform-team
+.cz.yaml   @go-full/platform-team
+.dockerignore   @go-full/platform-team
+golangci.yml   @go-full/platform-team
+
+# Stream-aligned Teams
+
+## Examination Team
+/api/frontend/src/examination/   @go-full/examination-team
+/api/rest/examination/   @go-full/examination-team
+/db/examination/   @go-full/examination-team
+/internal/examination/   @go-full/examination-team
+
+## Exam Library Team
+/api/frontend/src/exam-library/   @go-full/exam-library-team
+/api/rest/exam-library/   @go-full/exam-library-team
+/db/exam_library/   @go-full/exam-library-team
+/internal/exam_library/   @go-full/exam-library-team
+
+## Grading Team
+/api/frontend/src/grading/   @go-full/grading-team
+/api/rest/grading/   @go-full/grading-team
+/db/grading/   @go-full/grading-team
+/internal/grading/   @go-full/grading-team
+
+## Reporting Team
+/api/frontend/src/reporting/   @go-full/reporting-team
+/api/rest/reporting/   @go-full/reporting-team
+/db/reporting/   @go-full/reporting-team
+/internal/reporting/   @go-full/reporting-team
+
+# Complicated Subsystem Teams
+# None
