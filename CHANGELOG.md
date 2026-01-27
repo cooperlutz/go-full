@@ -1,3 +1,9 @@
+## v0.1.30 (2026-01-27)
+
+### Fix
+
+- **deps-dev**: bump msw from 2.12.4 to 2.12.7 in /api/frontend (#143)
+
 ## v0.1.29 (2026-01-26)
 
 ### Fix
