@@ -81,15 +81,11 @@ const examLibraryHandlers = [
 
 http.get('/examlibrary/api/v1/exams/:id', (req) => {
     const { id } = req.params
-    if (id === 'f660452b-4075-4eac-b87a-a5b1ce7bd428') {
       return HttpResponse.json({
-        "id": "f660452b-4075-4eac-b87a-a5b1ce7bd428",
+        id,
         "name": "Sample Exam",
         "gradeLevel": 6
       })
-    } else {
-      return HttpResponse.json({ error: 'Not Found' }, { status: 404 })
-    }
   })
 ]
 
