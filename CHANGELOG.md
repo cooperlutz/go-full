@@ -1,3 +1,9 @@
+## v0.1.31 (2026-01-28)
+
+### Fix
+
+- add exam library creator in ui (#146)
+
 ## v0.1.30 (2026-01-27)
 
 ### Fix
