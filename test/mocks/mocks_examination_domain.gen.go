@@ -8,6 +8,7 @@ import (
 	"context"
 
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
+	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -95,64 +96,133 @@ func (_c *MockRepository_AddExam_Call) RunAndReturn(run func(ctx context.Context
 	return _c
 }
 
-// FindAll provides a mock function for the type MockRepository
-func (_mock *MockRepository) FindAll(ctx context.Context) ([]examination.Exam, error) {
-	ret := _mock.Called(ctx)
+// GetExam provides a mock function for the type MockRepository
+func (_mock *MockRepository) GetExam(ctx context.Context, id uuid.UUID) (*examination.Exam, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
-		panic("no return value specified for FindAll")
+		panic("no return value specified for GetExam")
 	}
 
-	var r0 []examination.Exam
+	var r0 *examination.Exam
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]examination.Exam, error)); ok {
-		return returnFunc(ctx)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*examination.Exam, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context) []examination.Exam); ok {
-		r0 = returnFunc(ctx)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) *examination.Exam); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]examination.Exam)
+			r0 = ret.Get(0).(*examination.Exam)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
-		r1 = returnFunc(ctx)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
 	return r0, r1
 }
 
-// MockRepository_FindAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAll'
-type MockRepository_FindAll_Call struct {
+// MockRepository_GetExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExam'
+type MockRepository_GetExam_Call struct {
 	*mock.Call
 }
 
-// FindAll is a helper method to define mock.On call
+// GetExam is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockRepository_Expecter) FindAll(ctx interface{}) *MockRepository_FindAll_Call {
-	return &MockRepository_FindAll_Call{Call: _e.mock.On("FindAll", ctx)}
+//   - id uuid.UUID
+func (_e *MockRepository_Expecter) GetExam(ctx interface{}, id interface{}) *MockRepository_GetExam_Call {
+	return &MockRepository_GetExam_Call{Call: _e.mock.On("GetExam", ctx, id)}
 }
 
-func (_c *MockRepository_FindAll_Call) Run(run func(ctx context.Context)) *MockRepository_FindAll_Call {
+func (_c *MockRepository_GetExam_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockRepository_GetExam_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
 }
 
-func (_c *MockRepository_FindAll_Call) Return(exams []examination.Exam, err error) *MockRepository_FindAll_Call {
-	_c.Call.Return(exams, err)
+func (_c *MockRepository_GetExam_Call) Return(exam *examination.Exam, err error) *MockRepository_GetExam_Call {
+	_c.Call.Return(exam, err)
 	return _c
 }
 
-func (_c *MockRepository_FindAll_Call) RunAndReturn(run func(ctx context.Context) ([]examination.Exam, error)) *MockRepository_FindAll_Call {
+func (_c *MockRepository_GetExam_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (*examination.Exam, error)) *MockRepository_GetExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateExam provides a mock function for the type MockRepository
+func (_mock *MockRepository) UpdateExam(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error)) error {
+	ret := _mock.Called(ctx, exam, updateFn)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateExam")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *examination.Exam, func(h *examination.Exam) (*examination.Exam, error)) error); ok {
+		r0 = returnFunc(ctx, exam, updateFn)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockRepository_UpdateExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateExam'
+type MockRepository_UpdateExam_Call struct {
+	*mock.Call
+}
+
+// UpdateExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - exam *examination.Exam
+//   - updateFn func(h *examination.Exam) (*examination.Exam, error)
+func (_e *MockRepository_Expecter) UpdateExam(ctx interface{}, exam interface{}, updateFn interface{}) *MockRepository_UpdateExam_Call {
+	return &MockRepository_UpdateExam_Call{Call: _e.mock.On("UpdateExam", ctx, exam, updateFn)}
+}
+
+func (_c *MockRepository_UpdateExam_Call) Run(run func(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error))) *MockRepository_UpdateExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *examination.Exam
+		if args[1] != nil {
+			arg1 = args[1].(*examination.Exam)
+		}
+		var arg2 func(h *examination.Exam) (*examination.Exam, error)
+		if args[2] != nil {
+			arg2 = args[2].(func(h *examination.Exam) (*examination.Exam, error))
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockRepository_UpdateExam_Call) Return(err error) *MockRepository_UpdateExam_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockRepository_UpdateExam_Call) RunAndReturn(run func(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error)) error) *MockRepository_UpdateExam_Call {
 	_c.Call.Return(run)
 	return _c
 }

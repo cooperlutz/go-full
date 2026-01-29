@@ -39,6 +39,64 @@ func (_m *MockServerInterface) EXPECT() *MockServerInterface_Expecter {
 	return &MockServerInterface_Expecter{mock: &_m.Mock}
 }
 
+// AnswerQuestion provides a mock function for the type MockServerInterface
+func (_mock *MockServerInterface) AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	_mock.Called(w, r, examId, questionIndex)
+	return
+}
+
+// MockServerInterface_AnswerQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AnswerQuestion'
+type MockServerInterface_AnswerQuestion_Call struct {
+	*mock.Call
+}
+
+// AnswerQuestion is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+//   - examId string
+//   - questionIndex int32
+func (_e *MockServerInterface_Expecter) AnswerQuestion(w interface{}, r interface{}, examId interface{}, questionIndex interface{}) *MockServerInterface_AnswerQuestion_Call {
+	return &MockServerInterface_AnswerQuestion_Call{Call: _e.mock.On("AnswerQuestion", w, r, examId, questionIndex)}
+}
+
+func (_c *MockServerInterface_AnswerQuestion_Call) Run(run func(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)) *MockServerInterface_AnswerQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 int32
+		if args[3] != nil {
+			arg3 = args[3].(int32)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockServerInterface_AnswerQuestion_Call) Return() *MockServerInterface_AnswerQuestion_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockServerInterface_AnswerQuestion_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)) *MockServerInterface_AnswerQuestion_Call {
+	_c.Run(run)
+	return _c
+}
+
 // GetAvailableExams provides a mock function for the type MockServerInterface
 func (_mock *MockServerInterface) GetAvailableExams(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)
@@ -85,6 +143,168 @@ func (_c *MockServerInterface_GetAvailableExams_Call) RunAndReturn(run func(w ht
 	return _c
 }
 
+// GetExam provides a mock function for the type MockServerInterface
+func (_mock *MockServerInterface) GetExam(w http.ResponseWriter, r *http.Request, examId string) {
+	_mock.Called(w, r, examId)
+	return
+}
+
+// MockServerInterface_GetExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExam'
+type MockServerInterface_GetExam_Call struct {
+	*mock.Call
+}
+
+// GetExam is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+//   - examId string
+func (_e *MockServerInterface_Expecter) GetExam(w interface{}, r interface{}, examId interface{}) *MockServerInterface_GetExam_Call {
+	return &MockServerInterface_GetExam_Call{Call: _e.mock.On("GetExam", w, r, examId)}
+}
+
+func (_c *MockServerInterface_GetExam_Call) Run(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_GetExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockServerInterface_GetExam_Call) Return() *MockServerInterface_GetExam_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockServerInterface_GetExam_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_GetExam_Call {
+	_c.Run(run)
+	return _c
+}
+
+// GetExamProgress provides a mock function for the type MockServerInterface
+func (_mock *MockServerInterface) GetExamProgress(w http.ResponseWriter, r *http.Request, examId string) {
+	_mock.Called(w, r, examId)
+	return
+}
+
+// MockServerInterface_GetExamProgress_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExamProgress'
+type MockServerInterface_GetExamProgress_Call struct {
+	*mock.Call
+}
+
+// GetExamProgress is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+//   - examId string
+func (_e *MockServerInterface_Expecter) GetExamProgress(w interface{}, r interface{}, examId interface{}) *MockServerInterface_GetExamProgress_Call {
+	return &MockServerInterface_GetExamProgress_Call{Call: _e.mock.On("GetExamProgress", w, r, examId)}
+}
+
+func (_c *MockServerInterface_GetExamProgress_Call) Run(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_GetExamProgress_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockServerInterface_GetExamProgress_Call) Return() *MockServerInterface_GetExamProgress_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockServerInterface_GetExamProgress_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_GetExamProgress_Call {
+	_c.Run(run)
+	return _c
+}
+
+// GetExamQuestion provides a mock function for the type MockServerInterface
+func (_mock *MockServerInterface) GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	_mock.Called(w, r, examId, questionIndex)
+	return
+}
+
+// MockServerInterface_GetExamQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExamQuestion'
+type MockServerInterface_GetExamQuestion_Call struct {
+	*mock.Call
+}
+
+// GetExamQuestion is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+//   - examId string
+//   - questionIndex int32
+func (_e *MockServerInterface_Expecter) GetExamQuestion(w interface{}, r interface{}, examId interface{}, questionIndex interface{}) *MockServerInterface_GetExamQuestion_Call {
+	return &MockServerInterface_GetExamQuestion_Call{Call: _e.mock.On("GetExamQuestion", w, r, examId, questionIndex)}
+}
+
+func (_c *MockServerInterface_GetExamQuestion_Call) Run(run func(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)) *MockServerInterface_GetExamQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		var arg3 int32
+		if args[3] != nil {
+			arg3 = args[3].(int32)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockServerInterface_GetExamQuestion_Call) Return() *MockServerInterface_GetExamQuestion_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockServerInterface_GetExamQuestion_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)) *MockServerInterface_GetExamQuestion_Call {
+	_c.Run(run)
+	return _c
+}
+
 // StartNewExam provides a mock function for the type MockServerInterface
 func (_mock *MockServerInterface) StartNewExam(w http.ResponseWriter, r *http.Request) {
 	_mock.Called(w, r)
@@ -127,6 +347,58 @@ func (_c *MockServerInterface_StartNewExam_Call) Return() *MockServerInterface_S
 }
 
 func (_c *MockServerInterface_StartNewExam_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request)) *MockServerInterface_StartNewExam_Call {
+	_c.Run(run)
+	return _c
+}
+
+// SubmitExam provides a mock function for the type MockServerInterface
+func (_mock *MockServerInterface) SubmitExam(w http.ResponseWriter, r *http.Request, examId string) {
+	_mock.Called(w, r, examId)
+	return
+}
+
+// MockServerInterface_SubmitExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SubmitExam'
+type MockServerInterface_SubmitExam_Call struct {
+	*mock.Call
+}
+
+// SubmitExam is a helper method to define mock.On call
+//   - w http.ResponseWriter
+//   - r *http.Request
+//   - examId string
+func (_e *MockServerInterface_Expecter) SubmitExam(w interface{}, r interface{}, examId interface{}) *MockServerInterface_SubmitExam_Call {
+	return &MockServerInterface_SubmitExam_Call{Call: _e.mock.On("SubmitExam", w, r, examId)}
+}
+
+func (_c *MockServerInterface_SubmitExam_Call) Run(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_SubmitExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		var arg1 *http.Request
+		if args[1] != nil {
+			arg1 = args[1].(*http.Request)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockServerInterface_SubmitExam_Call) Return() *MockServerInterface_SubmitExam_Call {
+	_c.Call.Return()
+	return _c
+}
+
+func (_c *MockServerInterface_SubmitExam_Call) RunAndReturn(run func(w http.ResponseWriter, r *http.Request, examId string)) *MockServerInterface_SubmitExam_Call {
 	_c.Run(run)
 	return _c
 }
@@ -287,6 +559,396 @@ func (_c *MockStartNewExamResponseObject_VisitStartNewExamResponse_Call) RunAndR
 	return _c
 }
 
+// NewMockGetExamResponseObject creates a new instance of MockGetExamResponseObject. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockGetExamResponseObject(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *MockGetExamResponseObject {
+	mock := &MockGetExamResponseObject{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+
+// MockGetExamResponseObject is an autogenerated mock type for the GetExamResponseObject type
+type MockGetExamResponseObject struct {
+	mock.Mock
+}
+
+type MockGetExamResponseObject_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *MockGetExamResponseObject) EXPECT() *MockGetExamResponseObject_Expecter {
+	return &MockGetExamResponseObject_Expecter{mock: &_m.Mock}
+}
+
+// VisitGetExamResponse provides a mock function for the type MockGetExamResponseObject
+func (_mock *MockGetExamResponseObject) VisitGetExamResponse(w http.ResponseWriter) error {
+	ret := _mock.Called(w)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VisitGetExamResponse")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(http.ResponseWriter) error); ok {
+		r0 = returnFunc(w)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockGetExamResponseObject_VisitGetExamResponse_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VisitGetExamResponse'
+type MockGetExamResponseObject_VisitGetExamResponse_Call struct {
+	*mock.Call
+}
+
+// VisitGetExamResponse is a helper method to define mock.On call
+//   - w http.ResponseWriter
+func (_e *MockGetExamResponseObject_Expecter) VisitGetExamResponse(w interface{}) *MockGetExamResponseObject_VisitGetExamResponse_Call {
+	return &MockGetExamResponseObject_VisitGetExamResponse_Call{Call: _e.mock.On("VisitGetExamResponse", w)}
+}
+
+func (_c *MockGetExamResponseObject_VisitGetExamResponse_Call) Run(run func(w http.ResponseWriter)) *MockGetExamResponseObject_VisitGetExamResponse_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockGetExamResponseObject_VisitGetExamResponse_Call) Return(err error) *MockGetExamResponseObject_VisitGetExamResponse_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockGetExamResponseObject_VisitGetExamResponse_Call) RunAndReturn(run func(w http.ResponseWriter) error) *MockGetExamResponseObject_VisitGetExamResponse_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// NewMockGetExamProgressResponseObject creates a new instance of MockGetExamProgressResponseObject. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockGetExamProgressResponseObject(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *MockGetExamProgressResponseObject {
+	mock := &MockGetExamProgressResponseObject{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+
+// MockGetExamProgressResponseObject is an autogenerated mock type for the GetExamProgressResponseObject type
+type MockGetExamProgressResponseObject struct {
+	mock.Mock
+}
+
+type MockGetExamProgressResponseObject_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *MockGetExamProgressResponseObject) EXPECT() *MockGetExamProgressResponseObject_Expecter {
+	return &MockGetExamProgressResponseObject_Expecter{mock: &_m.Mock}
+}
+
+// VisitGetExamProgressResponse provides a mock function for the type MockGetExamProgressResponseObject
+func (_mock *MockGetExamProgressResponseObject) VisitGetExamProgressResponse(w http.ResponseWriter) error {
+	ret := _mock.Called(w)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VisitGetExamProgressResponse")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(http.ResponseWriter) error); ok {
+		r0 = returnFunc(w)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VisitGetExamProgressResponse'
+type MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call struct {
+	*mock.Call
+}
+
+// VisitGetExamProgressResponse is a helper method to define mock.On call
+//   - w http.ResponseWriter
+func (_e *MockGetExamProgressResponseObject_Expecter) VisitGetExamProgressResponse(w interface{}) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
+	return &MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call{Call: _e.mock.On("VisitGetExamProgressResponse", w)}
+}
+
+func (_c *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call) Run(run func(w http.ResponseWriter)) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call) Return(err error) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call) RunAndReturn(run func(w http.ResponseWriter) error) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// NewMockGetExamQuestionResponseObject creates a new instance of MockGetExamQuestionResponseObject. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockGetExamQuestionResponseObject(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *MockGetExamQuestionResponseObject {
+	mock := &MockGetExamQuestionResponseObject{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+
+// MockGetExamQuestionResponseObject is an autogenerated mock type for the GetExamQuestionResponseObject type
+type MockGetExamQuestionResponseObject struct {
+	mock.Mock
+}
+
+type MockGetExamQuestionResponseObject_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *MockGetExamQuestionResponseObject) EXPECT() *MockGetExamQuestionResponseObject_Expecter {
+	return &MockGetExamQuestionResponseObject_Expecter{mock: &_m.Mock}
+}
+
+// VisitGetExamQuestionResponse provides a mock function for the type MockGetExamQuestionResponseObject
+func (_mock *MockGetExamQuestionResponseObject) VisitGetExamQuestionResponse(w http.ResponseWriter) error {
+	ret := _mock.Called(w)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VisitGetExamQuestionResponse")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(http.ResponseWriter) error); ok {
+		r0 = returnFunc(w)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VisitGetExamQuestionResponse'
+type MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call struct {
+	*mock.Call
+}
+
+// VisitGetExamQuestionResponse is a helper method to define mock.On call
+//   - w http.ResponseWriter
+func (_e *MockGetExamQuestionResponseObject_Expecter) VisitGetExamQuestionResponse(w interface{}) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
+	return &MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call{Call: _e.mock.On("VisitGetExamQuestionResponse", w)}
+}
+
+func (_c *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call) Run(run func(w http.ResponseWriter)) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call) Return(err error) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call) RunAndReturn(run func(w http.ResponseWriter) error) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// NewMockAnswerQuestionResponseObject creates a new instance of MockAnswerQuestionResponseObject. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockAnswerQuestionResponseObject(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *MockAnswerQuestionResponseObject {
+	mock := &MockAnswerQuestionResponseObject{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+
+// MockAnswerQuestionResponseObject is an autogenerated mock type for the AnswerQuestionResponseObject type
+type MockAnswerQuestionResponseObject struct {
+	mock.Mock
+}
+
+type MockAnswerQuestionResponseObject_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *MockAnswerQuestionResponseObject) EXPECT() *MockAnswerQuestionResponseObject_Expecter {
+	return &MockAnswerQuestionResponseObject_Expecter{mock: &_m.Mock}
+}
+
+// VisitAnswerQuestionResponse provides a mock function for the type MockAnswerQuestionResponseObject
+func (_mock *MockAnswerQuestionResponseObject) VisitAnswerQuestionResponse(w http.ResponseWriter) error {
+	ret := _mock.Called(w)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VisitAnswerQuestionResponse")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(http.ResponseWriter) error); ok {
+		r0 = returnFunc(w)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VisitAnswerQuestionResponse'
+type MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call struct {
+	*mock.Call
+}
+
+// VisitAnswerQuestionResponse is a helper method to define mock.On call
+//   - w http.ResponseWriter
+func (_e *MockAnswerQuestionResponseObject_Expecter) VisitAnswerQuestionResponse(w interface{}) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
+	return &MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call{Call: _e.mock.On("VisitAnswerQuestionResponse", w)}
+}
+
+func (_c *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call) Run(run func(w http.ResponseWriter)) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call) Return(err error) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call) RunAndReturn(run func(w http.ResponseWriter) error) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// NewMockSubmitExamResponseObject creates a new instance of MockSubmitExamResponseObject. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockSubmitExamResponseObject(t interface {
+	mock.TestingT
+	Cleanup(func())
+}) *MockSubmitExamResponseObject {
+	mock := &MockSubmitExamResponseObject{}
+	mock.Mock.Test(t)
+
+	t.Cleanup(func() { mock.AssertExpectations(t) })
+
+	return mock
+}
+
+// MockSubmitExamResponseObject is an autogenerated mock type for the SubmitExamResponseObject type
+type MockSubmitExamResponseObject struct {
+	mock.Mock
+}
+
+type MockSubmitExamResponseObject_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *MockSubmitExamResponseObject) EXPECT() *MockSubmitExamResponseObject_Expecter {
+	return &MockSubmitExamResponseObject_Expecter{mock: &_m.Mock}
+}
+
+// VisitSubmitExamResponse provides a mock function for the type MockSubmitExamResponseObject
+func (_mock *MockSubmitExamResponseObject) VisitSubmitExamResponse(w http.ResponseWriter) error {
+	ret := _mock.Called(w)
+
+	if len(ret) == 0 {
+		panic("no return value specified for VisitSubmitExamResponse")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(http.ResponseWriter) error); ok {
+		r0 = returnFunc(w)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockSubmitExamResponseObject_VisitSubmitExamResponse_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'VisitSubmitExamResponse'
+type MockSubmitExamResponseObject_VisitSubmitExamResponse_Call struct {
+	*mock.Call
+}
+
+// VisitSubmitExamResponse is a helper method to define mock.On call
+//   - w http.ResponseWriter
+func (_e *MockSubmitExamResponseObject_Expecter) VisitSubmitExamResponse(w interface{}) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
+	return &MockSubmitExamResponseObject_VisitSubmitExamResponse_Call{Call: _e.mock.On("VisitSubmitExamResponse", w)}
+}
+
+func (_c *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call) Run(run func(w http.ResponseWriter)) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 http.ResponseWriter
+		if args[0] != nil {
+			arg0 = args[0].(http.ResponseWriter)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call) Return(err error) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call) RunAndReturn(run func(w http.ResponseWriter) error) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewMockStrictServerInterface creates a new instance of MockStrictServerInterface. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewMockStrictServerInterface(t interface {
@@ -312,6 +974,74 @@ type MockStrictServerInterface_Expecter struct {
 
 func (_m *MockStrictServerInterface) EXPECT() *MockStrictServerInterface_Expecter {
 	return &MockStrictServerInterface_Expecter{mock: &_m.Mock}
+}
+
+// AnswerQuestion provides a mock function for the type MockStrictServerInterface
+func (_mock *MockStrictServerInterface) AnswerQuestion(ctx context.Context, request inbound.AnswerQuestionRequestObject) (inbound.AnswerQuestionResponseObject, error) {
+	ret := _mock.Called(ctx, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for AnswerQuestion")
+	}
+
+	var r0 inbound.AnswerQuestionResponseObject
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.AnswerQuestionRequestObject) (inbound.AnswerQuestionResponseObject, error)); ok {
+		return returnFunc(ctx, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.AnswerQuestionRequestObject) inbound.AnswerQuestionResponseObject); ok {
+		r0 = returnFunc(ctx, request)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(inbound.AnswerQuestionResponseObject)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, inbound.AnswerQuestionRequestObject) error); ok {
+		r1 = returnFunc(ctx, request)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockStrictServerInterface_AnswerQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AnswerQuestion'
+type MockStrictServerInterface_AnswerQuestion_Call struct {
+	*mock.Call
+}
+
+// AnswerQuestion is a helper method to define mock.On call
+//   - ctx context.Context
+//   - request inbound.AnswerQuestionRequestObject
+func (_e *MockStrictServerInterface_Expecter) AnswerQuestion(ctx interface{}, request interface{}) *MockStrictServerInterface_AnswerQuestion_Call {
+	return &MockStrictServerInterface_AnswerQuestion_Call{Call: _e.mock.On("AnswerQuestion", ctx, request)}
+}
+
+func (_c *MockStrictServerInterface_AnswerQuestion_Call) Run(run func(ctx context.Context, request inbound.AnswerQuestionRequestObject)) *MockStrictServerInterface_AnswerQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 inbound.AnswerQuestionRequestObject
+		if args[1] != nil {
+			arg1 = args[1].(inbound.AnswerQuestionRequestObject)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockStrictServerInterface_AnswerQuestion_Call) Return(answerQuestionResponseObject inbound.AnswerQuestionResponseObject, err error) *MockStrictServerInterface_AnswerQuestion_Call {
+	_c.Call.Return(answerQuestionResponseObject, err)
+	return _c
+}
+
+func (_c *MockStrictServerInterface_AnswerQuestion_Call) RunAndReturn(run func(ctx context.Context, request inbound.AnswerQuestionRequestObject) (inbound.AnswerQuestionResponseObject, error)) *MockStrictServerInterface_AnswerQuestion_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // GetAvailableExams provides a mock function for the type MockStrictServerInterface
@@ -382,6 +1112,210 @@ func (_c *MockStrictServerInterface_GetAvailableExams_Call) RunAndReturn(run fun
 	return _c
 }
 
+// GetExam provides a mock function for the type MockStrictServerInterface
+func (_mock *MockStrictServerInterface) GetExam(ctx context.Context, request inbound.GetExamRequestObject) (inbound.GetExamResponseObject, error) {
+	ret := _mock.Called(ctx, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetExam")
+	}
+
+	var r0 inbound.GetExamResponseObject
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamRequestObject) (inbound.GetExamResponseObject, error)); ok {
+		return returnFunc(ctx, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamRequestObject) inbound.GetExamResponseObject); ok {
+		r0 = returnFunc(ctx, request)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(inbound.GetExamResponseObject)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, inbound.GetExamRequestObject) error); ok {
+		r1 = returnFunc(ctx, request)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockStrictServerInterface_GetExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExam'
+type MockStrictServerInterface_GetExam_Call struct {
+	*mock.Call
+}
+
+// GetExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - request inbound.GetExamRequestObject
+func (_e *MockStrictServerInterface_Expecter) GetExam(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExam_Call {
+	return &MockStrictServerInterface_GetExam_Call{Call: _e.mock.On("GetExam", ctx, request)}
+}
+
+func (_c *MockStrictServerInterface_GetExam_Call) Run(run func(ctx context.Context, request inbound.GetExamRequestObject)) *MockStrictServerInterface_GetExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 inbound.GetExamRequestObject
+		if args[1] != nil {
+			arg1 = args[1].(inbound.GetExamRequestObject)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExam_Call) Return(getExamResponseObject inbound.GetExamResponseObject, err error) *MockStrictServerInterface_GetExam_Call {
+	_c.Call.Return(getExamResponseObject, err)
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExam_Call) RunAndReturn(run func(ctx context.Context, request inbound.GetExamRequestObject) (inbound.GetExamResponseObject, error)) *MockStrictServerInterface_GetExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetExamProgress provides a mock function for the type MockStrictServerInterface
+func (_mock *MockStrictServerInterface) GetExamProgress(ctx context.Context, request inbound.GetExamProgressRequestObject) (inbound.GetExamProgressResponseObject, error) {
+	ret := _mock.Called(ctx, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetExamProgress")
+	}
+
+	var r0 inbound.GetExamProgressResponseObject
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamProgressRequestObject) (inbound.GetExamProgressResponseObject, error)); ok {
+		return returnFunc(ctx, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamProgressRequestObject) inbound.GetExamProgressResponseObject); ok {
+		r0 = returnFunc(ctx, request)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(inbound.GetExamProgressResponseObject)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, inbound.GetExamProgressRequestObject) error); ok {
+		r1 = returnFunc(ctx, request)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockStrictServerInterface_GetExamProgress_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExamProgress'
+type MockStrictServerInterface_GetExamProgress_Call struct {
+	*mock.Call
+}
+
+// GetExamProgress is a helper method to define mock.On call
+//   - ctx context.Context
+//   - request inbound.GetExamProgressRequestObject
+func (_e *MockStrictServerInterface_Expecter) GetExamProgress(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExamProgress_Call {
+	return &MockStrictServerInterface_GetExamProgress_Call{Call: _e.mock.On("GetExamProgress", ctx, request)}
+}
+
+func (_c *MockStrictServerInterface_GetExamProgress_Call) Run(run func(ctx context.Context, request inbound.GetExamProgressRequestObject)) *MockStrictServerInterface_GetExamProgress_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 inbound.GetExamProgressRequestObject
+		if args[1] != nil {
+			arg1 = args[1].(inbound.GetExamProgressRequestObject)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExamProgress_Call) Return(getExamProgressResponseObject inbound.GetExamProgressResponseObject, err error) *MockStrictServerInterface_GetExamProgress_Call {
+	_c.Call.Return(getExamProgressResponseObject, err)
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExamProgress_Call) RunAndReturn(run func(ctx context.Context, request inbound.GetExamProgressRequestObject) (inbound.GetExamProgressResponseObject, error)) *MockStrictServerInterface_GetExamProgress_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetExamQuestion provides a mock function for the type MockStrictServerInterface
+func (_mock *MockStrictServerInterface) GetExamQuestion(ctx context.Context, request inbound.GetExamQuestionRequestObject) (inbound.GetExamQuestionResponseObject, error) {
+	ret := _mock.Called(ctx, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetExamQuestion")
+	}
+
+	var r0 inbound.GetExamQuestionResponseObject
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamQuestionRequestObject) (inbound.GetExamQuestionResponseObject, error)); ok {
+		return returnFunc(ctx, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.GetExamQuestionRequestObject) inbound.GetExamQuestionResponseObject); ok {
+		r0 = returnFunc(ctx, request)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(inbound.GetExamQuestionResponseObject)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, inbound.GetExamQuestionRequestObject) error); ok {
+		r1 = returnFunc(ctx, request)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockStrictServerInterface_GetExamQuestion_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetExamQuestion'
+type MockStrictServerInterface_GetExamQuestion_Call struct {
+	*mock.Call
+}
+
+// GetExamQuestion is a helper method to define mock.On call
+//   - ctx context.Context
+//   - request inbound.GetExamQuestionRequestObject
+func (_e *MockStrictServerInterface_Expecter) GetExamQuestion(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExamQuestion_Call {
+	return &MockStrictServerInterface_GetExamQuestion_Call{Call: _e.mock.On("GetExamQuestion", ctx, request)}
+}
+
+func (_c *MockStrictServerInterface_GetExamQuestion_Call) Run(run func(ctx context.Context, request inbound.GetExamQuestionRequestObject)) *MockStrictServerInterface_GetExamQuestion_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 inbound.GetExamQuestionRequestObject
+		if args[1] != nil {
+			arg1 = args[1].(inbound.GetExamQuestionRequestObject)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExamQuestion_Call) Return(getExamQuestionResponseObject inbound.GetExamQuestionResponseObject, err error) *MockStrictServerInterface_GetExamQuestion_Call {
+	_c.Call.Return(getExamQuestionResponseObject, err)
+	return _c
+}
+
+func (_c *MockStrictServerInterface_GetExamQuestion_Call) RunAndReturn(run func(ctx context.Context, request inbound.GetExamQuestionRequestObject) (inbound.GetExamQuestionResponseObject, error)) *MockStrictServerInterface_GetExamQuestion_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // StartNewExam provides a mock function for the type MockStrictServerInterface
 func (_mock *MockStrictServerInterface) StartNewExam(ctx context.Context, request inbound.StartNewExamRequestObject) (inbound.StartNewExamResponseObject, error) {
 	ret := _mock.Called(ctx, request)
@@ -446,6 +1380,74 @@ func (_c *MockStrictServerInterface_StartNewExam_Call) Return(startNewExamRespon
 }
 
 func (_c *MockStrictServerInterface_StartNewExam_Call) RunAndReturn(run func(ctx context.Context, request inbound.StartNewExamRequestObject) (inbound.StartNewExamResponseObject, error)) *MockStrictServerInterface_StartNewExam_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// SubmitExam provides a mock function for the type MockStrictServerInterface
+func (_mock *MockStrictServerInterface) SubmitExam(ctx context.Context, request inbound.SubmitExamRequestObject) (inbound.SubmitExamResponseObject, error) {
+	ret := _mock.Called(ctx, request)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SubmitExam")
+	}
+
+	var r0 inbound.SubmitExamResponseObject
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.SubmitExamRequestObject) (inbound.SubmitExamResponseObject, error)); ok {
+		return returnFunc(ctx, request)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, inbound.SubmitExamRequestObject) inbound.SubmitExamResponseObject); ok {
+		r0 = returnFunc(ctx, request)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(inbound.SubmitExamResponseObject)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, inbound.SubmitExamRequestObject) error); ok {
+		r1 = returnFunc(ctx, request)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockStrictServerInterface_SubmitExam_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SubmitExam'
+type MockStrictServerInterface_SubmitExam_Call struct {
+	*mock.Call
+}
+
+// SubmitExam is a helper method to define mock.On call
+//   - ctx context.Context
+//   - request inbound.SubmitExamRequestObject
+func (_e *MockStrictServerInterface_Expecter) SubmitExam(ctx interface{}, request interface{}) *MockStrictServerInterface_SubmitExam_Call {
+	return &MockStrictServerInterface_SubmitExam_Call{Call: _e.mock.On("SubmitExam", ctx, request)}
+}
+
+func (_c *MockStrictServerInterface_SubmitExam_Call) Run(run func(ctx context.Context, request inbound.SubmitExamRequestObject)) *MockStrictServerInterface_SubmitExam_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 inbound.SubmitExamRequestObject
+		if args[1] != nil {
+			arg1 = args[1].(inbound.SubmitExamRequestObject)
+		}
+		run(
+			arg0,
+			arg1,
+		)
+	})
+	return _c
+}
+
+func (_c *MockStrictServerInterface_SubmitExam_Call) Return(submitExamResponseObject inbound.SubmitExamResponseObject, err error) *MockStrictServerInterface_SubmitExam_Call {
+	_c.Call.Return(submitExamResponseObject, err)
+	return _c
+}
+
+func (_c *MockStrictServerInterface_SubmitExam_Call) RunAndReturn(run func(ctx context.Context, request inbound.SubmitExamRequestObject) (inbound.SubmitExamResponseObject, error)) *MockStrictServerInterface_SubmitExam_Call {
 	_c.Call.Return(run)
 	return _c
 }

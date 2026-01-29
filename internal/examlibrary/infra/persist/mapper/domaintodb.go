@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
+	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	persist_postgres "github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
@@ -37,17 +38,23 @@ func FromDomainExamQuestionToDB(examId uuid.UUID, question entity.ExamQuestion) 
 	possiblePoints := question.GetPossiblePoints()
 	possiblePointsInt32 := utilitee.SafeIntToInt32(&possiblePoints)
 
+	var responseOptions []string
+	if question.GetQuestionType() == valueobject.QuestionMultipleChoice {
+		responseOptions = *question.GetResponseOptions()
+	}
+
 	return persist_postgres.SaveExamQuestionParams{
-		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(question.GetIdUUID()),
-		CreatedAt:      pgxutil.TimeToTimestampz(&createdAt),
-		UpdatedAt:      pgxutil.TimeToTimestampz(&updatedAt),
-		DeletedAt:      pgxutil.TimeToTimestampz(question.GetDeletedAtTime()),
-		Deleted:        question.IsDeleted(),
-		ExamID:         pgxutil.UUIDToPgtypeUUID(examId),
-		Index:          questionIndexInt32,
-		QuestionText:   question.GetQuestionText(),
-		AnswerText:     pgxutil.StrToPgtypeText(question.GetCorrectAnswer()),
-		PossiblePoints: possiblePointsInt32,
-		QuestionType:   question.GetQuestionType().String(),
+		ExamQuestionID:  pgxutil.UUIDToPgtypeUUID(question.GetIdUUID()),
+		CreatedAt:       pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:       pgxutil.TimeToTimestampz(&updatedAt),
+		DeletedAt:       pgxutil.TimeToTimestampz(question.GetDeletedAtTime()),
+		Deleted:         question.IsDeleted(),
+		ExamID:          pgxutil.UUIDToPgtypeUUID(examId),
+		Index:           questionIndexInt32,
+		QuestionText:    question.GetQuestionText(),
+		AnswerText:      pgxutil.StrToPgtypeText(question.GetCorrectAnswer()),
+		PossiblePoints:  possiblePointsInt32,
+		QuestionType:    question.GetQuestionType().String(),
+		ResponseOptions: responseOptions,
 	}
 }
