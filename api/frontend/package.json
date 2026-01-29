@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "deps": "pnpm i && pnpm audit && pnpm declutter",
-    "format": "prettier --write src/",
+    "format": "prettier --write .",
     "type-check": "vue-tsc --declaration --emitDeclarationOnly",
     "declutter": "knip --no-exit-code",
     "test": "vitest --dom --reporter verbose",
