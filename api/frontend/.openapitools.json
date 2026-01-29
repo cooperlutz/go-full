@@ -3,8 +3,8 @@
   "spaces": 2,
   "generator-cli": {
     "version": "7.14.0",
-    "generators": { 
-      "pingpong": { 
+    "generators": {
+      "pingpong": {
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/pingpong/services",
         "inputSpec": "../rest/pingpong/v1/api.yaml",
@@ -12,7 +12,7 @@
           "withInterfaces": true
         }
       },
-      "examlibrary": { 
+      "examlibrary": {
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/examlibrary/services",
         "inputSpec": "../rest/examlibrary/v1/api.yaml",
@@ -20,7 +20,7 @@
           "withInterfaces": true
         }
       },
-      "examination": { 
+      "examination": {
         "generatorName": "typescript-fetch",
         "output": "#{cwd}/src/examination/services",
         "inputSpec": "../rest/examination/api.yaml",
