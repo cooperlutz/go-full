@@ -1,5 +1,3 @@
-import examinationHandlers from './exams';
+import examinationHandlers from "./exams";
 
-export const examinationMockHandlers = [
-  ...examinationHandlers,
-]
+export const examinationMockHandlers = [...examinationHandlers];

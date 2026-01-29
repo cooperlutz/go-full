@@ -1,7 +1,4 @@
-import pingpongHandlers from './ping-pongs';
-import metricsHandlers from './metrics';
+import pingpongHandlers from "./ping-pongs";
+import metricsHandlers from "./metrics";
 
-export const pingPongMockHandlers = [
-  ...pingpongHandlers,
-  ...metricsHandlers,
-]
+export const pingPongMockHandlers = [...pingpongHandlers, ...metricsHandlers];

@@ -1,25 +1,25 @@
-import type {} from 'vitest/config';
-import { fileURLToPath, URL } from 'node:url';
+import type {} from "vitest/config";
+import { fileURLToPath, URL } from "node:url";
 
-import tailwindcss from '@tailwindcss/vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-import autoprefixer from 'autoprefixer';
-import { defineConfig } from 'vite';
-import { configDefaults } from 'vitest/config'
+import tailwindcss from "@tailwindcss/vite";
+import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import autoprefixer from "autoprefixer";
+import { defineConfig } from "vite";
+import { configDefaults } from "vitest/config";
 
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: "happy-dom",
     coverage: {
       // reporter: ['text', 'html'],
       include: [
-        'src/**/*.{js,ts,vue}' // Include all Vue, JS, and TS files in src
+        "src/**/*.{js,ts,vue}", // Include all Vue, JS, and TS files in src
       ],
       exclude: [
-        ...configDefaults.coverage.exclude ?? [],
-        '**/services/**', // Exclude service files from coverage as they are generated
+        ...(configDefaults.coverage.exclude ?? []),
+        "**/services/**", // Exclude service files from coverage as they are generated
       ],
       thresholds: {
         statements: 80,
@@ -28,15 +28,15 @@ export default defineConfig({
         lines: 80,
       },
     },
-    reporters: 'dot',
+    reporters: "dot",
     exclude: [
-      ...(configDefaults.exclude), 
-      '**/services/**', // Exclude service files from tests as they are generated
+      ...configDefaults.exclude,
+      "**/services/**", // Exclude service files from tests as they are generated
     ],
-    setupFiles: ['./vitest.setup.ts'],
+    setupFiles: ["./vitest.setup.ts"],
   },
-  base: '/',
-  appType: 'spa',
+  base: "/",
+  appType: "spa",
   plugins: [tailwindcss(), vue(), vueJsx()],
   css: {
     postcss: {
@@ -45,7 +45,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      "~": fileURLToPath(new URL("./src", import.meta.url)),
+    },
   },
-},);
+});
