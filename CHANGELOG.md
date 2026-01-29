@@ -1,3 +1,9 @@
+## v0.1.32 (2026-01-29)
+
+### Fix
+
+- prettier configuration updates (#147)
+
 ## v0.1.31 (2026-01-28)
 
 ### Fix
