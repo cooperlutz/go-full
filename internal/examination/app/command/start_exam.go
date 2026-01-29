@@ -27,7 +27,7 @@ func NewStartExamHandler(
 	return StartExamHandler{examinationRepo: examinationRepo, examLibraryAdapter: examLibraryAdapter}
 }
 
-func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (examination.Exam, error) {
+func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.startexam.handle")
 	defer span.End()
 
@@ -35,31 +35,49 @@ func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (examinatio
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return examination.Exam{}, err
+		return Exam{}, err
 	}
 
 	examIdUuid, err := uuid.Parse(cmd.StudentId)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return examination.Exam{}, err
+		return Exam{}, err
 	}
 
-	exam := examination.NewExam(examIdUuid, questions)
+	exam := examination.NewExam(examIdUuid, uuid.MustParse(cmd.ExamLibraryID), questions)
 
 	err = exam.StartExam()
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return examination.Exam{}, err
+		return Exam{}, err
 	}
 
 	err = h.examinationRepo.AddExam(ctx, exam)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return examination.Exam{}, err
+		return Exam{}, err
 	}
 
-	return *exam, nil
+	var questionsForExam []Question
+	for _, q := range questions {
+		questionsForExam = append(questionsForExam, Question{
+			QuestionID:      q.GetIdString(),
+			QuestionIndex:   q.GetIndex(),
+			QuestionText:    q.GetQuestionText(),
+			QuestionType:    q.GetQuestionType().String(),
+			ResponseOptions: *q.GetResponseOptions(),
+		})
+	}
+
+	return Exam{
+		ExamId:            exam.GetIdString(),
+		StudentId:         exam.GetStudentIdString(),
+		LibraryExamId:     exam.GetLibraryExamIdUUID().String(),
+		AnsweredQuestions: exam.AnsweredQuestionsCount(),
+		TotalQuestions:    exam.NumberOfQuestions(),
+		Questions:         questionsForExam,
+	}, nil
 }

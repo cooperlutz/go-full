@@ -12,8 +12,6 @@ import (
 type Repository interface {
 	AddExam(ctx context.Context, exam *Exam) error
 
-	GetQuestion(ctx context.Context, id uuid.UUID) (*Question, error)
-
 	GetExam(ctx context.Context, id uuid.UUID) (*Exam, error)
 
 	UpdateExam(

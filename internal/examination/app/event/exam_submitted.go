@@ -9,25 +9,25 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
-type ExamStarted struct {
+type ExamSubmitted struct {
 	ExamID    string
 	StudentID string
 }
 
-type ExamStartedHandler struct {
+type ExamSubmittedHandler struct {
 	publisher outbound.SqlPublisherAdapter
 }
 
-func NewExamStartedHandler(
+func NewExamSubmittedHandler(
 	publisher outbound.SqlPublisherAdapter,
-) ExamStartedHandler {
-	return ExamStartedHandler{
+) ExamSubmittedHandler {
+	return ExamSubmittedHandler{
 		publisher: publisher,
 	}
 }
 
-func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.examstarted.handle")
+func (h ExamSubmittedHandler) Handle(ctx context.Context, event ExamSubmitted) error {
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.examsubmitted.handle")
 	defer span.End()
 
 	msg, err := eeventdriven.EventPayloadToMessage(event)
@@ -37,7 +37,7 @@ func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error
 		return err
 	}
 
-	err = h.publisher.Publish("examination.examstarted", msg)
+	err = h.publisher.Publish("examination.examsubmitted", msg)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

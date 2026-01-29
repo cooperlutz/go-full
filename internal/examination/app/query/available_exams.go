@@ -3,16 +3,11 @@ package query
 import (
 	"context"
 
-	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
-type Exam struct {
-	ExamId    string
-	StudentId string
-}
-
 type AvailableExamsReadModel interface {
-	FindAll(ctx context.Context) ([]examination.Exam, error)
+	FindAll(ctx context.Context) ([]Exam, error)
 }
 
 type AvailableExamsHandler struct {
@@ -25,18 +20,14 @@ func NewAvailableExamsHandler(
 	return AvailableExamsHandler{readModel: readModel}
 }
 
-func (h AvailableExamsHandler) Handle(ctx context.Context) (d []Exam, err error) {
+func (h AvailableExamsHandler) Handle(ctx context.Context) ([]Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.query.availableexams.handle")
+	defer span.End()
+
 	exams, err := h.readModel.FindAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, e := range exams {
-		d = append(d, Exam{
-			ExamId:    e.GetIdString(),
-			StudentId: e.GetStudentIdString(),
-		})
-	}
-
-	return d, nil
+	return exams, nil
 }

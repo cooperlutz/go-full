@@ -18,7 +18,7 @@ type Exam struct {
 	questions     []*Question
 }
 
-func NewExam(studentId uuid.UUID, libraryExamId uuid.UUID, questions []*Question) *Exam {
+func NewExam(studentId, libraryExamId uuid.UUID, questions []*Question) *Exam {
 	return &Exam{
 		EntityMetadata: baseentitee.NewEntityMetadata(),
 		studentId:      studentId,
