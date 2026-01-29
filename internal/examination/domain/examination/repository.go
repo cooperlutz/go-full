@@ -10,14 +10,17 @@ import (
 )
 
 type Repository interface {
-	FindAll(ctx context.Context) ([]Exam, error)
-
 	AddExam(ctx context.Context, exam *Exam) error
 
-	// UpdateExam(
-	// 	ctx context.Context,
-	// 	updateFn func(h *Exam) (*Exam, error),
-	// ) error
+	GetQuestion(ctx context.Context, id uuid.UUID) (*Question, error)
+
+	GetExam(ctx context.Context, id uuid.UUID) (*Exam, error)
+
+	UpdateExam(
+		ctx context.Context,
+		exam *Exam,
+		updateFn func(h *Exam) (*Exam, error),
+	) error
 }
 
 // MapToExam creates an Exam domain object from the given parameters.
@@ -33,8 +36,8 @@ func MapToExam(
 	completedAt *time.Time,
 	completed bool,
 	questions []*Question,
-) Exam {
-	return Exam{
+) *Exam {
+	return &Exam{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
 			id,
 			createdAt,
@@ -58,11 +61,13 @@ func MapToQuestion(
 	updatedAt time.Time,
 	deleted bool,
 	deletedAt *time.Time,
+	examId uuid.UUID,
 	questionText string,
 	questionType string,
 	providedAnswer *string,
 	responseOptions *[]string,
 	index int32,
+	answered bool,
 ) (*Question, error) {
 	qtype, err := QuestionTypeFromString(questionType)
 	if err != nil {
@@ -77,10 +82,12 @@ func MapToQuestion(
 			deleted,
 			deletedAt,
 		),
+		examId:          examId,
 		questionText:    questionText,
 		questionType:    qtype,
 		providedAnswer:  providedAnswer,
 		responseOptions: responseOptions,
 		index:           index,
+		answered:        answered,
 	}, nil
 }

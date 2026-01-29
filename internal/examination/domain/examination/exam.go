@@ -6,22 +6,23 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 type Exam struct {
 	*baseentitee.EntityMetadata
-	studentId   uuid.UUID
-	startedAt   *time.Time
-	completedAt *time.Time
-	completed   bool
-	questions   []*Question
+	studentId     uuid.UUID
+	libraryExamId uuid.UUID
+	startedAt     *time.Time
+	completedAt   *time.Time
+	completed     bool
+	questions     []*Question
 }
 
-func NewExam(studentId uuid.UUID, questions []*Question) *Exam {
+func NewExam(studentId uuid.UUID, libraryExamId uuid.UUID, questions []*Question) *Exam {
 	return &Exam{
 		EntityMetadata: baseentitee.NewEntityMetadata(),
 		studentId:      studentId,
+		libraryExamId:  libraryExamId,
 		questions:      questions,
 	}
 }
@@ -30,18 +31,16 @@ func (e Exam) GetQuestions() []*Question {
 	return e.questions
 }
 
-func (e Exam) numberOfQuestions() int32 {
-	length := len(e.questions)
-
-	return utilitee.SafeIntToInt32(&length)
-}
-
 func (e Exam) GetQuestionByIndex(index int32) *Question {
 	if index < 1 || int(index) > len(e.questions) {
 		return nil
 	}
 
 	return e.questions[index-1]
+}
+
+func (e Exam) GetLibraryExamIdUUID() uuid.UUID {
+	return e.libraryExamId
 }
 
 func (e Exam) GetFirstQuestion() *Question {
@@ -70,6 +69,7 @@ func (e Exam) GetStudentIdString() string {
 
 type Question struct {
 	*baseentitee.EntityMetadata
+	examId          uuid.UUID
 	index           int32
 	answered        bool
 	questionText    string

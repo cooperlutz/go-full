@@ -7,7 +7,7 @@ func (e ErrNoMoreQuestions) Error() string {
 }
 
 func (e *Exam) NextQuestion(currentIndex int32) (*Question, error) {
-	if currentIndex >= e.numberOfQuestions() {
+	if currentIndex >= e.NumberOfQuestions() {
 		return nil, ErrNoMoreQuestions{}
 	}
 
