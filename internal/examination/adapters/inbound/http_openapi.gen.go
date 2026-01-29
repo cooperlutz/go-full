@@ -17,8 +17,14 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-chi/chi/v5"
+	"github.com/oapi-codegen/runtime"
 	strictnethttp "github.com/oapi-codegen/runtime/strictmiddleware/nethttp"
 )
+
+// Answer defines model for Answer.
+type Answer struct {
+	ProvidedAnswer string `json:"providedAnswer"`
+}
 
 // Error defines model for Error.
 type Error struct {
@@ -28,8 +34,30 @@ type Error struct {
 
 // Exam defines model for Exam.
 type Exam struct {
-	ExamId    string `json:"examId"`
-	StudentId string `json:"studentId"`
+	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
+	ExamId            string      `json:"examId"`
+	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
+	Questions         *[]Question `json:"questions,omitempty"`
+	StudentId         string      `json:"studentId"`
+	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
+}
+
+// Progress defines model for Progress.
+type Progress struct {
+	AnsweredQuestions int32 `json:"answeredQuestions"`
+	TotalQuestions    int32 `json:"totalQuestions"`
+}
+
+// Question defines model for Question.
+type Question struct {
+	Answered        bool      `json:"answered"`
+	ExamId          string    `json:"examId"`
+	ProvidedAnswer  *string   `json:"providedAnswer,omitempty"`
+	QuestionId      string    `json:"questionId"`
+	QuestionIndex   int32     `json:"questionIndex"`
+	QuestionText    string    `json:"questionText"`
+	QuestionType    string    `json:"questionType"`
+	ResponseOptions *[]string `json:"responseOptions,omitempty"`
 }
 
 // StartExam defines model for StartExam.
@@ -41,6 +69,9 @@ type StartExam struct {
 // StartNewExamJSONRequestBody defines body for StartNewExam for application/json ContentType.
 type StartNewExamJSONRequestBody = StartExam
 
+// AnswerQuestionJSONRequestBody defines body for AnswerQuestion for application/json ContentType.
+type AnswerQuestionJSONRequestBody = Answer
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
@@ -49,6 +80,21 @@ type ServerInterface interface {
 
 	// (POST /api/v1/exams)
 	StartNewExam(w http.ResponseWriter, r *http.Request)
+
+	// (GET /api/v1/exams/{examId})
+	GetExam(w http.ResponseWriter, r *http.Request, examId string)
+
+	// (GET /api/v1/exams/{examId}/progress)
+	GetExamProgress(w http.ResponseWriter, r *http.Request, examId string)
+
+	// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+	GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
+
+	// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+	AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
+
+	// (POST /api/v1/exams/{examId}/submit)
+	SubmitExam(w http.ResponseWriter, r *http.Request, examId string)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -62,6 +108,31 @@ func (_ Unimplemented) GetAvailableExams(w http.ResponseWriter, r *http.Request)
 
 // (POST /api/v1/exams)
 func (_ Unimplemented) StartNewExam(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (GET /api/v1/exams/{examId})
+func (_ Unimplemented) GetExam(w http.ResponseWriter, r *http.Request, examId string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (GET /api/v1/exams/{examId}/progress)
+func (_ Unimplemented) GetExamProgress(w http.ResponseWriter, r *http.Request, examId string) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+func (_ Unimplemented) GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+func (_ Unimplemented) AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (POST /api/v1/exams/{examId}/submit)
+func (_ Unimplemented) SubmitExam(w http.ResponseWriter, r *http.Request, examId string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -93,6 +164,149 @@ func (siw *ServerInterfaceWrapper) StartNewExam(w http.ResponseWriter, r *http.R
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.StartNewExam(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetExam operation middleware
+func (siw *ServerInterfaceWrapper) GetExam(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "examId" -------------
+	var examId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "examId", chi.URLParam(r, "examId"), &examId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "examId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetExam(w, r, examId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetExamProgress operation middleware
+func (siw *ServerInterfaceWrapper) GetExamProgress(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "examId" -------------
+	var examId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "examId", chi.URLParam(r, "examId"), &examId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "examId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetExamProgress(w, r, examId)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetExamQuestion operation middleware
+func (siw *ServerInterfaceWrapper) GetExamQuestion(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "examId" -------------
+	var examId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "examId", chi.URLParam(r, "examId"), &examId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "examId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "questionIndex" -------------
+	var questionIndex int32
+
+	err = runtime.BindStyledParameterWithOptions("simple", "questionIndex", chi.URLParam(r, "questionIndex"), &questionIndex, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "questionIndex", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetExamQuestion(w, r, examId, questionIndex)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// AnswerQuestion operation middleware
+func (siw *ServerInterfaceWrapper) AnswerQuestion(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "examId" -------------
+	var examId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "examId", chi.URLParam(r, "examId"), &examId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "examId", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "questionIndex" -------------
+	var questionIndex int32
+
+	err = runtime.BindStyledParameterWithOptions("simple", "questionIndex", chi.URLParam(r, "questionIndex"), &questionIndex, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "questionIndex", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AnswerQuestion(w, r, examId, questionIndex)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SubmitExam operation middleware
+func (siw *ServerInterfaceWrapper) SubmitExam(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+
+	// ------------- Path parameter "examId" -------------
+	var examId string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "examId", chi.URLParam(r, "examId"), &examId, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "examId", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SubmitExam(w, r, examId)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -221,6 +435,21 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/api/v1/exams", wrapper.StartNewExam)
 	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/exams/{examId}", wrapper.GetExam)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/exams/{examId}/progress", wrapper.GetExamProgress)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/api/v1/exams/{examId}/questions/{questionIndex}", wrapper.GetExamQuestion)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/v1/exams/{examId}/questions/{questionIndex}", wrapper.AnswerQuestion)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/api/v1/exams/{examId}/submit", wrapper.SubmitExam)
+	})
 
 	return r
 }
@@ -282,6 +511,153 @@ func (response StartNewExamdefaultJSONResponse) VisitStartNewExamResponse(w http
 	return json.NewEncoder(w).Encode(response.Body)
 }
 
+type GetExamRequestObject struct {
+	ExamId string `json:"examId"`
+}
+
+type GetExamResponseObject interface {
+	VisitGetExamResponse(w http.ResponseWriter) error
+}
+
+type GetExam200JSONResponse Exam
+
+func (response GetExam200JSONResponse) VisitGetExamResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetExamdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response GetExamdefaultJSONResponse) VisitGetExamResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type GetExamProgressRequestObject struct {
+	ExamId string `json:"examId"`
+}
+
+type GetExamProgressResponseObject interface {
+	VisitGetExamProgressResponse(w http.ResponseWriter) error
+}
+
+type GetExamProgress200JSONResponse Progress
+
+func (response GetExamProgress200JSONResponse) VisitGetExamProgressResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetExamProgressdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response GetExamProgressdefaultJSONResponse) VisitGetExamProgressResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type GetExamQuestionRequestObject struct {
+	ExamId        string `json:"examId"`
+	QuestionIndex int32  `json:"questionIndex"`
+}
+
+type GetExamQuestionResponseObject interface {
+	VisitGetExamQuestionResponse(w http.ResponseWriter) error
+}
+
+type GetExamQuestion200JSONResponse Question
+
+func (response GetExamQuestion200JSONResponse) VisitGetExamQuestionResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetExamQuestiondefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response GetExamQuestiondefaultJSONResponse) VisitGetExamQuestionResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type AnswerQuestionRequestObject struct {
+	ExamId        string `json:"examId"`
+	QuestionIndex int32  `json:"questionIndex"`
+	Body          *AnswerQuestionJSONRequestBody
+}
+
+type AnswerQuestionResponseObject interface {
+	VisitAnswerQuestionResponse(w http.ResponseWriter) error
+}
+
+type AnswerQuestion200JSONResponse Question
+
+func (response AnswerQuestion200JSONResponse) VisitAnswerQuestionResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type AnswerQuestiondefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response AnswerQuestiondefaultJSONResponse) VisitAnswerQuestionResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
+type SubmitExamRequestObject struct {
+	ExamId string `json:"examId"`
+}
+
+type SubmitExamResponseObject interface {
+	VisitSubmitExamResponse(w http.ResponseWriter) error
+}
+
+type SubmitExam200Response struct {
+}
+
+func (response SubmitExam200Response) VisitSubmitExamResponse(w http.ResponseWriter) error {
+	w.WriteHeader(200)
+	return nil
+}
+
+type SubmitExamdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response SubmitExamdefaultJSONResponse) VisitSubmitExamResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -290,6 +666,21 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/exams)
 	StartNewExam(ctx context.Context, request StartNewExamRequestObject) (StartNewExamResponseObject, error)
+
+	// (GET /api/v1/exams/{examId})
+	GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error)
+
+	// (GET /api/v1/exams/{examId}/progress)
+	GetExamProgress(ctx context.Context, request GetExamProgressRequestObject) (GetExamProgressResponseObject, error)
+
+	// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+	GetExamQuestion(ctx context.Context, request GetExamQuestionRequestObject) (GetExamQuestionResponseObject, error)
+
+	// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+	AnswerQuestion(ctx context.Context, request AnswerQuestionRequestObject) (AnswerQuestionResponseObject, error)
+
+	// (POST /api/v1/exams/{examId}/submit)
+	SubmitExam(ctx context.Context, request SubmitExamRequestObject) (SubmitExamResponseObject, error)
 }
 
 type StrictHandlerFunc = strictnethttp.StrictHTTPHandlerFunc
@@ -376,17 +767,162 @@ func (sh *strictHandler) StartNewExam(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetExam operation middleware
+func (sh *strictHandler) GetExam(w http.ResponseWriter, r *http.Request, examId string) {
+	var request GetExamRequestObject
+
+	request.ExamId = examId
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetExam(ctx, request.(GetExamRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetExam")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetExamResponseObject); ok {
+		if err := validResponse.VisitGetExamResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetExamProgress operation middleware
+func (sh *strictHandler) GetExamProgress(w http.ResponseWriter, r *http.Request, examId string) {
+	var request GetExamProgressRequestObject
+
+	request.ExamId = examId
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetExamProgress(ctx, request.(GetExamProgressRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetExamProgress")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetExamProgressResponseObject); ok {
+		if err := validResponse.VisitGetExamProgressResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetExamQuestion operation middleware
+func (sh *strictHandler) GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	var request GetExamQuestionRequestObject
+
+	request.ExamId = examId
+	request.QuestionIndex = questionIndex
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetExamQuestion(ctx, request.(GetExamQuestionRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetExamQuestion")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetExamQuestionResponseObject); ok {
+		if err := validResponse.VisitGetExamQuestionResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// AnswerQuestion operation middleware
+func (sh *strictHandler) AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
+	var request AnswerQuestionRequestObject
+
+	request.ExamId = examId
+	request.QuestionIndex = questionIndex
+
+	var body AnswerQuestionJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AnswerQuestion(ctx, request.(AnswerQuestionRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AnswerQuestion")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AnswerQuestionResponseObject); ok {
+		if err := validResponse.VisitAnswerQuestionResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SubmitExam operation middleware
+func (sh *strictHandler) SubmitExam(w http.ResponseWriter, r *http.Request, examId string) {
+	var request SubmitExamRequestObject
+
+	request.ExamId = examId
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SubmitExam(ctx, request.(SubmitExamRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SubmitExam")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SubmitExamResponseObject); ok {
+		if err := validResponse.VisitSubmitExamResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/8RTQYvbPBD9K2a+72jWye7NtxRC2Usp9LjsYSKPEy2ypI7GaUzwfy8jb+JuYwqFQE+W",
-	"Nc9P7z0/ncGELgZPXhLUZ0jmQB3m5ZY5sC4ih0gslvK2CQ3psw3coUAN1svTI5QgQ6TplfbEMJbQUUq4",
-	"z+j3YRK2fg/jeIWH3RsZUfT2hN3tcXTC7rlZoCghSd+Ql8XpWALT994yNVC/XFh+/eZ1QcI3QZZlHc7u",
-	"GHnY3kXODC1/I75Vpd9a34bMasXpTMHWo9jgi83XZyjhSJxs8FDD+mH1sFI9IZLHaKGGp7xVQkQ5ZDMV",
-	"Rlsd15XGkjf2JPpQw5lVTcBnks0RrcOdo21GqosUg09TJo+r1dQIL+QzAcborMkU1VtSPZdK6coKTcf9",
-	"z9RCDf9Vc/mq9+ZVOf65H8iMw5RCQ8mwjTL53BTOJilCW0wuMqDF3slfafqjlHwDFs7uPZ0iGaGmoBkT",
-	"Q1pIMXfqC/3IvqYaUJJPoRnupnOu7fixacI9jTc/bX2/gK5nfsxH9wvDhJpQ6o2hlNreueGf/yVFJWK9",
-	"LlC/nKFnBzUcRGKqq+p8CEk8djTqDdFrhWy1/jm5y1DXVxPggkGnI6V/HX8GAAD//9PPqpRRBQAA",
+	"H4sIAAAAAAAC/9xXTW/bMAz9Kwa3o1Gn7c23DCiGXrYO663oQbGZRIUtqRSdJgj83wfJsZ04zkfXdG12",
+	"imPRJB/fo0QtIdG50QoVW4iXYJMp5sI/DpV9QXJPhrRBYol29W8mU0zbdV4YhBgsk1QTKMsQCJ8LSZhC",
+	"/NC1fwxrez16woShDOGGSPdESnSK7nesKRcMMUjF11fQOJCKcYLkPORorZhgfzbb8eYi3w4nfIKY/irQ",
+	"stTKHhkb5yK/TXtCh5DJEQla3Oy2eF4PJhlz//CVcAwxfIladqIVNVGdHrTIBJFYuP+WixQV74jFmkX2",
+	"OnQdLldQ1wP18XlHekJo7elq/PbUOx7CnlT6oDTV3gllrdQjrTMU6oAoDjZQq4oDorlVKc6PrGD9zT3O",
+	"ea/Te7/QY0BojVYWf5ptwW5rbUOZHS7W4IWtpjZRdTLu5NfS18vabxbE/V1+uCX3NVEHSGva7fXtrNy3",
+	"Uo219yo5c2vOWCrhYAXDu1sIYYZkvdzg8mJwMXD5aINKGAkxXPtXIRjBUw8mEkZGs8vI1dC/mKAn1wEW",
+	"tYDgO/JwJmQmRhneeMuWTP/V1WBQ7beKUXkHwphMJt5F9GQr+Vcb0NH7lC//thLKEFK0CUlTtRUMg0xa",
+	"DvQ4qFB4g7EoMn5VTntT8edLT+xC4dxgwpgG2NoYbXuq6DX1A188rkoGaPmbThcny7OVbbmpNKYCyy3S",
+	"Lk9XoCbmZn3c+yAhFK5CtkgStHZcZNniw1kqw03xR8tqHyn3dcGKOiNI5MhIFuKHJUgXw7UUhKBE7sTa",
+	"7EmbFIRrSLobw+Mbe+qv6UmRhcxsQMgkcXY2REVmbUrYx1gzTZwhc03uu9iri3B+9DWTa7TcOLkPdmAz",
+	"Ur0Tn2Gvo+50sdvf4cnyPRXTjvc7FFMD+ayK2XV+VuPuf0L+6c/+1W3gqIP/36ityiiwxSiXfD4DQFQl",
+	"7Cf//kHOr3/ALNDTzJ+1uO4ahDSry1JQBjFMmY2No2g51ZZddUrHgLu0CJLucuHB1osV4hUIyHQiMrfk",
+	"3D+WfwIAAP//GRu+6XgSAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

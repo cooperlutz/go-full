@@ -1,8 +1,11 @@
 apis/DefaultApi.ts
 apis/index.ts
 index.ts
+models/Answer.ts
 models/Exam.ts
 models/ModelError.ts
+models/Progress.ts
+models/Question.ts
 models/StartExam.ts
 models/index.ts
 runtime.ts
