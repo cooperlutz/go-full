@@ -1,0 +1,40 @@
+<script setup lang="ts">
+import { ref } from "vue";
+
+import SubmitAnswerButton from "../SubmitAnswerButton.vue";
+import { type Question } from "../../services";
+
+const props = defineProps<{
+  question: Question;
+}>();
+
+const selectedAnswer = ref<string>("");
+selectedAnswer.value = props.question.providedAnswer || "";
+</script>
+
+<template>
+  <div id="multiple-choice-question">
+    <h2 class="card-title">Multiple Choice Question</h2>
+    <p>{{ props.question.questionText }}</p>
+    <ul>
+      <li v-for="option in props.question.responseOptions" :key="option">
+        <label class="cursor-pointer flex items-center space-x-2">
+          <input
+            :id="`multiple-choice-radio-option-${props.question.responseOptions?.indexOf(option)}`"
+            type="radio"
+            :value="option"
+            :name="option"
+            class="radio"
+            v-model="selectedAnswer"
+          />
+          <span>{{ option }}</span>
+        </label>
+      </li>
+    </ul>
+    <SubmitAnswerButton
+      :examId="props.question.examId"
+      :questionIndex="props.question.questionIndex"
+      :answer="selectedAnswer"
+    />
+  </div>
+</template>

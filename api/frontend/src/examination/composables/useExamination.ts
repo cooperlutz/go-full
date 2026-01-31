@@ -115,6 +115,7 @@ export function useExaminationProgress() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
   const progress = ref<Progress | null>(null);
+  const progressPercentage = ref<number>(0);
 
   const getExamProgress = async (examId: string) => {
     loading.value = true;
@@ -122,6 +123,8 @@ export function useExaminationProgress() {
     try {
       const response = await examinationAPI.getExamProgress({ examId });
       progress.value = response;
+      progressPercentage.value =
+        (response.answeredQuestions / response.totalQuestions) * 100;
       return response;
     } catch (err) {
       if (err instanceof Error) {
@@ -137,6 +140,7 @@ export function useExaminationProgress() {
     loading,
     getExamProgress,
     progress,
+    progressPercentage,
   };
 }
 

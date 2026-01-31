@@ -59,6 +59,12 @@ export interface Exam {
   answeredQuestions?: number;
   /**
    *
+   * @type {boolean}
+   * @memberof Exam
+   */
+  completed: boolean;
+  /**
+   *
    * @type {Array<Question>}
    * @memberof Exam
    */
@@ -71,6 +77,7 @@ export interface Exam {
 export function instanceOfExam(value: object): value is Exam {
   if (!("examId" in value) || value["examId"] === undefined) return false;
   if (!("studentId" in value) || value["studentId"] === undefined) return false;
+  if (!("completed" in value) || value["completed"] === undefined) return false;
   return true;
 }
 
@@ -94,6 +101,7 @@ export function ExamFromJSONTyped(
       json["totalQuestions"] == null ? undefined : json["totalQuestions"],
     answeredQuestions:
       json["answeredQuestions"] == null ? undefined : json["answeredQuestions"],
+    completed: json["completed"],
     questions:
       json["questions"] == null
         ? undefined
@@ -119,6 +127,7 @@ export function ExamToJSONTyped(
     libraryExamId: value["libraryExamId"],
     totalQuestions: value["totalQuestions"],
     answeredQuestions: value["answeredQuestions"],
+    completed: value["completed"],
     questions:
       value["questions"] == null
         ? undefined
