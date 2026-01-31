@@ -11,14 +11,14 @@ const addedExam = ref<Exam | null>(null);
 
 const newExam = ref<Exam>({
   name: "",
-  gradeLevel: 0,
+  gradeLevel: 1,
   questions: [],
 });
 
 const possibleAnswers = ref<string[]>([]);
 
 const newExamQuestion = ref<ExamQuestion>({
-  index: 0,
+  index: 1,
   questionType: QuestionType.MultipleChoice,
   questionText: "",
   correctAnswer: "",
@@ -32,7 +32,9 @@ function addQuestion(questionType: QuestionType) {
   // Reset the newExamQuestion for the next question
   possibleAnswers.value = [];
   newExamQuestion.value = {
-    index: newExam.value.questions?.length,
+    index: newExam.value.questions?.length
+      ? newExam.value.questions.length + 1
+      : 1,
     questionType: QuestionType.MultipleChoice,
     questionText: "",
     correctAnswer: "",
@@ -44,7 +46,7 @@ function addQuestion(questionType: QuestionType) {
 const navigateToNewlyCreatedExam = () => {
   if (addedExam.value) {
     try {
-      router.push({ name: "ExamDetails", params: { id: addedExam.value.id } });
+      router.push({ name: "ExamOverview", params: { id: addedExam.value.id } });
     } catch (error) {
       console.error("Navigation error:", error);
     }

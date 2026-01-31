@@ -49,6 +49,133 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /api/v1/exams/{examId}:
+    get:
+      operationId: getExam
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Exam details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/exams/{examId}/submit:
+    post:
+      operationId: submitExam
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Exam submitted successfully
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/exams/{examId}/progress:
+    get:
+      operationId: getExamProgress
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Exam progress retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/v1/exams/{examId}/questions/{questionIndex}:
+    get:
+      operationId: getExamQuestion
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionIndex
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Exam question retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: answerQuestion
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionIndex
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          description: Answer submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
 components:
   schemas:
 
@@ -68,11 +195,77 @@ components:
       required:
         - examId
         - studentId
+        - completed
       properties:
         examId:
           type: string
         studentId:
           type: string
+        libraryExamId:
+          type: string
+        totalQuestions:
+          type: integer
+          format: int32
+        answeredQuestions:
+          type: integer
+          format: int32
+        completed:
+          type: boolean
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+
+    Answer:
+      type: object
+      required:
+        - providedAnswer
+      properties:
+        providedAnswer:
+          type: string
+
+    Question:
+      type: object
+      required:
+        - questionId
+        - examId
+        - questionIndex
+        - questionText
+        - questionType
+        - answered
+      properties:
+        questionId:
+          type: string
+        examId:
+          type: string
+        questionIndex:
+          type: integer
+          format: int32
+        questionText:
+          type: string
+        questionType:
+          type: string
+        answered:
+          type: boolean
+        responseOptions:
+          type: array
+          items:
+            type: string
+        providedAnswer:
+          type: string
+
+    Progress:
+      type: object
+      required:
+        - totalQuestions
+        - answeredQuestions
+      properties:
+        totalQuestions:
+          type: integer
+          format: int32
+        answeredQuestions:
+          type: integer
+          format: int32
 
     Error:
       type: object

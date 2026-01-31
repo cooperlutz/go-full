@@ -1,3 +1,4 @@
+//nolint:dupl // basic publish logic will be duplicative, but we want to be explicit for each event
 package event
 
 import (
@@ -26,6 +27,9 @@ func NewExamStartedHandler(
 }
 
 func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error {
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.examstarted.handle")
+	defer span.End()
+
 	msg, err := eeventdriven.EventPayloadToMessage(event)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
@@ -33,7 +37,7 @@ func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error
 		return err
 	}
 
-	err = h.publisher.Publish("examination", msg)
+	err = h.publisher.Publish("examination.examstarted", msg)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

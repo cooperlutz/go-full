@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import { useExamination } from "~/examination/composables/useExamination";
+import { useStartExam } from "../composables/useExamination";
 
 const props = defineProps<{
-  examId: string;
+  libraryExamId: string;
 }>();
 const studentId = ref("");
-const { startExam, exam, error } = useExamination();
+const { startExam, exam, error } = useStartExam();
 
 // clickStart starts a new exam with the given examId and studentId
-const clickStart = async (examId: string, studentId: string) => {
-  await startExam(examId, studentId);
+const clickStart = async (libraryExamId: string, studentId: string) => {
+  await startExam(libraryExamId, studentId);
   if (error.value) {
     console.error("Error starting exam:", error.value);
     return;
@@ -22,7 +22,7 @@ const clickStart = async (examId: string, studentId: string) => {
 
 <template>
   <button
-    id="start_exam_button"
+    id="start-exam-modal-button"
     class="btn"
     onclick="start_exam_modal.showModal()"
   >
@@ -42,9 +42,9 @@ const clickStart = async (examId: string, studentId: string) => {
       </label>
       <div class="card-actions">
         <div
-          id="start-button"
+          id="confirm-start-exam-button"
           class="btn btn-m text-xs"
-          @click="clickStart(props.examId, studentId)"
+          @click="clickStart(props.libraryExamId, studentId)"
         >
           Start Exam
         </div>

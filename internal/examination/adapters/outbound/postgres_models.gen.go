@@ -9,15 +9,16 @@ import (
 )
 
 type ExaminationExam struct {
-	ExamID      pgtype.UUID        `db:"exam_id" json:"exam_id"`
-	CreatedAt   pgtype.Timestamptz `db:"created_at" json:"created_at"`
-	UpdatedAt   pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
-	DeletedAt   pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
-	Deleted     bool               `db:"deleted" json:"deleted"`
-	StudentID   pgtype.UUID        `db:"student_id" json:"student_id"`
-	Completed   bool               `db:"completed" json:"completed"`
-	CompletedAt pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
-	StartedAt   pgtype.Timestamptz `db:"started_at" json:"started_at"`
+	ExamID        pgtype.UUID        `db:"exam_id" json:"exam_id"`
+	CreatedAt     pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	DeletedAt     pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
+	Deleted       bool               `db:"deleted" json:"deleted"`
+	StudentID     pgtype.UUID        `db:"student_id" json:"student_id"`
+	LibraryExamID pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
+	Completed     bool               `db:"completed" json:"completed"`
+	CompletedAt   pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
+	StartedAt     pgtype.Timestamptz `db:"started_at" json:"started_at"`
 }
 
 type ExaminationQuestion struct {

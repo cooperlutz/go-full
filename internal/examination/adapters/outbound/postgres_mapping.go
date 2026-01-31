@@ -3,55 +3,118 @@ package outbound
 import (
 	"github.com/google/uuid"
 
+	"github.com/cooperlutz/go-full/internal/examination/app/query"
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )
 
-// ToDomain maps the ExaminationExam to the domain entity.
-func (e ExaminationExam) ToDomain() examination.Exam {
+// toDomain maps the ExaminationExam to the domain entity.
+func (e ExaminationExam) toDomain(questions ...ExaminationQuestion) (*examination.Exam, error) {
+	var domainQuestions []*examination.Question
+
+	for i := range questions {
+		q, err := questions[i].toDomain()
+		if err != nil {
+			return nil, err
+		}
+
+		domainQuestions = append(domainQuestions, q)
+	}
+
 	return examination.MapToExam(
 		e.ExamID.Bytes,
-		*pgxutil.TimestampzToTimePtr(e.CreatedAt),
-		*pgxutil.TimestampzToTimePtr(e.UpdatedAt),
+		e.CreatedAt.Time,
+		e.UpdatedAt.Time,
 		e.Deleted,
 		pgxutil.TimestampzToTimePtr(e.DeletedAt),
 		e.StudentID.Bytes,
+		e.LibraryExamID.Bytes,
 		pgxutil.TimestampzToTimePtr(e.StartedAt),
 		pgxutil.TimestampzToTimePtr(e.CompletedAt),
 		e.Completed,
-		nil,
+		domainQuestions,
+	), nil
+}
+
+// toQueryExam maps the ExaminationExam to the query.Exam.
+func (e ExaminationExam) toQueryExam() (query.Exam, error) {
+	exam, err := e.toDomain()
+	if err != nil {
+		return query.Exam{}, err
+	}
+
+	return mapEntityExamToQuery(exam), nil
+}
+
+// toQueryQuestion maps the ExaminationQuestion to the query.Question.
+func (q ExaminationQuestion) toQueryQuestion() query.Question {
+	return query.Question{
+		ExamId:          q.ExamID.String(),
+		Answered:        q.Answered,
+		QuestionID:      q.QuestionID.String(),
+		QuestionIndex:   q.Index,
+		QuestionText:    q.QuestionText,
+		QuestionType:    q.QuestionType,
+		ResponseOptions: &q.ResponseOptions,
+		ProvidedAnswer:  &q.ProvidedAnswer.String,
+	}
+}
+
+// toDomain maps the ExaminationQuestion to the domain entity.
+func (q ExaminationQuestion) toDomain() (*examination.Question, error) {
+	return examination.MapToQuestion(
+		q.QuestionID.Bytes,
+		q.CreatedAt.Time,
+		q.UpdatedAt.Time,
+		q.Deleted,
+		pgxutil.TimestampzToTimePtr(q.DeletedAt),
+		q.ExamID.Bytes,
+		q.QuestionText,
+		q.QuestionType,
+		&q.ProvidedAnswer.String,
+		&q.ResponseOptions,
+		q.Index,
+		q.Answered,
 	)
 }
 
-// ExaminationExamsToDomain maps a slice of ExaminationExam to a slice of domain Exam entities.
-func ExaminationExamsToDomain(exams []ExaminationExam) []examination.Exam {
-	domainExams := make([]examination.Exam, len(exams))
-	for i, exam := range exams {
-		domainExams[i] = exam.ToDomain()
+// examinationExamsToQuery maps a slice of ExaminationExam to a slice of query.Exam entities.
+func examinationExamsToQuery(exams []ExaminationExam) ([]query.Exam, error) {
+	var domainExams []query.Exam
+
+	for _, exam := range exams {
+		queryExam, err := exam.toQueryExam()
+		if err != nil {
+			return nil, err
+		}
+
+		domainExams = append(domainExams, queryExam)
 	}
 
-	return domainExams
+	return domainExams, nil
 }
 
-// ExaminationExamToDB maps a domain Exam entity to the ExaminationExam database model.
-func ExaminationExamToDB(exam *examination.Exam) ExaminationExam {
+// mapEntityExamToDB maps a domain Exam entity to the ExaminationExam database model.
+func mapEntityExamToDB(exam *examination.Exam) ExaminationExam {
 	createdAt := exam.GetCreatedAtTime()
 	updatedAt := exam.GetUpdatedAtTime()
 
 	return ExaminationExam{
-		ExamID:      pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
-		CreatedAt:   pgxutil.TimeToTimestampz(&createdAt),
-		UpdatedAt:   pgxutil.TimeToTimestampz(&updatedAt),
-		Deleted:     exam.IsDeleted(),
-		DeletedAt:   pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
-		StudentID:   pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
-		StartedAt:   pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
-		CompletedAt: pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
-		Completed:   exam.IsCompleted(),
+		ExamID:        pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
+		CreatedAt:     pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:     pgxutil.TimeToTimestampz(&updatedAt),
+		Deleted:       exam.IsDeleted(),
+		DeletedAt:     pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
+		StudentID:     pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
+		LibraryExamID: pgxutil.UUIDToPgtypeUUID(exam.GetLibraryExamIdUUID()),
+		StartedAt:     pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
+		CompletedAt:   pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
+		Completed:     exam.IsCompleted(),
 	}
 }
 
-func ExaminationQuestionToDB(question *examination.Question, examID uuid.UUID) ExaminationQuestion {
+// mapEntityQuestionToDB maps a domain Question entity to the ExaminationQuestion database model.
+func mapEntityQuestionToDB(question *examination.Question, examID uuid.UUID) ExaminationQuestion {
 	createdAt := question.GetCreatedAtTime()
 	updatedAt := question.GetUpdatedAtTime()
 
@@ -68,5 +131,37 @@ func ExaminationQuestionToDB(question *examination.Question, examID uuid.UUID) E
 		QuestionType:    question.GetQuestionType().String(),
 		ProvidedAnswer:  pgxutil.StrToPgtypeText(question.GetProvidedAnswer()),
 		ResponseOptions: *question.GetResponseOptions(),
+	}
+}
+
+// mapEntityExamToQuery maps a domain Exam entity to a query.Exam.
+func mapEntityExamToQuery(exam *examination.Exam) query.Exam {
+	var questions []query.Question
+	for _, q := range exam.GetQuestions() {
+		questions = append(questions, mapEntityQuestionToQuery(q, exam.GetIdUUID()))
+	}
+
+	return query.Exam{
+		ExamId:            exam.GetIdString(),
+		StudentId:         exam.GetStudentIdString(),
+		LibraryExamId:     exam.GetLibraryExamIdUUID().String(),
+		Completed:         exam.IsCompleted(),
+		AnsweredQuestions: exam.AnsweredQuestionsCount(),
+		TotalQuestions:    exam.NumberOfQuestions(),
+		Questions:         questions,
+	}
+}
+
+// mapEntityQuestionToQuery maps a domain Question entity to a query.Question.
+func mapEntityQuestionToQuery(question *examination.Question, examID uuid.UUID) query.Question {
+	return query.Question{
+		ExamId:          examID.String(),
+		Answered:        question.IsAnswered(),
+		QuestionID:      question.GetIdString(),
+		QuestionIndex:   question.GetIndex(),
+		QuestionText:    question.GetQuestionText(),
+		QuestionType:    question.GetQuestionType().String(),
+		ResponseOptions: question.GetResponseOptions(),
+		ProvidedAnswer:  question.GetProvidedAnswer(),
 	}
 }

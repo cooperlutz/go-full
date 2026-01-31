@@ -63,8 +63,13 @@ func seedTestData() error {
 
 	INSERT INTO exam_library.exam_questions
 	(exam_question_id, created_at, updated_at, deleted_at, deleted, exam_id, "index", question_text, answer_text, question_type, possible_points, response_options)
-	VALUES('22222222-2222-2222-2222-222222222222'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, '11111111-1111-1111-1111-111111111111'::uuid, 
-	 1, 'What is the capital of France?', 'Paris', 'multiple-choice', 5,  ARRAY['Berlin', 'Madrid', 'Paris', 'Rome']::text[])
+	VALUES
+	('22222222-2222-2222-2222-222222222222'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, '11111111-1111-1111-1111-111111111111'::uuid, 
+	 1, 'What is the capital of France?', 'Paris', 'multiple-choice', 5,  ARRAY['Berlin', 'Madrid', 'Paris', 'Rome']::text[]),
+	 ('33333333-3333-3333-3333-333333333333'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, '11111111-1111-1111-1111-111111111111'::uuid, 
+	 2, 'What is Go?', NULL, 'short-answer', 10,  NULL),
+	 ('44444444-4444-4444-4444-444444444444'::uuid, '2025-11-10 16:52:17.451034-06', NULL, NULL, false, '11111111-1111-1111-1111-111111111111'::uuid, 
+	 3, 'Explain the concept of concurrency.', NULL, 'essay', 15,  NULL)
 	 ON CONFLICT (exam_question_id) DO NOTHING;
 	 `
 
@@ -89,7 +94,7 @@ func countOfQuery(schema string, table string) (int64, error) {
 	}
 	defer conn.Close(ctx)
 
-	sqlStatement := `SELECT COUNT(*) FROM ` + schema + `.` + table + `;`
+	sqlStatement := `SELECT COUNT(*) FROM ` + schema + `."` + table + `";`
 
 	row := conn.QueryRow(ctx, sqlStatement)
 	var count int64

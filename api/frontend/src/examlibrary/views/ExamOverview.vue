@@ -15,6 +15,7 @@ const lookupOutput = ref<Exam>();
 const route = useRoute();
 const examId = route.params.id as string;
 const { error, loading, lookup } = useFindExamByID();
+
 onMounted(async () => {
   const response = await lookup(examId);
   lookupOutput.value = response;
@@ -37,7 +38,7 @@ onMounted(async () => {
         <p><b>Name:</b> {{ lookupOutput?.name }}</p>
         <p><b>Grade Level:</b> {{ lookupOutput?.gradeLevel }}</p>
       </div>
-      <StartExamModal :examId="lookupOutput?.id ?? ''" />
+      <StartExamModal :libraryExamId="lookupOutput?.id ?? ''" />
     </div>
   </div>
 </template>

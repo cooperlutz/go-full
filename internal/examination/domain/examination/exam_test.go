@@ -15,7 +15,7 @@ var FixtureExamQuestions = []*Question{
 }
 
 func TestExam(t *testing.T) {
-	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), FixtureExamQuestions)
+	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), uuid.MustParse("00000000-0000-0000-0000-000000000123"), FixtureExamQuestions)
 	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
 	err := exam.StartExam()
 	assert.Nil(t, err)
@@ -25,6 +25,7 @@ func TestExam(t *testing.T) {
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
 	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.studentId)
+	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.libraryExamId)
 	assert.Equal(t, FixtureExamQuestions, exam.questions)
 
 	err = exam.StartExam()

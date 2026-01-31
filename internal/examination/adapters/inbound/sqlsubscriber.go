@@ -55,8 +55,14 @@ func (s SqlSubscriberAdapter) Start() {
 
 func (s SqlSubscriberAdapter) RegisterEventHandler(handler message.NoPublishHandlerFunc) {
 	s.router.AddConsumerHandler(
-		"examination_handler",
-		"examination",
+		"examination_examsubmitted_handler",
+		"examination.examsubmitted",
+		s.subscriber,
+		handler,
+	)
+	s.router.AddConsumerHandler(
+		"examination_examstarted_handler",
+		"examination.examstarted",
 		s.subscriber,
 		handler,
 	)

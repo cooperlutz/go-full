@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS examination.exams (
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     -- 
     student_id UUID NOT NULL,
+    library_exam_id UUID NOT NULL,
     completed BOOLEAN NOT NULL DEFAULT FALSE,
     completed_at TIMESTAMPTZ,
     started_at TIMESTAMPTZ

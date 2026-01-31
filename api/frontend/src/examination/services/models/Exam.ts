@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from "../runtime";
+import type { Question } from "./Question";
+import {
+  QuestionFromJSON,
+  QuestionFromJSONTyped,
+  QuestionToJSON,
+  QuestionToJSONTyped,
+} from "./Question";
+
 /**
  *
  * @export
@@ -31,6 +39,36 @@ export interface Exam {
    * @memberof Exam
    */
   studentId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Exam
+   */
+  libraryExamId?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof Exam
+   */
+  totalQuestions?: number;
+  /**
+   *
+   * @type {number}
+   * @memberof Exam
+   */
+  answeredQuestions?: number;
+  /**
+   *
+   * @type {boolean}
+   * @memberof Exam
+   */
+  completed: boolean;
+  /**
+   *
+   * @type {Array<Question>}
+   * @memberof Exam
+   */
+  questions?: Array<Question>;
 }
 
 /**
@@ -39,6 +77,7 @@ export interface Exam {
 export function instanceOfExam(value: object): value is Exam {
   if (!("examId" in value) || value["examId"] === undefined) return false;
   if (!("studentId" in value) || value["studentId"] === undefined) return false;
+  if (!("completed" in value) || value["completed"] === undefined) return false;
   return true;
 }
 
@@ -56,6 +95,17 @@ export function ExamFromJSONTyped(
   return {
     examId: json["examId"],
     studentId: json["studentId"],
+    libraryExamId:
+      json["libraryExamId"] == null ? undefined : json["libraryExamId"],
+    totalQuestions:
+      json["totalQuestions"] == null ? undefined : json["totalQuestions"],
+    answeredQuestions:
+      json["answeredQuestions"] == null ? undefined : json["answeredQuestions"],
+    completed: json["completed"],
+    questions:
+      json["questions"] == null
+        ? undefined
+        : (json["questions"] as Array<any>).map(QuestionFromJSON),
   };
 }
 
@@ -74,5 +124,13 @@ export function ExamToJSONTyped(
   return {
     examId: value["examId"],
     studentId: value["studentId"],
+    libraryExamId: value["libraryExamId"],
+    totalQuestions: value["totalQuestions"],
+    answeredQuestions: value["answeredQuestions"],
+    completed: value["completed"],
+    questions:
+      value["questions"] == null
+        ? undefined
+        : (value["questions"] as Array<any>).map(QuestionToJSON),
   };
 }

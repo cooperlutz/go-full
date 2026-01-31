@@ -12,7 +12,14 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/oapi-codegen/runtime"
 )
+
+// Answer defines model for Answer.
+type Answer struct {
+	ProvidedAnswer string `json:"providedAnswer"`
+}
 
 // Error defines model for Error.
 type Error struct {
@@ -22,8 +29,31 @@ type Error struct {
 
 // Exam defines model for Exam.
 type Exam struct {
-	ExamId    string `json:"examId"`
-	StudentId string `json:"studentId"`
+	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
+	Completed         bool        `json:"completed"`
+	ExamId            string      `json:"examId"`
+	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
+	Questions         *[]Question `json:"questions,omitempty"`
+	StudentId         string      `json:"studentId"`
+	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
+}
+
+// Progress defines model for Progress.
+type Progress struct {
+	AnsweredQuestions int32 `json:"answeredQuestions"`
+	TotalQuestions    int32 `json:"totalQuestions"`
+}
+
+// Question defines model for Question.
+type Question struct {
+	Answered        bool      `json:"answered"`
+	ExamId          string    `json:"examId"`
+	ProvidedAnswer  *string   `json:"providedAnswer,omitempty"`
+	QuestionId      string    `json:"questionId"`
+	QuestionIndex   int32     `json:"questionIndex"`
+	QuestionText    string    `json:"questionText"`
+	QuestionType    string    `json:"questionType"`
+	ResponseOptions *[]string `json:"responseOptions,omitempty"`
 }
 
 // StartExam defines model for StartExam.
@@ -34,6 +64,9 @@ type StartExam struct {
 
 // StartNewExamJSONRequestBody defines body for StartNewExam for application/json ContentType.
 type StartNewExamJSONRequestBody = StartExam
+
+// AnswerQuestionJSONRequestBody defines body for AnswerQuestion for application/json ContentType.
+type AnswerQuestionJSONRequestBody = Answer
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -115,6 +148,23 @@ type ClientInterface interface {
 	StartNewExamWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	StartNewExam(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExam request
+	GetExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExamProgress request
+	GetExamProgress(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetExamQuestion request
+	GetExamQuestion(ctx context.Context, examId string, questionIndex int32, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AnswerQuestionWithBody request with any body
+	AnswerQuestionWithBody(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	AnswerQuestion(ctx context.Context, examId string, questionIndex int32, body AnswerQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SubmitExam request
+	SubmitExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) GetAvailableExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -143,6 +193,78 @@ func (c *Client) StartNewExamWithBody(ctx context.Context, contentType string, b
 
 func (c *Client) StartNewExam(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStartNewExamRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExamRequest(c.Server, examId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExamProgress(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExamProgressRequest(c.Server, examId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetExamQuestion(ctx context.Context, examId string, questionIndex int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetExamQuestionRequest(c.Server, examId, questionIndex)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AnswerQuestionWithBody(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAnswerQuestionRequestWithBody(c.Server, examId, questionIndex, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AnswerQuestion(ctx context.Context, examId string, questionIndex int32, body AnswerQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAnswerQuestionRequest(c.Server, examId, questionIndex, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SubmitExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSubmitExamRequest(c.Server, examId)
 	if err != nil {
 		return nil, err
 	}
@@ -220,6 +342,203 @@ func NewStartNewExamRequestWithBody(server string, contentType string, body io.R
 	return req, nil
 }
 
+// NewGetExamRequest generates requests for GetExam
+func NewGetExamRequest(server string, examId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "examId", runtime.ParamLocationPath, examId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExamProgressRequest generates requests for GetExamProgress
+func NewGetExamProgressRequest(server string, examId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "examId", runtime.ParamLocationPath, examId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams/%s/progress", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetExamQuestionRequest generates requests for GetExamQuestion
+func NewGetExamQuestionRequest(server string, examId string, questionIndex int32) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "examId", runtime.ParamLocationPath, examId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "questionIndex", runtime.ParamLocationPath, questionIndex)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams/%s/questions/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewAnswerQuestionRequest calls the generic AnswerQuestion builder with application/json body
+func NewAnswerQuestionRequest(server string, examId string, questionIndex int32, body AnswerQuestionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAnswerQuestionRequestWithBody(server, examId, questionIndex, "application/json", bodyReader)
+}
+
+// NewAnswerQuestionRequestWithBody generates requests for AnswerQuestion with any type of body
+func NewAnswerQuestionRequestWithBody(server string, examId string, questionIndex int32, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "examId", runtime.ParamLocationPath, examId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "questionIndex", runtime.ParamLocationPath, questionIndex)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams/%s/questions/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewSubmitExamRequest generates requests for SubmitExam
+func NewSubmitExamRequest(server string, examId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "examId", runtime.ParamLocationPath, examId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/exams/%s/submit", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -270,6 +589,23 @@ type ClientWithResponsesInterface interface {
 	StartNewExamWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error)
 
 	StartNewExamWithResponse(ctx context.Context, body StartNewExamJSONRequestBody, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error)
+
+	// GetExamWithResponse request
+	GetExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamResponse, error)
+
+	// GetExamProgressWithResponse request
+	GetExamProgressWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamProgressResponse, error)
+
+	// GetExamQuestionWithResponse request
+	GetExamQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, reqEditors ...RequestEditorFn) (*GetExamQuestionResponse, error)
+
+	// AnswerQuestionWithBodyWithResponse request with any body
+	AnswerQuestionWithBodyWithResponse(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AnswerQuestionResponse, error)
+
+	AnswerQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, body AnswerQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*AnswerQuestionResponse, error)
+
+	// SubmitExamWithResponse request
+	SubmitExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*SubmitExamResponse, error)
 }
 
 type GetAvailableExamsResponse struct {
@@ -318,6 +654,120 @@ func (r StartNewExamResponse) StatusCode() int {
 	return 0
 }
 
+type GetExamResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Exam
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExamResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExamResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExamProgressResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Progress
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExamProgressResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExamProgressResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetExamQuestionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Question
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetExamQuestionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetExamQuestionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type AnswerQuestionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Question
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r AnswerQuestionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AnswerQuestionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type SubmitExamResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r SubmitExamResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SubmitExamResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 // GetAvailableExamsWithResponse request returning *GetAvailableExamsResponse
 func (c *ClientWithResponses) GetAvailableExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAvailableExamsResponse, error) {
 	rsp, err := c.GetAvailableExams(ctx, reqEditors...)
@@ -342,6 +792,59 @@ func (c *ClientWithResponses) StartNewExamWithResponse(ctx context.Context, body
 		return nil, err
 	}
 	return ParseStartNewExamResponse(rsp)
+}
+
+// GetExamWithResponse request returning *GetExamResponse
+func (c *ClientWithResponses) GetExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamResponse, error) {
+	rsp, err := c.GetExam(ctx, examId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExamResponse(rsp)
+}
+
+// GetExamProgressWithResponse request returning *GetExamProgressResponse
+func (c *ClientWithResponses) GetExamProgressWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamProgressResponse, error) {
+	rsp, err := c.GetExamProgress(ctx, examId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExamProgressResponse(rsp)
+}
+
+// GetExamQuestionWithResponse request returning *GetExamQuestionResponse
+func (c *ClientWithResponses) GetExamQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, reqEditors ...RequestEditorFn) (*GetExamQuestionResponse, error) {
+	rsp, err := c.GetExamQuestion(ctx, examId, questionIndex, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetExamQuestionResponse(rsp)
+}
+
+// AnswerQuestionWithBodyWithResponse request with arbitrary body returning *AnswerQuestionResponse
+func (c *ClientWithResponses) AnswerQuestionWithBodyWithResponse(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AnswerQuestionResponse, error) {
+	rsp, err := c.AnswerQuestionWithBody(ctx, examId, questionIndex, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAnswerQuestionResponse(rsp)
+}
+
+func (c *ClientWithResponses) AnswerQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, body AnswerQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*AnswerQuestionResponse, error) {
+	rsp, err := c.AnswerQuestion(ctx, examId, questionIndex, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAnswerQuestionResponse(rsp)
+}
+
+// SubmitExamWithResponse request returning *SubmitExamResponse
+func (c *ClientWithResponses) SubmitExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*SubmitExamResponse, error) {
+	rsp, err := c.SubmitExam(ctx, examId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSubmitExamResponse(rsp)
 }
 
 // ParseGetAvailableExamsResponse parses an HTTP response from a GetAvailableExamsWithResponse call
@@ -398,6 +901,164 @@ func ParseStartNewExamResponse(rsp *http.Response) (*StartNewExamResponse, error
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExamResponse parses an HTTP response from a GetExamWithResponse call
+func ParseGetExamResponse(rsp *http.Response) (*GetExamResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExamResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Exam
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExamProgressResponse parses an HTTP response from a GetExamProgressWithResponse call
+func ParseGetExamProgressResponse(rsp *http.Response) (*GetExamProgressResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExamProgressResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Progress
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetExamQuestionResponse parses an HTTP response from a GetExamQuestionWithResponse call
+func ParseGetExamQuestionResponse(rsp *http.Response) (*GetExamQuestionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetExamQuestionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Question
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAnswerQuestionResponse parses an HTTP response from a AnswerQuestionWithResponse call
+func ParseAnswerQuestionResponse(rsp *http.Response) (*AnswerQuestionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AnswerQuestionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Question
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSubmitExamResponse parses an HTTP response from a SubmitExamWithResponse call
+func ParseSubmitExamResponse(rsp *http.Response) (*SubmitExamResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SubmitExamResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {

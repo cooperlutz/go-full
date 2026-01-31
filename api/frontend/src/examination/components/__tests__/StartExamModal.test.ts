@@ -8,22 +8,22 @@ describe("StartExamModal", () => {
     // Arrange & Act
     const wrapper = mount(StartExamModal, {
       props: {
-        examId: "test-exam-id",
+        libraryExamId: "test-exam-id",
       },
     });
 
     // Assert
-    expect(wrapper.find("#start_exam_button").exists()).toBe(true);
+    expect(wrapper.find("#start-exam-modal-button").exists()).toBe(true);
   });
 
   it("opens modal and input box is accessible on button click", async () => {
     // Arrange
     const wrapper = mount(StartExamModal, {
       props: {
-        examId: "test-exam-id",
+        libraryExamId: "test-exam-id",
       },
     });
-    const button = wrapper.find("#start_exam_button");
+    const button = wrapper.find("#start-exam-modal-button");
 
     // Act
     await button.trigger("click");
@@ -38,15 +38,15 @@ describe("StartExamModal", () => {
     const fetchSpy = vi.spyOn(window, "fetch");
     const wrapper = mount(StartExamModal, {
       props: {
-        examId: "test-exam-id",
+        libraryExamId: "test-exam-id",
       },
     });
-    const button = wrapper.find("#start_exam_button");
+    const button = wrapper.find("#start-exam-modal-button");
     await button.trigger("click");
     await nextTick();
     const studentIdInput = wrapper.find("#student-id-input");
     await studentIdInput.setValue("123e4567-e89b-12d3-a456-426614174000");
-    const startButton = wrapper.find("#start-button");
+    const startButton = wrapper.find("#confirm-start-exam-button");
     await startButton.trigger("click");
     await nextTick();
 

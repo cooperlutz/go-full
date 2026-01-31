@@ -13,16 +13,51 @@
  */
 
 import * as runtime from "../runtime";
-import type { Exam, StartExam } from "../models/index";
+import type {
+  Answer,
+  Exam,
+  Progress,
+  Question,
+  StartExam,
+} from "../models/index";
 import {
+  AnswerFromJSON,
+  AnswerToJSON,
   ExamFromJSON,
   ExamToJSON,
+  ProgressFromJSON,
+  ProgressToJSON,
+  QuestionFromJSON,
+  QuestionToJSON,
   StartExamFromJSON,
   StartExamToJSON,
 } from "../models/index";
 
+export interface AnswerQuestionRequest {
+  examId: string;
+  questionIndex: number;
+  answer: Answer;
+}
+
+export interface GetExamRequest {
+  examId: string;
+}
+
+export interface GetExamProgressRequest {
+  examId: string;
+}
+
+export interface GetExamQuestionRequest {
+  examId: string;
+  questionIndex: number;
+}
+
 export interface StartNewExamRequest {
   startExam: StartExam;
+}
+
+export interface SubmitExamRequest {
+  examId: string;
 }
 
 /**
@@ -32,6 +67,27 @@ export interface StartNewExamRequest {
  * @interface DefaultApiInterface
  */
 export interface DefaultApiInterface {
+  /**
+   *
+   * @param {string} examId
+   * @param {number} questionIndex
+   * @param {Answer} answer
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  answerQuestionRaw(
+    requestParameters: AnswerQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Question>>;
+
+  /**
+   */
+  answerQuestion(
+    requestParameters: AnswerQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Question>;
+
   /**
    *
    * @param {*} [options] Override http request option.
@@ -47,6 +103,64 @@ export interface DefaultApiInterface {
   getAvailableExams(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>>;
+
+  /**
+   *
+   * @param {string} examId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getExamRaw(
+    requestParameters: GetExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Exam>>;
+
+  /**
+   */
+  getExam(
+    requestParameters: GetExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Exam>;
+
+  /**
+   *
+   * @param {string} examId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getExamProgressRaw(
+    requestParameters: GetExamProgressRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Progress>>;
+
+  /**
+   */
+  getExamProgress(
+    requestParameters: GetExamProgressRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Progress>;
+
+  /**
+   *
+   * @param {string} examId
+   * @param {number} questionIndex
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getExamQuestionRaw(
+    requestParameters: GetExamQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Question>>;
+
+  /**
+   */
+  getExamQuestion(
+    requestParameters: GetExamQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Question>;
 
   /**
    *
@@ -66,12 +180,103 @@ export interface DefaultApiInterface {
     requestParameters: StartNewExamRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Exam>;
+
+  /**
+   *
+   * @param {string} examId
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  submitExamRaw(
+    requestParameters: SubmitExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<void>>;
+
+  /**
+   */
+  submitExam(
+    requestParameters: SubmitExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void>;
 }
 
 /**
  *
  */
 export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
+  /**
+   */
+  async answerQuestionRaw(
+    requestParameters: AnswerQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Question>> {
+    if (requestParameters["examId"] == null) {
+      throw new runtime.RequiredError(
+        "examId",
+        'Required parameter "examId" was null or undefined when calling answerQuestion().',
+      );
+    }
+
+    if (requestParameters["questionIndex"] == null) {
+      throw new runtime.RequiredError(
+        "questionIndex",
+        'Required parameter "questionIndex" was null or undefined when calling answerQuestion().',
+      );
+    }
+
+    if (requestParameters["answer"] == null) {
+      throw new runtime.RequiredError(
+        "answer",
+        'Required parameter "answer" was null or undefined when calling answerQuestion().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    headerParameters["Content-Type"] = "application/json";
+
+    let urlPath = `/api/v1/exams/{examId}/questions/{questionIndex}`;
+    urlPath = urlPath.replace(
+      `{${"examId"}}`,
+      encodeURIComponent(String(requestParameters["examId"])),
+    );
+    urlPath = urlPath.replace(
+      `{${"questionIndex"}}`,
+      encodeURIComponent(String(requestParameters["questionIndex"])),
+    );
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "POST",
+        headers: headerParameters,
+        query: queryParameters,
+        body: AnswerToJSON(requestParameters["answer"]),
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      QuestionFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   */
+  async answerQuestion(
+    requestParameters: AnswerQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Question> {
+    const response = await this.answerQuestionRaw(
+      requestParameters,
+      initOverrides,
+    );
+    return await response.value();
+  }
+
   /**
    */
   async getAvailableExamsRaw(
@@ -104,6 +309,167 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>> {
     const response = await this.getAvailableExamsRaw(initOverrides);
+    return await response.value();
+  }
+
+  /**
+   */
+  async getExamRaw(
+    requestParameters: GetExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Exam>> {
+    if (requestParameters["examId"] == null) {
+      throw new runtime.RequiredError(
+        "examId",
+        'Required parameter "examId" was null or undefined when calling getExam().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/api/v1/exams/{examId}`;
+    urlPath = urlPath.replace(
+      `{${"examId"}}`,
+      encodeURIComponent(String(requestParameters["examId"])),
+    );
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      ExamFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   */
+  async getExam(
+    requestParameters: GetExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Exam> {
+    const response = await this.getExamRaw(requestParameters, initOverrides);
+    return await response.value();
+  }
+
+  /**
+   */
+  async getExamProgressRaw(
+    requestParameters: GetExamProgressRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Progress>> {
+    if (requestParameters["examId"] == null) {
+      throw new runtime.RequiredError(
+        "examId",
+        'Required parameter "examId" was null or undefined when calling getExamProgress().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/api/v1/exams/{examId}/progress`;
+    urlPath = urlPath.replace(
+      `{${"examId"}}`,
+      encodeURIComponent(String(requestParameters["examId"])),
+    );
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      ProgressFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   */
+  async getExamProgress(
+    requestParameters: GetExamProgressRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Progress> {
+    const response = await this.getExamProgressRaw(
+      requestParameters,
+      initOverrides,
+    );
+    return await response.value();
+  }
+
+  /**
+   */
+  async getExamQuestionRaw(
+    requestParameters: GetExamQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Question>> {
+    if (requestParameters["examId"] == null) {
+      throw new runtime.RequiredError(
+        "examId",
+        'Required parameter "examId" was null or undefined when calling getExamQuestion().',
+      );
+    }
+
+    if (requestParameters["questionIndex"] == null) {
+      throw new runtime.RequiredError(
+        "questionIndex",
+        'Required parameter "questionIndex" was null or undefined when calling getExamQuestion().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/api/v1/exams/{examId}/questions/{questionIndex}`;
+    urlPath = urlPath.replace(
+      `{${"examId"}}`,
+      encodeURIComponent(String(requestParameters["examId"])),
+    );
+    urlPath = urlPath.replace(
+      `{${"questionIndex"}}`,
+      encodeURIComponent(String(requestParameters["questionIndex"])),
+    );
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      QuestionFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   */
+  async getExamQuestion(
+    requestParameters: GetExamQuestionRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Question> {
+    const response = await this.getExamQuestionRaw(
+      requestParameters,
+      initOverrides,
+    );
     return await response.value();
   }
 
@@ -155,5 +521,50 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
       initOverrides,
     );
     return await response.value();
+  }
+
+  /**
+   */
+  async submitExamRaw(
+    requestParameters: SubmitExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<void>> {
+    if (requestParameters["examId"] == null) {
+      throw new runtime.RequiredError(
+        "examId",
+        'Required parameter "examId" was null or undefined when calling submitExam().',
+      );
+    }
+
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/api/v1/exams/{examId}/submit`;
+    urlPath = urlPath.replace(
+      `{${"examId"}}`,
+      encodeURIComponent(String(requestParameters["examId"])),
+    );
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "POST",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.VoidApiResponse(response);
+  }
+
+  /**
+   */
+  async submitExam(
+    requestParameters: SubmitExamRequest,
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void> {
+    await this.submitExamRaw(requestParameters, initOverrides);
   }
 }

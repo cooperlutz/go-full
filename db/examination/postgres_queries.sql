@@ -9,6 +9,7 @@ INSERT INTO examination.exams (
     deleted_at,
     deleted,
     student_id,
+    library_exam_id,
     completed,
     completed_at,
     started_at
@@ -21,7 +22,8 @@ INSERT INTO examination.exams (
     $6,
     $7,
     $8,
-    $9
+    $9,
+    $10
 );
 
 -- name: FindQuestionsForExam :many
@@ -56,3 +58,50 @@ INSERT INTO examination.questions (
     $11,
     $12
 );
+
+-- name: GetQuestion :one
+SELECT * FROM examination.questions
+WHERE question_id = $1;
+
+-- name: GetQuestionsByExam :many
+SELECT * FROM examination.questions
+WHERE exam_id = $1
+ORDER BY index ASC;
+
+-- name: GetQuestionByExamAndIndex :one
+SELECT * FROM examination.questions
+WHERE exam_id = $1 AND index = $2;
+
+-- name: GetExam :one
+SELECT * FROM examination.exams
+WHERE exam_id = $1;
+
+-- name: SaveExam :exec
+UPDATE examination.exams
+SET
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5,
+    student_id = $6,
+    library_exam_id = $7,
+    completed = $8,
+    completed_at = $9,
+    started_at = $10
+WHERE exam_id = $1;
+
+-- name: SaveQuestion :exec
+UPDATE examination.questions
+SET
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5,
+    exam_id = $6,
+    index = $7,
+    answered = $8,
+    question_text = $9,
+    question_type = $10,
+    provided_answer = $11,
+    response_options = $12
+WHERE question_id = $1;

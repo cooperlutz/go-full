@@ -28,7 +28,7 @@ func (a ExamLibraryAdapter) RetrieveExamQuestionsFromLibrary(
 	ctx context.Context,
 	examID string,
 ) ([]*examination.Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.examlibrary.findoneexambyid")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.examlibrary.retrieveexamquestionsfromlibrary")
 	defer span.End()
 
 	response, err := a.uc.FindOneExamByID(ctx, query.FindOneExamByID{ExamID: examID})

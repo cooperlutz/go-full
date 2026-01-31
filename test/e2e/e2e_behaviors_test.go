@@ -2,11 +2,15 @@ package e2e_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+
+	api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 /*
@@ -166,11 +170,51 @@ Implementation Notes:
 4. An exam started event should be published to the message bus, verified via querying the 'watermill_examination' table in the database
 */
 func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
-	// Arrange
 	randomStudentId := uuid.New().String()
+	numberThreeInt32 := int32(3)
+	expect := api_client.Exam{
+		LibraryExamId:     utilitee.StrPtr("11111111-1111-1111-1111-111111111111"),
+		AnsweredQuestions: &numberThreeInt32,
+		TotalQuestions:    &numberThreeInt32,
+		StudentId:         randomStudentId,
+		Completed:         true,
+		ExamId:            "", // we don't know the exam ID ahead of time
+		Questions: &[]api_client.Question{
+			{
+				QuestionIndex: 1,
+				Answered:      true,
+				QuestionText:  "What is the capital of France?",
+				QuestionType:  "multiple-choice",
+				ResponseOptions: &[]string{
+					"Berlin",
+					"Madrid",
+					"Paris",
+					"Rome",
+				},
+				ProvidedAnswer: utilitee.StrPtr("Berlin"),
+			},
+			{
+				QuestionIndex:   2,
+				Answered:        true,
+				QuestionText:    "What is Go?",
+				QuestionType:    "short-answer",
+				ResponseOptions: nil,
+				ProvidedAnswer:  utilitee.StrPtr("A programming language developed by Google."),
+			},
+			{
+				QuestionIndex:   3,
+				Answered:        true,
+				QuestionText:    "Explain the concept of concurrency.",
+				QuestionType:    "essay",
+				ResponseOptions: nil,
+				ProvidedAnswer:  utilitee.StrPtr("It's about the relationship between space and time."),
+			},
+		},
+	}
+	// Arrange
 	ctx := context.Background()
 	queryCountOfExaminationEvents := func() (int64, error) {
-		return countOfQuery("public", "watermill_examination")
+		return countOfQuery("public", "watermill_examination.examstarted")
 	}
 	queryCountOfExaminationQuestions := func() (int64, error) {
 		return countOfQuery("examination", "questions")
@@ -179,27 +223,67 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	examsBefore, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsBefore := len(*examsBefore.JSON200)
 	countOfExaminationQuestionsBefore, err := queryCountOfExaminationQuestions()
-	assert.NoError(t, err)
-
 	_, page := newBrowserContextAndPage(t, defaultBrowserContextOptions)
+
+	// Act
 	_, err = page.Goto(serverAddr + "/exam-library/11111111-1111-1111-1111-111111111111")
-	assert.NoError(t, err)
-	modalButtons, err := page.Locator("#start_exam_button").All()
+	modalButtons, err := page.Locator("#start-exam-modal-button").All()
 	err = modalButtons[0].Click()
-	assert.NoError(t, err)
 	err = page.Locator("#student-id-input").Fill(randomStudentId)
-	assert.NoError(t, err)
-	buttons, err := page.Locator("#start-button").All()
+	buttons, err := page.Locator("#confirm-start-exam-button").All()
 	err = buttons[0].Click()
-	assert.NoError(t, err)
+	time.Sleep(1 * time.Second)
+	url := page.URL()
+	examId := strings.Split(url, "/exam/")[1]
+	expect.ExamId = examId
+	firstQuestionButton, err := page.Locator("#go-to-first-question-button").All()
+	err = firstQuestionButton[0].Click()
+	time.Sleep(1 * time.Second)
+	mcRadioOpt1, err := page.Locator("#multiple-choice-radio-option-0").All()
+	err = mcRadioOpt1[0].Click()
+	subQuestionBtn, err := page.Locator("#submit-question-button").All()
+	err = subQuestionBtn[0].Click()
+	questionNavItem2, err := page.Locator("#question-nav-item-2").All()
+	err = questionNavItem2[0].Click()
+	time.Sleep(1 * time.Second)
+	shortAnswerInput, err := page.Locator("#short-answer-input").All()
+	err = shortAnswerInput[0].Fill("A programming language developed by Google.")
+	subQuestionBtn2, err := page.Locator("#submit-question-button").All()
+	err = subQuestionBtn2[0].Click()
+	questionNavItem3, err := page.Locator("#question-nav-item-3").All()
+	err = questionNavItem3[0].Click()
+	err = page.Locator("#essay-question-input").Fill("It's about the relationship between space and time.")
+	subQuestionBtn3, err := page.Locator("#submit-question-button").All()
+	err = subQuestionBtn3[0].Click()
+	submitExamBtn, err := page.Locator("#exam-submission-button").All()
+	err = submitExamBtn[0].Click()
+	submissionValidationBtn, err := page.Locator("#confirm-exam-submission-button").All()
+	err = submissionValidationBtn[0].Click()
 
 	// Assert
 	countOfExaminationEventsAfter, err := queryCountOfExaminationEvents()
 	countOfExaminationQuestionsAfter, err := queryCountOfExaminationQuestions()
 	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsAfter := len(*examsAfter.JSON200)
-	assert.NoError(t, err)
+
 	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter)
 	assert.Equal(t, countOfExaminationEventsBefore+1, countOfExaminationEventsAfter)
 	assert.Greater(t, countOfExaminationQuestionsAfter, countOfExaminationQuestionsBefore)
+	actual, err := examinationApiClient.GetExamWithResponse(ctx, examId)
+	assert.Equal(t, *expect.LibraryExamId, *actual.JSON200.LibraryExamId)
+	assert.Equal(t, expect.StudentId, actual.JSON200.StudentId)
+	assert.Equal(t, *expect.AnsweredQuestions, *actual.JSON200.AnsweredQuestions)
+	assert.Equal(t, *expect.TotalQuestions, *actual.JSON200.TotalQuestions)
+	assert.Equal(t, expect.Completed, actual.JSON200.Completed)
+	assert.Equal(t, len(*expect.Questions), len(*actual.JSON200.Questions))
+	for i, expectedQuestion := range *expect.Questions {
+		actualQuestion := (*actual.JSON200.Questions)[i]
+		assert.Equal(t, expectedQuestion.QuestionIndex, actualQuestion.QuestionIndex)
+		assert.Equal(t, expectedQuestion.Answered, actualQuestion.Answered)
+		assert.Equal(t, expectedQuestion.QuestionText, actualQuestion.QuestionText)
+		assert.Equal(t, expectedQuestion.QuestionType, actualQuestion.QuestionType)
+		assert.Equal(t, expectedQuestion.ResponseOptions, actualQuestion.ResponseOptions)
+		assert.Equal(t, *expectedQuestion.ProvidedAnswer, *actualQuestion.ProvidedAnswer)
+	}
+	assert.NoError(t, err)
 }
