@@ -1,3 +1,9 @@
+## v0.1.33 (2026-01-31)
+
+### Fix
+
+- Examination domain module (#148)
+
 ## v0.1.32 (2026-01-29)
 
 ### Fix
