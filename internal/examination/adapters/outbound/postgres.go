@@ -37,7 +37,7 @@ func (p PostgresAdapter) FindAll(ctx context.Context) ([]query.Exam, error) {
 		return nil, err
 	}
 
-	return examinationExamsToQuery(exams), nil
+	return examinationExamsToQuery(exams)
 }
 
 // FindQuestion retrieves a question by its exam ID and question index from the database.
@@ -101,7 +101,7 @@ func (p PostgresAdapter) GetExam(ctx context.Context, id uuid.UUID) (*examinatio
 		return nil, err
 	}
 
-	return exam.toDomain(questions)
+	return exam.toDomain(questions...)
 }
 
 // AddExam adds a new exam to the database.

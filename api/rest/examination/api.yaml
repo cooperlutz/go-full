@@ -195,6 +195,7 @@ components:
       required:
         - examId
         - studentId
+        - completed
       properties:
         examId:
           type: string
@@ -208,6 +209,8 @@ components:
         answeredQuestions:
           type: integer
           format: int32
+        completed:
+          type: boolean
         questions:
           type: array
           items:

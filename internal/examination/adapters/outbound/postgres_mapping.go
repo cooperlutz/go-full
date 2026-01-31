@@ -9,7 +9,7 @@ import (
 )
 
 // toDomain maps the ExaminationExam to the domain entity.
-func (e ExaminationExam) toDomain(questions []ExaminationQuestion) (*examination.Exam, error) {
+func (e ExaminationExam) toDomain(questions ...ExaminationQuestion) (*examination.Exam, error) {
 	var domainQuestions []*examination.Question
 
 	for i := range questions {
@@ -35,12 +35,14 @@ func (e ExaminationExam) toDomain(questions []ExaminationQuestion) (*examination
 	), nil
 }
 
-// toDomain maps the ExaminationExam to the domain entity.
-func (e ExaminationExam) toQueryExam() query.Exam {
-	return query.Exam{
-		ExamId:    e.ExamID.String(),
-		StudentId: e.StudentID.String(),
+// toQueryExam maps the ExaminationExam to the query.Exam.
+func (e ExaminationExam) toQueryExam() (query.Exam, error) {
+	exam, err := e.toDomain()
+	if err != nil {
+		return query.Exam{}, err
 	}
+
+	return mapEntityExamToQuery(exam), nil
 }
 
 // toQueryQuestion maps the ExaminationQuestion to the query.Question.
@@ -76,13 +78,19 @@ func (q ExaminationQuestion) toDomain() (*examination.Question, error) {
 }
 
 // examinationExamsToQuery maps a slice of ExaminationExam to a slice of query.Exam entities.
-func examinationExamsToQuery(exams []ExaminationExam) []query.Exam {
+func examinationExamsToQuery(exams []ExaminationExam) ([]query.Exam, error) {
 	var domainExams []query.Exam
+
 	for _, exam := range exams {
-		domainExams = append(domainExams, exam.toQueryExam())
+		queryExam, err := exam.toQueryExam()
+		if err != nil {
+			return nil, err
+		}
+
+		domainExams = append(domainExams, queryExam)
 	}
 
-	return domainExams
+	return domainExams, nil
 }
 
 // mapEntityExamToDB maps a domain Exam entity to the ExaminationExam database model.

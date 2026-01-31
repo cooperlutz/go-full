@@ -170,6 +170,7 @@ func queryExamToHttpExam(e query.Exam) Exam {
 		ExamId:            e.ExamId,
 		LibraryExamId:     &e.LibraryExamId,
 		StudentId:         e.StudentId,
+		Completed:         e.Completed,
 		AnsweredQuestions: &e.AnsweredQuestions,
 		TotalQuestions:    &e.TotalQuestions,
 		Questions:         &questions,

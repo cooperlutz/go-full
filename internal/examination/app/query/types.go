@@ -4,6 +4,7 @@ type Exam struct {
 	ExamId            string
 	LibraryExamId     string
 	StudentId         string
+	Completed         bool
 	AnsweredQuestions int32
 	TotalQuestions    int32
 	Questions         []Question
