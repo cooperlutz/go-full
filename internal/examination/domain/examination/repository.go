@@ -30,6 +30,7 @@ func MapToExam(
 	deleted bool,
 	deletedAt *time.Time,
 	studentId uuid.UUID,
+	libraryExamId uuid.UUID,
 	startedAt *time.Time,
 	completedAt *time.Time,
 	completed bool,
@@ -43,11 +44,12 @@ func MapToExam(
 			deleted,
 			deletedAt,
 		),
-		studentId:   studentId,
-		startedAt:   startedAt,
-		completedAt: completedAt,
-		completed:   completed,
-		questions:   questions,
+		studentId:     studentId,
+		libraryExamId: libraryExamId,
+		startedAt:     startedAt,
+		completedAt:   completedAt,
+		completed:     completed,
+		questions:     questions,
 	}
 }
 

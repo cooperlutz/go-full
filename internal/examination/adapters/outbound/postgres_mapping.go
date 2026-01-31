@@ -28,6 +28,7 @@ func (e ExaminationExam) toDomain(questions ...ExaminationQuestion) (*examinatio
 		e.Deleted,
 		pgxutil.TimestampzToTimePtr(e.DeletedAt),
 		e.StudentID.Bytes,
+		e.LibraryExamID.Bytes,
 		pgxutil.TimestampzToTimePtr(e.StartedAt),
 		pgxutil.TimestampzToTimePtr(e.CompletedAt),
 		e.Completed,
@@ -99,15 +100,16 @@ func mapEntityExamToDB(exam *examination.Exam) ExaminationExam {
 	updatedAt := exam.GetUpdatedAtTime()
 
 	return ExaminationExam{
-		ExamID:      pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
-		CreatedAt:   pgxutil.TimeToTimestampz(&createdAt),
-		UpdatedAt:   pgxutil.TimeToTimestampz(&updatedAt),
-		Deleted:     exam.IsDeleted(),
-		DeletedAt:   pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
-		StudentID:   pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
-		StartedAt:   pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
-		CompletedAt: pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
-		Completed:   exam.IsCompleted(),
+		ExamID:        pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
+		CreatedAt:     pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:     pgxutil.TimeToTimestampz(&updatedAt),
+		Deleted:       exam.IsDeleted(),
+		DeletedAt:     pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
+		StudentID:     pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
+		LibraryExamID: pgxutil.UUIDToPgtypeUUID(exam.GetLibraryExamIdUUID()),
+		StartedAt:     pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
+		CompletedAt:   pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
+		Completed:     exam.IsCompleted(),
 	}
 }
 
@@ -143,6 +145,7 @@ func mapEntityExamToQuery(exam *examination.Exam) query.Exam {
 		ExamId:            exam.GetIdString(),
 		StudentId:         exam.GetStudentIdString(),
 		LibraryExamId:     exam.GetLibraryExamIdUUID().String(),
+		Completed:         exam.IsCompleted(),
 		AnsweredQuestions: exam.AnsweredQuestionsCount(),
 		TotalQuestions:    exam.NumberOfQuestions(),
 		Questions:         questions,

@@ -9,6 +9,7 @@ INSERT INTO examination.exams (
     deleted_at,
     deleted,
     student_id,
+    library_exam_id,
     completed,
     completed_at,
     started_at
@@ -21,7 +22,8 @@ INSERT INTO examination.exams (
     $6,
     $7,
     $8,
-    $9
+    $9,
+    $10
 );
 
 -- name: FindQuestionsForExam :many
@@ -82,9 +84,10 @@ SET
     deleted_at = $4,
     deleted = $5,
     student_id = $6,
-    completed = $7,
-    completed_at = $8,
-    started_at = $9
+    library_exam_id = $7,
+    completed = $8,
+    completed_at = $9,
+    started_at = $10
 WHERE exam_id = $1;
 
 -- name: SaveQuestion :exec
