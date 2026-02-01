@@ -16,12 +16,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center space-y-2">
+  <div class="flex flex-col space-y-2">
     Answered: {{ progress?.answeredQuestions || 0 }} /
     {{ progress?.totalQuestions || 0 }} ({{ progressPercentage.toFixed(2) }}%)
     <progress
       v-if="progress !== null"
-      class="progress w-56"
+      class="progress w-56 mt-1"
       :value="progress.answeredQuestions"
       :max="progress.totalQuestions"
     ></progress>
