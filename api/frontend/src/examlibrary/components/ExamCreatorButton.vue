@@ -9,6 +9,6 @@ function navigateToExamCreator() {
 
 <template>
   <button class="btn btn-primary" @click="navigateToExamCreator">
-    New Exam
+    Exam Creator
   </button>
 </template>
