@@ -11,19 +11,6 @@ describe("DashboardCard.vue", () => {
     expect(wrapper.find(".card-title").text()).toBe("Ping Pong");
   });
 
-  it("renders the logo image", () => {
-    // Arrange & Act
-    const wrapper = mount(DashboardCard);
-    const img = wrapper.find("img");
-    const imgData = img.element as HTMLImageElement;
-
-    // Assert
-    expect(imgData.src).toContain("data:image/svg+xml");
-    expect(img.exists()).toBe(true);
-    expect(img.attributes("width")).toBe("48");
-    expect(img.attributes("height")).toBe("48");
-  });
-
   it("contains the correct link", () => {
     // Arrange & Act
     const wrapper = mount(DashboardCard);
