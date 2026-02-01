@@ -88,7 +88,7 @@ const saveExamToLibrary = async () => {
       @click="saveExamToLibrary()"
       id="save-exam-to-library-button"
     >
-      Save Exam to Library
+      Add Exam to Library
     </button>
   </div>
 
