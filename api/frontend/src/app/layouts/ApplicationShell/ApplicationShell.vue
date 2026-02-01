@@ -78,7 +78,7 @@ const bottomSidebarItems = ref<SidebarItem[]>([
           <!-- Sidebar content here -->
           <ul id="sidebar-top" class="menu w-full grow">
             <li v-for="item in topSidebarItems" :key="item.name">
-              <a :href="item.url" class="hover:link hover:text-info">
+              <a :href="item.url" class="hover:link">
                 <button>
                   <component
                     :is="item.icon"
