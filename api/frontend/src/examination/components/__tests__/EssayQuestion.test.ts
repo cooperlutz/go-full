@@ -21,13 +21,13 @@ const wrapper = mount(EssayQuestion, {
 describe("EssayQuestion", () => {
   it("renders input and send button", () => {
     // Assert
-    expect(wrapper.find("#submit-question-button").exists()).toBe(true);
+    expect(wrapper.find("#record-answer-button").exists()).toBe(true);
   });
 
   it("allows user to input an essay answer", () => {
     const inputOption = wrapper.find("#essay-question-input");
     inputOption.setValue("this is my essay answer");
-    const submitButton = wrapper.find("#submit-question-button");
+    const submitButton = wrapper.find("#record-answer-button");
     submitButton.trigger("click");
 
     // Assert

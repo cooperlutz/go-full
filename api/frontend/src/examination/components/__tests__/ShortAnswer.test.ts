@@ -21,14 +21,14 @@ const wrapper = mount(ShortAnswer, {
 describe("ShortAnswer", () => {
   it("renders input and send button", () => {
     // Assert
-    expect(wrapper.find("#submit-question-button").exists()).toBe(true);
+    expect(wrapper.find("#record-answer-button").exists()).toBe(true);
     expect(wrapper.find("#short-answer-input").exists()).toBe(true);
   });
 
   it("allows user to input an answer", () => {
     const inputOption = wrapper.find("#short-answer-input");
     inputOption.setValue("this is my short answer");
-    const submitButton = wrapper.find("#submit-question-button");
+    const submitButton = wrapper.find("#record-answer-button");
     submitButton.trigger("click");
 
     // Assert

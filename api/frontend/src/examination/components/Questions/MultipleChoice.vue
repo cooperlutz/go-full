@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import SubmitAnswerButton from "../SubmitAnswerButton.vue";
+import RecordAnswerButton from "./RecordAnswerButton.vue";
 import { type Question } from "../../services";
 
 const props = defineProps<{
@@ -15,8 +15,9 @@ selectedAnswer.value = props.question.providedAnswer || "";
 <template>
   <div id="multiple-choice-question">
     <h2 class="card-title">Multiple Choice Question</h2>
+    <div class="divider"></div>
     <p>{{ props.question.questionText }}</p>
-    <ul>
+    <ul class="mt-6 space-y-4">
       <li v-for="option in props.question.responseOptions" :key="option">
         <label class="cursor-pointer flex items-center space-x-2">
           <input
@@ -31,7 +32,7 @@ selectedAnswer.value = props.question.providedAnswer || "";
         </label>
       </li>
     </ul>
-    <SubmitAnswerButton
+    <RecordAnswerButton
       :examId="props.question.examId"
       :questionIndex="props.question.questionIndex"
       :answer="selectedAnswer"
