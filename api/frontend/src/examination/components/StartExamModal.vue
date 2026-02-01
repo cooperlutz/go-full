@@ -23,15 +23,16 @@ const clickStart = async (libraryExamId: string, studentId: string) => {
 <template>
   <button
     id="start-exam-modal-button"
-    class="btn"
+    class="btn btn-info"
     onclick="start_exam_modal.showModal()"
   >
-    Start Exam
+    Take Exam
   </button>
   <dialog id="start_exam_modal" class="modal">
     <div class="modal-box">
-      <h3 class="text-lg font-bold">Start Exam</h3>
-      <label class="input">
+      <h3 class="text-lg font-bold">Take Exam</h3>
+      Enter your Student ID to begin the exam.
+      <label class="input mt-4">
         <input
           id="student-id-input"
           type="text"
@@ -43,7 +44,7 @@ const clickStart = async (libraryExamId: string, studentId: string) => {
       <div class="card-actions">
         <div
           id="confirm-start-exam-button"
-          class="btn btn-m text-xs"
+          class="btn btn-m btn-success text-xs mt-4"
           @click="clickStart(props.libraryExamId, studentId)"
         >
           Start Exam
