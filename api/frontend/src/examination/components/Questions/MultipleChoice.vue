@@ -14,9 +14,9 @@ selectedAnswer.value = props.question.providedAnswer || "";
 
 <template>
   <div id="multiple-choice-question">
-    <h2 class="card-title">Multiple Choice Question</h2>
+    <div class="badge badge-outline badge-primary">Multiple Choice</div>
+    <h2 class="card-title mt-4">{{ props.question.questionText }}</h2>
     <div class="divider"></div>
-    <p>{{ props.question.questionText }}</p>
     <ul class="mt-6 space-y-4">
       <li v-for="option in props.question.responseOptions" :key="option">
         <label class="cursor-pointer flex items-center space-x-2">

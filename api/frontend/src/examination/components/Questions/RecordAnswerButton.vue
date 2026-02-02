@@ -18,7 +18,7 @@ const { submitAnswer, loading } = useSubmitAnswer();
       @click="submitAnswer(props.examId, props.questionIndex, props.answer)"
       :disabled="loading"
     >
-      Submit
+      Record Answer
     </button>
   </div>
 </template>

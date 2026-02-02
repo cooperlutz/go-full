@@ -14,7 +14,8 @@ providedAnswer.value = props.question.providedAnswer || "";
 
 <template>
   <div>
-    <h2 class="card-title">Short Answer Question</h2>
+    <div class="badge badge-outline badge-primary">Short Answer</div>
+    <h2 class="card-title mt-4">{{ props.question.questionText }}</h2>
     <div class="divider"></div>
     <p>{{ props.question.questionText }}</p>
     <label class="cursor-pointer flex items-center space-x-2 mt-6 space-y-4">

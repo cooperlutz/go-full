@@ -14,13 +14,14 @@ providedAnswer.value = props.question.providedAnswer || "";
 
 <template>
   <div>
-    <h2 class="card-title">Essay Question</h2>
+    <div class="badge badge-outline badge-primary">Essay</div>
+    <h2 class="card-title mt-4">{{ props.question.questionText }}</h2>
     <div class="divider"></div>
-    <p class="mt-6">{{ props.question.questionText }}</p>
+
     <ul class="mt-6 space-y-4">
       <label class="cursor-pointer flex items-center space-x-2">
         <textarea
-          class="textarea"
+          class="textarea w-full my-2"
           v-model="providedAnswer"
           id="essay-question-input"
         />
