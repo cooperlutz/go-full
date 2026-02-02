@@ -1,3 +1,33 @@
+## v0.1.39 (2026-02-02)
+
+### Fix
+
+- **deps**: bump docker/login-action from 3.6.0 to 3.7.0 (#150)
+
+## v0.1.38 (2026-02-02)
+
+### Fix
+
+- **deps-dev**: bump happy-dom from 20.3.4 to 20.4.0 in /api/frontend (#152)
+
+## v0.1.37 (2026-02-02)
+
+### Fix
+
+- Testing improvements (#154)
+
+## v0.1.36 (2026-02-02)
+
+### Fix
+
+- **deps-dev**: bump vue-tsc from 3.2.2 to 3.2.4 in /api/frontend (#142)
+
+## v0.1.35 (2026-02-02)
+
+### Fix
+
+- **deps**: bump commitizen-tools/commitizen-action from 0.26.0 to 0.27.0 (#121)
+
 ## v0.1.34 (2026-02-02)
 
 ### Fix

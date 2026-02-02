@@ -16,16 +16,16 @@ x-app-environment: &x-app-environment
 
 include:
   # Application & Database
-  - ../../deploy/compose/app/docker-compose.go-full.yml
-  - ../../deploy/compose/database/docker-compose.postgres.yml
+  - ../../../deploy/compose/app/docker-compose.go-full.yml
+  - ../../../deploy/compose/database/docker-compose.postgres.yml
 
 services:
 
   e2e:
     container_name: go-full_e2e
     build:
-      context: ../../
-      dockerfile: test/e2e/Dockerfile
+      context: ../../../
+      dockerfile: test/e2e/docker/Dockerfile
     depends_on:
       - app
     environment:
