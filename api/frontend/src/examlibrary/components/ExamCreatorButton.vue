@@ -8,7 +8,7 @@ function navigateToExamCreator() {
 </script>
 
 <template>
-  <button class="btn btn-primary" @click="navigateToExamCreator">
+  <button class="btn btn-warning btn-block my-2" @click="navigateToExamCreator">
     Exam Creator
   </button>
 </template>
