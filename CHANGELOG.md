@@ -1,3 +1,9 @@
+## v0.1.39 (2026-02-02)
+
+### Fix
+
+- **deps**: bump docker/login-action from 3.6.0 to 3.7.0 (#150)
+
 ## v0.1.38 (2026-02-02)
 
 ### Fix
