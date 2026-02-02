@@ -6,6 +6,6 @@ import ExamCreatorButton from "../components/ExamCreatorButton.vue";
 
 <template>
   <PageHeader title="Exam Library" :disable-menu="true" />
-  <ExamCreatorButton/>
+  <ExamCreatorButton />
   <ExamLibraryTable />
 </template>

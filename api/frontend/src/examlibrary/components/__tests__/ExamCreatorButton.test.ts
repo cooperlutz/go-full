@@ -29,7 +29,7 @@ describe("ExamCreatorButton", () => {
 
     const button = wrapper.find("button");
     expect(button.exists()).toBe(true);
-    expect(button.text()).toBe("New Exam");
+    expect(button.text()).toBe("Exam Creator");
   });
 
   it("navigates to ExamCreator route when clicked", async () => {
