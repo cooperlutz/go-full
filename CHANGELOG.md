@@ -1,3 +1,9 @@
+## v0.1.36 (2026-02-02)
+
+### Fix
+
+- **deps-dev**: bump vue-tsc from 3.2.2 to 3.2.4 in /api/frontend (#142)
+
 ## v0.1.35 (2026-02-02)
 
 ### Fix
