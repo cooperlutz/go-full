@@ -14,13 +14,9 @@
       </p>
     </aside>
     <nav class="px-20">
-      <h6 class="footer-title">Apps</h6>
-      <a class="link link-hover">Ping Pong</a>
-    </nav>
-    <nav>
       <h6 class="footer-title">Links</h6>
       <div class="grid grid-flow-col gap-4">
-        <a>
+        <a href="https://github.com/cooperlutz/go-full" target="_blank" rel="noopener">
           <img src="/icons/github.svg" class="h-8 w-8 fill-current" />
         </a>
       </div>
