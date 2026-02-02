@@ -1,3 +1,9 @@
+## v0.1.35 (2026-02-02)
+
+### Fix
+
+- **deps**: bump commitizen-tools/commitizen-action from 0.26.0 to 0.27.0 (#121)
+
 ## v0.1.34 (2026-02-02)
 
 ### Fix
