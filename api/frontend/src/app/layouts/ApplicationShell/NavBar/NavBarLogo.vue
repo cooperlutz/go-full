@@ -7,6 +7,6 @@ import CONFIG from "~/app/config";
     <div class="mr-2">
       <h1>{{ CONFIG.SITE_NAME }}</h1>
     </div>
-    <img src="/image.png" height="32" width="32" />
+    <img src="/logo.png" height="32" width="32" />
   </a>
 </template>

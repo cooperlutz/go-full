@@ -41,7 +41,7 @@ onMounted(async () => {
       <tbody>
         <tr v-for="entity in allExams" :key="entity.id">
           <td>
-            <a :href="`/exam-library/${entity.id}`" class="link link-info">{{
+            <a :href="`/exam-library/${entity.id}`" class="link">{{
               entity.id
             }}</a>
           </td>

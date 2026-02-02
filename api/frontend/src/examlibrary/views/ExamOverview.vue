@@ -37,8 +37,10 @@ onMounted(async () => {
         <p><b>ID:</b> {{ lookupOutput?.id }}</p>
         <p><b>Name:</b> {{ lookupOutput?.name }}</p>
         <p><b>Grade Level:</b> {{ lookupOutput?.gradeLevel }}</p>
+        <div class="mt-6">
+          <StartExamModal :libraryExamId="lookupOutput?.id ?? ''" />
+        </div>
       </div>
-      <StartExamModal :libraryExamId="lookupOutput?.id ?? ''" />
     </div>
   </div>
 </template>

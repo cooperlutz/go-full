@@ -23,14 +23,14 @@ describe("MultipleChoice", () => {
   it("renders input and submit button", () => {
     // Assert
     expect(wrapper.find("#multiple-choice-radio-option-0").exists()).toBe(true);
-    expect(wrapper.find("#submit-question-button").exists()).toBe(true);
+    expect(wrapper.find("#record-answer-button").exists()).toBe(true);
   });
 
   it("allows user to select an option from the radio input", () => {
     const inputOption = wrapper.find("#multiple-choice-radio-option-0");
     inputOption.setValue("Option A");
     inputOption.trigger("click");
-    const submitButton = wrapper.find("#submit-question-button");
+    const submitButton = wrapper.find("#record-answer-button");
     submitButton.trigger("click");
     // Assert
     expect((inputOption.element as HTMLInputElement).value).toBe("Option A");

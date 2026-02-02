@@ -31,8 +31,7 @@ onMounted(async () => {
     <div class="card-body">
       <div class="grid grid-cols-5 gap-4 mb-4">
         <h1 class="card-title col-span-3">Examination Component</h1>
-        <ExaminationProgress class="col-span-1" />
-        <SubmitExamButton class="col-span-1" :examId="exam.examId" />
+        <ExaminationProgress class="col-span-2 items-end" />
         <div class="col-span-4">
           <QuestionComponent
             :examId="exam.examId"
@@ -45,6 +44,9 @@ onMounted(async () => {
             :examId="exam.examId"
             :questions="exam.questions"
           />
+          <div class="flex justify-center mt-4">
+            <SubmitExamButton :examId="exam.examId" />
+          </div>
         </div>
       </div>
     </div>

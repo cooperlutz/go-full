@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSubmitAnswer } from "../composables/useExamination";
+import { useSubmitAnswer } from "../../composables/useExamination";
 
 const props = defineProps<{
   examId: string;
@@ -13,12 +13,12 @@ const { submitAnswer, loading } = useSubmitAnswer();
 <template>
   <div class="flex justify-end">
     <button
-      id="submit-question-button"
+      id="record-answer-button"
       class="btn btn-outline"
       @click="submitAnswer(props.examId, props.questionIndex, props.answer)"
       :disabled="loading"
     >
-      Submit
+      Record Answer
     </button>
   </div>
 </template>

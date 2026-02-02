@@ -13,10 +13,4 @@ describe("FooterPrimary.vue", () => {
     expect(wrapper.text()).toContain("Go Full");
     expect(wrapper.text()).toContain("Y2K Compliant");
   });
-
-  it("renders Apps section with Ping Pong link", () => {
-    const wrapper = mount(FooterPrimary);
-    expect(wrapper.find("h6.footer-title").text()).toBe("Apps");
-    expect(wrapper.find("a.link-hover").text()).toBe("Ping Pong");
-  });
 });

@@ -14,7 +14,7 @@ function submitExamHandler(examId: string) {
 
 <template>
   <button
-    class="btn"
+    class="btn w-full btn-success"
     onclick="valiation_modal.showModal()"
     id="exam-submission-button"
   >
@@ -24,7 +24,7 @@ function submitExamHandler(examId: string) {
     <div class="modal-box">
       Are you sure you want to submit your exam?
       <button
-        class="btn"
+        class="btn btn-error mt-4"
         @click="submitExamHandler(examId)"
         id="confirm-exam-submission-button"
       >

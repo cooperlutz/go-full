@@ -12,7 +12,7 @@ describe("NavBarLogoName", () => {
     const wrapper = mount(NavBarLogoName);
     const img = wrapper.find("img");
     expect(img.exists()).toBe(true);
-    expect(img.attributes("src")).toBe("/image.png");
+    expect(img.attributes("src")).toBe("/logo.png");
     expect(img.attributes("height")).toBe("32");
     expect(img.attributes("width")).toBe("32");
   });

@@ -51,15 +51,39 @@ const examinationHandlers = [
 
   http.get("/examination/api/v1/exams/:examId/questions/:index", (req) => {
     const { examId, index } = req.params;
-    return HttpResponse.json({
-      examId,
-      questionIndex: index,
-      answered: false,
-      questionText: `What is going on in question ${index}?`,
-      questionType: "multiple-choice",
-      providedAnswer: null,
-      responseOptions: ["Option A", "Option B", "Option C", "Option D"],
-    });
+    if (index === "1") {
+      return HttpResponse.json({
+        examId,
+        questionIndex: index,
+        answered: false,
+        questionText: `What is going on in question ${index}?`,
+        questionType: "multiple-choice",
+        providedAnswer: null,
+        responseOptions: ["Option A", "Option B", "Option C", "Option D"],
+      });
+    }
+    if (index === "2") {
+      return HttpResponse.json({
+        examId,
+        questionIndex: index,
+        answered: false,
+        questionText: `Solve the equation: 2x + 3 = 7.`,
+        questionType: "short-answer",
+        providedAnswer: null,
+        responseOptions: null,
+      });
+    }
+    if (index === "3") {
+      return HttpResponse.json({
+        examId,
+        questionIndex: index,
+        answered: false,
+        questionText: `Explain the theory of relativity.`,
+        questionType: "essay",
+        providedAnswer: null,
+        responseOptions: null,
+      });
+    }
   }),
 
   http.post(
