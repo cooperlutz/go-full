@@ -1,3 +1,9 @@
+## v0.1.40 (2026-02-03)
+
+### Fix
+
+- **deps-dev**: bump globals from 16.5.0 to 17.3.0 in /api/frontend (#153)
+
 ## v0.1.39 (2026-02-02)
 
 ### Fix
