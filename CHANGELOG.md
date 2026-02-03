@@ -1,3 +1,9 @@
+## v0.1.41 (2026-02-03)
+
+### Fix
+
+- **deps-dev**: bump autoprefixer from 10.4.23 to 10.4.24 in /api/frontend (#151)
+
 ## v0.1.40 (2026-02-03)
 
 ### Fix
