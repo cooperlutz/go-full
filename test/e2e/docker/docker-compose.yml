@@ -13,6 +13,8 @@ x-app-environment: &x-app-environment
   DB_TYPE: ${DB_TYPE}
   # Telemetry
   OBSERVE_TRACE_ENDPOINT: ${OBSERVE_TRACE_ENDPOINT}
+  # Security
+  SEC_JWT_SECRET: ${SEC_JWT_SECRET}
 
 include:
   # Application & Database

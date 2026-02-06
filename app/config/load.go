@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 type ErrEnvVarValueMissing struct {
@@ -30,6 +31,8 @@ func LoadEnvironmentVariables() (map[string]string, error) {
 		"DB_PORT":     os.Getenv("DB_PORT"),
 		"DB_DBNAME":   os.Getenv("DB_DBNAME"),
 		"DB_SSLMODE":  os.Getenv("DB_SSLMODE"),
+		// Security
+		"SEC_JWT_SECRET": os.Getenv("SEC_JWT_SECRET"), // SENSITIVE
 	}
 
 	for k, v := range keyVals {
@@ -67,6 +70,10 @@ func LoadConfigFromEnvVars() (Config, error) {
 			Port:     getEnvAsInt("DB_PORT", 5432), //nolint:mnd // default port for Postgres
 			DBName:   loadedEnvVars["DB_DBNAME"],
 			SSLMode:  loadedEnvVars["DB_SSLMODE"],
+		},
+		Security: Security{
+			JWTSecret:      loadedEnvVars["SEC_JWT_SECRET"],
+			AccessTokenTTL: time.Duration(15) * time.Minute, //nolint:mnd // default 15 minutes
 		},
 	}
 	log.Printf("Loaded config: %+v\n", loadedCfg.String())
