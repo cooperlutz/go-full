@@ -1,3 +1,9 @@
+## v0.1.42 (2026-02-06)
+
+### Fix
+
+- bump deps in frontend, inc resolving CVE-2026-25547 (#155)
+
 ## v0.1.41 (2026-02-03)
 
 ### Fix
