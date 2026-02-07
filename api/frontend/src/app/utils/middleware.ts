@@ -49,8 +49,16 @@ export const authRefreshMiddleware: Middleware = {
           ...newInit.headers,
           Authorization: `Bearer ${tokenStore.getAccessToken()}`,
         };
-        const newResponse = await context.fetch(context.url, newInit);
-        return newResponse;
+        try {
+          const newResponse = await context.fetch(context.url, newInit);
+          return newResponse;
+        } catch (error) {
+          console.error(
+            "Failed to retry request after refreshing token:",
+            error,
+          );
+          tokenStore.clear();
+        }
       } catch (error) {
         console.error("Failed to refresh token:", error);
         tokenStore.clear();
