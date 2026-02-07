@@ -1,3 +1,9 @@
+## v0.1.43 (2026-02-07)
+
+### Fix
+
+- implementation of iam module (#156)
+
 ## v0.1.42 (2026-02-06)
 
 ### Fix
