@@ -36,7 +36,7 @@ func NewPingPongAPIRouter(uc usecase.IPingPongUseCase) http.Handler {
 	// e.g., v2Handler := pingpong_api_v2.Handler(controller)
 
 	// Finally, mount the versioned handlers onto the root router
-	pingPongRouter.Mount("/api/v1", v1_server.Handler(v1Handler))
+	pingPongRouter.Mount("/v1", v1_server.Handler(v1Handler))
 
 	// rootRouter.Mount("/api/v2", v2Handler) // Example for future versions
 	return pingPongRouter

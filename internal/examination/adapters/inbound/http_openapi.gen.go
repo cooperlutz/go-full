@@ -76,25 +76,25 @@ type AnswerQuestionJSONRequestBody = Answer
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/exams)
+	// (GET /v1/exams)
 	GetAvailableExams(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/exams)
+	// (POST /v1/exams)
 	StartNewExam(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/exams/{examId})
+	// (GET /v1/exams/{examId})
 	GetExam(w http.ResponseWriter, r *http.Request, examId string)
 
-	// (GET /api/v1/exams/{examId}/progress)
+	// (GET /v1/exams/{examId}/progress)
 	GetExamProgress(w http.ResponseWriter, r *http.Request, examId string)
 
-	// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+	// (GET /v1/exams/{examId}/questions/{questionIndex})
 	GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
 
-	// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+	// (POST /v1/exams/{examId}/questions/{questionIndex})
 	AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
 
-	// (POST /api/v1/exams/{examId}/submit)
+	// (POST /v1/exams/{examId}/submit)
 	SubmitExam(w http.ResponseWriter, r *http.Request, examId string)
 }
 
@@ -102,37 +102,37 @@ type ServerInterface interface {
 
 type Unimplemented struct{}
 
-// (GET /api/v1/exams)
+// (GET /v1/exams)
 func (_ Unimplemented) GetAvailableExams(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (POST /api/v1/exams)
+// (POST /v1/exams)
 func (_ Unimplemented) StartNewExam(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (GET /api/v1/exams/{examId})
+// (GET /v1/exams/{examId})
 func (_ Unimplemented) GetExam(w http.ResponseWriter, r *http.Request, examId string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (GET /api/v1/exams/{examId}/progress)
+// (GET /v1/exams/{examId}/progress)
 func (_ Unimplemented) GetExamProgress(w http.ResponseWriter, r *http.Request, examId string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+// (GET /v1/exams/{examId}/questions/{questionIndex})
 func (_ Unimplemented) GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+// (POST /v1/exams/{examId}/questions/{questionIndex})
 func (_ Unimplemented) AnswerQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (POST /api/v1/exams/{examId}/submit)
+// (POST /v1/exams/{examId}/submit)
 func (_ Unimplemented) SubmitExam(w http.ResponseWriter, r *http.Request, examId string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
@@ -431,25 +431,25 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/api/v1/exams", wrapper.GetAvailableExams)
+		r.Get(options.BaseURL+"/v1/exams", wrapper.GetAvailableExams)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/api/v1/exams", wrapper.StartNewExam)
+		r.Post(options.BaseURL+"/v1/exams", wrapper.StartNewExam)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/api/v1/exams/{examId}", wrapper.GetExam)
+		r.Get(options.BaseURL+"/v1/exams/{examId}", wrapper.GetExam)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/api/v1/exams/{examId}/progress", wrapper.GetExamProgress)
+		r.Get(options.BaseURL+"/v1/exams/{examId}/progress", wrapper.GetExamProgress)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/api/v1/exams/{examId}/questions/{questionIndex}", wrapper.GetExamQuestion)
+		r.Get(options.BaseURL+"/v1/exams/{examId}/questions/{questionIndex}", wrapper.GetExamQuestion)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/api/v1/exams/{examId}/questions/{questionIndex}", wrapper.AnswerQuestion)
+		r.Post(options.BaseURL+"/v1/exams/{examId}/questions/{questionIndex}", wrapper.AnswerQuestion)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/api/v1/exams/{examId}/submit", wrapper.SubmitExam)
+		r.Post(options.BaseURL+"/v1/exams/{examId}/submit", wrapper.SubmitExam)
 	})
 
 	return r
@@ -662,25 +662,25 @@ func (response SubmitExamdefaultJSONResponse) VisitSubmitExamResponse(w http.Res
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/exams)
+	// (GET /v1/exams)
 	GetAvailableExams(ctx context.Context, request GetAvailableExamsRequestObject) (GetAvailableExamsResponseObject, error)
 
-	// (POST /api/v1/exams)
+	// (POST /v1/exams)
 	StartNewExam(ctx context.Context, request StartNewExamRequestObject) (StartNewExamResponseObject, error)
 
-	// (GET /api/v1/exams/{examId})
+	// (GET /v1/exams/{examId})
 	GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error)
 
-	// (GET /api/v1/exams/{examId}/progress)
+	// (GET /v1/exams/{examId}/progress)
 	GetExamProgress(ctx context.Context, request GetExamProgressRequestObject) (GetExamProgressResponseObject, error)
 
-	// (GET /api/v1/exams/{examId}/questions/{questionIndex})
+	// (GET /v1/exams/{examId}/questions/{questionIndex})
 	GetExamQuestion(ctx context.Context, request GetExamQuestionRequestObject) (GetExamQuestionResponseObject, error)
 
-	// (POST /api/v1/exams/{examId}/questions/{questionIndex})
+	// (POST /v1/exams/{examId}/questions/{questionIndex})
 	AnswerQuestion(ctx context.Context, request AnswerQuestionRequestObject) (AnswerQuestionResponseObject, error)
 
-	// (POST /api/v1/exams/{examId}/submit)
+	// (POST /v1/exams/{examId}/submit)
 	SubmitExam(ctx context.Context, request SubmitExamRequestObject) (SubmitExamResponseObject, error)
 }
 
@@ -910,20 +910,20 @@ func (sh *strictHandler) SubmitExam(w http.ResponseWriter, r *http.Request, exam
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9xXwW7bMAz9FYPb0ajT9uZbBhRDL1uH9Vb0oNhMokKWVIlOEwT+90FybMeOnaRrujY7",
-	"xbFoko/vUaLWkKhMK4mSLMRrsMkcM+Yfx9K+oHFP2iiNhjjazb8FTzFt1mmlEWKwZLicQVGEYPA55wZT",
-	"iB+69o9hZa8mT5gQFCHcGKN6IiUqRfc7VSZjBDFwSddXUDvgknCGxnnI0Fo2w/5sduMtWbYbjvkEMf2V",
-	"oyWupD0ytqugQHJo6+gTpQQy6ZZxybLbtCezEASfGGZWN8MWz9u5cMLMP3w1OIUYvkQNedGGuajKHhrg",
-	"zBi2cv8t5SlKGohFiph4HfgO1Ruo24G2y9NH/Z1RM4PWno6Ot8PoeAh7UumDUld+EMqrBXKw1xqFHBDQ",
-	"rUxxeWQFq2/ucUl7nd77hR4Dg1YrafGn3hXvru5aKu1wsQUvbPTVRtXJuJNfQ18va7+JGerfEA63576G",
-	"6gDZbom2492s3LdcTpX3ykm4NWfMJXOwgvHdLYSwQGO93ODyYnQxcvkojZJpDjFc+1chaEZzDyZimkeL",
-	"y8jV0L+YoSfXAWaVgOA70njBuGATgTfesiHTf3U1GpVbsySU3gHTWvDEu4iebCn/cjM6es/y5d9VQhFC",
-	"ijYxXJdtBeNAcEuBmgYlCm8wZbmgV+W0NxV/FPXEziUuNSaEaYCNjVa2p4peUz/wxeMqZYCWvql0dbI8",
-	"G9kWbaWRybHYIe3ydAWqY7br494HiUHmKmTzJEFrp7kQqw9nqQjb4o/W5T5S7OuCDXWaGZYhobEQP6yB",
-	"uxiupSAEyTIn1npPalMQbiHpbgyPb+ypv6YnRWJc2MAgGY6LsyEq0ltTwj7G6mniDJmrcx9iryrC+dFX",
-	"T7HRunVyH+zAeqR6Jz7DXkfd6WLY3+HJ8j0V04z6A4qpgHxWxQydn+W4+5+Qf/qzf3MbOOrg/zdqKzMK",
-	"bD7JOJ3PABCVCfvJv3+Q8+sfMAv0NPNnLa67BqFZVGXJjYAY5kTaxlG0nitLrjqFY8BdWpjh7nLhwVaL",
-	"JeINCBAqYcItOfePxZ8AAAD//7HGrhejEgAA",
+	"H4sIAAAAAAAC/9xXT2/7Ngz9Kga3o/Fz+uvNtwwohl62Duut6EGxmUSFLKkUnSYI/N0HybGdOM6fruna",
+	"7BQ7okk+vkeJWkNmCms0anaQrsFlcyxEeBxr94bknywZi8QS3eZtIXPMu3VeWYQUHJPUM6iqGAhfS0mY",
+	"Q/rUt3+OG3szecGMoYrhjsgMRMpMjv53aqgQDClIzbc/oXUgNeMMyXso0Dkxw+Fs9uMtRbEfToQEMf+r",
+	"RMfSaHdmbF9BhezRttEnxigU2i/jUhT3+UBmMSg5IUGru8MWr9u5SMYiPPxKOIUUfkk68pINc0mTPXTA",
+	"BZFY+XfHZY6aD8Riw0K9D3yP6g3U7UDb5Rmi/oHMjNC5y9HxcRg9D/FAKkNQ2sofhPJugZzstU4hJwR0",
+	"r3NcnlnB5ptHXPJRp49hYcCA0FmjHf5p98W7r7sdlfa42IIXd/raRdXLuJdfR98ga3+zIB7eEE6357GG",
+	"6gHZboldx/tZ+W+lnprgVbLya95YauFhReOHe4hhgeSC3ODmx+jHyOdjLGphJaRwG/6KwQqeBzDJ4ibx",
+	"9QsvMwzEerCiEQ/8jjxeCKnEROFdsOyIDF/9HI3qbVkz6uBAWKtkFlwkL66Wfr0Rnb1fhdLvq6CKIUeX",
+	"kbR1S8E4UtJxZKZRjSIYTEWp+F05HU0lHEMDsUuNS4sZYx5hZ2ONG6hi0NMf+BZw1RJAx7+ZfHWxPDvJ",
+	"VrsqYyqx2iPt5nIFamPu1sf/H2WEwlfIlVmGzk1LpVZfzlIVd8JP1vX+UR3rgA1tVpAokJEcpE9rkN6/",
+	"byWIQYvCC7Xdi3bLH2+h6G8Izx/sp39NTY4spHIRIZPExVWQlNityeAYW+0EcYWstbkfYq4pwnVR106t",
+	"yXrnpD7Zee0I9UlcxoOO+tPEYX+nJ8nPVEs32h9QSwPku6rl0JlZj7f/E/Ivf95vpv+zDvv/Rm11RpEr",
+	"J4Xk6zj0kzrZMOUPD25h/QvO/4FG/q6F9VcepEVTlpIUpDBnti5NkvXcOPbVqRJ/B4lhIUj6y0QA2yzW",
+	"iDcgQJlMKL/k3T9X/wQAAP//Nbvx9o8SAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

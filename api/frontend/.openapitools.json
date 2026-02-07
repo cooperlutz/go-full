@@ -27,6 +27,14 @@
         "additionalProperties": {
           "withInterfaces": true
         }
+      },
+      "iam": {
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/src/iam/services",
+        "inputSpec": "../rest/iam/api.yaml",
+        "additionalProperties": {
+          "withInterfaces": true
+        }
       }
     }
   }

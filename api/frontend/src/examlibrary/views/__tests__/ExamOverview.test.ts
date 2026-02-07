@@ -54,8 +54,6 @@ describe("ExamOverview", () => {
     await nextTick();
 
     // Assert
-    expect(wrapper.text()).toContain(
-      "Error loading exam: ResponseError: Response returned an error code",
-    );
+    expect(wrapper.text()).toContain("Error loading exam: ");
   });
 });

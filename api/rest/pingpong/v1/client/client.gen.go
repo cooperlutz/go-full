@@ -19,11 +19,6 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
-const (
-	Api_keyScopes    = "api_key.Scopes"
-	Basic_authScopes = "basic_auth.Scopes"
-)
-
 // PingPong A Ping or Pong
 type PingPong struct {
 	// Message The message of the Ping or Pong

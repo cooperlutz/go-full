@@ -2,6 +2,7 @@ package e2e_test
 
 import (
 	"log/slog"
+	"net/http"
 	"testing"
 	"time"
 
@@ -15,6 +16,9 @@ func TestLoad(t *testing.T) {
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
 		URL:    serverAddr + "/examination/api/v1/exams",
+		Header: http.Header{
+			"Authorization": []string{"Bearer " + bearerToken},
+		},
 	})
 	attacker := vegeta.NewAttacker()
 	var runs int

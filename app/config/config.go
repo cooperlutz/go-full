@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 )
 
 var (
 	ApplicationVersion string             //nolint:gochecknoglobals // set via build flags
 	ApplicationName    string = "go-full" //nolint:gochecknoglobals // set via build flags
+	obscuredValue      string = "****"    //nolint:gochecknoglobals // used to hide sensitive config values
 )
 
 // Config.App settings.
@@ -37,6 +39,11 @@ type Telemetry struct {
 	TraceEndpoint string
 }
 
+type Security struct {
+	JWTSecret      string
+	AccessTokenTTL time.Duration
+}
+
 // Config holds the application configuration settings.
 // Values are populated from environment variables.
 //
@@ -47,10 +54,12 @@ type Config struct {
 	HTTP      HTTP
 	Telemetry Telemetry
 	DB        DB
+	Security  Security
 }
 
 func (c Config) String() string {
-	c.DB.Password = "****" // hide password
+	c.DB.Password = obscuredValue        // hide password
+	c.Security.JWTSecret = obscuredValue // hide JWT secret
 
 	jsonData, _ := json.MarshalIndent(c, "", "  ") //nolint:errcheck // ignoring error
 

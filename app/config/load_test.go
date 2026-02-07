@@ -2,6 +2,7 @@ package config_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -28,6 +29,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
+				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -48,6 +50,10 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				},
 				Telemetry: config.Telemetry{
 					TraceEndpoint: "localhost:4317",
+				},
+				Security: config.Security{
+					JWTSecret:      "THIS_IS_NOT_A_REAL_PASSWORD",
+					AccessTokenTTL: time.Duration(15) * time.Minute,
 				},
 			},
 		},
@@ -63,6 +69,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
+				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -83,6 +90,10 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				},
 				Telemetry: config.Telemetry{
 					TraceEndpoint: "localhost:4317",
+				},
+				Security: config.Security{
+					JWTSecret:      "THIS_IS_NOT_A_REAL_PASSWORD",
+					AccessTokenTTL: time.Duration(15) * time.Minute,
 				},
 			},
 		},
@@ -124,6 +135,7 @@ func TestLoadConfigFromEnvVars_MissingVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
+				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
 			},
 			expectedCfg: config.Config{},
 			expectedErr: config.ErrEnvVarValueMissing{VarName: "HTTP_PORT"},

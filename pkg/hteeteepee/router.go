@@ -29,7 +29,7 @@ import (
 // Routes:
 //
 // - /metrics: Exposes Prometheus metrics for monitoring.
-func NewRootRouterWithMiddleware() *chi.Mux {
+func NewRootRouterWithMiddleware(middlewares ...func(http.Handler) http.Handler) *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(otelhttp.NewMiddleware("api-server"))
 	r.Use(middleware.RequestID)
@@ -45,6 +45,10 @@ func NewRootRouterWithMiddleware() *chi.Mux {
 		AllowCredentials: false,
 		MaxAge:           300, //nolint:mnd // Maximum value not ignored by any of major browsers
 	}))
+	// Apply additional middlewares
+	if len(middlewares) > 0 {
+		r.Use(middlewares...)
+	}
 
 	// Add Prometheus metrics endpoint
 	r.Mount("/metrics", metrics.MetricsHandler())

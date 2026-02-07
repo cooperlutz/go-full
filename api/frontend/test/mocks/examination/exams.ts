@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 const examinationHandlers = [
-  http.get("/examination/api/v1/exams", () => {
+  http.get("/api/examination/v1/exams", () => {
     return HttpResponse.json([
       {
         examId: "5d9abb80-0706-42ad-8131-33627d3e6b17",
@@ -14,8 +14,8 @@ const examinationHandlers = [
     ]);
   }),
 
-  http.post("/examination/api/v1/exams", async ({ request }) => {
-    const newExam = await request.clone().json();
+  http.post("/api/examination/v1/exams", async ({ request }) => {
+    const newExam = await request.json();
     return HttpResponse.json({
       examId: crypto.randomUUID(),
       studentId: (newExam as { studentId: string }).studentId || "",
@@ -23,7 +23,7 @@ const examinationHandlers = [
     });
   }),
 
-  http.get("/examination/api/v1/exams/:examId", (req) => {
+  http.get("/api/examination/v1/exams/:examId", (req) => {
     const { examId } = req.params;
     return HttpResponse.json({
       examId,
@@ -42,14 +42,14 @@ const examinationHandlers = [
     });
   }),
 
-  http.get("/examination/api/v1/exams/:examId/progress", () => {
+  http.get("/api/examination/v1/exams/:examId/progress", () => {
     return HttpResponse.json({
       answeredQuestions: 23,
       totalQuestions: 28,
     });
   }),
 
-  http.get("/examination/api/v1/exams/:examId/questions/:index", (req) => {
+  http.get("/api/examination/v1/exams/:examId/questions/:index", (req) => {
     const { examId, index } = req.params;
     if (index === "1") {
       return HttpResponse.json({
@@ -87,9 +87,9 @@ const examinationHandlers = [
   }),
 
   http.post(
-    "/examination/api/v1/exams/:examId/questions/:index",
+    "/api/examination/v1/exams/:examId/questions/:index",
     async ({ request, params }) => {
-      const answer = await request.clone().json();
+      const answer = await request.json();
       const { examId, index } = params;
       return HttpResponse.json({
         examId,

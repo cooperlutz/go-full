@@ -79,6 +79,12 @@
         "metadata": {
           "description": "The container image tag to deploy. Should include the full image path. E.g. ghcr.io/username/repo:tag"
         }
+      },
+      "jwtSecret": {
+        "value": "${SEC_JWT_SECRET}",
+        "metadata": {
+          "description": "The secret key used for signing JWT tokens."
+        }
       }
     }
   }

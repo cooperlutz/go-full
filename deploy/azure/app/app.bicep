@@ -18,6 +18,8 @@ param dbType string
 param postgresPassword string
 @secure()
 param containerRegPat string
+@secure()
+param jwtSecret string
 
 /* RESOURCES */
 resource webIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
@@ -72,6 +74,10 @@ module app '../containers/container-app-upsert.bicep' = {
         secretRef: 'dbpass'
       }
       {
+        name: 'SEC_JWT_SECRET'
+        secretRef: 'jwt'
+      }
+      {
         name: 'HTTP_PORT'
         value: targetPort
       }
@@ -93,6 +99,10 @@ module app '../containers/container-app-upsert.bicep' = {
       {
         name: 'dbpass'
         value: postgresPassword
+      }
+      {
+        name: 'jwt'
+        value: jwtSecret
       }
       {
         name: containerRegSecretName

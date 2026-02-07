@@ -16,7 +16,7 @@ import (
 	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
-// Test that /api/v1/ping returns 200 and "pong"
+// Test that /v1/ping-pongs returns 200 and "pong"
 func TestNewPingPongAPIRouter(t *testing.T) {
 	t.Parallel()
 
@@ -28,7 +28,7 @@ func TestNewPingPongAPIRouter(t *testing.T) {
 	}, nil)
 	req := httptest.NewRequest(
 		http.MethodPost,
-		"/api/v1/ping-pongs",
+		"/v1/ping-pongs",
 		bytes.NewBufferString(`{"message":"ping"}`),
 	)
 	w := httptest.NewRecorder()

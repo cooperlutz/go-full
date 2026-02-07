@@ -52,11 +52,12 @@ describe("StartExamModal", () => {
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(fetchSpy).toHaveBeenCalledWith(
-      expect.stringContaining("/examination/api/v1/exams"),
+      expect.stringContaining("/examination/v1/exams"),
       expect.objectContaining({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: expect.stringContaining("Bearer "),
         },
         body: JSON.stringify({
           studentId: "123e4567-e89b-12d3-a456-426614174000",
