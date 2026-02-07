@@ -12,8 +12,12 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 	"github.com/cooperlutz/go-full/internal/examination"
 	"github.com/cooperlutz/go-full/internal/examlibrary"
+	"github.com/cooperlutz/go-full/internal/iam"
+	iam_handlers "github.com/cooperlutz/go-full/internal/iam/handlers"
+	iam_models "github.com/cooperlutz/go-full/internal/iam/models"
 	"github.com/cooperlutz/go-full/internal/pingpong"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
+	"github.com/cooperlutz/go-full/pkg/securitee"
 )
 
 // Application represents the main application structure.
@@ -73,24 +77,25 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	// User Management
+	userRepo := iam_models.NewUserRepository(conn)
+	refreshTokenRepo := iam_models.NewRefreshTokenRepository(conn)
+	iamSvc := iam.NewIamService(
+		userRepo,
+		refreshTokenRepo,
+		a.conf.Security.JWTSecret,
+		a.conf.Security.AccessTokenTTL,
+	)
+
 	/* -----------------------------------------------------------------------------------
 	REST API Controller Initialization:
 
 	Create a new Chi router instance to be used by the API controller
 	----------------------------------------------------------------------------------- */
-	restApiController := hteeteepee.NewRootRouterWithMiddleware()
-
-	/* -----------------------------------------------------------------------------------
-	HTTP Server Initialization
-	----------------------------------------------------------------------------------- */
-	httpServer := hteeteepee.NewHTTPServer(a.conf, restApiController)
-
-	/* -----------------------------------------------------------------------------------
-	Setup Web Router
-	----------------------------------------------------------------------------------- */
-	webRouter := hteeteepee.NewRouter("web")
-	webRouter.Handle("/*", frontend.SPAHandler())
-	httpServer.RegisterController("/", webRouter)
+	// Public Routes
+	publicRestApiController := hteeteepee.NewRootRouterWithMiddleware()
+	authHandler := iam_handlers.NewIAMApiController(iamSvc)
+	publicRestApiController.Mount("/auth", authHandler.IamRouter)
 
 	/* -----------------------------------------------------------------------------------
 	Setup Domain Module Routes
@@ -98,9 +103,26 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	Each domain module's router is created and registered with the main HTTP server handler.
 	the resulting mountpoint will be {root}/{service-name}/[routes defined in the service router]
 	----------------------------------------------------------------------------------- */
-	httpServer.RegisterController("/pingpong", pingPongModule.RestApi)       // mounts `/pingpong/api/v1/ping-pong`
-	httpServer.RegisterController("/examlibrary", examLibraryModule.RestApi) // mounts `/examlibrary/api/v1/exam-library`
-	httpServer.RegisterController("/examination", examinationModule.RestApi) // mounts `/examination/api/v1/examination`
+	authMiddleware := securitee.AuthMiddleware(iamSvc)
+	protectedRestApiController := hteeteepee.NewRootRouterWithMiddleware(authMiddleware)
+	// protectedRestApiController.HandleFunc("/auth/profile", userHandler.Profile)
+	protectedRestApiController.Mount("/pingpong", pingPongModule.RestApi)
+	protectedRestApiController.Mount("/examlibrary", examLibraryModule.RestApi)
+	protectedRestApiController.Mount("/examination", examinationModule.RestApi)
+
+	/* -----------------------------------------------------------------------------------
+	Setup Web Router
+	----------------------------------------------------------------------------------- */
+	webRouter := hteeteepee.NewRouter("web")
+	webRouter.Handle("/*", frontend.SPAHandler())
+
+	/* -----------------------------------------------------------------------------------
+	HTTP Server Initialization
+	----------------------------------------------------------------------------------- */
+	httpServer := hteeteepee.NewHTTPServer(a.conf, publicRestApiController)
+	httpServer.RegisterController("/api", protectedRestApiController)
+	httpServer.RegisterController("/", webRouter)
+
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
