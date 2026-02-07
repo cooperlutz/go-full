@@ -8,6 +8,7 @@ import {
   PanelLeftClose,
   Settings,
   File,
+  User,
 } from "lucide-vue-next";
 import { batBall } from "@lucide/lab";
 
@@ -32,6 +33,7 @@ const topSidebarItems = ref<SidebarItem[]>([
 const bottomSidebarItems = ref<SidebarItem[]>([
   { name: "Docs", url: CONFIG.DOCS_URL, icon: File },
   { name: "Settings", url: "/settings", icon: Settings },
+  { name: "Profile", url: "/profile", icon: User },
 ]);
 </script>
 
@@ -95,7 +97,7 @@ const bottomSidebarItems = ref<SidebarItem[]>([
           <!-- Bottom Sidebar Items -->
           <ul id="sidebar-bottom" class="menu w-full">
             <li v-for="item in bottomSidebarItems" :key="item.name">
-              <a :href="item.url" class="hover:link hover:text-info">
+              <a :href="item.url" class="hover:link">
                 <button>
                   <component
                     :is="item.icon"
