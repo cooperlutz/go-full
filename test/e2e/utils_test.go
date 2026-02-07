@@ -2,6 +2,7 @@ package e2e_test
 
 import (
 	"context"
+	"net/http"
 	"testing"
 
 	"github.com/jackc/pgx/v5"
@@ -10,11 +11,22 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 )
 
+func addLocalStorageToContext(context playwright.BrowserContext, token string) error {
+	script := `window.localStorage.setItem("access_token", "` + token + `");`
+	return context.AddInitScript(playwright.Script{
+		Content: &script,
+	})
+}
+
 func newBrowserContextAndPage(t *testing.T, options playwright.BrowserNewContextOptions) (playwright.BrowserContext, playwright.Page) {
 	t.Helper()
 	context, err := browser.NewContext(options)
 	if err != nil {
 		t.Fatalf("could not create new context: %v", err)
+	}
+	err = addLocalStorageToContext(context, bearerToken)
+	if err != nil {
+		t.Fatalf("could not add local storage to context: %v", err)
 	}
 	t.Cleanup(func() {
 		if err := context.Close(); err != nil {
@@ -103,4 +115,13 @@ func countOfQuery(schema string, table string) (int64, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// type RequestEditorFn
+
+func ReqWithBearerToken(token string) func(ctx context.Context, req *http.Request) error {
+	return func(ctx context.Context, req *http.Request) error {
+		req.Header.Set("Authorization", "Bearer "+token)
+		return nil
+	}
 }
