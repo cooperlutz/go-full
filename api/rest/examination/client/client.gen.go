@@ -284,7 +284,7 @@ func NewGetAvailableExamsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams")
+	operationPath := fmt.Sprintf("/v1/exams")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -322,7 +322,7 @@ func NewStartNewExamRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams")
+	operationPath := fmt.Sprintf("/v1/exams")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -358,7 +358,7 @@ func NewGetExamRequest(server string, examId string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/%s", pathParam0)
+	operationPath := fmt.Sprintf("/v1/exams/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -392,7 +392,7 @@ func NewGetExamProgressRequest(server string, examId string) (*http.Request, err
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/%s/progress", pathParam0)
+	operationPath := fmt.Sprintf("/v1/exams/%s/progress", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -433,7 +433,7 @@ func NewGetExamQuestionRequest(server string, examId string, questionIndex int32
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/%s/questions/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/v1/exams/%s/questions/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -485,7 +485,7 @@ func NewAnswerQuestionRequestWithBody(server string, examId string, questionInde
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/%s/questions/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/v1/exams/%s/questions/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -521,7 +521,7 @@ func NewSubmitExamRequest(server string, examId string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/exams/%s/submit", pathParam0)
+	operationPath := fmt.Sprintf("/v1/exams/%s/submit", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}

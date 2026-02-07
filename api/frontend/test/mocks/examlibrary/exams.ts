@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 const examLibraryHandlers = [
-  http.get("/examlibrary/api/v1/exams", () => {
+  http.get("/api/examlibrary/v1/exams", () => {
     return HttpResponse.json([
       {
         gradeLevel: 3,
@@ -56,7 +56,7 @@ const examLibraryHandlers = [
     ]);
   }),
 
-  http.post("/examlibrary/api/v1/exams", async ({ request }) => {
+  http.post("/api/examlibrary/v1/exams", async ({ request }) => {
     const reqBody = (await request.json()) as {
       name: string;
       gradeLevel: number;
@@ -77,7 +77,7 @@ const examLibraryHandlers = [
     });
   }),
 
-  http.get("/examlibrary/api/v1/exams/:id", (req) => {
+  http.get("/api/examlibrary/v1/exams/:id", (req) => {
     const { id } = req.params;
     return HttpResponse.json({
       id,

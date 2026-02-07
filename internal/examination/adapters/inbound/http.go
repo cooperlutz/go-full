@@ -27,7 +27,7 @@ func (h HttpServer) StrictHandler() ServerInterface {
 	return NewStrictHandler(h, nil)
 }
 
-// (GET /api/v1/exams/available).
+// (GET /v1/exams).
 func (h HttpServer) GetAvailableExams(ctx context.Context, request GetAvailableExamsRequestObject) (GetAvailableExamsResponseObject, error) {
 	exams, err := h.app.Queries.AvailableExams.Handle(ctx)
 	if err != nil {
@@ -42,7 +42,7 @@ func (h HttpServer) GetAvailableExams(ctx context.Context, request GetAvailableE
 	return GetAvailableExams200JSONResponse(responseExams), nil
 }
 
-// (POST /api/v1/exams).
+// (POST /v1/exams)
 func (h HttpServer) StartNewExam(ctx context.Context, request StartNewExamRequestObject) (StartNewExamResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.startnewexam")
 	defer span.End()
@@ -69,6 +69,7 @@ func (h HttpServer) StartNewExam(ctx context.Context, request StartNewExamReques
 	}, nil
 }
 
+// (POST /v1/exams/{examId}/questions/{questionIndex})
 func (h HttpServer) AnswerQuestion(ctx context.Context, request AnswerQuestionRequestObject) (AnswerQuestionResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.answerquestion")
 	defer span.End()
@@ -85,7 +86,7 @@ func (h HttpServer) AnswerQuestion(ctx context.Context, request AnswerQuestionRe
 	return AnswerQuestion200JSONResponse{}, nil
 }
 
-// (GET /api/v1/exams/{examId}/question/{index}).
+// (GET /v1/exams/{examId}/questions/{questionIndex})
 func (h HttpServer) GetExamQuestion(ctx context.Context, request GetExamQuestionRequestObject) (GetExamQuestionResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.getexamquestion")
 	defer span.End()
@@ -103,7 +104,7 @@ func (h HttpServer) GetExamQuestion(ctx context.Context, request GetExamQuestion
 	return GetExamQuestion200JSONResponse(questionResponse), nil
 }
 
-// (GET /api/v1/exams/{examId}/progress).
+// (GET /v1/exams/{examId}/progress)
 func (h HttpServer) GetExamProgress(ctx context.Context, request GetExamProgressRequestObject) (GetExamProgressResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.getexamprogress")
 	defer span.End()
@@ -121,7 +122,7 @@ func (h HttpServer) GetExamProgress(ctx context.Context, request GetExamProgress
 	}, nil
 }
 
-// (GET /api/v1/exams/{examId}).
+// (GET /v1/exams/{examId})
 func (h HttpServer) GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.getexam")
 	defer span.End()
@@ -138,7 +139,7 @@ func (h HttpServer) GetExam(ctx context.Context, request GetExamRequestObject) (
 	return GetExam200JSONResponse(examResponse), nil
 }
 
-// (POST /api/v1/exams/{examId}/submit).
+// (POST /v1/exams/{examId}/submit)
 func (h HttpServer) SubmitExam(ctx context.Context, request SubmitExamRequestObject) (SubmitExamResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.inbound.http.submitexam")
 	defer span.End()

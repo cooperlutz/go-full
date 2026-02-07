@@ -44,8 +44,8 @@ tags:
   - name: examlibrary
     description: Exam library operations
 servers:
-  - url: 'http://localhost:8080/examlibrary/api/v1'
-  - url: 'https://localhost:8080/examlibrary/api/v1'
+  - url: 'http://localhost:8080/api/examlibrary/v1'
+  - url: 'https://localhost:8080/api/examlibrary/v1'
 
 # Holds the relative paths to the individual endpoints. The path is appended to the
 # basePath in order to construct the full URL. 

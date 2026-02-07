@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 const pingPongHandlers = [
-  http.get("/pingpong/api/v1/ping-pongs", () => {
+  http.get("/api/pingpong/v1/ping-pongs", () => {
     return HttpResponse.json({
       pingpongs: [
         {
@@ -16,7 +16,7 @@ const pingPongHandlers = [
     });
   }),
 
-  http.post("/pingpong/api/v1/ping-pongs", async ({ request }) => {
+  http.post("/api/pingpong/v1/ping-pongs", async ({ request }) => {
     const reqBody = (await request.json()) as { message: string } | null;
 
     if (reqBody?.message === "pong") {
@@ -45,7 +45,7 @@ const pingPongHandlers = [
   /* STEP 5.1. Implement Frontend Mock Endpoints
 here, we create a mock response for hitting the endpoint for a particular id
 */
-  http.get("/pingpong/api/v1/ping-pongs/:id", (req) => {
+  http.get("/api/pingpong/v1/ping-pongs/:id", (req) => {
     const { id } = req.params;
     if (id === "f660452b-4075-4eac-b87a-a5b1ce7bd428") {
       return HttpResponse.json({

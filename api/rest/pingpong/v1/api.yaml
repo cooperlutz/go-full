@@ -48,8 +48,8 @@ tags:
   - name: pong
     description: Pong operations
 servers:
-  - url: 'http://localhost:8080/pingpong/api/v1'
-  - url: 'https://localhost:8080/pingpong/api/v1'
+  - url: 'http://localhost:8080/api/pingpong/v1'
+  - url: 'https://localhost:8080/api/pingpong/v1'
 
 # Holds the relative paths to the individual endpoints. The path is appended to the
 # basePath in order to construct the full URL. 
@@ -61,9 +61,6 @@ paths:
       summary: Get all Pingpongs
       description: Retrieve all PingPongs
       operationId: getFindAllPingPongs
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -87,9 +84,6 @@ paths:
       summary: Pong
       description: Post a PingPong message
       operationId: pingPong
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -126,9 +120,6 @@ paths:
       summary: Get a PingPong by ID
       description: Retrieve a single PingPong by its ID
       operationId: getFindOneByID # the operationId corelates to the function name withihn the Go server, Go Client, and TS Client implemented within the module's frontend services
-      security:
-        - api_key: []
-        - basic_auth: []
       parameters:
         - name: pingPongID
           in: path
@@ -161,9 +152,6 @@ paths:
       summary: Get all Pings
       description: Retrieve all PingPong Pings
       operationId: getPings
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -188,9 +176,6 @@ paths:
       summary: Get all Pongs
       description: Retrieve all PingPong Pongs
       operationId: getPongs
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -215,9 +200,6 @@ paths:
       summary: Get total number of ping pongs per day
       description: Retrieve total number of PingPong Pongs per day
       operationId: getDailyDistribution
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -244,9 +226,6 @@ paths:
       summary: Get total number of Pings Pongs
       description: Retrieve total number of PingPong Pongs
       operationId: getTotalPingPongs
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -273,9 +252,6 @@ paths:
       summary: Get total number of Pings
       description: Retrieve total number of PingPong Pings
       operationId: getTotalPings
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK
@@ -302,9 +278,6 @@ paths:
       summary: Get total number of Pongs
       description: Retrieve total number of PingPong Pongs
       operationId: getTotalPongs
-      security:
-        - api_key: []
-        - basic_auth: []
       responses:
         '200':
           description: OK

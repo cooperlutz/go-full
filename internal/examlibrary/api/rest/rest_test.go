@@ -18,7 +18,7 @@ import (
 	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
-// Test that /api/v1/ping returns 200 and "pong"
+// Test that /v1/exams returns 200 and "pong"
 func TestNewExamLibraryAPIRouter(t *testing.T) {
 	t.Parallel()
 
@@ -62,7 +62,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 	)
 	req := httptest.NewRequest(
 		http.MethodPost,
-		"/api/v1/exams",
+		"/v1/exams",
 		bytes.NewBufferString(`
 {
 	"name": "Sample Exam",

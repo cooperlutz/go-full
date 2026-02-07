@@ -29,7 +29,7 @@ func NewExamLibraryAPIRouter(uc usecase.IExamLibraryUseCase) http.Handler {
 	// e.g., v2Handler := examlibrary_api_v2.Handler(controller)
 
 	// Finally, mount the versioned handlers onto the root router
-	examLibraryRouter.Mount("/api/v1", v1_server.Handler(v1Handler))
+	examLibraryRouter.Mount("/v1", v1_server.Handler(v1Handler))
 
 	// rootRouter.Mount("/api/v2", v2Handler) // Example for future versions
 	return examLibraryRouter

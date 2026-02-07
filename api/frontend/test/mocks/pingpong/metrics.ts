@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 const metricsHandlers = [
-  http.get("/pingpong/api/v1/metrics/dailyDistribution", () => {
+  http.get("/api/pingpong/v1/metrics/dailyDistribution", () => {
     return HttpResponse.json({
       dimensionKeys: [
         "2025-10-26 00:00:00 +0000 UTC",
@@ -12,15 +12,15 @@ const metricsHandlers = [
     });
   }),
 
-  http.get("/pingpong/api/v1/metrics/totalPingPongs", () => {
+  http.get("/api/pingpong/v1/metrics/totalPingPongs", () => {
     return HttpResponse.json(14);
   }),
 
-  http.get("/pingpong/api/v1/metrics/totalPings", () => {
+  http.get("/api/pingpong/v1/metrics/totalPings", () => {
     return HttpResponse.json(7);
   }),
 
-  http.get("/pingpong/api/v1/metrics/totalPongs", () => {
+  http.get("/api/pingpong/v1/metrics/totalPongs", () => {
     return HttpResponse.json(7);
   }),
 ];

@@ -238,7 +238,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     headerParameters["Content-Type"] = "application/json";
 
-    let urlPath = `/api/v1/exams/{examId}/questions/{questionIndex}`;
+    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}`;
     urlPath = urlPath.replace(
       `{${"examId"}}`,
       encodeURIComponent(String(requestParameters["examId"])),
@@ -286,7 +286,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    let urlPath = `/api/v1/exams`;
+    let urlPath = `/v1/exams`;
 
     const response = await this.request(
       {
@@ -329,7 +329,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    let urlPath = `/api/v1/exams/{examId}`;
+    let urlPath = `/v1/exams/{examId}`;
     urlPath = urlPath.replace(
       `{${"examId"}}`,
       encodeURIComponent(String(requestParameters["examId"])),
@@ -377,7 +377,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    let urlPath = `/api/v1/exams/{examId}/progress`;
+    let urlPath = `/v1/exams/{examId}/progress`;
     urlPath = urlPath.replace(
       `{${"examId"}}`,
       encodeURIComponent(String(requestParameters["examId"])),
@@ -435,7 +435,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    let urlPath = `/api/v1/exams/{examId}/questions/{questionIndex}`;
+    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}`;
     urlPath = urlPath.replace(
       `{${"examId"}}`,
       encodeURIComponent(String(requestParameters["examId"])),
@@ -492,7 +492,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     headerParameters["Content-Type"] = "application/json";
 
-    let urlPath = `/api/v1/exams`;
+    let urlPath = `/v1/exams`;
 
     const response = await this.request(
       {
@@ -540,7 +540,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
     const headerParameters: runtime.HTTPHeaders = {};
 
-    let urlPath = `/api/v1/exams/{examId}/submit`;
+    let urlPath = `/v1/exams/{examId}/submit`;
     urlPath = urlPath.replace(
       `{${"examId"}}`,
       encodeURIComponent(String(requestParameters["examId"])),

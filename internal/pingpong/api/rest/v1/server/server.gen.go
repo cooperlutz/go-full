@@ -24,11 +24,6 @@ import (
 	openapi_types "github.com/oapi-codegen/runtime/types"
 )
 
-const (
-	Api_keyScopes    = "api_key.Scopes"
-	Basic_authScopes = "basic_auth.Scopes"
-)
-
 // PingPong A Ping or Pong
 type PingPong struct {
 	// Message The message of the Ping or Pong
@@ -183,14 +178,6 @@ type MiddlewareFunc func(http.Handler) http.Handler
 // GetDailyDistribution operation middleware
 func (siw *ServerInterfaceWrapper) GetDailyDistribution(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetDailyDistribution(w, r)
 	}))
@@ -204,14 +191,6 @@ func (siw *ServerInterfaceWrapper) GetDailyDistribution(w http.ResponseWriter, r
 
 // GetTotalPingPongs operation middleware
 func (siw *ServerInterfaceWrapper) GetTotalPingPongs(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetTotalPingPongs(w, r)
@@ -227,14 +206,6 @@ func (siw *ServerInterfaceWrapper) GetTotalPingPongs(w http.ResponseWriter, r *h
 // GetTotalPings operation middleware
 func (siw *ServerInterfaceWrapper) GetTotalPings(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetTotalPings(w, r)
 	}))
@@ -248,14 +219,6 @@ func (siw *ServerInterfaceWrapper) GetTotalPings(w http.ResponseWriter, r *http.
 
 // GetTotalPongs operation middleware
 func (siw *ServerInterfaceWrapper) GetTotalPongs(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetTotalPongs(w, r)
@@ -271,14 +234,6 @@ func (siw *ServerInterfaceWrapper) GetTotalPongs(w http.ResponseWriter, r *http.
 // GetPings operation middleware
 func (siw *ServerInterfaceWrapper) GetPings(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetPings(w, r)
 	}))
@@ -292,14 +247,6 @@ func (siw *ServerInterfaceWrapper) GetPings(w http.ResponseWriter, r *http.Reque
 
 // GetPongs operation middleware
 func (siw *ServerInterfaceWrapper) GetPongs(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetPongs(w, r)
@@ -315,14 +262,6 @@ func (siw *ServerInterfaceWrapper) GetPongs(w http.ResponseWriter, r *http.Reque
 // GetFindAllPingPongs operation middleware
 func (siw *ServerInterfaceWrapper) GetFindAllPingPongs(w http.ResponseWriter, r *http.Request) {
 
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetFindAllPingPongs(w, r)
 	}))
@@ -336,14 +275,6 @@ func (siw *ServerInterfaceWrapper) GetFindAllPingPongs(w http.ResponseWriter, r 
 
 // PingPong operation middleware
 func (siw *ServerInterfaceWrapper) PingPong(w http.ResponseWriter, r *http.Request) {
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PingPong(w, r)
@@ -369,14 +300,6 @@ func (siw *ServerInterfaceWrapper) GetFindOneByID(w http.ResponseWriter, r *http
 		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "pingPongID", Err: err})
 		return
 	}
-
-	ctx := r.Context()
-
-	ctx = context.WithValue(ctx, Api_keyScopes, []string{})
-
-	ctx = context.WithValue(ctx, Basic_authScopes, []string{})
-
-	r = r.WithContext(ctx)
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetFindOneByID(w, r, pingPongID)
@@ -1388,26 +1311,26 @@ func (sh *strictHandler) GetFindOneByID(w http.ResponseWriter, r *http.Request, 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
+	"HgH/dv1fAAAA///EYRN/yhsAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
