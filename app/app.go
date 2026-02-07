@@ -13,8 +13,8 @@ import (
 	"github.com/cooperlutz/go-full/internal/examination"
 	"github.com/cooperlutz/go-full/internal/examlibrary"
 	"github.com/cooperlutz/go-full/internal/iam"
+	iam_repo "github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
 	iam_handlers "github.com/cooperlutz/go-full/internal/iam/handlers"
-	iam_models "github.com/cooperlutz/go-full/internal/iam/models"
 	"github.com/cooperlutz/go-full/internal/pingpong"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
@@ -78,11 +78,9 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	}
 
 	// User Management
-	userRepo := iam_models.NewUserRepository(conn)
-	refreshTokenRepo := iam_models.NewRefreshTokenRepository(conn)
+	iamRepo := iam_repo.New(conn)
 	iamSvc := iam.NewIamService(
-		userRepo,
-		refreshTokenRepo,
+		iamRepo,
 		a.conf.Security.JWTSecret,
 		a.conf.Security.AccessTokenTTL,
 	)
@@ -105,7 +103,8 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	----------------------------------------------------------------------------------- */
 	authMiddleware := securitee.AuthMiddleware(iamSvc)
 	protectedRestApiController := hteeteepee.NewRootRouterWithMiddleware(authMiddleware)
-	// protectedRestApiController.HandleFunc("/auth/profile", userHandler.Profile)
+	userHandler := iam_handlers.NewUserHandler(iamRepo)
+	protectedRestApiController.HandleFunc("/iam/profile", userHandler.Profile)
 	protectedRestApiController.Mount("/pingpong", pingPongModule.RestApi)
 	protectedRestApiController.Mount("/examlibrary", examLibraryModule.RestApi)
 	protectedRestApiController.Mount("/examination", examinationModule.RestApi)

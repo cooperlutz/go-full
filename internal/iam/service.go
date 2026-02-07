@@ -2,14 +2,18 @@
 package iam
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 
-	"github.com/cooperlutz/go-full/internal/iam/models"
+	"github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
 	"github.com/cooperlutz/go-full/pkg/securitee"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 type ErrInvalidCredentials struct{}
@@ -38,53 +42,61 @@ func (e ErrEmailInUse) Error() string {
 
 // IamService provides authentication functionality.
 type IamService struct {
-	userRepo         *models.UserRepository
-	refreshTokenRepo *models.RefreshTokenRepository
-	jwtSecret        []byte
-	accessTokenTTL   time.Duration
+	// userRepo         *models.UserRepository
+	// refreshTokenRepo *models.RefreshTokenRepository
+	iamRepository  outbound.Querier
+	jwtSecret      []byte
+	accessTokenTTL time.Duration
 }
 
 // NewIamService creates a new authentication service.
-func NewIamService(userRepo *models.UserRepository, refreshTokenRepo *models.RefreshTokenRepository, jwtSecret string, accessTokenTTL time.Duration) *IamService {
+func NewIamService(iamRepository outbound.Querier, jwtSecret string, accessTokenTTL time.Duration) *IamService {
 	return &IamService{
-		userRepo:         userRepo,
-		refreshTokenRepo: refreshTokenRepo,
-		jwtSecret:        []byte(jwtSecret),
-		accessTokenTTL:   accessTokenTTL,
+		iamRepository:  iamRepository,
+		jwtSecret:      []byte(jwtSecret),
+		accessTokenTTL: accessTokenTTL,
 	}
 }
 
 // Register creates a new user with the provided credentials.
-func (s *IamService) Register(email, password string) (*models.User, error) {
-	// Check if user already exists
-	_, err := s.userRepo.GetUserByEmail(email)
+func (s *IamService) Register(ctx context.Context, email, password string) (outbound.IamUser, error) {
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.register")
+	defer span.End()
+
+	_, err := s.iamRepository.GetUserByEmail(ctx, outbound.GetUserByEmailParams{Email: email})
 	if err == nil {
-		return nil, ErrEmailInUse{}
+		return outbound.IamUser{}, ErrEmailInUse{}
 	}
 
 	// Only proceed if the error was "user not found"
 	if !errors.Is(err, sql.ErrNoRows) {
-		return nil, err
+		return outbound.IamUser{}, err
 	}
 
 	// Hash the password
 	hashedPassword, err := securitee.HashPassword(password)
 	if err != nil {
-		return nil, err
+		return outbound.IamUser{}, err
 	}
 
+	userId := uuid.New()
+
 	// Create the user
-	user, err := s.userRepo.CreateUser(email, hashedPassword)
+	user, err := s.iamRepository.CreateUser(ctx, outbound.CreateUserParams{
+		ID:           pgtype.UUID{Bytes: userId, Valid: true},
+		Email:        email,
+		PasswordHash: hashedPassword,
+		LastLogin:    pgtype.Timestamp{Time: time.Time{}, Valid: false},
+	})
 	if err != nil {
-		return nil, err
+		return outbound.IamUser{}, err
 	}
 
 	return user, nil
 }
 
 // generateAccessToken creates a new JWT access token.
-func (s *IamService) generateAccessToken(user *models.User) (string, error) {
-	// Set the expiration time
+func (s *IamService) generateAccessToken(user outbound.IamUser) (string, error) {
 	expirationTime := time.Now().Add(s.accessTokenTTL)
 
 	// Create the JWT claims
@@ -109,7 +121,6 @@ func (s *IamService) generateAccessToken(user *models.User) (string, error) {
 
 // ValidateToken verifies a JWT token and returns the claims.
 func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
-	// Parse the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Validate the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -135,9 +146,11 @@ func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
 }
 
 // LoginWithRefresh authenticates a user and returns both access and refresh tokens.
-func (s *IamService) LoginWithRefresh(email, password string, refreshTokenTTL time.Duration) (accessToken, refreshToken string, err error) {
-	// Get the user from the database
-	user, err := s.userRepo.GetUserByEmail(email)
+func (s *IamService) LoginWithRefresh(ctx context.Context, email, password string, refreshTokenTTL time.Duration) (accessToken, refreshToken string, err error) {
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.loginwithrefresh")
+	defer span.End()
+
+	user, err := s.iamRepository.GetUserByEmail(ctx, outbound.GetUserByEmailParams{Email: email})
 	if err != nil {
 		return "", "", ErrInvalidCredentials{}
 	}
@@ -153,19 +166,32 @@ func (s *IamService) LoginWithRefresh(email, password string, refreshTokenTTL ti
 		return "", "", err
 	}
 
+	expiresAt := time.Now().Add(refreshTokenTTL)
+	refreshTokenId := uuid.New()
+
 	// Create a refresh token
-	token, err := s.refreshTokenRepo.CreateRefreshToken(user.ID, refreshTokenTTL)
+	token, err := s.iamRepository.CreateRefreshToken(ctx, outbound.CreateRefreshTokenParams{
+		ID:        pgtype.UUID{Bytes: refreshTokenId, Valid: true},
+		UserID:    user.ID,
+		Token:     accessToken,
+		ExpiresAt: pgtype.Timestamp{Time: expiresAt, Valid: true},
+		CreatedAt: pgtype.Timestamp{Time: time.Now(), Valid: true},
+		Revoked:   false,
+	})
 	if err != nil {
 		return "", "", err
 	}
 
-	return accessToken, token.Token, nil
+	return token.Token, refreshTokenId.String(), nil
 }
 
 // RefreshAccessToken creates a new access token using a refresh token.
-func (s *IamService) RefreshAccessToken(refreshTokenString string) (string, error) {
+func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString string) (string, error) {
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.refreshaccesstoken")
+	defer span.End()
+
 	// Retrieve the refresh token
-	token, err := s.refreshTokenRepo.GetRefreshToken(refreshTokenString)
+	token, err := s.iamRepository.GetRefreshToken(ctx, outbound.GetRefreshTokenParams{Token: refreshTokenString})
 	if err != nil {
 		return "", ErrInvalidToken{}
 	}
@@ -176,12 +202,12 @@ func (s *IamService) RefreshAccessToken(refreshTokenString string) (string, erro
 	}
 
 	// Check if the token has expired
-	if time.Now().After(token.ExpiresAt) {
+	if time.Now().After(token.ExpiresAt.Time) {
 		return "", ErrExpiredToken{}
 	}
 
 	// Get the user
-	user, err := s.userRepo.GetUserByID(token.UserID)
+	user, err := s.iamRepository.GetUserByID(ctx, outbound.GetUserByIDParams{ID: token.UserID})
 	if err != nil {
 		return "", err
 	}

@@ -56,7 +56,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the auth service to register the user
-	user, err := h.authService.Register(req.Email, req.Password)
+	user, err := h.authService.Register(r.Context(), req.Email, req.Password)
 	if err != nil {
 		if errors.Is(err, iam.ErrEmailInUse{}) {
 			http.Error(w, "Email already in use", http.StatusConflict)
@@ -110,7 +110,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to login with refresh token generation
-	accessToken, refreshToken, err := h.authService.LoginWithRefresh(req.Email, req.Password, refreshTokenTTL)
+	accessToken, refreshToken, err := h.authService.LoginWithRefresh(r.Context(), req.Email, req.Password, refreshTokenTTL)
 	if err != nil {
 		if errors.Is(err, iam.ErrInvalidCredentials{}) {
 			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
@@ -158,7 +158,7 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to refresh the token
-	token, err := h.authService.RefreshAccessToken(req.RefreshToken)
+	token, err := h.authService.RefreshAccessToken(r.Context(), req.RefreshToken)
 	if err != nil {
 		if errors.Is(err, iam.ErrInvalidToken{}) || errors.Is(err, iam.ErrExpiredToken{}) {
 			http.Error(w, "Invalid or expired refresh token", http.StatusUnauthorized)
