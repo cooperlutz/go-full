@@ -57,6 +57,22 @@ export interface RegisterUserRequest {
 export interface DefaultApiInterface {
   /**
    *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getUserProfileRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<RegisterResponse>>;
+
+  /**
+   */
+  getUserProfile(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<RegisterResponse>;
+
+  /**
+   *
    * @param {LoginRequest} loginRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -117,6 +133,41 @@ export interface DefaultApiInterface {
  *
  */
 export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
+  /**
+   */
+  async getUserProfileRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<RegisterResponse>> {
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/api/iam/profile`;
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      RegisterResponseFromJSON(jsonValue),
+    );
+  }
+
+  /**
+   */
+  async getUserProfile(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<RegisterResponse> {
+    const response = await this.getUserProfileRaw(initOverrides);
+    return await response.value();
+  }
+
   /**
    */
   async loginUserRaw(
