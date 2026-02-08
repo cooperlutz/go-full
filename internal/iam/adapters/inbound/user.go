@@ -1,5 +1,4 @@
-// handlers/user.go
-package handlers
+package inbound
 
 import (
 	"encoding/json"
@@ -8,8 +7,17 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
+	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
 )
+
+func NewIamUserApiController(iamRepo outbound.Querier) http.Handler {
+	iamUserRouter := hteeteepee.NewRouter("iam.user")
+	handler := NewUserHandler(iamRepo)
+	iamUserRouter.HandleFunc("/profile", handler.Profile)
+
+	return iamUserRouter
+}
 
 // UserHandler contains HTTP handlers for user-related endpoints.
 type UserHandler struct {

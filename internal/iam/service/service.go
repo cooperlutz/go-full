@@ -1,5 +1,4 @@
-// auth/service.go
-package iam
+package service
 
 import (
 	"context"
@@ -15,6 +14,12 @@ import (
 	"github.com/cooperlutz/go-full/pkg/securitee"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
+
+type ErrUserNotFound struct{}
+
+func (e ErrUserNotFound) Error() string {
+	return "user not found"
+}
 
 type ErrInvalidCredentials struct{}
 
@@ -42,20 +47,24 @@ func (e ErrEmailInUse) Error() string {
 
 // IamService provides authentication functionality.
 type IamService struct {
-	// userRepo         *models.UserRepository
-	// refreshTokenRepo *models.RefreshTokenRepository
-	iamRepository  outbound.Querier
-	jwtSecret      []byte
-	accessTokenTTL time.Duration
+	iamRepository   outbound.Querier
+	jwtSecret       []byte
+	accessTokenTTL  time.Duration
+	refreshTokenTTL time.Duration
 }
 
 // NewIamService creates a new authentication service.
-func NewIamService(iamRepository outbound.Querier, jwtSecret string, accessTokenTTL time.Duration) *IamService {
+func NewIamService(iamRepository outbound.Querier, jwtSecret string, accessTokenTTL, refreshTokenTTL time.Duration) *IamService {
 	return &IamService{
-		iamRepository:  iamRepository,
-		jwtSecret:      []byte(jwtSecret),
-		accessTokenTTL: accessTokenTTL,
+		iamRepository:   iamRepository,
+		jwtSecret:       []byte(jwtSecret),
+		accessTokenTTL:  accessTokenTTL,
+		refreshTokenTTL: refreshTokenTTL,
 	}
+}
+
+func (s *IamService) GetRefreshTokenTTL() time.Duration {
+	return s.refreshTokenTTL
 }
 
 // Register creates a new user with the provided credentials.
@@ -219,4 +228,8 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	}
 
 	return accessToken, nil
+}
+
+func (s *IamService) GetUserByID(ctx context.Context, params outbound.GetUserByIDParams) (outbound.IamUser, error) {
+	return s.iamRepository.GetUserByID(ctx, params)
 }

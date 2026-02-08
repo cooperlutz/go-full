@@ -17,13 +17,15 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
 //go:embed dist/*
 var spaFiles embed.FS
 
 // https://github.com/go-chi/chi/issues/611#issuecomment-1804702959
-func SPAHandler() http.HandlerFunc {
+func spaHandler() http.HandlerFunc {
 	spaFS, err := fs.Sub(spaFiles, "dist")
 	if err != nil {
 		panic(fmt.Errorf("failed getting the sub tree for the site files: %w", err))
@@ -41,4 +43,10 @@ func SPAHandler() http.HandlerFunc {
 
 		http.FileServer(http.FS(spaFS)).ServeHTTP(w, r)
 	}
+}
+
+func SpaRouter() http.Handler {
+	spaRouter := hteeteepee.NewRouter("web")
+	spaRouter.Handle("/*", spaHandler())
+	return spaRouter
 }
