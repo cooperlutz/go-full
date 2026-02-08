@@ -20,6 +20,7 @@ import type {
   RefreshResponse,
   RegisterRequest,
   RegisterResponse,
+  UserProfile,
 } from "../models/index";
 import {
   LoginRequestFromJSON,
@@ -34,6 +35,8 @@ import {
   RegisterRequestToJSON,
   RegisterResponseFromJSON,
   RegisterResponseToJSON,
+  UserProfileFromJSON,
+  UserProfileToJSON,
 } from "../models/index";
 
 export interface LoginUserRequest {
@@ -63,13 +66,13 @@ export interface DefaultApiInterface {
    */
   getUserProfileRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<RegisterResponse>>;
+  ): Promise<runtime.ApiResponse<UserProfile>>;
 
   /**
    */
   getUserProfile(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<RegisterResponse>;
+  ): Promise<UserProfile>;
 
   /**
    *
@@ -137,7 +140,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
    */
   async getUserProfileRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<RegisterResponse>> {
+  ): Promise<runtime.ApiResponse<UserProfile>> {
     const queryParameters: any = {};
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -155,7 +158,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     );
 
     return new runtime.JSONApiResponse(response, (jsonValue) =>
-      RegisterResponseFromJSON(jsonValue),
+      UserProfileFromJSON(jsonValue),
     );
   }
 
@@ -163,7 +166,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
    */
   async getUserProfile(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<RegisterResponse> {
+  ): Promise<UserProfile> {
     const response = await this.getUserProfileRaw(initOverrides);
     return await response.value();
   }

@@ -8,5 +8,6 @@ models/RefreshRequest.ts
 models/RefreshResponse.ts
 models/RegisterRequest.ts
 models/RegisterResponse.ts
+models/UserProfile.ts
 models/index.ts
 runtime.ts

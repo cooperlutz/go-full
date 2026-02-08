@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterResponse'
+                $ref: '#/components/schemas/UserProfile'
         default:
           description: unexpected error
           content:
@@ -105,6 +105,17 @@ components:
         - email
         - password
     RegisterResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        id:
+          type: string
+      required:
+        - email
+        - id
+    UserProfile:
       type: object
       properties:
         email:

@@ -56,6 +56,12 @@ type RegisterResponse struct {
 	Id    string              `json:"id"`
 }
 
+// UserProfile defines model for UserProfile.
+type UserProfile struct {
+	Email openapi_types.Email `json:"email"`
+	Id    string              `json:"id"`
+}
+
 // LoginUserJSONRequestBody defines body for LoginUser for application/json ContentType.
 type LoginUserJSONRequestBody = LoginRequest
 
@@ -453,7 +459,7 @@ type ClientWithResponsesInterface interface {
 type GetUserProfileResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *RegisterResponse
+	JSON200      *UserProfile
 	JSONDefault  *Error
 }
 
@@ -617,7 +623,7 @@ func ParseGetUserProfileResponse(rsp *http.Response) (*GetUserProfileResponse, e
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest RegisterResponse
+		var dest UserProfile
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
