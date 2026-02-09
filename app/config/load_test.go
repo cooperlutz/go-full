@@ -52,8 +52,9 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					TraceEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
-					JWTSecret:      "THIS_IS_NOT_A_REAL_PASSWORD",
-					AccessTokenTTL: time.Duration(15) * time.Minute,
+					JWTSecret:       "THIS_IS_NOT_A_REAL_PASSWORD",
+					AccessTokenTTL:  time.Duration(15) * time.Minute,
+					RefreshTokenTTL: time.Hour * 24 * 7,
 				},
 			},
 		},
@@ -92,8 +93,9 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					TraceEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
-					JWTSecret:      "THIS_IS_NOT_A_REAL_PASSWORD",
-					AccessTokenTTL: time.Duration(15) * time.Minute,
+					JWTSecret:       "THIS_IS_NOT_A_REAL_PASSWORD",
+					AccessTokenTTL:  time.Duration(15) * time.Minute,
+					RefreshTokenTTL: time.Hour * 24 * 7,
 				},
 			},
 		},

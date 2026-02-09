@@ -1,26 +1,31 @@
-// handlers/auth.go
-package handlers
+package inbound
 
 import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"time"
 
-	"github.com/cooperlutz/go-full/internal/iam"
+	"github.com/cooperlutz/go-full/internal/iam/service"
+	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
-const (
-	refreshTokenTTL = time.Hour * 24 * 7 // 7 days
-)
+func NewIamAuthApiController(iamSvc *service.IamService) http.Handler {
+	iamRouter := hteeteepee.NewRouter("iam.auth")
+	authHandler := NewAuthHandler(iamSvc)
+	iamRouter.HandleFunc("/register", authHandler.Register)
+	iamRouter.HandleFunc("/login", authHandler.Login)
+	iamRouter.HandleFunc("/refresh", authHandler.RefreshToken)
+
+	return iamRouter
+}
 
 // AuthHandler contains HTTP handlers for authentication.
 type AuthHandler struct {
-	authService *iam.IamService
+	authService *service.IamService
 }
 
 // NewAuthHandler creates a new auth handler.
-func NewAuthHandler(authService *iam.IamService) *AuthHandler {
+func NewAuthHandler(authService *service.IamService) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
 	}
@@ -56,9 +61,9 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the auth service to register the user
-	user, err := h.authService.Register(req.Email, req.Password)
+	user, err := h.authService.Register(r.Context(), req.Email, req.Password)
 	if err != nil {
-		if errors.Is(err, iam.ErrEmailInUse{}) {
+		if errors.Is(err, service.ErrEmailInUse{}) {
 			http.Error(w, "Email already in use", http.StatusConflict)
 
 			return
@@ -110,9 +115,14 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to login with refresh token generation
-	accessToken, refreshToken, err := h.authService.LoginWithRefresh(req.Email, req.Password, refreshTokenTTL)
+	accessToken, refreshToken, err := h.authService.LoginWithRefresh(
+		r.Context(),
+		req.Email,
+		req.Password,
+		h.authService.GetRefreshTokenTTL(),
+	)
 	if err != nil {
-		if errors.Is(err, iam.ErrInvalidCredentials{}) {
+		if errors.Is(err, service.ErrInvalidCredentials{}) {
 			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		} else {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -158,9 +168,9 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to refresh the token
-	token, err := h.authService.RefreshAccessToken(req.RefreshToken)
+	token, err := h.authService.RefreshAccessToken(r.Context(), req.RefreshToken)
 	if err != nil {
-		if errors.Is(err, iam.ErrInvalidToken{}) || errors.Is(err, iam.ErrExpiredToken{}) {
+		if errors.Is(err, service.ErrInvalidToken{}) || errors.Is(err, service.ErrExpiredToken{}) {
 			http.Error(w, "Invalid or expired refresh token", http.StatusUnauthorized)
 		} else {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)

@@ -74,6 +74,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/iam/profile:
+    get:
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     RegisterRequest:
@@ -89,6 +105,17 @@ components:
         - email
         - password
     RegisterResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        id:
+          type: string
+      required:
+        - email
+        - id
+    UserProfile:
       type: object
       properties:
         email:

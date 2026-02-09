@@ -1,21 +1,31 @@
-// handlers/user.go
-package handlers
+package inbound
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/cooperlutz/go-full/internal/iam/models"
+	"github.com/jackc/pgx/v5/pgtype"
+
+	"github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
+	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
 )
 
+func NewIamUserApiController(iamRepo outbound.Querier) http.Handler {
+	iamUserRouter := hteeteepee.NewRouter("iam.user")
+	handler := NewUserHandler(iamRepo)
+	iamUserRouter.HandleFunc("/profile", handler.Profile)
+
+	return iamUserRouter
+}
+
 // UserHandler contains HTTP handlers for user-related endpoints.
 type UserHandler struct {
-	userRepo *models.UserRepository
+	userRepo outbound.Querier
 }
 
 // NewUserHandler creates a new user handler.
-func NewUserHandler(userRepo *models.UserRepository) *UserHandler {
+func NewUserHandler(userRepo outbound.Querier) *UserHandler {
 	return &UserHandler{
 		userRepo: userRepo,
 	}
@@ -38,7 +48,12 @@ func (h *UserHandler) Profile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get user from database
-	user, err := h.userRepo.GetUserByID(userID)
+	user, err := h.userRepo.GetUserByID(r.Context(), outbound.GetUserByIDParams{
+		ID: pgtype.UUID{
+			Bytes: userID,
+			Valid: true,
+		},
+	})
 	if err != nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 

@@ -120,3 +120,30 @@ export function useLogout() {
     logout,
   };
 }
+
+export function useProfile() {
+  const error = ref<Error | null>(null);
+  const loading = ref(false);
+
+  const getProfile = async () => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const userProfile = await iamAPI.getUserProfile();
+      return userProfile;
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = err;
+      }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    getProfile,
+    error,
+    loading,
+  };
+}

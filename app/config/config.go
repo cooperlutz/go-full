@@ -40,8 +40,9 @@ type Telemetry struct {
 }
 
 type Security struct {
-	JWTSecret      string
-	AccessTokenTTL time.Duration
+	JWTSecret       string
+	AccessTokenTTL  time.Duration
+	RefreshTokenTTL time.Duration
 }
 
 // Config holds the application configuration settings.

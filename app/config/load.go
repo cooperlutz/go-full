@@ -72,8 +72,9 @@ func LoadConfigFromEnvVars() (Config, error) {
 			SSLMode:  loadedEnvVars["DB_SSLMODE"],
 		},
 		Security: Security{
-			JWTSecret:      loadedEnvVars["SEC_JWT_SECRET"],
-			AccessTokenTTL: time.Duration(15) * time.Minute, //nolint:mnd // default 15 minutes
+			JWTSecret:       loadedEnvVars["SEC_JWT_SECRET"],
+			AccessTokenTTL:  time.Duration(15) * time.Minute, //nolint:mnd // default 15 minutes
+			RefreshTokenTTL: time.Hour * 24 * 7,              //nolint:mnd // 7 days
 		},
 	}
 	log.Printf("Loaded config: %+v\n", loadedCfg.String())

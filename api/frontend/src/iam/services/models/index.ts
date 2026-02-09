@@ -7,3 +7,4 @@ export * from "./RefreshRequest";
 export * from "./RefreshResponse";
 export * from "./RegisterRequest";
 export * from "./RegisterResponse";
+export * from "./UserProfile";
