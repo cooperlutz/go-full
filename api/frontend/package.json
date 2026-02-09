@@ -19,6 +19,11 @@
     "test-ui": "vitest --ui",
     "openapi": "openapi-generator-cli --openapitools .openapitools.json generate"
   },
+  "pnpm": {
+    "overrides": {
+      "axios": "^1.13.5"
+    }
+  },
   "dependencies": {
     "@lucide/lab": "^0.1.2",
     "@tailwindcss/vite": "^4.1.18",
