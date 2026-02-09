@@ -24,7 +24,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "@vueuse/core": "^14.2.0",
     "chart.js": "^4.5.1",
-    "daisyui": "^5.5.17",
+    "daisyui": "^5.5.18",
     "lucide-vue-next": "^0.563.0",
     "marked": "^17.0.1",
     "sweetalert2": "^11.26.18",
