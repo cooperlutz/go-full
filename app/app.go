@@ -88,8 +88,9 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	iamModule := iam.NewModule(
 		conn,
 		iam.IamModuleConfig{
-			JwtSecret:      a.conf.Security.JWTSecret,
-			AccessTokenTTL: a.conf.Security.AccessTokenTTL,
+			JwtSecret:       a.conf.Security.JWTSecret,
+			AccessTokenTTL:  a.conf.Security.AccessTokenTTL,
+			RefreshTokenTTL: a.conf.Security.RefreshTokenTTL,
 		},
 	)
 

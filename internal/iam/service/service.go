@@ -200,36 +200,44 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	defer span.End()
 
 	// Retrieve the refresh token
-	token, err := s.iamRepository.GetRefreshToken(ctx, outbound.GetRefreshTokenParams{Token: refreshTokenString})
+	token, err := s.iamRepository.GetRefreshToken(ctx, outbound.GetRefreshTokenParams{
+		ID: pgtype.UUID{Bytes: uuid.MustParse(refreshTokenString), Valid: true},
+	})
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to get refresh token")
+
 		return "", ErrInvalidToken{}
 	}
 
 	// Check if the token is valid
 	if token.Revoked {
+		telemetree.RecordError(ctx, ErrInvalidToken{}, "refresh token revoked")
+
 		return "", ErrInvalidToken{}
 	}
 
 	// Check if the token has expired
 	if time.Now().After(token.ExpiresAt.Time) {
+		telemetree.RecordError(ctx, ErrExpiredToken{}, "refresh token expired")
+
 		return "", ErrExpiredToken{}
 	}
 
 	// Get the user
 	user, err := s.iamRepository.GetUserByID(ctx, outbound.GetUserByIDParams{ID: token.UserID})
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to get user for refresh token")
+
 		return "", err
 	}
 
 	// Generate a new access token
 	accessToken, err := s.generateAccessToken(user)
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to generate access token")
+
 		return "", err
 	}
 
 	return accessToken, nil
-}
-
-func (s *IamService) GetUserByID(ctx context.Context, params outbound.GetUserByIDParams) (outbound.IamUser, error) {
-	return s.iamRepository.GetUserByID(ctx, params)
 }

@@ -40,9 +40,9 @@ RETURNING *;
 
 -- name: GetRefreshToken :one
 SELECT * FROM iam.refresh_tokens
-WHERE token = $1;
+WHERE id = $1;
 
 -- name: RevokeRefreshToken :exec
 UPDATE iam.refresh_tokens
 SET revoked = TRUE
-WHERE token = $1;
+WHERE id = $1;

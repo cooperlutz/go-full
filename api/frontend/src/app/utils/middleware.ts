@@ -49,6 +49,7 @@ export const authRefreshMiddleware: Middleware = {
           ...newInit.headers,
           Authorization: `Bearer ${tokenStore.getAccessToken()}`,
         };
+        console.log("Retrying request with new access token...");
         try {
           const newResponse = await context.fetch(context.url, newInit);
           return newResponse;
