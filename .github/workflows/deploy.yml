@@ -7,7 +7,7 @@ name: Deploy
 # https://learn.microsoft.com/en-us/azure/container-apps/github-actions
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dep-fixes ]
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
@@ -82,5 +82,8 @@ jobs:
           CONTAINER_IMAGE: ${{ env.CONTAINER_IMAGE }}
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
 
+      - name: Deploy / Deploy Container App
+        run: az containerapp up -n go-full-ca --image ghcr.io/cooperlutz/go-full:latest   
+        
       - name: Output AZD Info
         run: azd show -C ./deploy/azure
