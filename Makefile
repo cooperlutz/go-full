@@ -117,6 +117,9 @@ commit: ### commit changes
 #                            DEPLOY                                        #
 ############################################################################
 
+deploy:
+	az containerapp up -n go-full-ca --image ghcr.io/cooperlutz/go-full:latest   
+
 init-deploy:
 	azd pipeline config --auth-type federated -C ${AZD_CONF}
 .PHONY: init-deploy

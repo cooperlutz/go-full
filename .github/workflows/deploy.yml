@@ -83,7 +83,7 @@ jobs:
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
 
       - name: Deploy / Deploy Container App
-        run: az containerapp up -n go-full-ca --image ghcr.io/cooperlutz/go-full:latest   
-        
+        run: make deploy
+
       - name: Output AZD Info
         run: azd show -C ./deploy/azure
