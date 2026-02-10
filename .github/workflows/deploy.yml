@@ -82,5 +82,8 @@ jobs:
           CONTAINER_IMAGE: ${{ env.CONTAINER_IMAGE }}
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
 
+      - name: Deploy / Deploy Container App
+        run: make deploy
+
       - name: Output AZD Info
         run: azd show -C ./deploy/azure
