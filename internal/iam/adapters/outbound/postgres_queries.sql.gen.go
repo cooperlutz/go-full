@@ -134,19 +134,19 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (IamUser
 
 const getRefreshToken = `-- name: GetRefreshToken :one
 SELECT id, user_id, token, expires_at, created_at, revoked FROM iam.refresh_tokens
-WHERE token = $1
+WHERE id = $1
 `
 
 type GetRefreshTokenParams struct {
-	Token string `db:"token" json:"token"`
+	ID pgtype.UUID `db:"id" json:"id"`
 }
 
 // GetRefreshToken
 //
 //	SELECT id, user_id, token, expires_at, created_at, revoked FROM iam.refresh_tokens
-//	WHERE token = $1
+//	WHERE id = $1
 func (q *Queries) GetRefreshToken(ctx context.Context, arg GetRefreshTokenParams) (IamRefreshToken, error) {
-	row := q.db.QueryRow(ctx, getRefreshToken, arg.Token)
+	row := q.db.QueryRow(ctx, getRefreshToken, arg.ID)
 	var i IamRefreshToken
 	err := row.Scan(
 		&i.ID,
@@ -214,19 +214,19 @@ func (q *Queries) GetUserByID(ctx context.Context, arg GetUserByIDParams) (IamUs
 const revokeRefreshToken = `-- name: RevokeRefreshToken :exec
 UPDATE iam.refresh_tokens
 SET revoked = TRUE
-WHERE token = $1
+WHERE id = $1
 `
 
 type RevokeRefreshTokenParams struct {
-	Token string `db:"token" json:"token"`
+	ID pgtype.UUID `db:"id" json:"id"`
 }
 
 // RevokeRefreshToken
 //
 //	UPDATE iam.refresh_tokens
 //	SET revoked = TRUE
-//	WHERE token = $1
+//	WHERE id = $1
 func (q *Queries) RevokeRefreshToken(ctx context.Context, arg RevokeRefreshTokenParams) error {
-	_, err := q.db.Exec(ctx, revokeRefreshToken, arg.Token)
+	_, err := q.db.Exec(ctx, revokeRefreshToken, arg.ID)
 	return err
 }

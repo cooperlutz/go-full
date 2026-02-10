@@ -46,7 +46,7 @@ type Querier interface {
 	//GetRefreshToken
 	//
 	//  SELECT id, user_id, token, expires_at, created_at, revoked FROM iam.refresh_tokens
-	//  WHERE token = $1
+	//  WHERE id = $1
 	GetRefreshToken(ctx context.Context, arg GetRefreshTokenParams) (IamRefreshToken, error)
 	//GetUserByEmail
 	//
@@ -62,7 +62,7 @@ type Querier interface {
 	//
 	//  UPDATE iam.refresh_tokens
 	//  SET revoked = TRUE
-	//  WHERE token = $1
+	//  WHERE id = $1
 	RevokeRefreshToken(ctx context.Context, arg RevokeRefreshTokenParams) error
 }
 
