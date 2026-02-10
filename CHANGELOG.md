@@ -1,3 +1,9 @@
+## v0.1.46 (2026-02-10)
+
+### Fix
+
+- issues with token refreshing (#169)
+
 ## v0.1.45 (2026-02-09)
 
 ### Fix
