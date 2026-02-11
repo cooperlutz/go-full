@@ -3,9 +3,10 @@ package command
 import (
 	"context"
 
+	"github.com/google/uuid"
+
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
-	"github.com/google/uuid"
 )
 
 type GradeQuestion struct {
