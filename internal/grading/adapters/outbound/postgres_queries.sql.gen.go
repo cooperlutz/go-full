@@ -246,6 +246,43 @@ func (q *Queries) FindAllIncompleteExams(ctx context.Context) ([]GradingExam, er
 	return items, nil
 }
 
+const findQuestionByExamIdAndQuestionIndex = `-- name: FindQuestionByExamIdAndQuestionIndex :one
+SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+WHERE exam_id = $1 AND index = $2
+`
+
+type FindQuestionByExamIdAndQuestionIndexParams struct {
+	ExamID pgtype.UUID `db:"exam_id" json:"exam_id"`
+	Index  int32       `db:"index" json:"index"`
+}
+
+// FindQuestionByExamIdAndQuestionIndex
+//
+//	SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+//	WHERE exam_id = $1 AND index = $2
+func (q *Queries) FindQuestionByExamIdAndQuestionIndex(ctx context.Context, arg FindQuestionByExamIdAndQuestionIndexParams) (GradingQuestion, error) {
+	row := q.db.QueryRow(ctx, findQuestionByExamIdAndQuestionIndex, arg.ExamID, arg.Index)
+	var i GradingQuestion
+	err := row.Scan(
+		&i.QuestionID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+		&i.Deleted,
+		&i.ExamID,
+		&i.Index,
+		&i.QuestionType,
+		&i.Graded,
+		&i.Feedback,
+		&i.ProvidedAnswer,
+		&i.CorrectAnswer,
+		&i.CorrectlyAnswered,
+		&i.PointsReceived,
+		&i.PointsPossible,
+	)
+	return i, err
+}
+
 const getExam = `-- name: GetExam :one
 SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams
 WHERE exam_id = $1
@@ -312,6 +349,57 @@ func (q *Queries) GetQuestion(ctx context.Context, arg GetQuestionParams) (Gradi
 		&i.PointsPossible,
 	)
 	return i, err
+}
+
+const getQuestionsForExam = `-- name: GetQuestionsForExam :many
+SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+WHERE exam_id = $1
+ORDER BY index ASC
+`
+
+type GetQuestionsForExamParams struct {
+	ExamID pgtype.UUID `db:"exam_id" json:"exam_id"`
+}
+
+// GetQuestionsForExam
+//
+//	SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+//	WHERE exam_id = $1
+//	ORDER BY index ASC
+func (q *Queries) GetQuestionsForExam(ctx context.Context, arg GetQuestionsForExamParams) ([]GradingQuestion, error) {
+	rows, err := q.db.Query(ctx, getQuestionsForExam, arg.ExamID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GradingQuestion
+	for rows.Next() {
+		var i GradingQuestion
+		if err := rows.Scan(
+			&i.QuestionID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+			&i.Deleted,
+			&i.ExamID,
+			&i.Index,
+			&i.QuestionType,
+			&i.Graded,
+			&i.Feedback,
+			&i.ProvidedAnswer,
+			&i.CorrectAnswer,
+			&i.CorrectlyAnswered,
+			&i.PointsReceived,
+			&i.PointsPossible,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const updateExam = `-- name: UpdateExam :exec

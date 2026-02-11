@@ -77,6 +77,11 @@ type Querier interface {
 	//
 	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams WHERE grading_completed = FALSE
 	FindAllIncompleteExams(ctx context.Context) ([]GradingExam, error)
+	//FindQuestionByExamIdAndQuestionIndex
+	//
+	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+	//  WHERE exam_id = $1 AND index = $2
+	FindQuestionByExamIdAndQuestionIndex(ctx context.Context, arg FindQuestionByExamIdAndQuestionIndexParams) (GradingQuestion, error)
 	//GetExam
 	//
 	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams
@@ -87,6 +92,12 @@ type Querier interface {
 	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
 	//  WHERE question_id = $1
 	GetQuestion(ctx context.Context, arg GetQuestionParams) (GradingQuestion, error)
+	//GetQuestionsForExam
+	//
+	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, question_type, graded, feedback, provided_answer, correct_answer, correctly_answered, points_received, points_possible FROM grading.questions
+	//  WHERE exam_id = $1
+	//  ORDER BY index ASC
+	GetQuestionsForExam(ctx context.Context, arg GetQuestionsForExamParams) ([]GradingQuestion, error)
 	//UpdateExam
 	//
 	//  UPDATE grading.exams SET

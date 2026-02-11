@@ -5,6 +5,15 @@ SELECT * FROM grading.exams WHERE grading_completed = FALSE;
 SELECT * FROM grading.exams
 WHERE exam_id = $1;
 
+-- name: GetQuestionsForExam :many
+SELECT * FROM grading.questions
+WHERE exam_id = $1
+ORDER BY index ASC;
+
+-- name: FindQuestionByExamIdAndQuestionIndex :one
+SELECT * FROM grading.questions
+WHERE exam_id = $1 AND index = $2;
+
 -- name: GetQuestion :one
 SELECT * FROM grading.questions
 WHERE question_id = $1;

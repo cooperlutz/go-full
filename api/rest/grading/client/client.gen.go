@@ -25,11 +25,8 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	ExamId              string     `json:"examId"`
-	ExaminationExamId   string     `json:"examinationExamId"`
 	GradingCompleted    bool       `json:"gradingCompleted"`
-	LibraryExamId       string     `json:"libraryExamId"`
 	Questions           []Question `json:"questions"`
-	StudentId           string     `json:"studentId"`
 	TotalPointsEarned   *int32     `json:"totalPointsEarned,omitempty"`
 	TotalPointsPossible int32      `json:"totalPointsPossible"`
 }

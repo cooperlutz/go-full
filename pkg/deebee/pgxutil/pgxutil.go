@@ -50,3 +50,21 @@ func IntToPgtypeInt4(i *int) pgtype.Int4 {
 
 	return pgtype.Int4{Int32: utilitee.SafeIntToInt32(i), Valid: true}
 }
+
+// Int32ToPgtypeInt4 converts an int32 pointer to a pgx Int4 type.
+func Int32ToPgtypeInt4(i *int32) pgtype.Int4 {
+	if i == nil {
+		return pgtype.Int4{Int32: 0, Valid: false}
+	}
+
+	return pgtype.Int4{Int32: *i, Valid: true}
+}
+
+// BoolToPgtypeBool converts a bool pointer to a pgx Bool type.
+func BoolToPgtypeBool(b *bool) pgtype.Bool {
+	if b == nil {
+		return pgtype.Bool{Bool: false, Valid: false}
+	}
+
+	return pgtype.Bool{Bool: *b, Valid: true}
+}

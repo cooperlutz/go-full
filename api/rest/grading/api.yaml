@@ -114,20 +114,11 @@ components:
       type: object
       required:
         - examId
-        - studentId
-        - libraryExamId
-        - examinationExamId
         - gradingCompleted
         - totalPointsPossible
         - questions
       properties:
         examId:
-          type: string
-        studentId:
-          type: string
-        libraryExamId:
-          type: string
-        examinationExamId:
           type: string
         totalPointsPossible:
           type: integer

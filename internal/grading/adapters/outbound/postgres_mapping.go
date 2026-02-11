@@ -3,6 +3,7 @@ package outbound
 import (
 	"github.com/google/uuid"
 
+	"github.com/cooperlutz/go-full/internal/grading/app/query"
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )
@@ -33,6 +34,20 @@ func (e GradingExam) toDomain(questions ...GradingQuestion) (*grading.Exam, erro
 	), nil
 }
 
+func (e GradingExam) toQuery(questions ...GradingQuestion) query.Exam {
+	var qs []query.Question
+	for _, q := range questions {
+		qs = append(qs, q.toQuery())
+	}
+	return query.Exam{
+		ExamId:              e.ExamID.String(),
+		GradingCompleted:    e.GradingCompleted,
+		TotalPointsPossible: e.TotalPointsPossible.Int32,
+		TotalPointsReceived: &e.TotalPointsReceived.Int32,
+		Questions:           qs,
+	}
+}
+
 // toDomain maps the GradingQuestion to the domain entity.
 func (q GradingQuestion) toDomain() (*grading.Question, error) {
 	return grading.MapToQuestion(
@@ -52,6 +67,21 @@ func (q GradingQuestion) toDomain() (*grading.Question, error) {
 		q.PointsPossible,
 		&q.PointsReceived.Int32,
 	)
+}
+
+func (q GradingQuestion) toQuery() query.Question {
+	return query.Question{
+		QuestionId:     q.QuestionID.String(),
+		ExamId:         q.ExamID.String(),
+		Index:          q.Index,
+		QuestionType:   q.QuestionType,
+		Graded:         q.Graded,
+		Feedback:       &q.Feedback.String,
+		ProvidedAnswer: q.ProvidedAnswer,
+		CorrectAnswer:  &q.CorrectAnswer.String,
+		PointsPossible: q.PointsPossible,
+		PointsReceived: &q.PointsReceived.Int32,
+	}
 }
 
 // mapEntityExamToDB maps a domain Exam entity to the GradingExam database model.

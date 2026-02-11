@@ -3,6 +3,7 @@ package outbound
 import (
 	"context"
 
+	"github.com/cooperlutz/go-full/internal/grading/app/query"
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
@@ -23,6 +24,64 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 	}
 }
 
+func (p PostgresAdapter) AddExam(ctx context.Context, exam *grading.Exam) error {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.addexam")
+	defer span.End()
+
+	examToDb := mapEntityExamToDB(exam)
+
+	err := p.postgres.AddExam(ctx, AddExamParams(examToDb))
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
+	for _, question := range exam.GetQuestions() {
+		dbQuestion := mapEntityQuestionToDB(question, exam.GetIdUUID())
+
+		err = p.postgres.AddQuestion(ctx, AddQuestionParams(dbQuestion))
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (p PostgresAdapter) GetExam(ctx context.Context, examId uuid.UUID) (*grading.Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.getexam")
+	defer span.End()
+
+	examFromDb, err := p.postgres.GetExam(ctx, GetExamParams{
+		ExamID: pgxutil.UUIDToPgtypeUUID(examId),
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return nil, err
+	}
+	questionsFromDb, err := p.postgres.GetQuestionsForExam(ctx, GetQuestionsForExamParams{
+		ExamID: pgxutil.UUIDToPgtypeUUID(examId),
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return nil, err
+	}
+
+	exam, err := examFromDb.toDomain(questionsFromDb...)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return nil, err
+	}
+
+	return exam, nil
+}
+
 // UpdateExam updates an existing exam in the database.
 func (p PostgresAdapter) UpdateExam(
 	ctx context.Context,
@@ -41,16 +100,7 @@ func (p PostgresAdapter) UpdateExam(
 		err = p.finishTransaction(ctx, err, tx)
 	}()
 
-	examFromDb, err := p.postgres.GetExam(ctx, GetExamParams{
-		ExamID: pgxutil.UUIDToPgtypeUUID(examId),
-	})
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	exam, err := examFromDb.toDomain()
+	exam, err := p.GetExam(ctx, examId)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
@@ -107,4 +157,66 @@ func (p PostgresAdapter) finishTransaction(ctx context.Context, err error, tx pg
 
 		return nil
 	}
+}
+
+func (p PostgresAdapter) FindExam(ctx context.Context, examId string) (query.Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findexam")
+	defer span.End()
+
+	examFromDb, err := p.postgres.GetExam(ctx, GetExamParams{
+		ExamID: pgxutil.UUIDToPgtypeUUID(uuid.MustParse(examId)),
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return query.Exam{}, err
+	}
+	questionsFromDb, err := p.postgres.GetQuestionsForExam(ctx, GetQuestionsForExamParams{
+		ExamID: pgxutil.UUIDToPgtypeUUID(uuid.MustParse(examId)),
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return query.Exam{}, err
+	}
+
+	exam := examFromDb.toQuery(questionsFromDb...)
+
+	return exam, nil
+}
+
+func (p PostgresAdapter) FindIncompleteExams(ctx context.Context) ([]query.Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findincompleteexams")
+	defer span.End()
+
+	examsFromDb, err := p.postgres.FindAllIncompleteExams(ctx)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return nil, err
+	}
+
+	var exams []query.Exam
+	for _, e := range examsFromDb {
+		exams = append(exams, e.toQuery())
+	}
+
+	return exams, nil
+}
+
+func (p PostgresAdapter) FindExamQuestion(ctx context.Context, examId string, questionIndex int32) (query.Question, error) {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findexamquestion")
+	defer span.End()
+
+	questionFromDb, err := p.postgres.FindQuestionByExamIdAndQuestionIndex(ctx, FindQuestionByExamIdAndQuestionIndexParams{
+		ExamID: pgxutil.UUIDToPgtypeUUID(uuid.MustParse(examId)),
+		Index:  questionIndex,
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return query.Question{}, err
+	}
+
+	return questionFromDb.toQuery(), nil
 }
