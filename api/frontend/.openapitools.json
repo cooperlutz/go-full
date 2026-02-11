@@ -35,6 +35,14 @@
         "additionalProperties": {
           "withInterfaces": true
         }
+      },
+      "grading": {
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/src/grading/services",
+        "inputSpec": "../rest/grading/api.yaml",
+        "additionalProperties": {
+          "withInterfaces": true
+        }
       }
     }
   }

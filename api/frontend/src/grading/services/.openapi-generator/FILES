@@ -1,0 +1,11 @@
+.openapi-generator-ignore
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/Answer.ts
+models/Exam.ts
+models/GradeQuestion.ts
+models/ModelError.ts
+models/Question.ts
+models/index.ts
+runtime.ts
