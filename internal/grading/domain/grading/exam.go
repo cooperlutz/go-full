@@ -224,7 +224,7 @@ func (q *Question) markAsGraded() {
 
 // NewQuestion creates a new Question entity.
 func NewQuestion(
-	examId uuid.UUID,
+	// examId uuid.UUID,
 	questionType QuestionType,
 	index int32,
 	providedAnswer string,
@@ -234,7 +234,7 @@ func NewQuestion(
 	return &Question{
 		EntityMetadata: baseentitee.NewEntityMetadata(),
 		index:          index,
-		examId:         examId,
+		// examId:         examId,
 		questionType:   questionType,
 		graded:         false,
 		feedback:       nil,

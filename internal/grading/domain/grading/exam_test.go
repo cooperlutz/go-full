@@ -11,28 +11,28 @@ import (
 )
 
 var FixtureExamQuestions = []*Question{
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000123"),
+	NewQuestion(
 		QuestionMultipleChoice,
 		1,
 		"Go",
 		utilitee.StrPtr("Go"),
 		int32(5),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000123"),
+	NewQuestion(
 		QuestionMultipleChoice,
 		1,
 		"fortran",
 		utilitee.StrPtr("Go"),
 		int32(5),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000124"),
+	NewQuestion(
 		QuestionShortAnswer,
 		2,
 		"Python",
 		nil,
 		int32(10),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000125"),
+	NewQuestion(
 		QuestionEssay,
 		3,
 		"Java",
