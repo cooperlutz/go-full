@@ -169,5 +169,5 @@ sql:
       output_db_file_name: postgres_repository.gen.go
       output_files_suffix: .gen.go
       output_models_file_name: postgres_models.gen.go
-      output_querier_file_name: query_interface.gen.go
+      output_querier_file_name: postgres_query_interface.gen.go
       query_parameter_limit: 0 # always return a struct, even if its empty

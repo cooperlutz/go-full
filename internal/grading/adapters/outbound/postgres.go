@@ -3,13 +3,14 @@ package outbound
 import (
 	"context"
 
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
+
 	"github.com/cooperlutz/go-full/internal/grading/app/query"
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5"
 )
 
 // PostgresAdapter implements the grading repository using Postgres as the data store.
@@ -63,6 +64,7 @@ func (p PostgresAdapter) GetExam(ctx context.Context, examId uuid.UUID) (*gradin
 
 		return nil, err
 	}
+
 	questionsFromDb, err := p.postgres.GetQuestionsForExam(ctx, GetQuestionsForExamParams{
 		ExamID: pgxutil.UUIDToPgtypeUUID(examId),
 	})
@@ -171,6 +173,7 @@ func (p PostgresAdapter) FindExam(ctx context.Context, examId string) (query.Exa
 
 		return query.Exam{}, err
 	}
+
 	questionsFromDb, err := p.postgres.GetQuestionsForExam(ctx, GetQuestionsForExamParams{
 		ExamID: pgxutil.UUIDToPgtypeUUID(uuid.MustParse(examId)),
 	})

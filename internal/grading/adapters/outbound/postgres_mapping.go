@@ -39,6 +39,7 @@ func (e GradingExam) toQuery(questions ...GradingQuestion) query.Exam {
 	for _, q := range questions {
 		qs = append(qs, q.toQuery())
 	}
+
 	return query.Exam{
 		ExamId:              e.ExamID.String(),
 		GradingCompleted:    e.GradingCompleted,

@@ -26,7 +26,7 @@ func (h HttpServer) StrictHandler() ServerInterface {
 	return NewStrictHandler(h, nil)
 }
 
-// (GET /v1/exams/{examId})
+// (GET /v1/exams/{examId}).
 func (h HttpServer) GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.inbound.http.getexam")
 	defer span.End()
@@ -39,7 +39,7 @@ func (h HttpServer) GetExam(ctx context.Context, request GetExamRequestObject) (
 	return GetExam200JSONResponse(queryExamToHttpExam(exam)), nil
 }
 
-// (GET /v1/exams/{examId}/questions/{questionIndex})
+// (GET /v1/exams/{examId}/questions/{questionIndex}).
 func (h HttpServer) GetExamQuestion(ctx context.Context, request GetExamQuestionRequestObject) (GetExamQuestionResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.inbound.http.getexamquestion")
 	defer span.End()
@@ -58,7 +58,7 @@ func (h HttpServer) GetExamQuestion(ctx context.Context, request GetExamQuestion
 	), nil
 }
 
-// (POST /v1/exams/{examId}/questions/{questionIndex}/grade)
+// (POST /v1/exams/{examId}/questions/{questionIndex}/grade).
 func (h HttpServer) GradeExamQuestion(ctx context.Context, request GradeExamQuestionRequestObject) (GradeExamQuestionResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.inbound.http.gradeexamquestion")
 	defer span.End()

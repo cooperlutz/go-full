@@ -12,8 +12,10 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 	"github.com/cooperlutz/go-full/internal/examination"
 	"github.com/cooperlutz/go-full/internal/examlibrary"
+	"github.com/cooperlutz/go-full/internal/grading"
 	"github.com/cooperlutz/go-full/internal/iam"
 	"github.com/cooperlutz/go-full/internal/pingpong"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
 )
@@ -51,7 +53,10 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
-	// Public Router
+	pubSub, err := eeventdriven.NewPubSub(conn)
+	if err != nil {
+		os.Exit(1)
+	}
 
 	/* -----------------------------------------------------------------------------------
 	Modular Service Initializations:
@@ -78,6 +83,7 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	// Examination
 	examinationModule, err := examination.NewModule(
 		conn,
+		pubSub,
 		examLibraryModule.UseCase,
 	)
 	if err != nil {
@@ -93,6 +99,16 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 			RefreshTokenTTL: a.conf.Security.RefreshTokenTTL,
 		},
 	)
+
+	// Grading
+	gradingModule, err := grading.NewModule(
+		conn,
+		pubSub,
+		examLibraryModule.UseCase,
+	)
+	if err != nil {
+		os.Exit(1)
+	}
 
 	/* -----------------------------------------------------------------------------------
 	Protected REST API Controller Initialization:
@@ -122,6 +138,10 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	protectedRestApiRouter.Mount(
 		"/iam",
 		iamModule.UserRestApi,
+	)
+	protectedRestApiRouter.Mount(
+		"/grading",
+		gradingModule.RestApi,
 	)
 
 	/* -----------------------------------------------------------------------------------
@@ -169,7 +189,7 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	go func() {
 		defer wg.Done()
 
-		examinationModule.SubscriberInterface.Start()
+		pubSub.Run()
 	}()
 
 	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)
