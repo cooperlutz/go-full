@@ -151,8 +151,37 @@ func (h HttpServer) SubmitExam(ctx context.Context, request SubmitExamRequestObj
 		return nil, err
 	}
 
-	err = h.app.Events.ExamSubmitted.Handle(ctx, event.ExamSubmitted{
+	exam, err := h.app.Queries.FindExam.Handle(ctx, query.FindExam{
 		ExamID: request.ExamId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	err = h.app.Events.ExamSubmitted.Handle(ctx, event.ExamSubmitted{
+		ExamId:            exam.ExamId,
+		LibraryExamId:     exam.LibraryExamId,
+		StudentId:         exam.StudentId,
+		Completed:         exam.Completed,
+		AnsweredQuestions: exam.AnsweredQuestions,
+		TotalQuestions:    exam.TotalQuestions,
+		Questions: func() []event.ExamSubmittedQuestion {
+			var questions []event.ExamSubmittedQuestion
+			for _, q := range exam.Questions {
+				questions = append(questions, event.ExamSubmittedQuestion{
+					ExamId:          q.ExamId,
+					Answered:        q.Answered,
+					QuestionID:      q.QuestionID,
+					QuestionIndex:   q.QuestionIndex,
+					QuestionText:    q.QuestionText,
+					QuestionType:    q.QuestionType,
+					ResponseOptions: q.ResponseOptions,
+					ProvidedAnswer:  q.ProvidedAnswer,
+				})
+			}
+
+			return questions
+		}(),
 	})
 	if err != nil {
 		return nil, err

@@ -1,10 +1,8 @@
-//nolint:dupl // basic publish logic will be duplicative, but we want to be explicit for each event
 package event
 
 import (
 	"context"
 
-	"github.com/cooperlutz/go-full/internal/examination/adapters/outbound"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -15,11 +13,11 @@ type ExamStarted struct {
 }
 
 type ExamStartedHandler struct {
-	publisher outbound.SqlPublisherAdapter
+	publisher eeventdriven.IPubSubEventProcessor
 }
 
 func NewExamStartedHandler(
-	publisher outbound.SqlPublisherAdapter,
+	publisher eeventdriven.IPubSubEventProcessor,
 ) ExamStartedHandler {
 	return ExamStartedHandler{
 		publisher: publisher,
@@ -37,7 +35,7 @@ func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error
 		return err
 	}
 
-	err = h.publisher.Publish("examination.examstarted", msg)
+	err = h.publisher.EmitEventMessage("examination.examstarted", msg)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

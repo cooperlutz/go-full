@@ -15,34 +15,32 @@ import (
 	"github.com/cooperlutz/go-full/internal/examination/adapters/inbound"
 	"github.com/cooperlutz/go-full/internal/examination/app"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
 type ExaminationModule struct {
-	RestApi             http.Handler
-	SubscriberInterface inbound.SqlSubscriberAdapter
+	RestApi http.Handler
 }
 
 // NewModule - Initializes the Examination module with its needed dependencies.
-func NewModule(pgconn *pgxpool.Pool, examLibraryUseCase usecase.IExamLibraryUseCase) (*ExaminationModule, error) {
+func NewModule(
+	pgconn *pgxpool.Pool,
+	pubSub *eeventdriven.BasePgsqlPubSubProcessor,
+	examLibraryUseCase usecase.IExamLibraryUseCase,
+) (*ExaminationModule, error) {
 	application, err := app.NewApplication(
 		pgconn,
+		pubSub,
 		examLibraryUseCase,
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	apiServer := inbound.NewHttpServer(
-		application,
-	)
+	apiServer := inbound.NewHttpServer(application)
 
-	subscriber, err := inbound.NewSqlSubscriberAdapter(pgconn)
-	if err != nil {
-		return nil, err
-	}
-
-	subscriber.RegisterEventHandler(application.Events.NoOp.Handle())
+	inbound.RegisterEventHandler(application.Events, pubSub)
 
 	module := &ExaminationModule{
 		RestApi: inbound.HandlerFromMux(
@@ -51,7 +49,6 @@ func NewModule(pgconn *pgxpool.Pool, examLibraryUseCase usecase.IExamLibraryUseC
 				"examination",
 			),
 		),
-		SubscriberInterface: subscriber,
 	}
 
 	return module, nil
