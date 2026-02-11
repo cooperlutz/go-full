@@ -35,24 +35,6 @@ export interface Exam {
   examId: string;
   /**
    *
-   * @type {string}
-   * @memberof Exam
-   */
-  studentId: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Exam
-   */
-  libraryExamId: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Exam
-   */
-  examinationExamId: string;
-  /**
-   *
    * @type {number}
    * @memberof Exam
    */
@@ -82,14 +64,6 @@ export interface Exam {
  */
 export function instanceOfExam(value: object): value is Exam {
   if (!("examId" in value) || value["examId"] === undefined) return false;
-  if (!("studentId" in value) || value["studentId"] === undefined) return false;
-  if (!("libraryExamId" in value) || value["libraryExamId"] === undefined)
-    return false;
-  if (
-    !("examinationExamId" in value) ||
-    value["examinationExamId"] === undefined
-  )
-    return false;
   if (
     !("totalPointsPossible" in value) ||
     value["totalPointsPossible"] === undefined
@@ -114,9 +88,6 @@ export function ExamFromJSONTyped(
   }
   return {
     examId: json["examId"],
-    studentId: json["studentId"],
-    libraryExamId: json["libraryExamId"],
-    examinationExamId: json["examinationExamId"],
     totalPointsPossible: json["totalPointsPossible"],
     totalPointsEarned:
       json["totalPointsEarned"] == null ? undefined : json["totalPointsEarned"],
@@ -139,9 +110,6 @@ export function ExamToJSONTyped(
 
   return {
     examId: value["examId"],
-    studentId: value["studentId"],
-    libraryExamId: value["libraryExamId"],
-    examinationExamId: value["examinationExamId"],
     totalPointsPossible: value["totalPointsPossible"],
     totalPointsEarned: value["totalPointsEarned"],
     gradingCompleted: value["gradingCompleted"],
