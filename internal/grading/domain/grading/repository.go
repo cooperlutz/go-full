@@ -15,8 +15,8 @@ type Repository interface {
 
 	UpdateExam(
 		ctx context.Context,
-		exam *Exam,
-		updateFn func(h *Exam) (*Exam, error),
+		examId uuid.UUID,
+		updateFn func(e *Exam) (*Exam, error),
 	) error
 }
 

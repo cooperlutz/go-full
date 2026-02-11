@@ -3,8 +3,6 @@ package outbound
 import (
 	"github.com/google/uuid"
 
-	// "github.com/cooperlutz/go-full/internal/examination/app/query"
-
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )

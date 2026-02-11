@@ -31,22 +31,10 @@ func (h GradeQuestionHandler) Handle(ctx context.Context, cmd GradeQuestion) err
 	ctx, span := telemetree.AddSpan(ctx, "grading.app.command.gradequestion.handle")
 	defer span.End()
 
-	exam, err := h.gradingRepo.GetExam(ctx, uuid.MustParse(cmd.ExamId))
-	if err != nil {
-		telemetree.RecordError(ctx, err)
+	return h.gradingRepo.UpdateExam(ctx, uuid.MustParse(cmd.ExamId), func(e *grading.Exam) (*grading.Exam, error) {
+		question := e.GetQuestionByIndex(cmd.QuestionIndex)
 
-		return err
-	}
-
-	err = h.gradingRepo.UpdateExam(ctx, exam, func(h *grading.Exam) (*grading.Exam, error) {
-		question := exam.GetQuestionByIndex(cmd.QuestionIndex)
-		if err != nil {
-			telemetree.RecordError(ctx, err)
-
-			return nil, err
-		}
-
-		err = question.GradeQuestion(grading.GradeQuestionOption{
+		err := question.GradeQuestion(grading.GradeQuestionOption{
 			Feedback: cmd.Feedback,
 			Points:   cmd.Points,
 		})
@@ -56,13 +44,6 @@ func (h GradeQuestionHandler) Handle(ctx context.Context, cmd GradeQuestion) err
 			return nil, err
 		}
 
-		return h, nil
+		return e, nil
 	})
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	return nil
 }
