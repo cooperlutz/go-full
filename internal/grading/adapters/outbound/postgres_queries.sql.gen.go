@@ -316,20 +316,22 @@ func (q *Queries) GetQuestion(ctx context.Context, arg GetQuestionParams) (Gradi
 
 const updateExam = `-- name: UpdateExam :exec
 UPDATE grading.exams SET
-    updated_at = $2,
-    deleted_at = $3,
-    deleted = $4,
-    student_id = $5,
-    library_exam_id = $6,
-    examination_exam_id = $7,
-    grading_completed = $8,
-    total_points_received = $9,
-    total_points_possible = $10
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5,
+    student_id = $6,
+    library_exam_id = $7,
+    examination_exam_id = $8,
+    grading_completed = $9,
+    total_points_received = $10,
+    total_points_possible = $11
 WHERE exam_id = $1
 `
 
 type UpdateExamParams struct {
 	ExamID              pgtype.UUID        `db:"exam_id" json:"exam_id"`
+	CreatedAt           pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	UpdatedAt           pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	DeletedAt           pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
 	Deleted             bool               `db:"deleted" json:"deleted"`
@@ -344,19 +346,21 @@ type UpdateExamParams struct {
 // UpdateExam
 //
 //	UPDATE grading.exams SET
-//	    updated_at = $2,
-//	    deleted_at = $3,
-//	    deleted = $4,
-//	    student_id = $5,
-//	    library_exam_id = $6,
-//	    examination_exam_id = $7,
-//	    grading_completed = $8,
-//	    total_points_received = $9,
-//	    total_points_possible = $10
+//	    created_at = $2,
+//	    updated_at = $3,
+//	    deleted_at = $4,
+//	    deleted = $5,
+//	    student_id = $6,
+//	    library_exam_id = $7,
+//	    examination_exam_id = $8,
+//	    grading_completed = $9,
+//	    total_points_received = $10,
+//	    total_points_possible = $11
 //	WHERE exam_id = $1
 func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) error {
 	_, err := q.db.Exec(ctx, updateExam,
 		arg.ExamID,
+		arg.CreatedAt,
 		arg.UpdatedAt,
 		arg.DeletedAt,
 		arg.Deleted,
@@ -372,24 +376,26 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) error {
 
 const updateQuestion = `-- name: UpdateQuestion :exec
 UPDATE grading.questions SET
-    updated_at = $2,
-    deleted_at = $3,
-    deleted = $4,
-    exam_id = $5,
-    index = $6,
-    question_type = $7,
-    graded = $8,
-    feedback = $9,
-    provided_answer = $10,
-    correct_answer = $11,
-    correctly_answered = $12,
-    points_received = $13,
-    points_possible = $14
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5,
+    exam_id = $6,
+    index = $7,
+    question_type = $8,
+    graded = $9,
+    feedback = $10,
+    provided_answer = $11,
+    correct_answer = $12,
+    correctly_answered = $13,
+    points_received = $14,
+    points_possible = $15
 WHERE question_id = $1
 `
 
 type UpdateQuestionParams struct {
 	QuestionID        pgtype.UUID        `db:"question_id" json:"question_id"`
+	CreatedAt         pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	UpdatedAt         pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	DeletedAt         pgtype.Timestamptz `db:"deleted_at" json:"deleted_at"`
 	Deleted           bool               `db:"deleted" json:"deleted"`
@@ -408,23 +414,25 @@ type UpdateQuestionParams struct {
 // UpdateQuestion
 //
 //	UPDATE grading.questions SET
-//	    updated_at = $2,
-//	    deleted_at = $3,
-//	    deleted = $4,
-//	    exam_id = $5,
-//	    index = $6,
-//	    question_type = $7,
-//	    graded = $8,
-//	    feedback = $9,
-//	    provided_answer = $10,
-//	    correct_answer = $11,
-//	    correctly_answered = $12,
-//	    points_received = $13,
-//	    points_possible = $14
+//	    created_at = $2,
+//	    updated_at = $3,
+//	    deleted_at = $4,
+//	    deleted = $5,
+//	    exam_id = $6,
+//	    index = $7,
+//	    question_type = $8,
+//	    graded = $9,
+//	    feedback = $10,
+//	    provided_answer = $11,
+//	    correct_answer = $12,
+//	    correctly_answered = $13,
+//	    points_received = $14,
+//	    points_possible = $15
 //	WHERE question_id = $1
 func (q *Queries) UpdateQuestion(ctx context.Context, arg UpdateQuestionParams) error {
 	_, err := q.db.Exec(ctx, updateQuestion,
 		arg.QuestionID,
+		arg.CreatedAt,
 		arg.UpdatedAt,
 		arg.DeletedAt,
 		arg.Deleted,

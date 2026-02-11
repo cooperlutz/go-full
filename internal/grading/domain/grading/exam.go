@@ -83,6 +83,14 @@ func (e *Exam) CalculateTotalPointsReceived() {
 	e.MarkUpdated()
 }
 
+func (e Exam) GetTotalPointsReceived() *int32 {
+	return e.totalPointsReceived
+}
+
+func (e Exam) GetTotalPointsPossible() int32 {
+	return e.totalPossiblePoints
+}
+
 func (e Exam) GetMultiplChoiceQuestions() []*Question {
 	var questions []*Question
 
@@ -183,6 +191,30 @@ func (q Question) GetQuestionType() QuestionType {
 
 func (q Question) GetPointsReceived() *int32 {
 	return q.pointsReceived
+}
+
+func (q Question) GetPointsPossible() int32 {
+	return q.pointsPossible
+}
+
+func (q Question) IsGraded() bool {
+	return q.graded
+}
+
+func (q Question) GetFeedback() *string {
+	return q.feedback
+}
+
+func (q Question) GetProvidedAnswer() string {
+	return q.providedAnswer
+}
+
+func (q Question) GetCorrectAnswer() *string {
+	return q.correctAnswer
+}
+
+func (q Question) IsCorrectlyAnswered() *bool {
+	return q.correctlyAnswered
 }
 
 func (q *Question) markAsGraded() {

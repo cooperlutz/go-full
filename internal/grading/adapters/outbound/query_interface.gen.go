@@ -90,33 +90,35 @@ type Querier interface {
 	//UpdateExam
 	//
 	//  UPDATE grading.exams SET
-	//      updated_at = $2,
-	//      deleted_at = $3,
-	//      deleted = $4,
-	//      student_id = $5,
-	//      library_exam_id = $6,
-	//      examination_exam_id = $7,
-	//      grading_completed = $8,
-	//      total_points_received = $9,
-	//      total_points_possible = $10
+	//      created_at = $2,
+	//      updated_at = $3,
+	//      deleted_at = $4,
+	//      deleted = $5,
+	//      student_id = $6,
+	//      library_exam_id = $7,
+	//      examination_exam_id = $8,
+	//      grading_completed = $9,
+	//      total_points_received = $10,
+	//      total_points_possible = $11
 	//  WHERE exam_id = $1
 	UpdateExam(ctx context.Context, arg UpdateExamParams) error
 	//UpdateQuestion
 	//
 	//  UPDATE grading.questions SET
-	//      updated_at = $2,
-	//      deleted_at = $3,
-	//      deleted = $4,
-	//      exam_id = $5,
-	//      index = $6,
-	//      question_type = $7,
-	//      graded = $8,
-	//      feedback = $9,
-	//      provided_answer = $10,
-	//      correct_answer = $11,
-	//      correctly_answered = $12,
-	//      points_received = $13,
-	//      points_possible = $14
+	//      created_at = $2,
+	//      updated_at = $3,
+	//      deleted_at = $4,
+	//      deleted = $5,
+	//      exam_id = $6,
+	//      index = $7,
+	//      question_type = $8,
+	//      graded = $9,
+	//      feedback = $10,
+	//      provided_answer = $11,
+	//      correct_answer = $12,
+	//      correctly_answered = $13,
+	//      points_received = $14,
+	//      points_possible = $15
 	//  WHERE question_id = $1
 	UpdateQuestion(ctx context.Context, arg UpdateQuestionParams) error
 }
