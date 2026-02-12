@@ -86,6 +86,22 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getUngradedExamsRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Array<Exam>>>;
+
+  /**
+   */
+  getUngradedExams(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Array<Exam>>;
+
+  /**
+   *
    * @param {string} examId
    * @param {number} questionIndex
    * @param {GradeQuestion} gradeQuestion
@@ -222,6 +238,41 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
   /**
    */
+  async getUngradedExamsRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<Array<Exam>>> {
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/v1/exams/ungraded`;
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "GET",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      jsonValue.map(ExamFromJSON),
+    );
+  }
+
+  /**
+   */
+  async getUngradedExams(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<Array<Exam>> {
+    const response = await this.getUngradedExamsRaw(initOverrides);
+    return await response.value();
+  }
+
+  /**
+   */
   async gradeExamQuestionRaw(
     requestParameters: GradeExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
@@ -266,7 +317,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: "PATCH",
         headers: headerParameters,
         query: queryParameters,
         body: GradeQuestionToJSON(requestParameters["gradeQuestion"]),
