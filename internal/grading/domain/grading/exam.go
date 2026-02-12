@@ -123,7 +123,7 @@ func (e ErrMultipleChoiceGradingFailed) Error() string {
 
 func (e *Exam) GradeMultipleChoiceQuestions() error {
 	for _, q := range e.GetMultiplChoiceQuestions() {
-		err := q.GradeQuestion(GradeQuestionOption{})
+		err := q.gradeQuestion(GradeQuestionOption{})
 		if err != nil {
 			return ErrMultipleChoiceGradingFailed{}
 		}

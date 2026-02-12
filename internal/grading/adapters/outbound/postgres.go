@@ -200,8 +200,18 @@ func (p PostgresAdapter) FindIncompleteExams(ctx context.Context) ([]query.Exam,
 	}
 
 	var exams []query.Exam
+
 	for _, e := range examsFromDb {
-		exams = append(exams, e.toQuery())
+		questionsFromDb, err := p.postgres.GetQuestionsForExam(ctx, GetQuestionsForExamParams{
+			ExamID: e.ExamID,
+		})
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return nil, err
+		}
+
+		exams = append(exams, e.toQuery(questionsFromDb...))
 	}
 
 	return exams, nil

@@ -6,7 +6,21 @@ type GradeQuestionOption struct {
 	Points   int32
 }
 
-func (q *Question) GradeQuestion(options GradeQuestionOption) error {
+func (e *Exam) GradeQuestion(index int32, options GradeQuestionOption) error {
+	question := e.GetQuestionByIndex(index)
+
+	err := question.gradeQuestion(options)
+	if err != nil {
+		return err
+	}
+
+	e.MarkUpdated()
+	_ = e.checkIfGradingCompletedAndFinalize()
+
+	return nil
+}
+
+func (q *Question) gradeQuestion(options GradeQuestionOption) error {
 	switch q.questionType {
 	case QuestionMultipleChoice:
 		gradeMultipleChoiceQuestion(q)

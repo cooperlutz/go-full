@@ -61,19 +61,27 @@ type GradeExamQuestionJSONRequestBody = GradeQuestion
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
+	// (GET /v1/exams/ungraded)
+	GetUngradedExams(w http.ResponseWriter, r *http.Request)
+
 	// (GET /v1/exams/{examId})
 	GetExam(w http.ResponseWriter, r *http.Request, examId string)
 
 	// (GET /v1/exams/{examId}/questions/{questionIndex})
 	GetExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
 
-	// (POST /v1/exams/{examId}/questions/{questionIndex}/grade)
+	// (PATCH /v1/exams/{examId}/questions/{questionIndex}/grade)
 	GradeExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
 
 type Unimplemented struct{}
+
+// (GET /v1/exams/ungraded)
+func (_ Unimplemented) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
 
 // (GET /v1/exams/{examId})
 func (_ Unimplemented) GetExam(w http.ResponseWriter, r *http.Request, examId string) {
@@ -85,7 +93,7 @@ func (_ Unimplemented) GetExamQuestion(w http.ResponseWriter, r *http.Request, e
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
-// (POST /v1/exams/{examId}/questions/{questionIndex}/grade)
+// (PATCH /v1/exams/{examId}/questions/{questionIndex}/grade)
 func (_ Unimplemented) GradeExamQuestion(w http.ResponseWriter, r *http.Request, examId string, questionIndex int32) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
@@ -98,6 +106,20 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// GetUngradedExams operation middleware
+func (siw *ServerInterfaceWrapper) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetUngradedExams(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // GetExam operation middleware
 func (siw *ServerInterfaceWrapper) GetExam(w http.ResponseWriter, r *http.Request) {
@@ -306,16 +328,47 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/v1/exams/ungraded", wrapper.GetUngradedExams)
+	})
+	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/v1/exams/{examId}", wrapper.GetExam)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/v1/exams/{examId}/questions/{questionIndex}", wrapper.GetExamQuestion)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/exams/{examId}/questions/{questionIndex}/grade", wrapper.GradeExamQuestion)
+		r.Patch(options.BaseURL+"/v1/exams/{examId}/questions/{questionIndex}/grade", wrapper.GradeExamQuestion)
 	})
 
 	return r
+}
+
+type GetUngradedExamsRequestObject struct {
+}
+
+type GetUngradedExamsResponseObject interface {
+	VisitGetUngradedExamsResponse(w http.ResponseWriter) error
+}
+
+type GetUngradedExams200JSONResponse []Exam
+
+func (response GetUngradedExams200JSONResponse) VisitGetUngradedExamsResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+
+	return json.NewEncoder(w).Encode(response)
+}
+
+type GetUngradedExamsdefaultJSONResponse struct {
+	Body       Error
+	StatusCode int
+}
+
+func (response GetUngradedExamsdefaultJSONResponse) VisitGetUngradedExamsResponse(w http.ResponseWriter) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(response.StatusCode)
+
+	return json.NewEncoder(w).Encode(response.Body)
 }
 
 type GetExamRequestObject struct {
@@ -411,13 +464,16 @@ func (response GradeExamQuestiondefaultJSONResponse) VisitGradeExamQuestionRespo
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (GET /v1/exams/ungraded)
+	GetUngradedExams(ctx context.Context, request GetUngradedExamsRequestObject) (GetUngradedExamsResponseObject, error)
+
 	// (GET /v1/exams/{examId})
 	GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error)
 
 	// (GET /v1/exams/{examId}/questions/{questionIndex})
 	GetExamQuestion(ctx context.Context, request GetExamQuestionRequestObject) (GetExamQuestionResponseObject, error)
 
-	// (POST /v1/exams/{examId}/questions/{questionIndex}/grade)
+	// (PATCH /v1/exams/{examId}/questions/{questionIndex}/grade)
 	GradeExamQuestion(ctx context.Context, request GradeExamQuestionRequestObject) (GradeExamQuestionResponseObject, error)
 }
 
@@ -448,6 +504,30 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// GetUngradedExams operation middleware
+func (sh *strictHandler) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
+	var request GetUngradedExamsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetUngradedExams(ctx, request.(GetUngradedExamsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetUngradedExams")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetUngradedExamsResponseObject); ok {
+		if err := validResponse.VisitGetUngradedExamsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // GetExam operation middleware
@@ -540,18 +620,18 @@ func (sh *strictHandler) GradeExamQuestion(w http.ResponseWriter, r *http.Reques
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9xVTW/bMAz9KwG3o1Cn7S23biiK3jpgt6IHxWIcdbakUnSWIvB/HyjHdtI4/RjaYejJ",
-	"skWRj4/PTxvIfRW8Q8cRZhuI+RIrnZaXRJ5kEcgHJLaYPufeoDwXnirNMAPr+PwMFPBjwPYVCyRoFFQY",
-	"oy5S9HYzMllXQNP04X5+jzlL9OVaV4flcK2razOSQkFB2lhXfPdVKJFxN2jufYnaSdRDjZGtdymbZazS",
-	"4ivhAmbwJRvaz7a9Zz+2J2BAqYn0Y3r3rMsbbx3HS02uLfoKKnbO3fgY7bx8HYmNAsKH2pJUuu3YGOl9",
-	"vMRu+3cjnF+RNtj3e0D+AtHMdf5rlP6QSv1NF9uTasg/hu04rGc08SxiIe2YTMLbZxrePk4lnaysQXPh",
-	"4m+kUZjdyI602G87g+tXVu3O/Ew7Y7/j7nx2AKhBcvt1n+TsyT2cpGS3buFTXcvCVNKddcXk4uYaFKyQ",
-	"Yho0nJ5MT6YC2Ad0OliYwXn6pCBoXqbpZ6vTTEDFbNNia+RrgSwPkYnuyIMr5OQqcpp0hYwUYXa7ASvF",
-	"JCMocLoSSH2fAxNMNaqtJY6xdifBMXgXW12eTaetQzpGl+DoEEqbJ0DZfWy1POR7zoQS7sSdwZiTDe2v",
-	"kFxyYpC1LeOEkMniCs0k1nmOMS7qskw+ZXCh65LfD066DEbw1A7XAXNGM8EuplEjQ8p6J8o2e1J6cXy9",
-	"EXzQGNVooqdyP57vZfv7SKEMt9URsXSNfBK1ZMlo0qXg45hoZPsTySYl/ObN47tNZ//Sb/bdX1A2B3I9",
-	"/Te+1ku1vUz+M502CiLSqlNRTSXMYMkc4izLNksfWTTQZHJvKVhpsnpetgx2m7Lum4DS57qULUl/1/wJ",
-	"AAD//5CdR++MCwAA",
+	"H4sIAAAAAAAC/9xWTW/bOBD9K8bsHonISW6+ZRdBkFsKtKcgB1oay0wlkhmOXAeG/nsxlPXhWHactina",
+	"nEyLw5k37z0NtYHUld5ZtBxgtoGQLrHUcXlN5EgWnpxHYoPxceoylN+Fo1IzzMBYvrwABfzssfmLORLU",
+	"CkoMQecxersZmIzNoa67cDd/xJQl+nqty/1yuNblbTaSQkFOOjM2/9+VvkDGYdDcuQK1lainCgMbZ2M2",
+	"w1jGxb+EC5jBP0nffrLtPfm0PQE9Sk2kn+N/x7q4c8ZyuNZkm6InUDE4d+dCMPPiNBJrBYRPlSGpdN+y",
+	"MdL7eIlh+w8jnN+QzrDrd4/8BWI21+nXUfp9LPUjXWxPqj7/GLbDsI544ihiIe2QTfzbNfVvl1NJJyuT",
+	"YXZlwzekUZitZAda7LZthusTq7ZnPsedsddxqM8AgOott1v3Rc6O3H0lJbuxCxfrGhamou+MzSdXd7eg",
+	"YIUUotBwfjY9mwpg59Fqb2AGl/GRAq95GdVPVueJgApJZXtFc2T5EZvoljy4Qf6yjZHpIpYjDN7Z0Bjp",
+	"YjptRppltPG89r4wacyQPIbGfM1cOHl8xDm2NzqEhQxDSsY3poYW2SQ2MyFkMrjCbBKqNMUQFlVRxJmT",
+	"4UJXBb8J6VGAcbCPIKosrj2mLJjamFoNCN80ZqiPER7bF7lIl8hIAWb3GzCSXyQEBVaXQkxnrN56TBWq",
+	"QRcvbfrwk/q9Lts+KfJ8kiFrU/xdIiXd6E82O+/uq/J1k/edZFSjiV7Ol8P5Xr9v3tMo/efBAbO0jXwQ",
+	"tyRxTMVbWHO6HHGN7H8g38SE/7ns+ZfJs/uZVe/et4Ky3vPr+e8ZbJ1Xt3fRn2XUWkFAWrUuqqiAGSyZ",
+	"fZglyWbpAosH6kS+FBSsNBk9LxoG201Zd01A4VJdyJakf6i/BwAA//8/mYFB/gwAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

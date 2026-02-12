@@ -81,7 +81,7 @@ func TestExam(t *testing.T) {
 	assert.Len(t, ungradedQuestions, 2)
 
 	thirdQuestion := ungradedQuestions[0]
-	err = thirdQuestion.GradeQuestion(GradeQuestionOption{
+	err = thirdQuestion.gradeQuestion(GradeQuestionOption{
 		Feedback: "Good job",
 		Points:   8,
 	})
@@ -91,7 +91,7 @@ func TestExam(t *testing.T) {
 
 	// an error should be returned if points received exceed possible points
 	fourthQuestion := ungradedQuestions[1]
-	err = fourthQuestion.GradeQuestion(GradeQuestionOption{
+	err = fourthQuestion.gradeQuestion(GradeQuestionOption{
 		Feedback: "Needs improvement",
 		Points:   16,
 	})
@@ -100,18 +100,18 @@ func TestExam(t *testing.T) {
 
 	// grading should not be finalized until all questions are graded
 	// given that the third question is still ungraded, grading should not be finalized
-	assert.False(t, exam.CheckIfGradingCompletedAndFinalize())
+	assert.False(t, exam.checkIfGradingCompletedAndFinalize())
 
 	fourthQuestion = exam.GetQuestionByIndex(4)
-	err = fourthQuestion.GradeQuestion(
+	err = fourthQuestion.gradeQuestion(
 		GradeQuestionOption{
 			Feedback: "this was horrible",
 			Points:   1,
 		},
 	)
 	assert.Equal(t, int32(1), *fourthQuestion.GetPointsReceived())
-	assert.True(t, exam.CheckIfGradingCompletedAndFinalize())
-	assert.True(t, exam.CheckIfGradingCompletedAndFinalize())
+	assert.True(t, exam.checkIfGradingCompletedAndFinalize())
+	assert.True(t, exam.checkIfGradingCompletedAndFinalize())
 	assert.True(t, exam.IsCompleted())
 	assert.Equal(t, int32(14), *exam.totalPointsReceived)
 	grade, err = exam.GetGrade()

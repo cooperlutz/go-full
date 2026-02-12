@@ -126,6 +126,9 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+	// GetUngradedExams request
+	GetUngradedExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetExam request
 	GetExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -136,6 +139,18 @@ type ClientInterface interface {
 	GradeExamQuestionWithBody(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	GradeExamQuestion(ctx context.Context, examId string, questionIndex int32, body GradeExamQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+func (c *Client) GetUngradedExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUngradedExamsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 func (c *Client) GetExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -184,6 +199,33 @@ func (c *Client) GradeExamQuestion(ctx context.Context, examId string, questionI
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewGetUngradedExamsRequest generates requests for GetUngradedExams
+func NewGetUngradedExamsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/exams/ungraded")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewGetExamRequest generates requests for GetExam
@@ -305,7 +347,7 @@ func NewGradeExamQuestionRequestWithBody(server string, examId string, questionI
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", queryURL.String(), body)
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -358,6 +400,9 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+	// GetUngradedExamsWithResponse request
+	GetUngradedExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUngradedExamsResponse, error)
+
 	// GetExamWithResponse request
 	GetExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamResponse, error)
 
@@ -368,6 +413,29 @@ type ClientWithResponsesInterface interface {
 	GradeExamQuestionWithBodyWithResponse(ctx context.Context, examId string, questionIndex int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*GradeExamQuestionResponse, error)
 
 	GradeExamQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, body GradeExamQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*GradeExamQuestionResponse, error)
+}
+
+type GetUngradedExamsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]Exam
+	JSONDefault  *Error
+}
+
+// Status returns HTTPResponse.Status
+func (r GetUngradedExamsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetUngradedExamsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
 }
 
 type GetExamResponse struct {
@@ -439,6 +507,15 @@ func (r GradeExamQuestionResponse) StatusCode() int {
 	return 0
 }
 
+// GetUngradedExamsWithResponse request returning *GetUngradedExamsResponse
+func (c *ClientWithResponses) GetUngradedExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUngradedExamsResponse, error) {
+	rsp, err := c.GetUngradedExams(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetUngradedExamsResponse(rsp)
+}
+
 // GetExamWithResponse request returning *GetExamResponse
 func (c *ClientWithResponses) GetExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamResponse, error) {
 	rsp, err := c.GetExam(ctx, examId, reqEditors...)
@@ -472,6 +549,39 @@ func (c *ClientWithResponses) GradeExamQuestionWithResponse(ctx context.Context,
 		return nil, err
 	}
 	return ParseGradeExamQuestionResponse(rsp)
+}
+
+// ParseGetUngradedExamsResponse parses an HTTP response from a GetUngradedExamsWithResponse call
+func ParseGetUngradedExamsResponse(rsp *http.Response) (*GetUngradedExamsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetUngradedExamsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Exam
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && true:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSONDefault = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseGetExamResponse parses an HTTP response from a GetExamWithResponse call

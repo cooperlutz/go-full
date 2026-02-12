@@ -9,7 +9,7 @@ servers:
         default: localhost
 paths:
   /v1/exams/{examId}/questions/{questionIndex}/grade:
-    post:
+    patch:
       operationId: gradeExamQuestion
       parameters:
         - name: examId
@@ -59,6 +59,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/exams/ungraded:
+    get:
+      operationId: getUngradedExams
+      responses:
+        '200':
+          description: Ungraded exams retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exam'
         default:
           description: unexpected error
           content:

@@ -58,7 +58,7 @@ func (h HttpServer) GetExamQuestion(ctx context.Context, request GetExamQuestion
 	), nil
 }
 
-// (POST /v1/exams/{examId}/questions/{questionIndex}/grade).
+// (PATCH /v1/exams/{examId}/questions/{questionIndex}/grade).
 func (h HttpServer) GradeExamQuestion(ctx context.Context, request GradeExamQuestionRequestObject) (GradeExamQuestionResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.inbound.http.gradeexamquestion")
 	defer span.End()
@@ -77,6 +77,24 @@ func (h HttpServer) GradeExamQuestion(ctx context.Context, request GradeExamQues
 	}
 
 	return GradeExamQuestion201JSONResponse{}, nil
+}
+
+// (GET /v1/exams/ungraded).
+func (h HttpServer) GetUngradedExams(ctx context.Context, request GetUngradedExamsRequestObject) (GetUngradedExamsResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.inbound.http.getungradedexams")
+	defer span.End()
+
+	exams, err := h.app.Queries.IncompleteExams.Handle(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var httpExams []Exam
+	for _, exam := range exams {
+		httpExams = append(httpExams, queryExamToHttpExam(exam))
+	}
+
+	return GetUngradedExams200JSONResponse(httpExams), nil
 }
 
 func queryExamToHttpExam(exam query.Exam) Exam {
