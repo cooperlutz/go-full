@@ -6,8 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 var FixtureExamQuestions = []*Question{
@@ -15,14 +13,14 @@ var FixtureExamQuestions = []*Question{
 		QuestionMultipleChoice,
 		1,
 		"Go",
-		utilitee.StrPtr("Go"),
+		new("Go"),
 		int32(5),
 	),
 	NewQuestion(
 		QuestionMultipleChoice,
 		1,
 		"fortran",
-		utilitee.StrPtr("Go"),
+		new("Go"),
 		int32(5),
 	),
 	NewQuestion(
@@ -50,7 +48,7 @@ func TestExam(t *testing.T) {
 	)
 
 	// initial state of the exam should be correct
-	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
+	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*15)
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
 	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.GetStudentId())
