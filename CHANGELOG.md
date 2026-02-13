@@ -1,3 +1,9 @@
+## v0.1.48 (2026-02-13)
+
+### Fix
+
+- implementation of grading module (#171)
+
 ## v0.1.47 (2026-02-10)
 
 ### Fix
