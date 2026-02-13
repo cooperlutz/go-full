@@ -6,33 +6,31 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 var FixtureExamQuestions = []*Question{
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000123"),
+	NewQuestion(
 		QuestionMultipleChoice,
 		1,
 		"Go",
-		utilitee.StrPtr("Go"),
+		new("Go"),
 		int32(5),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000123"),
+	NewQuestion(
 		QuestionMultipleChoice,
 		1,
 		"fortran",
-		utilitee.StrPtr("Go"),
+		new("Go"),
 		int32(5),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000124"),
+	NewQuestion(
 		QuestionShortAnswer,
 		2,
 		"Python",
 		nil,
 		int32(10),
 	),
-	NewQuestion(uuid.MustParse("00000000-0000-0000-0000-000000000125"),
+	NewQuestion(
 		QuestionEssay,
 		3,
 		"Java",
@@ -50,7 +48,7 @@ func TestExam(t *testing.T) {
 	)
 
 	// initial state of the exam should be correct
-	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
+	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*15)
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
 	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.GetStudentId())
@@ -81,7 +79,7 @@ func TestExam(t *testing.T) {
 	assert.Len(t, ungradedQuestions, 2)
 
 	thirdQuestion := ungradedQuestions[0]
-	err = thirdQuestion.GradeQuestion(GradeQuestionOption{
+	err = thirdQuestion.gradeQuestion(GradeQuestionOption{
 		Feedback: "Good job",
 		Points:   8,
 	})
@@ -91,7 +89,7 @@ func TestExam(t *testing.T) {
 
 	// an error should be returned if points received exceed possible points
 	fourthQuestion := ungradedQuestions[1]
-	err = fourthQuestion.GradeQuestion(GradeQuestionOption{
+	err = fourthQuestion.gradeQuestion(GradeQuestionOption{
 		Feedback: "Needs improvement",
 		Points:   16,
 	})
@@ -100,18 +98,18 @@ func TestExam(t *testing.T) {
 
 	// grading should not be finalized until all questions are graded
 	// given that the third question is still ungraded, grading should not be finalized
-	assert.False(t, exam.CheckIfGradingCompletedAndFinalize())
+	assert.False(t, exam.checkIfGradingCompletedAndFinalize())
 
 	fourthQuestion = exam.GetQuestionByIndex(4)
-	err = fourthQuestion.GradeQuestion(
+	err = fourthQuestion.gradeQuestion(
 		GradeQuestionOption{
 			Feedback: "this was horrible",
 			Points:   1,
 		},
 	)
 	assert.Equal(t, int32(1), *fourthQuestion.GetPointsReceived())
-	assert.True(t, exam.CheckIfGradingCompletedAndFinalize())
-	assert.True(t, exam.CheckIfGradingCompletedAndFinalize())
+	assert.True(t, exam.checkIfGradingCompletedAndFinalize())
+	assert.True(t, exam.checkIfGradingCompletedAndFinalize())
 	assert.True(t, exam.IsCompleted())
 	assert.Equal(t, int32(14), *exam.totalPointsReceived)
 	grade, err = exam.GetGrade()

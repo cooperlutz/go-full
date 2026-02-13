@@ -15,7 +15,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/exception"
 	"github.com/cooperlutz/go-full/pkg/types"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
 
@@ -45,7 +44,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 			"GET a ping, receive a Pong!",
 			v1_server.PingPongRequestObject{
 				JSONBody: &v1_server.PingPongJSONRequestBody{
-					Message: utilitee.StrPtr("ping"),
+					Message: new("ping"),
 				},
 			},
 			v1_server.PingPong200JSONResponse{
@@ -63,7 +62,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 			"GET a pong, receive a Ping!",
 			v1_server.PingPongRequestObject{
 				JSONBody: &v1_server.PingPongJSONRequestBody{
-					Message: utilitee.StrPtr("pong"),
+					Message: new("pong"),
 				},
 			},
 			v1_server.PingPong200JSONResponse{
@@ -81,7 +80,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 			"GET a ring, receive an error",
 			v1_server.PingPongRequestObject{
 				JSONBody: &v1_server.PingPongJSONRequestBody{
-					Message: utilitee.StrPtr("ring"),
+					Message: new("ring"),
 				},
 			},
 			v1_server.PingPong400Response{},
@@ -168,20 +167,20 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 				Body: v1_server.PingPongsRaw{
 					Pingpongs: &[]v1_server.PingPongRaw{
 						{
-							Message:   utilitee.StrPtr("Ping!"),
-							Deleted:   utilitee.BoolPtr(false),
+							Message:   new("Ping!"),
+							Deleted:   new(false),
 							DeletedAt: nil,
 							CreatedAt: &testTime,
 							UpdatedAt: &testTime,
-							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000001"),
+							Id:        new("00000000-0000-0000-0000-000000000001"),
 						},
 						{
-							Message:   utilitee.StrPtr("Pong!"),
-							Deleted:   utilitee.BoolPtr(false),
+							Message:   new("Pong!"),
+							Deleted:   new(false),
 							DeletedAt: nil,
 							CreatedAt: &testTime,
 							UpdatedAt: &testTime,
-							Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000001"),
+							Id:        new("00000000-0000-0000-0000-000000000001"),
 						},
 					},
 				},
@@ -271,12 +270,12 @@ func TestPingPongRestAPIController_GetFindOneByID_Success(t *testing.T) {
 			},
 			expectedResponse: v1_server.GetFindOneByID200JSONResponse{
 				Body: v1_server.PingPongRaw{
-					Message:   utilitee.StrPtr("Ping!"),
-					Deleted:   utilitee.BoolPtr(false),
+					Message:   new("Ping!"),
+					Deleted:   new(false),
 					DeletedAt: nil,
 					CreatedAt: &testTime,
 					UpdatedAt: &testTime,
-					Id:        utilitee.StrPtr("00000000-0000-0000-0000-000000000000"),
+					Id:        new("00000000-0000-0000-0000-000000000000"),
 				},
 				Headers: v1_server.GetFindOneByID200ResponseHeaders{
 					XRequestId: "0000000000000000",
@@ -464,10 +463,10 @@ func TestPingPongRestAPIController_GetPings(t *testing.T) {
 				Body: v1_server.PingPongs{
 					Pingpongs: &[]v1_server.PingPong{
 						{
-							Message: utilitee.StrPtr("Ping!"),
+							Message: new("Ping!"),
 						},
 						{
-							Message: utilitee.StrPtr("Ping!"),
+							Message: new("Ping!"),
 						},
 					},
 				},
@@ -601,10 +600,10 @@ func TestPingPongRestAPIController_GetPongs(t *testing.T) {
 				Body: v1_server.PingPongs{
 					Pingpongs: &[]v1_server.PingPong{
 						{
-							Message: utilitee.StrPtr("Pong!"),
+							Message: new("Pong!"),
 						},
 						{
-							Message: utilitee.StrPtr("Pong!"),
+							Message: new("Pong!"),
 						},
 					},
 				},

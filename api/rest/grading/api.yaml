@@ -1,0 +1,201 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Grading API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /v1/exams/{examId}/questions/{questionIndex}/grade:
+    patch:
+      operationId: gradeExamQuestion
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionIndex
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GradeQuestion'
+      responses:
+        '201':
+          description: Exam question graded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/exams/{examId}:
+    get:
+      operationId: getExam
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Exam details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/exams/ungraded:
+    get:
+      operationId: getUngradedExams
+      responses:
+        '200':
+          description: Ungraded exams retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exam'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/exams/{examId}/questions/{questionIndex}:
+    get:
+      operationId: getExamQuestion
+      parameters:
+        - name: examId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionIndex
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Exam question retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+
+    GradeQuestion:
+      type: object
+      required:
+        - points
+        - feedback
+      properties:
+        points:
+          type: integer
+          format: int32
+        feedback: 
+          type: string
+
+    Exam:
+      type: object
+      required:
+        - examId
+        - gradingCompleted
+        - totalPointsPossible
+        - questions
+      properties:
+        examId:
+          type: string
+        totalPointsPossible:
+          type: integer
+          format: int32
+        totalPointsEarned:
+          type: integer
+          format: int32
+        gradingCompleted:
+          type: boolean
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+
+    Answer:
+      type: object
+      required:
+        - providedAnswer
+      properties:
+        providedAnswer:
+          type: string
+
+    Question:
+      type: object
+      required:
+        - questionId
+        - examId
+        - questionIndex
+        - questionType
+        - graded
+      properties:
+        questionId:
+          type: string
+        examId:
+          type: string
+        questionIndex:
+          type: integer
+          format: int32
+        questionType:
+          type: string
+        graded:
+          type: boolean
+        feedback:
+          type: string
+        providedAnswer:
+          type: string
+        pointsEarned:
+          type: integer
+          format: int32
+        pointsPossible:
+          type: integer
+          format: int32
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

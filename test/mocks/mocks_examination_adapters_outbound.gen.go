@@ -1201,10 +1201,10 @@ func (_c *MockIQuerierExamination_BeginTx_Call) RunAndReturn(run func(ctx contex
 }
 
 // Exec provides a mock function for the type MockIQuerierExamination
-func (_mock *MockIQuerierExamination) Exec(context1 context.Context, s string, ifaceVals ...interface{}) (pgconn.CommandTag, error) {
+func (_mock *MockIQuerierExamination) Exec(context1 context.Context, s string, vs ...any) (pgconn.CommandTag, error) {
 	var tmpRet mock.Arguments
-	if len(ifaceVals) > 0 {
-		tmpRet = _mock.Called(context1, s, ifaceVals)
+	if len(vs) > 0 {
+		tmpRet = _mock.Called(context1, s, vs)
 	} else {
 		tmpRet = _mock.Called(context1, s)
 	}
@@ -1216,16 +1216,16 @@ func (_mock *MockIQuerierExamination) Exec(context1 context.Context, s string, i
 
 	var r0 pgconn.CommandTag
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...interface{}) (pgconn.CommandTag, error)); ok {
-		return returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...any) (pgconn.CommandTag, error)); ok {
+		return returnFunc(context1, s, vs...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...interface{}) pgconn.CommandTag); ok {
-		r0 = returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...any) pgconn.CommandTag); ok {
+		r0 = returnFunc(context1, s, vs...)
 	} else {
 		r0 = ret.Get(0).(pgconn.CommandTag)
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
-		r1 = returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...any) error); ok {
+		r1 = returnFunc(context1, s, vs...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -1240,13 +1240,13 @@ type MockIQuerierExamination_Exec_Call struct {
 // Exec is a helper method to define mock.On call
 //   - context1 context.Context
 //   - s string
-//   - ifaceVals ...interface{}
-func (_e *MockIQuerierExamination_Expecter) Exec(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockIQuerierExamination_Exec_Call {
+//   - vs ...any
+func (_e *MockIQuerierExamination_Expecter) Exec(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_Exec_Call {
 	return &MockIQuerierExamination_Exec_Call{Call: _e.mock.On("Exec",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]interface{}{context1, s}, vs...)...)}
 }
 
-func (_c *MockIQuerierExamination_Exec_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockIQuerierExamination_Exec_Call {
+func (_c *MockIQuerierExamination_Exec_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_Exec_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -1256,10 +1256,10 @@ func (_c *MockIQuerierExamination_Exec_Call) Run(run func(context1 context.Conte
 		if args[1] != nil {
 			arg1 = args[1].(string)
 		}
-		var arg2 []interface{}
-		var variadicArgs []interface{}
+		var arg2 []any
+		var variadicArgs []any
 		if len(args) > 2 {
-			variadicArgs = args[2].([]interface{})
+			variadicArgs = args[2].([]any)
 		}
 		arg2 = variadicArgs
 		run(
@@ -1276,7 +1276,7 @@ func (_c *MockIQuerierExamination_Exec_Call) Return(commandTag pgconn.CommandTag
 	return _c
 }
 
-func (_c *MockIQuerierExamination_Exec_Call) RunAndReturn(run func(context1 context.Context, s string, ifaceVals ...interface{}) (pgconn.CommandTag, error)) *MockIQuerierExamination_Exec_Call {
+func (_c *MockIQuerierExamination_Exec_Call) RunAndReturn(run func(context1 context.Context, s string, vs ...any) (pgconn.CommandTag, error)) *MockIQuerierExamination_Exec_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -1678,10 +1678,10 @@ func (_c *MockIQuerierExamination_GetQuestionsByExam_Call) RunAndReturn(run func
 }
 
 // Query provides a mock function for the type MockIQuerierExamination
-func (_mock *MockIQuerierExamination) Query(context1 context.Context, s string, ifaceVals ...interface{}) (pgx.Rows, error) {
+func (_mock *MockIQuerierExamination) Query(context1 context.Context, s string, vs ...any) (pgx.Rows, error) {
 	var tmpRet mock.Arguments
-	if len(ifaceVals) > 0 {
-		tmpRet = _mock.Called(context1, s, ifaceVals)
+	if len(vs) > 0 {
+		tmpRet = _mock.Called(context1, s, vs)
 	} else {
 		tmpRet = _mock.Called(context1, s)
 	}
@@ -1693,18 +1693,18 @@ func (_mock *MockIQuerierExamination) Query(context1 context.Context, s string, 
 
 	var r0 pgx.Rows
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...interface{}) (pgx.Rows, error)); ok {
-		return returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...any) (pgx.Rows, error)); ok {
+		return returnFunc(context1, s, vs...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...interface{}) pgx.Rows); ok {
-		r0 = returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...any) pgx.Rows); ok {
+		r0 = returnFunc(context1, s, vs...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(pgx.Rows)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
-		r1 = returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...any) error); ok {
+		r1 = returnFunc(context1, s, vs...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -1719,13 +1719,13 @@ type MockIQuerierExamination_Query_Call struct {
 // Query is a helper method to define mock.On call
 //   - context1 context.Context
 //   - s string
-//   - ifaceVals ...interface{}
-func (_e *MockIQuerierExamination_Expecter) Query(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockIQuerierExamination_Query_Call {
+//   - vs ...any
+func (_e *MockIQuerierExamination_Expecter) Query(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_Query_Call {
 	return &MockIQuerierExamination_Query_Call{Call: _e.mock.On("Query",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]interface{}{context1, s}, vs...)...)}
 }
 
-func (_c *MockIQuerierExamination_Query_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockIQuerierExamination_Query_Call {
+func (_c *MockIQuerierExamination_Query_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_Query_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -1735,10 +1735,10 @@ func (_c *MockIQuerierExamination_Query_Call) Run(run func(context1 context.Cont
 		if args[1] != nil {
 			arg1 = args[1].(string)
 		}
-		var arg2 []interface{}
-		var variadicArgs []interface{}
+		var arg2 []any
+		var variadicArgs []any
 		if len(args) > 2 {
-			variadicArgs = args[2].([]interface{})
+			variadicArgs = args[2].([]any)
 		}
 		arg2 = variadicArgs
 		run(
@@ -1755,16 +1755,16 @@ func (_c *MockIQuerierExamination_Query_Call) Return(rows pgx.Rows, err error) *
 	return _c
 }
 
-func (_c *MockIQuerierExamination_Query_Call) RunAndReturn(run func(context1 context.Context, s string, ifaceVals ...interface{}) (pgx.Rows, error)) *MockIQuerierExamination_Query_Call {
+func (_c *MockIQuerierExamination_Query_Call) RunAndReturn(run func(context1 context.Context, s string, vs ...any) (pgx.Rows, error)) *MockIQuerierExamination_Query_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // QueryRow provides a mock function for the type MockIQuerierExamination
-func (_mock *MockIQuerierExamination) QueryRow(context1 context.Context, s string, ifaceVals ...interface{}) pgx.Row {
+func (_mock *MockIQuerierExamination) QueryRow(context1 context.Context, s string, vs ...any) pgx.Row {
 	var tmpRet mock.Arguments
-	if len(ifaceVals) > 0 {
-		tmpRet = _mock.Called(context1, s, ifaceVals)
+	if len(vs) > 0 {
+		tmpRet = _mock.Called(context1, s, vs)
 	} else {
 		tmpRet = _mock.Called(context1, s)
 	}
@@ -1775,8 +1775,8 @@ func (_mock *MockIQuerierExamination) QueryRow(context1 context.Context, s strin
 	}
 
 	var r0 pgx.Row
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...interface{}) pgx.Row); ok {
-		r0 = returnFunc(context1, s, ifaceVals...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...any) pgx.Row); ok {
+		r0 = returnFunc(context1, s, vs...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(pgx.Row)
@@ -1793,13 +1793,13 @@ type MockIQuerierExamination_QueryRow_Call struct {
 // QueryRow is a helper method to define mock.On call
 //   - context1 context.Context
 //   - s string
-//   - ifaceVals ...interface{}
-func (_e *MockIQuerierExamination_Expecter) QueryRow(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockIQuerierExamination_QueryRow_Call {
+//   - vs ...any
+func (_e *MockIQuerierExamination_Expecter) QueryRow(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_QueryRow_Call {
 	return &MockIQuerierExamination_QueryRow_Call{Call: _e.mock.On("QueryRow",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]interface{}{context1, s}, vs...)...)}
 }
 
-func (_c *MockIQuerierExamination_QueryRow_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockIQuerierExamination_QueryRow_Call {
+func (_c *MockIQuerierExamination_QueryRow_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_QueryRow_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -1809,10 +1809,10 @@ func (_c *MockIQuerierExamination_QueryRow_Call) Run(run func(context1 context.C
 		if args[1] != nil {
 			arg1 = args[1].(string)
 		}
-		var arg2 []interface{}
-		var variadicArgs []interface{}
+		var arg2 []any
+		var variadicArgs []any
 		if len(args) > 2 {
-			variadicArgs = args[2].([]interface{})
+			variadicArgs = args[2].([]any)
 		}
 		arg2 = variadicArgs
 		run(
@@ -1829,7 +1829,7 @@ func (_c *MockIQuerierExamination_QueryRow_Call) Return(row pgx.Row) *MockIQueri
 	return _c
 }
 
-func (_c *MockIQuerierExamination_QueryRow_Call) RunAndReturn(run func(context1 context.Context, s string, ifaceVals ...interface{}) pgx.Row) *MockIQuerierExamination_QueryRow_Call {
+func (_c *MockIQuerierExamination_QueryRow_Call) RunAndReturn(run func(context1 context.Context, s string, vs ...any) pgx.Row) *MockIQuerierExamination_QueryRow_Call {
 	_c.Call.Return(run)
 	return _c
 }

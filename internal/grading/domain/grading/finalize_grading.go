@@ -9,7 +9,7 @@ func (e *Exam) finalizeGrading() {
 }
 
 // CheckIfGradingCompletedAndFinalize checks if grading is completed and finalizes grading if it is.
-func (e *Exam) CheckIfGradingCompletedAndFinalize() bool {
+func (e *Exam) checkIfGradingCompletedAndFinalize() bool {
 	if e.IsCompleted() {
 		return true
 	}

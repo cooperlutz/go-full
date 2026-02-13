@@ -9,7 +9,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
@@ -158,8 +157,8 @@ func TestFromApiExamToAppAddExamToLibrary(t *testing.T) {
 		{
 			name: "converts API exam to app AddExamToLibrary command",
 			input: server.Exam{
-				Name:       utilitee.StrPtr("Sample Exam"),
-				GradeLevel: utilitee.IntPtr(5),
+				Name:       new("Sample Exam"),
+				GradeLevel: new(5),
 				Questions:  &fixtures.ValidApiExamQuestions,
 			},
 			expected: command.NewAddExamToLibrary(

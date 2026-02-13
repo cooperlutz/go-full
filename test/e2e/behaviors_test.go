@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 /*
@@ -173,7 +172,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	randomStudentId := uuid.New().String()
 	numberThreeInt32 := int32(3)
 	expect := api_client.Exam{
-		LibraryExamId:     utilitee.StrPtr("11111111-1111-1111-1111-111111111111"),
+		LibraryExamId:     new("11111111-1111-1111-1111-111111111111"),
 		AnsweredQuestions: &numberThreeInt32,
 		TotalQuestions:    &numberThreeInt32,
 		StudentId:         randomStudentId,
@@ -191,7 +190,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 					"Paris",
 					"Rome",
 				},
-				ProvidedAnswer: utilitee.StrPtr("Berlin"),
+				ProvidedAnswer: new("Berlin"),
 			},
 			{
 				QuestionIndex:   2,
@@ -199,7 +198,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 				QuestionText:    "What is Go?",
 				QuestionType:    "short-answer",
 				ResponseOptions: nil,
-				ProvidedAnswer:  utilitee.StrPtr("A programming language developed by Google."),
+				ProvidedAnswer:  new("A programming language developed by Google."),
 			},
 			{
 				QuestionIndex:   3,
@@ -207,7 +206,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 				QuestionText:    "Explain the concept of concurrency.",
 				QuestionType:    "essay",
 				ResponseOptions: nil,
-				ProvidedAnswer:  utilitee.StrPtr("It's about the relationship between space and time."),
+				ProvidedAnswer:  new("It's about the relationship between space and time."),
 			},
 		},
 	}

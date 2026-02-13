@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 func TestNewExamQuestion(t *testing.T) {
@@ -15,7 +14,7 @@ func TestNewExamQuestion(t *testing.T) {
 	questionText := "What is the capital of France?"
 	questionType := "multiple-choice"
 	possiblePoints := 5
-	correctAnswer := utilitee.StrPtr("Paris")
+	correctAnswer := new("Paris")
 	options := &[]string{"Berlin", "Madrid", "Paris", "Rome"}
 
 	// Act

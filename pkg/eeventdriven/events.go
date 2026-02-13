@@ -7,7 +7,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 )
 
-func EventPayloadToMessage(payload interface{}) (*message.Message, error) {
+func EventPayloadToMessage(payload any) (*message.Message, error) {
 	marshaled, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err

@@ -47,7 +47,7 @@ func NewPingPongUseCase(repo repository.IPingPongRepository, events eeventdriven
 }
 
 // emitEvents emits the given domain events using the event processor.
-func (uc *PingPongUseCase) emitEvents(events []interface{}) error {
+func (uc *PingPongUseCase) emitEvents(events []any) error {
 	for _, ev := range events {
 		err := uc.Events.EmitEvent("pingpong", ev)
 		if err != nil {

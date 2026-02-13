@@ -1,6 +1,6 @@
 module github.com/cooperlutz/go-full
 
-go 1.25.7
+go 1.26.0
 
 tool (
 	github.com/daixiang0/gci

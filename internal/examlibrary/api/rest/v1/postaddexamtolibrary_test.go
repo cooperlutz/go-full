@@ -11,7 +11,6 @@ import (
 	v1_server "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 	"github.com/cooperlutz/go-full/test/mocks"
 )
@@ -39,43 +38,43 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			"POST a new exam to the library successfully",
 			v1_server.PostAddExamToLibraryRequestObject{
 				Body: &v1_server.Exam{
-					Name:       utilitee.StrPtr("Sample Exam"),
-					GradeLevel: utilitee.IntPtr(5),
+					Name:       new("Sample Exam"),
+					GradeLevel: new(5),
 					Questions: &[]v1_server.ExamQuestion{
 						{
-							Index:          utilitee.IntPtr(1),
-							QuestionText:   utilitee.StrPtr("What animal is known to bark?"),
+							Index:          new(1),
+							QuestionText:   new("What animal is known to bark?"),
 							QuestionType:   &mcptr,
-							PossiblePoints: utilitee.IntPtr(5),
+							PossiblePoints: new(5),
 							PossibleAnswers: &[]string{
 								"dog",
 								"cat",
 								"bird",
 								"fish",
 							},
-							CorrectAnswer: utilitee.StrPtr("dog"),
+							CorrectAnswer: new("dog"),
 						},
 					},
 				},
 			},
 			v1_server.PostAddExamToLibrary200JSONResponse{
 				Body: v1_server.Exam{
-					Id:         utilitee.StrPtr(fixtures.ValidUUID.String()),
-					Name:       utilitee.StrPtr("Sample Exam"),
-					GradeLevel: utilitee.IntPtr(5),
+					Id:         new(fixtures.ValidUUID.String()),
+					Name:       new("Sample Exam"),
+					GradeLevel: new(5),
 					Questions: &[]v1_server.ExamQuestion{
 						{
-							Index:          utilitee.IntPtr(1),
-							QuestionText:   utilitee.StrPtr("What animal is known to bark?"),
+							Index:          new(1),
+							QuestionText:   new("What animal is known to bark?"),
 							QuestionType:   &mcptr,
-							PossiblePoints: utilitee.IntPtr(5),
+							PossiblePoints: new(5),
 							PossibleAnswers: &[]string{
 								"dog",
 								"cat",
 								"bird",
 								"fish",
 							},
-							CorrectAnswer: utilitee.StrPtr("dog"),
+							CorrectAnswer: new("dog"),
 						},
 					},
 				},
@@ -97,7 +96,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 							"What animal is known to bark?",
 							"multiple-choice",
 							5,
-							utilitee.StrPtr("dog"),
+							new("dog"),
 							&[]string{"dog", "cat", "bird", "fish"},
 						),
 					},
@@ -113,7 +112,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 							"What animal is known to bark?",
 							"multiple-choice",
 							5,
-							utilitee.StrPtr("dog"),
+							new("dog"),
 							&[]string{"dog", "cat", "bird", "fish"},
 						),
 					},
@@ -125,7 +124,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			"POST a new exam to the library with missing name results in error",
 			v1_server.PostAddExamToLibraryRequestObject{
 				Body: &v1_server.Exam{
-					GradeLevel: utilitee.IntPtr(5),
+					GradeLevel: new(5),
 					Questions:  &[]v1_server.ExamQuestion{},
 				},
 			},
@@ -140,21 +139,21 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			"POST a new exam to the library, use case returns invalid question type error",
 			v1_server.PostAddExamToLibraryRequestObject{
 				Body: &v1_server.Exam{
-					Name:       utilitee.StrPtr("Sample Exam"),
-					GradeLevel: utilitee.IntPtr(5),
+					Name:       new("Sample Exam"),
+					GradeLevel: new(5),
 					Questions: &[]v1_server.ExamQuestion{
 						{
-							Index:          utilitee.IntPtr(1),
-							QuestionText:   utilitee.StrPtr("What animal is known to meow?"),
+							Index:          new(1),
+							QuestionText:   new("What animal is known to meow?"),
 							QuestionType:   &mcptr,
-							PossiblePoints: utilitee.IntPtr(5),
+							PossiblePoints: new(5),
 							PossibleAnswers: &[]string{
 								"dog",
 								"cat",
 								"bird",
 								"fish",
 							},
-							CorrectAnswer: utilitee.StrPtr("cat"),
+							CorrectAnswer: new("cat"),
 						},
 					},
 				},
@@ -174,7 +173,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 							"What animal is known to meow?",
 							"multiple-choice",
 							5,
-							utilitee.StrPtr("cat"),
+							new("cat"),
 							&[]string{"dog", "cat", "bird", "fish"},
 						),
 					},

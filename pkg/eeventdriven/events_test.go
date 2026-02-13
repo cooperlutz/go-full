@@ -37,7 +37,7 @@ func TestEventPayloadToMessage_JsonDecodeError(t *testing.T) {
 		Field1 string `json:"field1"`
 		Field2 int    `json:"field2"`
 	}
-	payload := map[string]interface{}{
+	payload := map[string]any{
 		"foo": make(chan int), // Json cannot marshal channels
 	}
 

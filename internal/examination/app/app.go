@@ -7,6 +7,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/examination/app/query"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/pkg/deebee"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 )
 
 type Application struct {
@@ -36,15 +37,10 @@ type Events struct {
 // NewApplication initializes the Examination application with its dependencies.
 func NewApplication(
 	pgconn deebee.IDatabase,
+	pubSub eeventdriven.IPubSubEventProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
 ) (Application, error) {
-	publisher, err := outbound.NewSqlPublisherAdapter(
-		pgconn,
-	)
-	if err != nil {
-		return Application{}, err
-	}
-
+	// publisher := outbound.NewSqlPublisherAdapter(pubSub)
 	examinationRepository := outbound.NewPostgresAdapter(
 		pgconn,
 	)
@@ -83,10 +79,10 @@ func NewApplication(
 		},
 		Events: Events{
 			ExamStarted: event.NewExamStartedHandler(
-				publisher,
+				pubSub,
 			),
 			ExamSubmitted: event.NewExamSubmittedHandler(
-				publisher,
+				pubSub,
 			),
 			NoOp: event.NewNoOpEventHandler(),
 		},

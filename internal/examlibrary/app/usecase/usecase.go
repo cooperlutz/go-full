@@ -31,7 +31,7 @@ func NewExamLibraryUseCase(repo repository.IExamLibraryRepository, events eevent
 }
 
 // emitEvents emits the given domain events using the event processor.
-func (uc *examLibraryUseCase) emitEvents(events []interface{}) error {
+func (uc *examLibraryUseCase) emitEvents(events []any) error {
 	for _, ev := range events {
 		err := uc.Events.EmitEvent("examlibrary", ev)
 		if err != nil {
