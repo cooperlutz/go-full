@@ -13,7 +13,7 @@ import (
 )
 
 type IPubSubEventProcessor interface {
-	EmitEvent(topic string, payload interface{}) error
+	EmitEvent(topic string, payload any) error
 	EmitEventMessage(topic string, payload *message.Message) error
 	Run()
 	RegisterSubscriberHandlers() error
@@ -101,7 +101,7 @@ func (bps *BasePgsqlPubSubProcessor) setSubscriber(subscriber *sql.Subscriber) {
 }
 
 // EmitEvent publishes an event with the given topic and payload.
-func (bps *BasePgsqlPubSubProcessor) EmitEvent(topic string, payload interface{}) error {
+func (bps *BasePgsqlPubSubProcessor) EmitEvent(topic string, payload any) error {
 	msg, err := EventPayloadToMessage(payload)
 	if err != nil {
 		return err

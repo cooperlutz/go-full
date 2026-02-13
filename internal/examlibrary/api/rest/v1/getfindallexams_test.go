@@ -10,7 +10,6 @@ import (
 	v1 "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1"
 	v1_server "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 	"github.com/cooperlutz/go-full/test/mocks"
 )
@@ -37,9 +36,9 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {
 			v1_server.GetFindAllExams200JSONResponse{
 				Body: v1_server.Exams{
 					{
-						Id:         utilitee.StrPtr(fixtures.ValidUUID.String()),
-						Name:       utilitee.StrPtr("Sample Exam"),
-						GradeLevel: utilitee.IntPtr(5),
+						Id:         new(fixtures.ValidUUID.String()),
+						Name:       new("Sample Exam"),
+						GradeLevel: new(5),
 					},
 				},
 				Headers: v1_server.GetFindAllExams200ResponseHeaders{

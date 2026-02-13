@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	examLibrary_api_client_v1 "github.com/cooperlutz/go-full/api/rest/examlibrary/v1/client"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 func TestRestAPIPostExam(t *testing.T) {
@@ -22,11 +21,11 @@ func TestRestAPIPostExam(t *testing.T) {
 		Name:       &examName,
 		Questions: &[]examLibrary_api_client_v1.ExamQuestion{
 			{
-				Index:          utilitee.IntPtr(1),
-				QuestionText:   utilitee.StrPtr("What animal is known to bark?"),
+				Index:          new(1),
+				QuestionText:   new("What animal is known to bark?"),
 				QuestionType:   &mc,
-				PossiblePoints: utilitee.IntPtr(5),
-				CorrectAnswer:  utilitee.StrPtr("dog"),
+				PossiblePoints: new(5),
+				CorrectAnswer:  new("dog"),
 				PossibleAnswers: &[]string{
 					"dog", "cat", "bird", "fish",
 				},

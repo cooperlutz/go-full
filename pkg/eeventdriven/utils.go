@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func structName(v interface{}) string {
+func structName(v any) string {
 	if s, ok := v.(fmt.Stringer); ok {
 		return s.String()
 	}

@@ -19,7 +19,7 @@ func TestRightNow(t *testing.T) {
 func TestStrPtr(t *testing.T) {
 	t.Parallel()
 	s := "hello"
-	ptr := utilitee.StrPtr(s)
+	ptr := new(s)
 	assert.NotNil(t, ptr)
 	assert.Equal(t, &s, ptr)
 }
@@ -27,7 +27,7 @@ func TestStrPtr(t *testing.T) {
 func TestBoolPtr(t *testing.T) {
 	t.Parallel()
 	b := true
-	ptr := utilitee.BoolPtr(b)
+	ptr := new(b)
 	assert.NotNil(t, ptr)
 	assert.Equal(t, &b, ptr)
 }
@@ -35,7 +35,7 @@ func TestBoolPtr(t *testing.T) {
 func TestTimePtr(t *testing.T) {
 	t.Parallel()
 	timeVal := time.Now()
-	ptr := utilitee.TimePtr(timeVal)
+	ptr := new(timeVal)
 	assert.NotNil(t, ptr)
 	assert.Equal(t, &timeVal, ptr)
 }
@@ -70,7 +70,7 @@ func TestSafeIntToInt32(t *testing.T) {
 func TestIntPtr(t *testing.T) {
 	t.Parallel()
 	i := 486
-	ptr := utilitee.IntPtr(i)
+	ptr := new(i)
 	assert.NotNil(t, ptr)
 	assert.Equal(t, &i, ptr)
 }

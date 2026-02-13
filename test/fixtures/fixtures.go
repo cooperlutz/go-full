@@ -8,7 +8,6 @@ import (
 	rest_api_V1 "github.com/cooperlutz/go-full/internal/pingpong/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/pingpong/domain/entity"
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 var (
@@ -41,20 +40,20 @@ var (
 	)
 	RestApiV1PingPongRaw = []rest_api_V1.PingPongRaw{
 		{
-			Message:   utilitee.StrPtr("ping"),
-			CreatedAt: utilitee.TimePtr(time.Now()),
-			Deleted:   utilitee.BoolPtr(false),
-			UpdatedAt: utilitee.TimePtr(time.Now()),
+			Message:   new("ping"),
+			CreatedAt: new(time.Now()),
+			Deleted:   new(false),
+			UpdatedAt: new(time.Now()),
 			DeletedAt: nil,
-			Id:        utilitee.StrPtr(uuid.New().String()),
+			Id:        new(uuid.New().String()),
 		},
 		{
-			Message:   utilitee.StrPtr("pong"),
-			CreatedAt: utilitee.TimePtr(time.Now()),
-			Deleted:   utilitee.BoolPtr(false),
-			UpdatedAt: utilitee.TimePtr(time.Now()),
+			Message:   new("pong"),
+			CreatedAt: new(time.Now()),
+			Deleted:   new(false),
+			UpdatedAt: new(time.Now()),
 			DeletedAt: nil,
-			Id:        utilitee.StrPtr(uuid.New().String()),
+			Id:        new(uuid.New().String()),
 		},
 	}
 	RestApiV1PingPongsRaw = rest_api_V1.PingPongsRaw{

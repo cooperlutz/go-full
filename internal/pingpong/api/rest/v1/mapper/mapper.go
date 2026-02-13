@@ -5,7 +5,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/pingpong/app/command"
 	"github.com/cooperlutz/go-full/internal/pingpong/app/query"
 	"github.com/cooperlutz/go-full/pkg/types"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // MapPingPongToCommand maps an API request object to a PingPongCommand.
@@ -44,12 +43,12 @@ func MapFindAllToResponseRaw(res query.FindAllQueryResponseRaw) server.PingPongs
 
 	for _, p := range res.Entities {
 		httpPing := server.PingPongRaw{
-			Id:        utilitee.StrPtr(p.ID),
-			Message:   utilitee.StrPtr(p.Message),
-			CreatedAt: utilitee.TimePtr(p.CreatedAt),
-			UpdatedAt: utilitee.TimePtr(p.UpdatedAt),
+			Id:        new(p.ID),
+			Message:   new(p.Message),
+			CreatedAt: new(p.CreatedAt),
+			UpdatedAt: new(p.UpdatedAt),
 			DeletedAt: p.DeletedAt,
-			Deleted:   utilitee.BoolPtr(p.Deleted),
+			Deleted:   new(p.Deleted),
 		}
 		httpPings = append(httpPings, httpPing)
 	}

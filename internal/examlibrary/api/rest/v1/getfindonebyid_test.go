@@ -11,7 +11,6 @@ import (
 	v1_server "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 	"github.com/cooperlutz/go-full/test/mocks"
 )
@@ -39,17 +38,17 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID(t *testing.T) {
 			v1_server.GetFindOneByIDRequestObject{},
 			v1_server.GetFindOneByID200JSONResponse{
 				Body: v1_server.Exam{
-					Id:         utilitee.StrPtr(fixtures.ValidUUID.String()),
-					Name:       utilitee.StrPtr("Sample Exam"),
-					GradeLevel: utilitee.IntPtr(5),
+					Id:         new(fixtures.ValidUUID.String()),
+					Name:       new("Sample Exam"),
+					GradeLevel: new(5),
 					Questions: &[]v1_server.ExamQuestion{
 						{
-							PossiblePoints:  utilitee.IntPtr(5),
+							PossiblePoints:  new(5),
 							QuestionType:    &mcptr,
-							Index:           utilitee.IntPtr(1),
-							QuestionText:    utilitee.StrPtr("What is 2 + 2?"),
+							Index:           new(1),
+							QuestionText:    new("What is 2 + 2?"),
 							PossibleAnswers: &[]string{"3", "4", "5", "6"},
-							CorrectAnswer:   utilitee.StrPtr("4"),
+							CorrectAnswer:   new("4"),
 						},
 					},
 				},
@@ -77,7 +76,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID(t *testing.T) {
 							QuestionType:    "multiple-choice",
 							QuestionText:    "What is 2 + 2?",
 							ResponseOptions: &[]string{"3", "4", "5", "6"},
-							CorrectAnswer:   utilitee.StrPtr("4"),
+							CorrectAnswer:   new("4"),
 						},
 					},
 				},

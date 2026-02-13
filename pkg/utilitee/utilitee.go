@@ -11,23 +11,31 @@ func RightNow() time.Time {
 }
 
 // StrPtr returns a pointer to the given string value.
+//
+//go:fix inline
 func StrPtr(s string) *string {
-	return &s
+	return new(s)
 }
 
 // BoolPtr returns a pointer to the given bool value.
+//
+//go:fix inline
 func BoolPtr(b bool) *bool {
-	return &b
+	return new(b)
 }
 
 // TimePtr returns a pointer to the given time.Time value.
+//
+//go:fix inline
 func TimePtr(t time.Time) *time.Time {
-	return &t
+	return new(t)
 }
 
 // IntPtr returns a pointer to the given int value.
+//
+//go:fix inline
 func IntPtr(i int) *int {
-	return &i
+	return new(i)
 }
 
 // SafeIntToInt32 safely converts an *int to int32, returning 0 if the pointer is nil or if the value is out of int32 bounds.

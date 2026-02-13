@@ -37,7 +37,7 @@ func (_m *MockIPubSubEventProcessor) EXPECT() *MockIPubSubEventProcessor_Expecte
 }
 
 // EmitEvent provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, payload interface{}) error {
+func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, payload any) error {
 	ret := _mock.Called(topic, payload)
 
 	if len(ret) == 0 {
@@ -45,7 +45,7 @@ func (_mock *MockIPubSubEventProcessor) EmitEvent(topic string, payload interfac
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(string, interface{}) error); ok {
+	if returnFunc, ok := ret.Get(0).(func(string, any) error); ok {
 		r0 = returnFunc(topic, payload)
 	} else {
 		r0 = ret.Error(0)
@@ -60,20 +60,20 @@ type MockIPubSubEventProcessor_EmitEvent_Call struct {
 
 // EmitEvent is a helper method to define mock.On call
 //   - topic string
-//   - payload interface{}
+//   - payload any
 func (_e *MockIPubSubEventProcessor_Expecter) EmitEvent(topic interface{}, payload interface{}) *MockIPubSubEventProcessor_EmitEvent_Call {
 	return &MockIPubSubEventProcessor_EmitEvent_Call{Call: _e.mock.On("EmitEvent", topic, payload)}
 }
 
-func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Run(run func(topic string, payload interface{})) *MockIPubSubEventProcessor_EmitEvent_Call {
+func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Run(run func(topic string, payload any)) *MockIPubSubEventProcessor_EmitEvent_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 string
 		if args[0] != nil {
 			arg0 = args[0].(string)
 		}
-		var arg1 interface{}
+		var arg1 any
 		if args[1] != nil {
-			arg1 = args[1].(interface{})
+			arg1 = args[1].(any)
 		}
 		run(
 			arg0,
@@ -88,7 +88,7 @@ func (_c *MockIPubSubEventProcessor_EmitEvent_Call) Return(err error) *MockIPubS
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_EmitEvent_Call) RunAndReturn(run func(topic string, payload interface{}) error) *MockIPubSubEventProcessor_EmitEvent_Call {
+func (_c *MockIPubSubEventProcessor_EmitEvent_Call) RunAndReturn(run func(topic string, payload any) error) *MockIPubSubEventProcessor_EmitEvent_Call {
 	_c.Call.Return(run)
 	return _c
 }

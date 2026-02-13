@@ -130,7 +130,7 @@ func (s *IamService) generateAccessToken(user outbound.IamUser) (string, error) 
 
 // ValidateToken verifies a JWT token and returns the claims.
 func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		// Validate the signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, ErrInvalidToken{}

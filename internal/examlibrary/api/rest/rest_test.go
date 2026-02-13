@@ -13,7 +13,6 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/test/fixtures"
 	mocks "github.com/cooperlutz/go-full/test/mocks"
 )
@@ -37,7 +36,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 					"What animal is known to bark?",
 					"multiple-choice",
 					5,
-					utilitee.StrPtr("dog"),
+					new("dog"),
 					&[]string{"dog", "cat", "bird", "fish"},
 				),
 			},
@@ -53,7 +52,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 					"What animal is known to bark?",
 					"multiple-choice",
 					5,
-					utilitee.StrPtr("dog"),
+					new("dog"),
 					&[]string{"dog", "cat", "bird", "fish"},
 				),
 			},

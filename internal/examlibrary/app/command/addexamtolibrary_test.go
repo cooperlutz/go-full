@@ -7,7 +7,6 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 func TestNewAddExamToLibrary(t *testing.T) {
@@ -21,7 +20,7 @@ func TestNewAddExamToLibrary(t *testing.T) {
 			QuestionType:    "multiple-choice",
 			PossiblePoints:  5,
 			ResponseOptions: &[]string{"3", "4", "5"},
-			CorrectAnswer:   utilitee.StrPtr("4"),
+			CorrectAnswer:   new("4"),
 		},
 	}
 
@@ -37,7 +36,7 @@ func TestNewAddExamToLibrary(t *testing.T) {
 	assert.Equal(t, "multiple-choice", cmd.Questions[0].QuestionType)
 	assert.Equal(t, 5, cmd.Questions[0].PossiblePoints)
 	assert.Equal(t, &[]string{"3", "4", "5"}, cmd.Questions[0].ResponseOptions)
-	assert.Equal(t, utilitee.StrPtr("4"), cmd.Questions[0].CorrectAnswer)
+	assert.Equal(t, new("4"), cmd.Questions[0].CorrectAnswer)
 }
 
 func TestNewAddExamToLibraryResult(t *testing.T) {
@@ -52,7 +51,7 @@ func TestNewAddExamToLibraryResult(t *testing.T) {
 			QuestionType:    "multiple-choice",
 			PossiblePoints:  5,
 			ResponseOptions: &[]string{"3", "4", "5"},
-			CorrectAnswer:   utilitee.StrPtr("4"),
+			CorrectAnswer:   new("4"),
 		},
 	}
 
@@ -69,5 +68,5 @@ func TestNewAddExamToLibraryResult(t *testing.T) {
 	assert.Equal(t, "multiple-choice", result.Questions[0].QuestionType)
 	assert.Equal(t, 5, result.Questions[0].PossiblePoints)
 	assert.Equal(t, &[]string{"3", "4", "5"}, result.Questions[0].ResponseOptions)
-	assert.Equal(t, utilitee.StrPtr("4"), result.Questions[0].CorrectAnswer)
+	assert.Equal(t, new("4"), result.Questions[0].CorrectAnswer)
 }

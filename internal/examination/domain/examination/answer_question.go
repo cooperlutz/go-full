@@ -1,5 +1,7 @@
 package examination
 
+import "slices"
+
 type ErrInvalidAnswer struct{}
 
 func (e ErrInvalidAnswer) Error() string {
@@ -24,13 +26,7 @@ func (q *Question) validateAnswer(answer string) bool {
 	case QuestionMultipleChoice:
 		options := q.GetResponseOptions()
 		if options != nil {
-			for _, option := range *options {
-				if option == answer {
-					return true
-				}
-			}
-
-			return false
+			return slices.Contains(*options, answer)
 		}
 	case QuestionShortAnswer:
 		if answer == "" {
