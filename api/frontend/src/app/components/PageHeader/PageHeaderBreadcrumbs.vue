@@ -6,8 +6,6 @@ function parsePathToBreadcrumbs(path: string): string[] {
   const breadcrumbs: string[] = [];
 
   segments.forEach((segment) => {
-    // remove dashes and capitalize words
-    segment = segment.replace(/-/g, " ");
     // capitalize first letter of each word
     segment = segment.replace(/\b\w/g, (char) => char.toUpperCase());
     breadcrumbs.push(segment);

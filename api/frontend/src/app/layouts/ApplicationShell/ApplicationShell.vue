@@ -6,9 +6,10 @@ import {
   LibraryBig,
   type LucideIcon,
   PanelLeftClose,
-  Settings,
   File,
   User,
+  Apple,
+  ChartBarStacked,
 } from "lucide-vue-next";
 import { batBall } from "@lucide/lab";
 
@@ -29,10 +30,11 @@ const topSidebarItems = ref<SidebarItem[]>([
   { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { name: "Ping Pong", url: "/ping-pong", icon: PingPongIcon },
   { name: "Exam Library", url: "/exam-library", icon: LibraryBig },
+  { name: "Grading", url: "/grading", icon: Apple },
+  { name: "Reporting", url: "/reporting", icon: ChartBarStacked },
 ]);
 const bottomSidebarItems = ref<SidebarItem[]>([
   { name: "Docs", url: CONFIG.DOCS_URL, icon: File },
-  { name: "Settings", url: "/settings", icon: Settings },
   { name: "Profile", url: "/profile", icon: User },
 ]);
 </script>
