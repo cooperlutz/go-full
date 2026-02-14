@@ -70,13 +70,13 @@ func (s *HTTPServer) Run() {
 		}
 	}()
 
-	mp, err := telemetree.InitMeter()
+	mp, err := telemetree.InitMeter(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	defer func() {
-		if err := mp.Shutdown(context.Background()); err != nil {
+		if err := mp.Shutdown(ctx); err != nil {
 			log.Printf("Error shutting down meter provider: %v", err)
 		}
 	}()

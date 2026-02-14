@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+// MetricsHandler returns an HTTP handler that exposes Prometheus metrics at the /metrics endpoint.
 func MetricsHandler() http.Handler {
 	reg := prometheus.NewRegistry()
 	reg.MustRegister(

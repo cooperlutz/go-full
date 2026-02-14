@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
-	ApplicationVersion string             //nolint:gochecknoglobals // set via build flags
-	ApplicationName    string = "go-full" //nolint:gochecknoglobals // set via build flags
-	obscuredValue      string = "****"    //nolint:gochecknoglobals // used to hide sensitive config values
+	ApplicationVersion    string                       //nolint:gochecknoglobals // set via build flags
+	ApplicationName       string = "go-full"           //nolint:gochecknoglobals // set via build flags
+	ApplicationInstanceID        = uuid.New().String() //nolint:gochecknoglobals // set at startup, unique per instance
+	obscuredValue         string = "****"              //nolint:gochecknoglobals // used to hide sensitive config values
 )
 
 // Config.App settings.

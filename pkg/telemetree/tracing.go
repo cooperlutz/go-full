@@ -9,14 +9,13 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.20.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/cooperlutz/go-full/app/config"
 )
 
+// InitTracer initializes an OpenTelemetry TracerProvider with a stdout exporter and an OTLP HTTP exporter.
 func InitTracer(ctx context.Context, cfg config.Telemetry) (*sdktrace.TracerProvider, error) {
 	// Create stdout exporter to be able to retrieve
 	// the collected spans.
@@ -33,17 +32,17 @@ func InitTracer(ctx context.Context, cfg config.Telemetry) (*sdktrace.TracerProv
 		panic(err)
 	}
 
+	rd, err := ResourceDefinition(ctx)
+	if err != nil {
+		return nil, err
+	}
 	// For the demonstration, use sdktrace.AlwaysSample sampler to sample all traces.
 	// In a production application, use sdktrace.ProbabilitySampler with a desired probability.
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithBatcher(stdOutExporter),
 		sdktrace.WithBatcher(httpExporter),
-		sdktrace.WithResource(resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceName(config.ApplicationName),
-			semconv.ServiceVersion(config.ApplicationVersion),
-		)),
+		sdktrace.WithResource(rd),
 	)
 
 	otel.SetTracerProvider(tp)
@@ -58,10 +57,6 @@ func InitTracer(ctx context.Context, cfg config.Telemetry) (*sdktrace.TracerProv
 
 // AddSpan adds an otel span to the existing trace.
 func AddSpan(ctx context.Context, spanName string, keyValues ...attribute.KeyValue) (context.Context, trace.Span) {
-	// tracer, ok := ctx.Value(tracerKey).(trace.Tracer)
-	// if !ok || tracer == nil {
-	// 	return ctx, trace.SpanFromContext(ctx)
-	// }
 	tracer := otel.Tracer(config.ApplicationName)
 
 	ctx, span := tracer.Start(ctx, spanName)

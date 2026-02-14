@@ -9,13 +9,13 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 )
 
-func ResourceDefinition() (*resource.Resource, error) {
+func ResourceDefinition(ctx context.Context) (*resource.Resource, error) {
 	res, err := resource.New(
-		context.Background(), // Use a background context
+		ctx,
 		resource.WithAttributes(
-			semconv.ServiceNameKey.String(config.ApplicationName),
-			semconv.ServiceVersionKey.String(config.ApplicationVersion),
-			semconv.ServiceInstanceIDKey.String("unique-instance-id"),
+			semconv.ServiceInstanceIDKey.String(config.ApplicationInstanceID),
+			semconv.ServiceName(config.ApplicationName),
+			semconv.ServiceVersion(config.ApplicationVersion),
 		),
 	)
 
