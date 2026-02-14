@@ -1,3 +1,9 @@
+## v0.1.49 (2026-02-14)
+
+### Fix
+
+- update resource def and conf of telemetree (#172)
+
 ## v0.1.48 (2026-02-13)
 
 ### Fix
