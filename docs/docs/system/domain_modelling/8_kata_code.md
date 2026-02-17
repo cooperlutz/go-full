@@ -18,6 +18,6 @@ Code the domain model.
 
 ![Grading Aggregate Design Canvas](./_img/kata_aggregate_design_canvas/grading_subdomain.drawio.svg)
 
-## User Management
+## Identity and Access Management
 
-![Users Aggregate Design Canvas](./_img/kata_aggregate_design_canvas/users_subdomain.drawio.svg)
+![Identity and Access Management Aggregate Design Canvas](./_img/kata_aggregate_design_canvas/iam_subdomain.drawio.svg)

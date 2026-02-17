@@ -1,4 +1,4 @@
-package event
+package eeventdriven
 
 import "github.com/ThreeDotsLabs/watermill/message"
 

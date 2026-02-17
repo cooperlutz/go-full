@@ -33,7 +33,7 @@ func (h GradeQuestionHandler) Handle(ctx context.Context, cmd GradeQuestion) err
 	defer span.End()
 
 	return h.gradingRepo.UpdateExam(ctx, uuid.MustParse(cmd.ExamId), func(e *grading.Exam) (*grading.Exam, error) {
-		err := e.GradeQuestion(cmd.QuestionIndex, grading.GradeQuestionOption{
+		_, err := e.GradeQuestion(cmd.QuestionIndex, grading.GradeQuestionOption{
 			Feedback: cmd.Feedback,
 			Points:   cmd.Points,
 		})

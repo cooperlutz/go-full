@@ -22,7 +22,7 @@ We've outlined our team topology to optimize for fast flow, enabling autonomous 
 - **Examination Team**: Frontend, Backend/core domain, and Database for Examination bounded context.
 - **Grading Team**: Frontend, Backend/core domain, and Database for Grading bounded context.
 - **Reporting Team**: Frontend, Backend/core domain, and Database for Reporting bounded context.
-- **User Management Team**: Frontend, Backend/core domain, and Database for User Management bounded context.
+- **Identity and Access Management Team**: Frontend, Backend/core domain, and Database for Identity and Access Management bounded context.
 
 ### Platform Teams
 

@@ -2,7 +2,6 @@
 package event
 
 import (
-	"context"
 	"encoding/json"
 
 	"github.com/ThreeDotsLabs/watermill/message"
@@ -11,11 +10,11 @@ import (
 	exam_library_query "github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/internal/grading/domain/grading"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
-// {"ExamId":"af6830f8-b146-42f0-bbcd-473d8068b234","LibraryExamId":"11111111-1111-1111-1111-111111111111","StudentId":"e95cb30c-2012-41f5-8de8-02ef608f56e5","Completed":true,"AnsweredQuestions":3,"TotalQuestions":3,"Questions":[{"ExamId":"af6830f8-b146-42f0-bbcd-473d8068b234","Answered":true,"QuestionID":"5ece76af-2359-4ade-9130-3e404473c536","QuestionIndex":1,"QuestionText":"What is the capital of France?","QuestionType":"multiple-choice","ResponseOptions":["Berlin","Madrid","Paris","Rome"],"ProvidedAnswer":"Berlin"},{"ExamId":"af6830f8-b146-42f0-bbcd-473d8068b234","Answered":true,"QuestionID":"2fffee65-94d1-481c-80b0-5a6390dcd2e7","QuestionIndex":2,"QuestionText":"What is Go?","QuestionType":"short-answer","ResponseOptions":null,"ProvidedAnswer":"idk"},{"ExamId":"af6830f8-b146-42f0-bbcd-473d8068b234","Answered":true,"QuestionID":"536969b1-11fe-4bc1-a13f-824b34af0398","QuestionIndex":3,"QuestionText":"Explain the concept of concurrency.","QuestionType":"essay","ResponseOptions":null,"ProvidedAnswer":"huh"}]}.
 type ExamSubmitted struct {
 	ExamId            string                  `json:"ExamId"`
 	LibraryExamId     string                  `json:"LibraryExamId"`
@@ -37,7 +36,7 @@ type ExamSubmittedQuestion struct {
 	ProvidedAnswer  *string   `json:"ProvidedAnswer"`
 }
 
-// ExamSubmittedHandler is a handler that does nothing and acknowledges the message.
+// ExamSubmittedHandler is a handler that processes exam submitted events.
 type ExamSubmittedHandler struct {
 	gradingRepo grading.Repository
 	examLibrary usecase.IExamLibraryUseCase
@@ -51,11 +50,17 @@ func NewExamSubmittedHandler(gradingRepo grading.Repository, examLibraryUseCase 
 	}
 }
 
-// Handle returns a message handler function that acknowledges the message without processing.
-func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
-	ctx := context.Background()
+// Handle returns a message handler function that processes exam submitted events.
+//
+//nolint:cyclop,gocyclo,gocognit // I don't want to split this function up right now
+func (h ExamSubmittedHandler) Handle(
+	gradingStartedHandler GradingStartedHandler,
+	gradingCompletedHandler GradingCompletedHandler,
+) message.NoPublishHandlerFunc {
+	return eeventdriven.TraceConsumerHandler(func(msg *message.Message) error {
+		ctx := msg.Context()
 
-	return func(msg *message.Message) error {
+		// unmarshal the event
 		var event ExamSubmitted
 
 		err := json.Unmarshal(msg.Payload, &event)
@@ -65,6 +70,7 @@ func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
 			return err
 		}
 
+		// get the exam from the exam library to get the correct answers and possible points for each question
 		examFromLibrary, err := h.examLibrary.FindOneExamByID(
 			ctx, exam_library_query.FindOneExamByID{
 				ExamID: event.LibraryExamId,
@@ -76,6 +82,7 @@ func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
 			return err
 		}
 
+		// create grading questions from the submitted exam questions and the exam from the library
 		var questions []*grading.Question
 
 		for _, q := range event.Questions {
@@ -97,6 +104,7 @@ func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
 			))
 		}
 
+		// create an exam aggregate from the submitted exam event and the grading questions
 		exam := grading.NewExam(
 			uuid.MustParse(event.StudentId),
 			uuid.MustParse(event.LibraryExamId),
@@ -104,13 +112,7 @@ func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
 			questions,
 		)
 
-		err = exam.GradeMultipleChoiceQuestions()
-		if err != nil {
-			telemetree.RecordError(ctx, err)
-
-			return err
-		}
-
+		// store the exam aggregate in the grading repository
 		err = h.gradingRepo.AddExam(ctx, exam)
 		if err != nil {
 			telemetree.RecordError(ctx, err)
@@ -118,10 +120,48 @@ func (h ExamSubmittedHandler) Handle() message.NoPublishHandlerFunc {
 			return err
 		}
 
-		msg.Ack()
+		// update the exam aggregate in the grading repository to grade multiple choice questions and emit grading started and grading completed events if grading is complete
+		err = h.gradingRepo.UpdateExam(ctx, exam.GetIdUUID(), func(e *grading.Exam) (*grading.Exam, error) {
+			// grade multiple choice questions automatically when the exam is submitted, and check if grading is complete
+			gradingIsComplete, err := e.GradeMultipleChoiceQuestions()
+			if err != nil {
+				telemetree.RecordError(ctx, err)
+
+				return nil, err
+			}
+
+			// emit grading started event
+			err = gradingStartedHandler.Handle(ctx, GradingStarted{
+				ExamId: event.ExamId,
+			})
+			if err != nil {
+				telemetree.RecordError(ctx, err)
+
+				return nil, err
+			}
+
+			// if grading is complete after grading multiple choice questions, emit grading completed event
+			if gradingIsComplete {
+				err = gradingCompletedHandler.Handle(ctx, GradingCompleted{
+					ExamId: event.ExamId,
+				})
+				if err != nil {
+					telemetree.RecordError(ctx, err)
+
+					return nil, err
+				}
+			}
+
+			return e, nil
+		})
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return err
+		}
 
 		return nil
-	}
+	})
 }
 
 type QuestionFromExamLib struct {

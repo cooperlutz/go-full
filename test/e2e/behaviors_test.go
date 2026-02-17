@@ -213,7 +213,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	// Arrange
 	ctx := context.Background()
 	queryCountOfExaminationEvents := func() (int64, error) {
-		return countOfQuery("public", "watermill_examination.examstarted")
+		return countOfQuery("public", "watermill_examination.exam_started")
 	}
 	queryCountOfExaminationQuestions := func() (int64, error) {
 		return countOfQuery("examination", "questions")
@@ -265,24 +265,24 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsAfter := len(*examsAfter.JSON200)
 
-	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter)
-	assert.Equal(t, countOfExaminationEventsBefore+1, countOfExaminationEventsAfter)
-	assert.Greater(t, countOfExaminationQuestionsAfter, countOfExaminationQuestionsBefore)
+	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter, "Expected number of exams to increase by 1")
+	assert.Equal(t, countOfExaminationEventsBefore+1, countOfExaminationEventsAfter, "Expected number of events to increase by 1")
+	assert.Greater(t, countOfExaminationQuestionsAfter, countOfExaminationQuestionsBefore, "Expected number of questions to increase")
 	actual, err := examinationApiClient.GetExamWithResponse(ctx, examId)
-	assert.Equal(t, *expect.LibraryExamId, *actual.JSON200.LibraryExamId)
-	assert.Equal(t, expect.StudentId, actual.JSON200.StudentId)
-	assert.Equal(t, *expect.AnsweredQuestions, *actual.JSON200.AnsweredQuestions)
-	assert.Equal(t, *expect.TotalQuestions, *actual.JSON200.TotalQuestions)
-	assert.Equal(t, expect.Completed, actual.JSON200.Completed)
-	assert.Equal(t, len(*expect.Questions), len(*actual.JSON200.Questions))
+	assert.Equal(t, *expect.LibraryExamId, *actual.JSON200.LibraryExamId, "Expected LibraryExamId to match")
+	assert.Equal(t, expect.StudentId, actual.JSON200.StudentId, "Expected StudentId to match")
+	assert.Equal(t, *expect.AnsweredQuestions, *actual.JSON200.AnsweredQuestions, "Expected AnsweredQuestions to match")
+	assert.Equal(t, *expect.TotalQuestions, *actual.JSON200.TotalQuestions, "Expected TotalQuestions to match")
+	assert.Equal(t, expect.Completed, actual.JSON200.Completed, "Expected Completed to match")
+	assert.Equal(t, len(*expect.Questions), len(*actual.JSON200.Questions), "Expected number of questions to match")
 	for i, expectedQuestion := range *expect.Questions {
 		actualQuestion := (*actual.JSON200.Questions)[i]
-		assert.Equal(t, expectedQuestion.QuestionIndex, actualQuestion.QuestionIndex)
-		assert.Equal(t, expectedQuestion.Answered, actualQuestion.Answered)
-		assert.Equal(t, expectedQuestion.QuestionText, actualQuestion.QuestionText)
-		assert.Equal(t, expectedQuestion.QuestionType, actualQuestion.QuestionType)
-		assert.Equal(t, expectedQuestion.ResponseOptions, actualQuestion.ResponseOptions)
-		assert.Equal(t, *expectedQuestion.ProvidedAnswer, *actualQuestion.ProvidedAnswer)
+		assert.Equal(t, expectedQuestion.QuestionIndex, actualQuestion.QuestionIndex, "Question %d: QuestionIndex does not match", expectedQuestion.QuestionIndex)
+		assert.Equal(t, expectedQuestion.Answered, actualQuestion.Answered, "Question %d: Answered does not match", expectedQuestion.QuestionIndex)
+		assert.Equal(t, expectedQuestion.QuestionText, actualQuestion.QuestionText, "Question %d: QuestionText does not match", expectedQuestion.QuestionIndex)
+		assert.Equal(t, expectedQuestion.QuestionType, actualQuestion.QuestionType, "Question %d: QuestionType does not match", expectedQuestion.QuestionIndex)
+		assert.Equal(t, expectedQuestion.ResponseOptions, actualQuestion.ResponseOptions, "Question %d: ResponseOptions do not match", expectedQuestion.QuestionIndex)
+		assert.Equal(t, *expectedQuestion.ProvidedAnswer, *actualQuestion.ProvidedAnswer, "Question %d: Provided answer does not match expected", expectedQuestion.QuestionIndex)
 	}
 	assert.NoError(t, err)
 }

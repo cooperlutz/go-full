@@ -64,7 +64,8 @@ func TestExam(t *testing.T) {
 	assert.Equal(t, "grading not completed", err.Error())
 
 	// Multiple choice questions should be graded automatically
-	err = exam.GradeMultipleChoiceQuestions()
+	gradingComplete, err := exam.GradeMultipleChoiceQuestions()
+	assert.False(t, gradingComplete)
 	assert.NoError(t, err)
 
 	firstQuestion := exam.GetFirstQuestion()

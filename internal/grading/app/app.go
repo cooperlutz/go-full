@@ -7,6 +7,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/grading/app/event"
 	"github.com/cooperlutz/go-full/internal/grading/app/query"
 	"github.com/cooperlutz/go-full/pkg/deebee"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 )
 
 type Application struct {
@@ -26,12 +27,15 @@ type Queries struct {
 }
 
 type Events struct {
-	ExamSubmitted event.ExamSubmittedHandler
+	ExamSubmitted    event.ExamSubmittedHandler
+	GradingStarted   event.GradingStartedHandler
+	GradingCompleted event.GradingCompletedHandler
 }
 
 // NewApplication initializes the Grading application with its dependencies.
 func NewApplication(
 	pgconn deebee.IDatabase,
+	pubSub *eeventdriven.BasePgsqlPubSubProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
 ) (Application, error) {
 	gradingRepo := outbound.NewPostgresAdapter(pgconn)
@@ -46,7 +50,9 @@ func NewApplication(
 			IncompleteExams:  query.NewIncompleteExamsHandler(gradingRepo),
 		},
 		Events: Events{
-			ExamSubmitted: event.NewExamSubmittedHandler(gradingRepo, examLibraryUseCase),
+			ExamSubmitted:    event.NewExamSubmittedHandler(gradingRepo, examLibraryUseCase),
+			GradingStarted:   event.NewGradingStartedHandler(pubSub),
+			GradingCompleted: event.NewGradingCompletedHandler(pubSub),
 		},
 	}
 
