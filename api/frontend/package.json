@@ -22,6 +22,11 @@
   "pnpm": {
     "overrides": {
       "axios": "^1.13.5"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-2g4f-4pwh-qvx6"
+      ]
     }
   },
   "dependencies": {

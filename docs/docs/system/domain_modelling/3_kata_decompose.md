@@ -79,7 +79,7 @@ Next, we'll apply the concept of [Independent Service Heuristics](./_templates/i
 10. **Product Decisions**: Would the team working on this thing be able to "own" their own product roadmap and the product direction?
     **Yes**
 
-### User Management
+### Identity and Access Management
 
 1. **Sense-check**: Could it make any logical sense to offer this thing "as a service"?
     **Yes**

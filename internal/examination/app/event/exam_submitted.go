@@ -41,7 +41,7 @@ func NewExamSubmittedHandler(
 }
 
 func (h ExamSubmittedHandler) Handle(ctx context.Context, event ExamSubmitted) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.examsubmitted.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.exam_submitted.handle")
 	defer span.End()
 
 	msg, err := eeventdriven.EventPayloadToMessage(event)
@@ -51,7 +51,7 @@ func (h ExamSubmittedHandler) Handle(ctx context.Context, event ExamSubmitted) e
 		return err
 	}
 
-	err = h.publisher.EmitEventMessage("examination.examsubmitted", msg)
+	err = h.publisher.EmitEventMessage("examination.exam_submitted", msg)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

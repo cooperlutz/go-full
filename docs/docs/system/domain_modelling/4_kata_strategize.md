@@ -22,7 +22,7 @@ Strategically map out your sub-domains to identify core domains: the parts of th
 
 ### Generic Subdomains
 
-- User Management: handles authentication, authorization, and management of user profiles. User Identity and Access Management is a commodity capability with a variety of toolsets available to developers. While it is technically required to provide necessary functionality of our system, it does not provide value to our user groups, and is not considered to be core business differentiator to our business.
+- Identity and Access Management: handles authentication, authorization, and management of user profiles. User Identity and Access Management is a commodity capability with a variety of toolsets available to developers. While it is technically required to provide necessary functionality of our system, it does not provide value to our user groups, and is not considered to be core business differentiator to our business.
 
 ## Wardley Mapping
 

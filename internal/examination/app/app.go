@@ -31,7 +31,6 @@ type Queries struct {
 type Events struct {
 	ExamStarted   event.ExamStartedHandler
 	ExamSubmitted event.ExamSubmittedHandler
-	NoOp          event.NoOpEventHandler
 }
 
 // NewApplication initializes the Examination application with its dependencies.
@@ -40,7 +39,6 @@ func NewApplication(
 	pubSub eeventdriven.IPubSubEventProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
 ) (Application, error) {
-	// publisher := outbound.NewSqlPublisherAdapter(pubSub)
 	examinationRepository := outbound.NewPostgresAdapter(
 		pgconn,
 	)
@@ -84,7 +82,6 @@ func NewApplication(
 			ExamSubmitted: event.NewExamSubmittedHandler(
 				pubSub,
 			),
-			NoOp: event.NewNoOpEventHandler(),
 		},
 	}
 

@@ -25,7 +25,7 @@ func NewExamStartedHandler(
 }
 
 func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.examstarted.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.event.exam_started.handle")
 	defer span.End()
 
 	msg, err := eeventdriven.EventPayloadToMessage(event)
@@ -35,7 +35,7 @@ func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error
 		return err
 	}
 
-	err = h.publisher.EmitEventMessage("examination.examstarted", msg)
+	err = h.publisher.EmitEventMessage("examination.exam_started", msg)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

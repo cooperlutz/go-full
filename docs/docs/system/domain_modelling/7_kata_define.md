@@ -14,9 +14,9 @@ Define the roles and responsibilities of each [bounded context](https://martinfo
 
 ![Grading Bounded Context](./_img/kata_bounded_context_canvas/kata_bounded_context_grading.drawio.png)
 
-## User Management Bounded Context
+## Identity and Access Management Bounded Context
 
-![User Management Bounded Context](./_img/kata_bounded_context_canvas/kata_bounded_context_users.drawio.png)
+![Identity and Access Management Bounded Context](./_img/kata_bounded_context_canvas/kata_bounded_context_iam.drawio.png)
 
 ## Reporting Bounded Context
 
