@@ -24,6 +24,7 @@ func NewModule(
 ) (*GradingModule, error) {
 	application, err := app.NewApplication(
 		pgconn,
+		pubSub,
 		examLibraryUseCase,
 	)
 	if err != nil {

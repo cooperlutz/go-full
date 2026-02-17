@@ -6,18 +6,18 @@ type GradeQuestionOption struct {
 	Points   int32
 }
 
-func (e *Exam) GradeQuestion(index int32, options GradeQuestionOption) error {
+func (e *Exam) GradeQuestion(index int32, options GradeQuestionOption) (bool, error) {
 	question := e.GetQuestionByIndex(index)
 
 	err := question.gradeQuestion(options)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	e.MarkUpdated()
-	_ = e.checkIfGradingCompletedAndFinalize()
+	completed := e.checkIfGradingCompletedAndFinalize()
 
-	return nil
+	return completed, nil
 }
 
 func (q *Question) gradeQuestion(options GradeQuestionOption) error {

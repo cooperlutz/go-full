@@ -121,17 +121,18 @@ func (e ErrMultipleChoiceGradingFailed) Error() string {
 	return "grading multiple-choice question failed"
 }
 
-func (e *Exam) GradeMultipleChoiceQuestions() error {
+func (e *Exam) GradeMultipleChoiceQuestions() (bool, error) {
 	for _, q := range e.GetMultiplChoiceQuestions() {
 		err := q.gradeQuestion(GradeQuestionOption{})
 		if err != nil {
-			return ErrMultipleChoiceGradingFailed{}
+			return false, ErrMultipleChoiceGradingFailed{}
 		}
 	}
 
 	e.MarkUpdated()
+	completed := e.checkIfGradingCompletedAndFinalize()
 
-	return nil
+	return completed, nil
 }
 
 func (e Exam) GetQuestionByIndex(index int32) *Question {
@@ -224,7 +225,6 @@ func (q *Question) markAsGraded() {
 
 // NewQuestion creates a new Question entity.
 func NewQuestion(
-	// examId uuid.UUID,
 	questionType QuestionType,
 	index int32,
 	providedAnswer string,
@@ -234,7 +234,6 @@ func NewQuestion(
 	return &Question{
 		EntityMetadata: baseentitee.NewEntityMetadata(),
 		index:          index,
-		// examId:         examId,
 		questionType:   questionType,
 		graded:         false,
 		feedback:       nil,

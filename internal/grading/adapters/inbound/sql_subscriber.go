@@ -9,9 +9,12 @@ func RegisterEventHandlers(events app.Events, pubSub *eeventdriven.BasePgsqlPubS
 	router := pubSub.GetRouter()
 
 	router.AddConsumerHandler(
-		"grading_exam_submitted_event_handler",
-		"examination.examsubmitted",
+		"grading_exam_submitted_handler",
+		"examination.exam_submitted",
 		pubSub.GetSubscriber(),
-		events.ExamSubmitted.Handle(),
+		events.ExamSubmitted.Handle(
+			events.GradingStarted,
+			events.GradingCompleted,
+		),
 	)
 }
