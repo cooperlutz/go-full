@@ -1,0 +1,3 @@
+DELETE TABLE IF EXISTS reporting.reports;
+DELETE TABLE IF EXISTS reporting.metrics;
+DELETE SCHEMA IF EXISTS reporting CASCADE;

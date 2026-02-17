@@ -15,6 +15,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/grading"
 	"github.com/cooperlutz/go-full/internal/iam"
 	"github.com/cooperlutz/go-full/internal/pingpong"
+	"github.com/cooperlutz/go-full/internal/reporting"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
@@ -110,6 +111,15 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	// Reporting
+	reportingModule, err := reporting.NewModule(
+		conn,
+		pubSub,
+	)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	/* -----------------------------------------------------------------------------------
 	Protected REST API Controller Initialization:
 	----------------------------------------------------------------------------------- */
@@ -142,6 +152,10 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	protectedRestApiRouter.Mount(
 		"/grading",
 		gradingModule.RestApi,
+	)
+	protectedRestApiRouter.Mount(
+		"/reporting",
+		reportingModule.RestApi,
 	)
 
 	/* -----------------------------------------------------------------------------------

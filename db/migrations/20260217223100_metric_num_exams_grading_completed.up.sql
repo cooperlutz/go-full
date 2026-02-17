@@ -1,0 +1,1 @@
+INSERT INTO reporting.metrics (name, value) VALUES ('number_of_exams_grading_completed', 0.0) ON CONFLICT (name) DO NOTHING;
