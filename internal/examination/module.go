@@ -40,6 +40,8 @@ func NewModule(
 
 	apiServer := inbound.NewHttpServer(application)
 
+	inbound.RegisterEventHandlers(pubSub)
+
 	module := &ExaminationModule{
 		RestApi: inbound.HandlerFromMux(
 			apiServer.StrictHandler(),
