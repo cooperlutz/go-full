@@ -5,6 +5,7 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/grading/app"
 	"github.com/cooperlutz/go-full/internal/grading/app/command"
+	"github.com/cooperlutz/go-full/internal/grading/app/event"
 	"github.com/cooperlutz/go-full/internal/grading/app/query"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -74,6 +75,18 @@ func (h HttpServer) GradeExamQuestion(ctx context.Context, request GradeExamQues
 	)
 	if err != nil {
 		return nil, err
+	}
+
+	exam, err := h.app.Queries.FindExam.Handle(ctx, request.ExamId)
+	if err != nil {
+		return nil, err
+	}
+
+	if exam.GradingCompleted {
+		err = h.app.Events.GradingCompleted.Handle(ctx, event.GradingCompleted{ExamId: exam.ExamId})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return GradeExamQuestion201JSONResponse{}, nil

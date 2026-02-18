@@ -25,7 +25,7 @@ export APP_NAME
 ############################################################################
 #                             ALL                                          #
 ############################################################################
-all: deps install deps-audit gen build-fe lintfmt test cover-filter build-local ### run all setup tasks
+all: gofix deps install deps-audit gen build-fe lintfmt test cover-filter build-local ### run all setup tasks
 .PHONY: all
 
 ############################################################################
@@ -40,6 +40,14 @@ deps: ### go mod tidy + verify + vendor
 deps-audit: ### check dependencies vulnerabilities
 	go tool govulncheck ./...
 .PHONY: deps-audit
+
+############################################################################
+#                            MODERNIZE                                     #
+############################################################################
+
+gofix: ### run go fix https://go.dev/blog/gofix
+	go fix ./...
+.PHONY: gofix
 
 ############################################################################
 #                            LINT & FORMAT                                 #

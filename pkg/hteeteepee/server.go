@@ -53,7 +53,7 @@ func (s *HTTPServer) RegisterController(serviceEndpoint string, handler http.Han
 	s.Router.Mount(serviceEndpoint, handler)
 }
 
-func (s *HTTPServer) Run() {
+func (s *HTTPServer) Run() error {
 	// Set the server handler
 	s.Server.Handler = s.Router
 
@@ -119,8 +119,12 @@ func (s *HTTPServer) Run() {
 
 	if !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal(err)
+
+		return err
 	}
 
 	// Wait for server context to be stopped upon receiving a shutdown signal
 	<-serverCtx.Done()
+
+	return nil
 }

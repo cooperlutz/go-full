@@ -1,0 +1,1 @@
+DELETE FROM reporting.metrics WHERE name = 'number_of_exams_grading_completed';

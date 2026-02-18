@@ -2,8 +2,8 @@ package app
 
 import (
 	"context"
+	"log"
 	"os"
-	"sync"
 
 	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -15,6 +15,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/grading"
 	"github.com/cooperlutz/go-full/internal/iam"
 	"github.com/cooperlutz/go-full/internal/pingpong"
+	"github.com/cooperlutz/go-full/internal/reporting"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
@@ -33,7 +34,7 @@ func NewApplication(conf config.Config) *Application {
 }
 
 // this is where all of the wiring happens.
-func (a *Application) Run() { //nolint:funlen // main application run function
+func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main application run function
 	/* -----------------------------------------------------------------------------------
 	System Initializations:
 	----------------------------------------------------------------------------------- */
@@ -110,6 +111,15 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		os.Exit(1)
 	}
 
+	// Reporting
+	reportingModule, err := reporting.NewModule(
+		conn,
+		pubSub,
+	)
+	if err != nil {
+		os.Exit(1)
+	}
+
 	/* -----------------------------------------------------------------------------------
 	Protected REST API Controller Initialization:
 	----------------------------------------------------------------------------------- */
@@ -143,6 +153,10 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 		"/grading",
 		gradingModule.RestApi,
 	)
+	protectedRestApiRouter.Mount(
+		"/reporting",
+		reportingModule.RestApi,
+	)
 
 	/* -----------------------------------------------------------------------------------
 	Mount Public Routes
@@ -166,31 +180,41 @@ func (a *Application) Run() { //nolint:funlen // main application run function
 	/* -----------------------------------------------------------------------------------
 	Run the HTTP server & Pub/Sub processors
 	----------------------------------------------------------------------------------- */
-	var wg sync.WaitGroup
-	// We increment the WaitGroup counter by 4 for the four servers we plan to run.
-	wg.Add(4) //nolint:mnd // we have four goroutines to wait for
+	errChannel := make(chan error, 1) // Buffer size of 1 for the error channel
 
+	// run each server in its own goroutine and send any errors to the error channel
+
+	// the HTTP server
 	go func() {
-		defer wg.Done()
-
-		httpServer.Run()
+		err = httpServer.Run()
+		if err != nil {
+			errChannel <- err
+		}
 	}()
 
+	// the Pub/Sub processors
 	go func() {
-		defer wg.Done()
-
-		pingPongModule.PubSub.Run()
+		err = pingPongModule.PubSub.Run()
+		if err != nil {
+			errChannel <- err
+		}
 	}()
 	go func() {
-		defer wg.Done()
-
-		examLibraryModule.PubSub.Run()
+		err = examLibraryModule.PubSub.Run()
+		if err != nil {
+			errChannel <- err
+		}
 	}()
 	go func() {
-		defer wg.Done()
-
-		pubSub.Run()
+		err = pubSub.Run()
+		if err != nil {
+			errChannel <- err
+		}
 	}()
 
-	wg.Wait() // Wait for both servers to finish (they won't, unless there's an error)
+	// Wait for any server to return an error
+	if err := <-errChannel; err != nil {
+		os.Exit(1)
+		log.Fatal(err)
+	}
 }

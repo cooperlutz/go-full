@@ -195,9 +195,20 @@ func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) RunAndRetur
 }
 
 // Run provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) Run() {
-	_mock.Called()
-	return
+func (_mock *MockIPubSubEventProcessor) Run() error {
+	ret := _mock.Called()
+
+	if len(ret) == 0 {
+		panic("no return value specified for Run")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func() error); ok {
+		r0 = returnFunc()
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
 }
 
 // MockIPubSubEventProcessor_Run_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Run'
@@ -217,12 +228,12 @@ func (_c *MockIPubSubEventProcessor_Run_Call) Run(run func()) *MockIPubSubEventP
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) Return() *MockIPubSubEventProcessor_Run_Call {
-	_c.Call.Return()
+func (_c *MockIPubSubEventProcessor_Run_Call) Return(err error) *MockIPubSubEventProcessor_Run_Call {
+	_c.Call.Return(err)
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func()) *MockIPubSubEventProcessor_Run_Call {
-	_c.Run(run)
+func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func() error) *MockIPubSubEventProcessor_Run_Call {
+	_c.Call.Return(run)
 	return _c
 }

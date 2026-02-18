@@ -58,5 +58,19 @@ func (h ExamSubmittedHandler) Handle(ctx context.Context, event ExamSubmitted) e
 		return err
 	}
 
+	err = h.publisher.EmitEventMessage("reporting.exam_submitted", msg)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
+	err = h.publisher.EmitEventMessage("grading.exam_submitted", msg)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
 	return nil
 }
