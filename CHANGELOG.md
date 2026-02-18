@@ -1,3 +1,9 @@
+## v0.1.51 (2026-02-18)
+
+### Fix
+
+- implementation of Reporting module (#174)
+
 ## v0.1.50 (2026-02-17)
 
 ### Fix
