@@ -15,7 +15,7 @@ import (
 type IPubSubEventProcessor interface {
 	EmitEvent(topic string, payload any) error
 	EmitEventMessage(topic string, payload *message.Message) error
-	Run()
+	Run() error
 	RegisterSubscriberHandlers() error
 }
 
@@ -135,9 +135,11 @@ func (bps *BasePgsqlPubSubProcessor) RegisterSubscriberHandlers() error {
 }
 
 // Run starts the Pub/Sub processor's router.
-func (bps *BasePgsqlPubSubProcessor) Run() {
+func (bps *BasePgsqlPubSubProcessor) Run() error {
 	err := bps.router.Run(context.Background())
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
