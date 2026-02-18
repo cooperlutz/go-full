@@ -41,7 +41,7 @@ func (h GradingStartedHandler) Handle() message.NoPublishHandlerFunc {
 			return err
 		}
 
-		err = h.reportingRepo.UpdateMetric(ctx, reporting.MetricNumberOfExamsInProgress, func(m *reporting.Metric) (*reporting.Metric, error) {
+		err = h.reportingRepo.UpdateMetric(ctx, reporting.MetricNumberOfExamsBeingGraded, func(m *reporting.Metric) (*reporting.Metric, error) {
 			m.IncrementValueByOne()
 
 			return m, nil

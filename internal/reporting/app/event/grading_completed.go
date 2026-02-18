@@ -29,10 +29,10 @@ func NewGradingCompletedHandler(
 
 func (h GradingCompletedHandler) Handle() message.NoPublishHandlerFunc {
 	return eeventdriven.TraceConsumerHandler(func(msg *message.Message) error {
-		ctx, span := telemetree.AddSpan(msg.Context(), "reporting.app.event.examstarted.handle")
+		ctx, span := telemetree.AddSpan(msg.Context(), "reporting.app.event.gradingcompleted.handle")
 		defer span.End()
 
-		var event ExamStarted
+		var event GradingCompleted
 
 		err := json.Unmarshal(msg.Payload, &event)
 		if err != nil {
@@ -41,7 +41,18 @@ func (h GradingCompletedHandler) Handle() message.NoPublishHandlerFunc {
 			return err
 		}
 
-		err = h.reportingRepo.UpdateMetric(ctx, reporting.MetricNumberOfExamsInProgress, func(m *reporting.Metric) (*reporting.Metric, error) {
+		err = h.reportingRepo.UpdateMetric(ctx, reporting.MetricNumberOfExamsBeingGraded, func(m *reporting.Metric) (*reporting.Metric, error) {
+			m.DecrementValueByOne()
+
+			return m, nil
+		})
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return err
+		}
+
+		err = h.reportingRepo.UpdateMetric(ctx, reporting.MetricNumberOfExamsGradingCompleted, func(m *reporting.Metric) (*reporting.Metric, error) {
 			m.IncrementValueByOne()
 
 			return m, nil
