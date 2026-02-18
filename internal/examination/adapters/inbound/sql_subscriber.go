@@ -14,4 +14,11 @@ func RegisterEventHandlers(pubSub *eeventdriven.BasePgsqlPubSubProcessor) {
 		pubSub.GetSubscriber(),
 		eeventdriven.NewNoOpEventHandler().Handle(),
 	)
+	// noop handler to initialize the topic table
+	router.AddConsumerHandler(
+		"examination_exam_submitted_handler",
+		"examination.exam_submitted",
+		pubSub.GetSubscriber(),
+		eeventdriven.NewNoOpEventHandler().Handle(),
+	)
 }
