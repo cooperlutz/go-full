@@ -11,8 +11,10 @@ import (
 
 	examination_api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
 	examLibrary_api_client_v1 "github.com/cooperlutz/go-full/api/rest/examlibrary/v1/client"
+	grading_api_client "github.com/cooperlutz/go-full/api/rest/grading/client"
 	iam_api_client "github.com/cooperlutz/go-full/api/rest/iam/client"
 	pingpong_api_client_v1 "github.com/cooperlutz/go-full/api/rest/pingpong/v1/client"
+	reporting_api_client "github.com/cooperlutz/go-full/api/rest/reporting/client"
 )
 
 var (
@@ -23,6 +25,8 @@ var (
 	pingpongApiClient            *pingpong_api_client_v1.ClientWithResponses
 	examLibraryApiClient         *examLibrary_api_client_v1.ClientWithResponses
 	examinationApiClient         *examination_api_client.ClientWithResponses
+	gradingApiClient             *grading_api_client.ClientWithResponses
+	reportingApiClient           *reporting_api_client.ClientWithResponses
 	iamApiClient                 *iam_api_client.ClientWithResponses
 	defaultBrowserContextOptions = playwright.BrowserNewContextOptions{}
 )
@@ -55,6 +59,22 @@ func TestMain(m *testing.M) {
 	)
 	if err != nil {
 		slog.Error("Error creating examination api client:", slog.String("error", err.Error()))
+	}
+
+	gradingApiClient, err = grading_api_client.NewClientWithResponses(serverAddr+"/api/grading",
+		grading_api_client.WithRequestEditorFn(
+			ReqWithBearerToken(bearerToken)),
+	)
+	if err != nil {
+		slog.Error("Error creating grading api client:", slog.String("error", err.Error()))
+	}
+
+	reportingApiClient, err = reporting_api_client.NewClientWithResponses(serverAddr+"/api/reporting",
+		reporting_api_client.WithRequestEditorFn(
+			ReqWithBearerToken(bearerToken)),
+	)
+	if err != nil {
+		slog.Error("Error creating reporting api client:", slog.String("error", err.Error()))
 	}
 
 	exitCode := m.Run()
