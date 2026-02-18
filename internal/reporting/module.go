@@ -32,7 +32,11 @@ func NewModule(
 		application,
 	)
 
-	inbound.RegisterEventHandlers(application.Events, pubSub)
+	subscriber := inbound.NewSubscriber(
+		application.Events,
+		pubSub,
+	)
+	subscriber.RegisterEventHandlers()
 
 	module := &ReportingModule{
 		RestApi: inbound.HandlerFromMux(
