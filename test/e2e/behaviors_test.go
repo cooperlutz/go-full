@@ -222,6 +222,14 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	examsBefore, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
 	countOfExaminationExamsBefore := len(*examsBefore.JSON200)
 	countOfExaminationQuestionsBefore, err := queryCountOfExaminationQuestions()
+	metricNumberOfExamsInProgressBefore, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_in_progress")
+	valueMetricNumberOfExamsInProgressBefore := *metricNumberOfExamsInProgressBefore.JSON200.MetricValue
+	metricNumberOfExamsCompletedBefore, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_completed")
+	valueMetricNumberOfExamsCompletedBefore := *metricNumberOfExamsCompletedBefore.JSON200.MetricValue
+	metricNumberOfExamsBeingGradedBefore, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_being_graded")
+	valueMetricNumberOfExamsBeingGradedBefore := *metricNumberOfExamsBeingGradedBefore.JSON200.MetricValue
+	// metricNumberOfExamsGradingCompletedBefore, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_grading_completed")
+	// valueMetricNumberOfExamsGradingCompletedBefore := metricNumberOfExamsGradingCompletedBefore.JSON200.MetricValue
 	_, page := newBrowserContextAndPage(t, defaultBrowserContextOptions)
 
 	// Act
@@ -238,6 +246,8 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	firstQuestionButton, err := page.Locator("#go-to-first-question-button").All()
 	err = firstQuestionButton[0].Click()
 	time.Sleep(1 * time.Second)
+	metricNumberOfExamsInProgressDuring, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_in_progress")
+	valueMetricNumberOfExamsInProgressDuring := *metricNumberOfExamsInProgressDuring.JSON200.MetricValue
 	mcRadioOpt1, err := page.Locator("#multiple-choice-radio-option-0").All()
 	err = mcRadioOpt1[0].Click()
 	subQuestionBtn, err := page.Locator("#record-answer-button").All()
@@ -259,7 +269,12 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	submissionValidationBtn, err := page.Locator("#confirm-exam-submission-button").All()
 	err = submissionValidationBtn[0].Click()
 
+	time.Sleep(2 * time.Second)
 	// Assert
+	metricNumberOfExamsBeingGradedAfter, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_being_graded")
+	valueMetricNumberOfExamsBeingGradedAfter := *metricNumberOfExamsBeingGradedAfter.JSON200.MetricValue
+	metricNumberOfExamsCompletedAfter, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_completed")
+	valueMetricNumberOfExamsCompletedAfter := *metricNumberOfExamsCompletedAfter.JSON200.MetricValue
 	countOfExaminationEventsAfter, err := queryCountOfExaminationEvents()
 	countOfExaminationQuestionsAfter, err := queryCountOfExaminationQuestions()
 	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
@@ -284,5 +299,8 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 		assert.Equal(t, expectedQuestion.ResponseOptions, actualQuestion.ResponseOptions, "Question %d: ResponseOptions do not match", expectedQuestion.QuestionIndex)
 		assert.Equal(t, *expectedQuestion.ProvidedAnswer, *actualQuestion.ProvidedAnswer, "Question %d: Provided answer does not match expected", expectedQuestion.QuestionIndex)
 	}
+	assert.Equal(t, valueMetricNumberOfExamsInProgressBefore+float64(1), valueMetricNumberOfExamsInProgressDuring, "Expected number_of_exams_in_progress metric to increase by 1")
+	assert.Equal(t, valueMetricNumberOfExamsCompletedBefore+float64(1), valueMetricNumberOfExamsCompletedAfter, "Expected number_of_exams_completed metric to increase by 1 after exam submission")
+	assert.Equal(t, valueMetricNumberOfExamsBeingGradedBefore+float64(1), valueMetricNumberOfExamsBeingGradedAfter, "Expected number_of_exams_being_graded metric to increase by 1 after exam submission")
 	assert.NoError(t, err)
 }
