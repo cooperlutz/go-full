@@ -42,5 +42,12 @@ func (h ExamStartedHandler) Handle(ctx context.Context, event ExamStarted) error
 		return err
 	}
 
+	err = h.publisher.EmitEventMessage("reporting.exam_started", msg)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
 	return nil
 }

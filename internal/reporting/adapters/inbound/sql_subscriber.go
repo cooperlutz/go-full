@@ -5,31 +5,41 @@ import (
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 )
 
-func RegisterEventHandlers(events app.Events, pubSub *eeventdriven.BasePgsqlPubSubProcessor) {
-	router := pubSub.GetRouter()
+type Subscriber struct {
+	app    app.Events
+	pubSub *eeventdriven.BasePgsqlPubSubProcessor
+}
 
-	router.AddConsumerHandler(
+func NewSubscriber(events app.Events, pubSub *eeventdriven.BasePgsqlPubSubProcessor) Subscriber {
+	return Subscriber{
+		app:    events,
+		pubSub: pubSub,
+	}
+}
+
+func (s Subscriber) RegisterEventHandlers() {
+	s.pubSub.GetRouter().AddConsumerHandler(
 		"reporting_exam_started_handler",
-		"examination.exam_started",
-		pubSub.GetSubscriber(),
-		events.ExamStarted.Handle(),
+		"reporting.exam_started",
+		s.pubSub.GetSubscriber(),
+		s.app.ExamStarted.Handle(),
 	)
-	router.AddConsumerHandler(
+	s.pubSub.GetRouter().AddConsumerHandler(
 		"reporting_exam_submitted_handler",
-		"examination.exam_submitted",
-		pubSub.GetSubscriber(),
-		events.ExamSubmitted.Handle(),
+		"reporting.exam_submitted",
+		s.pubSub.GetSubscriber(),
+		s.app.ExamSubmitted.Handle(),
 	)
-	router.AddConsumerHandler(
+	s.pubSub.GetRouter().AddConsumerHandler(
 		"reporting_grading_started_handler",
-		"grading.grading_started",
-		pubSub.GetSubscriber(),
-		events.GradingStarted.Handle(),
+		"reporting.grading_started",
+		s.pubSub.GetSubscriber(),
+		s.app.GradingStarted.Handle(),
 	)
-	router.AddConsumerHandler(
+	s.pubSub.GetRouter().AddConsumerHandler(
 		"reporting_grading_completed_handler",
-		"grading.grading_completed",
-		pubSub.GetSubscriber(),
-		events.GradingCompleted.Handle(),
+		"reporting.grading_completed",
+		s.pubSub.GetSubscriber(),
+		s.app.GradingCompleted.Handle(),
 	)
 }

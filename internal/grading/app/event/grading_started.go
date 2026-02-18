@@ -42,5 +42,12 @@ func (h GradingStartedHandler) Handle(ctx context.Context, event GradingStarted)
 		return err
 	}
 
+	err = h.publisher.EmitEventMessage("reporting.grading_started", msg)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
 	return nil
 }

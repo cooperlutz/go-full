@@ -1,3 +1,4 @@
+//nolint:dupl // the event handlers look similar but we don't want to abstract them
 package event
 
 import (

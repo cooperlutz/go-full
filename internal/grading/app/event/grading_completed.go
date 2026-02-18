@@ -42,5 +42,12 @@ func (h GradingCompletedHandler) Handle(ctx context.Context, event GradingComple
 		return err
 	}
 
+	err = h.publisher.EmitEventMessage("reporting.grading_completed", msg)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return err
+	}
+
 	return nil
 }
