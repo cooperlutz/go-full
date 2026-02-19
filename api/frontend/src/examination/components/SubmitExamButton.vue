@@ -4,11 +4,13 @@ import { useSubmitExam } from "../composables/useExamination";
 defineProps<{
   examId: string;
 }>();
+const emit = defineEmits(["exam-submitted"]);
 
 const { submitExam } = useSubmitExam();
 
 function submitExamHandler(examId: string) {
   submitExam(examId);
+  emit("exam-submitted");
 }
 </script>
 

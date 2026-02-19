@@ -7,6 +7,8 @@ import {
 } from "../composables/useGrading";
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
+const emit = defineEmits(["question-graded"]);
+
 const pointsToGive = ref(0);
 const graderComments = ref("");
 
@@ -15,6 +17,18 @@ const { gradeExamQuestion } = useGradeExamQuestion();
 const route = useRoute();
 const examId = route.params.examId as string;
 const questionIndex = Number(route.params.questionIndex);
+
+function gradeQuestion() {
+  gradeExamQuestion(
+    examId,
+    questionIndex,
+    pointsToGive.value,
+    graderComments.value,
+  );
+  emit("question-graded");
+  // navigate back to exam grading page after grading question
+  window.location.href = `/grading/exam/${examId}`;
+}
 
 onMounted(() => {
   getExamQuestion(examId, questionIndex);
@@ -55,14 +69,7 @@ onMounted(() => {
           />
           <button
             class="btn btn-primary"
-            @click="
-              gradeExamQuestion(
-                examId,
-                question.questionIndex,
-                pointsToGive,
-                graderComments,
-              )
-            "
+            @click="gradeQuestion"
           >
             Send
           </button>

@@ -7,6 +7,7 @@ import { type Question } from "../../services";
 const props = defineProps<{
   question: Question;
 }>();
+const emit = defineEmits(["question-answered"]);
 
 const providedAnswer = ref<string>("");
 providedAnswer.value = props.question.providedAnswer || "";
@@ -30,6 +31,7 @@ providedAnswer.value = props.question.providedAnswer || "";
       :examId="props.question.examId"
       :questionIndex="props.question.questionIndex"
       :answer="providedAnswer"
+      @question-answered="emit('question-answered')"
     />
   </div>
 </template>

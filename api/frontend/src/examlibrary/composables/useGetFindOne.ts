@@ -15,7 +15,7 @@ export function useFindExamByID() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
 
-  const lookup = async (id: string) => {
+  const findExam = async (id: string) => {
     loading.value = true;
     error.value = null;
     try {
@@ -34,7 +34,7 @@ export function useFindExamByID() {
   };
 
   return {
-    lookup,
+    findExam,
     error,
     loading,
   };

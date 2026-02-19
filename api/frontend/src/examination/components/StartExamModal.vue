@@ -6,6 +6,8 @@ import { useStartExam } from "../composables/useExamination";
 const props = defineProps<{
   libraryExamId: string;
 }>();
+const emit = defineEmits(["exam-started"]);
+
 const studentId = ref("");
 const { startExam, exam, error } = useStartExam();
 
@@ -16,6 +18,7 @@ const clickStart = async (libraryExamId: string, studentId: string) => {
     console.error("Error starting exam:", error.value);
     return;
   }
+  emit("exam-started");
   window.location.href = `/exam/${exam.value?.examId}`;
 };
 </script>
