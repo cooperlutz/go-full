@@ -41,6 +41,16 @@ deps-audit: ### check dependencies vulnerabilities
 	go tool govulncheck ./...
 .PHONY: deps-audit
 
+deps-update: deps-update-packages all ### update dependencies and run all setup tasks
+.PHONY: deps-update
+
+deps-update-packages: ### update package dependencies in go and frontend
+	go get -u ./...
+	$(PNPM) update
+	$(PNPM) install
+	go mod vendor
+.PHONY: deps-update-packages
+
 ############################################################################
 #                            MODERNIZE                                     #
 ############################################################################
