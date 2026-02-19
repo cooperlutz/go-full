@@ -1,14 +1,21 @@
 <script lang="ts" setup>
 import { useRoute } from "vue-router";
 
-function parsePathToBreadcrumbs(path: string): string[] {
+type Breadcrumb = {
+  name: string;
+  link: string;
+};
+
+function parsePathToBreadcrumbs(path: string): Breadcrumb[] {
   const segments = path.split("/").filter((segment) => segment.length > 0);
-  const breadcrumbs: string[] = [];
+  const breadcrumbs: Breadcrumb[] = [];
 
   segments.forEach((segment) => {
     // capitalize first letter of each word
-    segment = segment.replace(/\b\w/g, (char) => char.toUpperCase());
-    breadcrumbs.push(segment);
+    const name = segment.replace(/\b\w/g, (char) => char.toUpperCase());
+    // create link by joining segments up to the current segment
+    const link = "/" + segments.slice(0, segments.indexOf(segment) + 1).join("/");
+    breadcrumbs.push({ name, link });
   });
 
   return breadcrumbs;
@@ -24,7 +31,7 @@ const currentRoute = useRoute();
         v-for="(breadcrumb, index) in parsePathToBreadcrumbs(currentRoute.path)"
         :key="index"
       >
-        <a>{{ breadcrumb }}</a>
+        <a :href="breadcrumb.link">{{ breadcrumb.name }}</a>
       </li>
     </ul>
   </div>
