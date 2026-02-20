@@ -17,7 +17,7 @@ permissions:
   contents: write
 
 env:
-  CONTAINER_IMAGE: ghcr.io/cooperlutz/go-full
+  CONTAINER_IMAGE_NAME: ghcr.io/cooperlutz/go-full
   IMAGE_NAME: ${{ github.repository }}
   AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
   AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
@@ -70,11 +70,11 @@ jobs:
         id: get_image_digest
         run: |
           echo "Getting latest image digest for $IMAGE_NAME..."
-          MANIFEST_FOR_LATEST=$(docker manifest inspect $CONTAINER_IMAGE:latest)
+          MANIFEST_FOR_LATEST=$(docker manifest inspect $CONTAINER_IMAGE_NAME:latest)
           SHA_FOR_AMD64_LATEST=$(yq '.manifests[] | select(.platform.architecture == "amd64" and .platform.os == "linux") | .digest' -P <<< "$MANIFEST_FOR_LATEST")  
           echo "SHA for AMD64 latest: $SHA_FOR_AMD64_LATEST"
-          LATEST_IMAGE_WITH_DIGEST="$CONTAINER_IMAGE@$SHA_FOR_AMD64_LATEST"
-          echo "LATEST_IMAGE_WITH_DIGEST=$LATEST_IMAGE_WITH_DIGEST" >> $GITHUB_ENV
+          LATEST_IMAGE_WITH_DIGEST="$CONTAINER_IMAGE_NAME@$SHA_FOR_AMD64_LATEST"
+          echo "CONTAINER_IMAGE=$LATEST_IMAGE_WITH_DIGEST" >> $GITHUB_ENV
 
       - name: Deploy / Provision Immutable Azure Infrastructure
         run: azd provision -C ./deploy/azure --no-prompt --no-state
@@ -89,11 +89,8 @@ jobs:
           DB_NAME: ${{ vars.DB_NAME }}
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
-          CONTAINER_IMAGE: ${{ env.LATEST_IMAGE_WITH_DIGEST }}
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
-
-      # - name: Deploy / Deploy Container App
-      #   run: make deploy
+          # CONTAINER_IMAGE: set in previous step after fetching digest for latest image
 
       - name: Output AZD Info
         run: azd show -C ./deploy/azure
