@@ -73,8 +73,8 @@ jobs:
           MANIFEST_FOR_LATEST=$(docker manifest inspect $CONTAINER_IMAGE_NAME:latest)
           SHA_FOR_AMD64_LATEST=$(yq '.manifests[] | select(.platform.architecture == "amd64" and .platform.os == "linux") | .digest' -P <<< "$MANIFEST_FOR_LATEST")  
           echo "SHA for AMD64 latest: $SHA_FOR_AMD64_LATEST"
-          CONTAINER_IMAGE="$CONTAINER_IMAGE_NAME@$SHA_FOR_AMD64_LATEST"
-          echo "LATEST_IMAGE_WITH_DIGEST=$CONTAINER_IMAGE" >> $GITHUB_ENV
+          LATEST_IMAGE_WITH_DIGEST="$CONTAINER_IMAGE_NAME@$SHA_FOR_AMD64_LATEST"
+          echo "CONTAINER_IMAGE=$LATEST_IMAGE_WITH_DIGEST" >> $GITHUB_ENV
 
       - name: Deploy / Provision Immutable Azure Infrastructure
         run: azd provision -C ./deploy/azure --no-prompt --no-state
@@ -89,7 +89,6 @@ jobs:
           DB_NAME: ${{ vars.DB_NAME }}
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
-          CONTAINER_IMAGE: $LATEST_IMAGE_WITH_DIGEST
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
 
       # - name: Deploy / Deploy Container App
