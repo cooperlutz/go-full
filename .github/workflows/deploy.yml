@@ -7,7 +7,7 @@ name: Deploy
 # https://learn.microsoft.com/en-us/azure/container-apps/github-actions
 on:
   push:
-    branches: [ main ]
+    branches: [ main, deploy-correct-image ]
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
@@ -89,7 +89,7 @@ jobs:
           DB_NAME: ${{ vars.DB_NAME }}
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
-          CONTAINER_IMAGE: ${{ env.LATEST_IMAGE_WITH_DIGEST }}
+          CONTAINER_IMAGE: $LATEST_IMAGE_WITH_DIGEST
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
 
       # - name: Deploy / Deploy Container App
