@@ -7,7 +7,7 @@ name: Deploy
 # https://learn.microsoft.com/en-us/azure/container-apps/github-actions
 on:
   push:
-    branches: [ main, deploy-correct-image ]
+    branches: [ main ]
   workflow_dispatch:
 
 # Set up permissions for deploying with secretless Azure federated credentials
@@ -58,13 +58,13 @@ jobs:
       - name: Deploy / Setup / Install azd
         uses: Azure/setup-azd@v2
 
-      # - name: Deploy / Setup / Log in with Azure (Federated Credentials)
-      #   run: |
-      #     azd auth login `
-      #       --client-id "$Env:AZURE_CLIENT_ID" `
-      #       --federated-credential-provider "github" `
-      #       --tenant-id "$Env:AZURE_TENANT_ID"
-      #   shell: pwsh
+      - name: Deploy / Setup / Log in with Azure (Federated Credentials)
+        run: |
+          azd auth login `
+            --client-id "$Env:AZURE_CLIENT_ID" `
+            --federated-credential-provider "github" `
+            --tenant-id "$Env:AZURE_TENANT_ID"
+        shell: pwsh
 
       - name: Get latest image digest for the container image
         id: get_image_digest
@@ -90,9 +90,7 @@ jobs:
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
           SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
-
-      # - name: Deploy / Deploy Container App
-      #   run: make deploy
+          # CONTAINER_IMAGE: set in previous step after fetching digest for latest image
 
       - name: Output AZD Info
         run: azd show -C ./deploy/azure
