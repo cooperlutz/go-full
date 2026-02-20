@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
+
+import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+
 import {
   useGetExamQuestion,
   useGradeExamQuestion,
 } from "../composables/useGrading";
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
 const emit = defineEmits(["question-graded"]);
 
@@ -67,12 +69,7 @@ onMounted(() => {
             class="input"
             v-model="pointsToGive"
           />
-          <button
-            class="btn btn-primary"
-            @click="gradeQuestion"
-          >
-            Send
-          </button>
+          <button class="btn btn-primary" @click="gradeQuestion">Send</button>
         </div>
       </div>
     </div>

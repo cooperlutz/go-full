@@ -11,7 +11,6 @@ import { useGetExam } from "../composables/useExamination";
 const route = useRoute();
 const questionIndex = Number(route.params.index);
 const examId = route.params.id as string;
-
 const { exam, loading, error, getExam } = useGetExam();
 
 onMounted(async () => {
@@ -31,7 +30,7 @@ onMounted(async () => {
     <div class="card-body">
       <div class="grid grid-cols-5 gap-4 mb-4">
         <h1 class="card-title col-span-3">Examination Component</h1>
-        <ExaminationProgress 
+        <ExaminationProgress
           class="col-span-2 items-end"
           :totalQuestions="exam.totalQuestions || 0"
           :answeredQuestions="exam.answeredQuestions || 0"
@@ -50,7 +49,10 @@ onMounted(async () => {
             :questions="exam.questions"
           />
           <div class="flex justify-center mt-4">
-            <SubmitExamButton :examId="exam.examId" @exam-submitted="getExam(examId)"/>
+            <SubmitExamButton
+              :examId="exam.examId"
+              @exam-submitted="getExam(examId)"
+            />
           </div>
         </div>
       </div>

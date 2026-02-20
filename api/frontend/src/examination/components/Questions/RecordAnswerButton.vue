@@ -16,7 +16,11 @@ const { submitAnswer, loading } = useSubmitAnswer();
     <button
       id="record-answer-button"
       class="btn btn-outline"
-      @click="submitAnswer(props.examId, props.questionIndex, props.answer).then(() => emit('question-answered'))"
+      @click="
+        submitAnswer(props.examId, props.questionIndex, props.answer).then(() =>
+          emit('question-answered'),
+        )
+      "
       :disabled="loading"
     >
       Record Answer

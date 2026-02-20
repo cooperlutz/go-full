@@ -13,7 +13,12 @@ function calculateProgressPercentage(answered: number, total: number): number {
 <template>
   <div class="flex flex-col space-y-2">
     Answered: {{ props.answeredQuestions || 0 }} /
-    {{ props.totalQuestions || 0 }} ({{ calculateProgressPercentage(props.answeredQuestions, props.totalQuestions).toFixed(2) }}%)
+    {{ props.totalQuestions || 0 }} ({{
+      calculateProgressPercentage(
+        props.answeredQuestions,
+        props.totalQuestions,
+      ).toFixed(2)
+    }}%)
     <progress
       v-if="props.totalQuestions !== 0 && props.answeredQuestions !== undefined"
       class="progress w-56 mt-1"
