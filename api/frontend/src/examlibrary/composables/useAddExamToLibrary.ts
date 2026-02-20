@@ -1,11 +1,11 @@
 import { ref } from "vue";
 
-import { BackendConfig } from "~/examlibrary/config";
+import { BackendConfig } from "../config";
 import {
   ExamlibraryApi,
   type PostAddExamToLibraryRequest,
   type Exam,
-} from "~/examlibrary/services";
+} from "../services";
 
 const examLibraryAPI = new ExamlibraryApi(BackendConfig);
 

@@ -1,10 +1,7 @@
 import { ref } from "vue";
 
-import { BackendConfig } from "~/examlibrary/config";
-import {
-  ExamlibraryApi,
-  type GetFindOneByIDRequest,
-} from "~/examlibrary/services";
+import { BackendConfig } from "../config";
+import { ExamlibraryApi, type GetFindOneByIDRequest } from "../services";
 
 const examLibraryAPI = new ExamlibraryApi(BackendConfig);
 

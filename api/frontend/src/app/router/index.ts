@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import { useLocalTokenStore } from "../../iam/stores/useToken";
 // Layout imports
-import ShellComponent from "~/app/layouts/ApplicationShell/ApplicationShell.vue";
+import ShellComponent from "../layouts/ApplicationShell/ApplicationShell.vue";
 // View imports
-import ComingSoon from "~/app/views/ComingSoon.vue";
-import Error404View from "~/app/views/Error404View.vue";
+import ComingSoon from "../views/ComingSoon.vue";
+import Error404View from "../views/Error404View.vue";
 // Route imports
 import INSECURE_ROUTES from "./insecure";
 import protectedRoutes from "./protected";

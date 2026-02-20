@@ -2,8 +2,8 @@
 import { onMounted } from "vue";
 import { CircleX } from "lucide-vue-next";
 
-import { type ExamMetadata } from "~/examlibrary/services";
-import { useGetFindAllExams } from "~/examlibrary/composables/useGetFindAllExams";
+import { type ExamMetadata } from "../services";
+import { useGetFindAllExams } from "../composables/useGetFindAllExams";
 
 const { error, loading, allExams, fetchData } = useGetFindAllExams();
 

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 
-
 import MultipleChoice from "./Questions/MultipleChoice.vue";
 import ShortAnswer from "./Questions/ShortAnswer.vue";
 import EssayQuestion from "./Questions/EssayQuestion.vue";

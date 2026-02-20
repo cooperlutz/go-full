@@ -5,10 +5,11 @@ It uses the useFindExamByID composable to retrieve the exam data and handles loa
 */
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
+import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 import StartExamModal from "~/examination/components/StartExamModal.vue";
-import { useFindExamByID } from "~/examlibrary/composables/useGetFindOne";
+
+import { useFindExamByID } from "../composables/useGetFindOne";
 import type { Exam } from "../services";
 
 const exam = ref<Exam>();
@@ -37,7 +38,7 @@ onMounted(async () => {
         <p><b>Name:</b> {{ exam?.name }}</p>
         <p><b>Grade Level:</b> {{ exam?.gradeLevel }}</p>
         <div class="mt-6">
-          <StartExamModal :libraryExamId="exam?.id ?? ''"/>
+          <StartExamModal :libraryExamId="exam?.id ?? ''" />
         </div>
       </div>
     </div>

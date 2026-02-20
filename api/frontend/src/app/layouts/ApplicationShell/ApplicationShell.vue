@@ -13,9 +13,9 @@ import {
 } from "lucide-vue-next";
 import { batBall } from "@lucide/lab";
 
-import Footer from "~/app/layouts/ApplicationShell/Footer/FooterPrimary.vue";
+import Footer from "./Footer/FooterPrimary.vue";
 import LogoName from "./NavBar/NavBarLogo.vue";
-import CONFIG from "~/app/config";
+import CONFIG from "../../config";
 
 // Create a functional component for the custom icon
 const PingPongIcon = () => h(Icon, { name: "ping-pong", iconNode: batBall });

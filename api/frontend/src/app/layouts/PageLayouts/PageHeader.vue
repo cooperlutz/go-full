@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import PageHeaderBreadcrumbs from "~/app/components/PageHeader/PageHeaderBreadcrumbs.vue";
-import PageHeaderMenu from "~/app/components/PageHeader/PageHeaderMenu.vue";
-import SectionDivider from "~/app/components/SectionDivider/SectionDivider.vue";
+import PageHeaderBreadcrumbs from "../../components/PageHeader/PageHeaderBreadcrumbs.vue";
+import PageHeaderMenu from "../../components/PageHeader/PageHeaderMenu.vue";
+import SectionDivider from "../../components/SectionDivider/SectionDivider.vue";
 
 defineProps({
   title: String,
