@@ -139,6 +139,9 @@ func authentication() {
 		Email:    openapi_types.Email("user@example.com"),
 		Password: "SecureP@ssw0rd!",
 	})
+	if err != nil {
+		slog.Error("Error registering test user:", slog.String("error", err.Error()))
+	}
 
 	resp, err := iamApiClient.LoginUserWithResponse(context.Background(), iam_api_client.LoginRequest{
 		Email:    "user@example.com",
@@ -148,4 +151,5 @@ func authentication() {
 		slog.Error("Error logging in test user:", slog.String("error", err.Error()))
 	}
 	bearerToken = resp.JSON200.AccessToken
+
 }

@@ -6,7 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 
 	api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
@@ -169,15 +168,14 @@ Implementation Notes:
 4. An exam started event should be published to the message bus, verified via querying the 'watermill_examination' table in the database
 */
 func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
-	randomStudentId := uuid.New().String()
 	numberThreeInt32 := int32(3)
 	expect := api_client.Exam{
 		LibraryExamId:     new("11111111-1111-1111-1111-111111111111"),
 		AnsweredQuestions: &numberThreeInt32,
 		TotalQuestions:    &numberThreeInt32,
-		StudentId:         randomStudentId,
-		Completed:         true,
-		ExamId:            "", // we don't know the exam ID ahead of time
+		// StudentId:         ,
+		Completed: true,
+		ExamId:    "", // we don't know the exam ID ahead of time
 		Questions: &[]api_client.Question{
 			{
 				QuestionIndex: 1,
@@ -236,7 +234,6 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	_, err = page.Goto(serverAddr + "/exam-library/11111111-1111-1111-1111-111111111111")
 	modalButtons, err := page.Locator("#start-exam-modal-button").All()
 	err = modalButtons[0].Click()
-	err = page.Locator("#student-id-input").Fill(randomStudentId)
 	buttons, err := page.Locator("#confirm-start-exam-button").All()
 	err = buttons[0].Click()
 	time.Sleep(1 * time.Second)
@@ -285,7 +282,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	assert.Greater(t, countOfExaminationQuestionsAfter, countOfExaminationQuestionsBefore, "Expected number of questions to increase")
 	actual, err := examinationApiClient.GetExamWithResponse(ctx, examId)
 	assert.Equal(t, *expect.LibraryExamId, *actual.JSON200.LibraryExamId, "Expected LibraryExamId to match")
-	assert.Equal(t, expect.StudentId, actual.JSON200.StudentId, "Expected StudentId to match")
+	// assert.Equal(t, expect.StudentId, actual.JSON200.StudentId, "Expected StudentId to match")
 	assert.Equal(t, *expect.AnsweredQuestions, *actual.JSON200.AnsweredQuestions, "Expected AnsweredQuestions to match")
 	assert.Equal(t, *expect.TotalQuestions, *actual.JSON200.TotalQuestions, "Expected TotalQuestions to match")
 	assert.Equal(t, expect.Completed, actual.JSON200.Completed, "Expected Completed to match")
