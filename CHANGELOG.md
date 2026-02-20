@@ -1,3 +1,9 @@
+## v0.1.54 (2026-02-20)
+
+### Fix
+
+- export latest image sha properly (#177)
+
 ## v0.1.53 (2026-02-20)
 
 ### Fix
