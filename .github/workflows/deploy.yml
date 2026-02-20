@@ -58,13 +58,13 @@ jobs:
       - name: Deploy / Setup / Install azd
         uses: Azure/setup-azd@v2
 
-      - name: Deploy / Setup / Log in with Azure (Federated Credentials)
-        run: |
-          azd auth login `
-            --client-id "$Env:AZURE_CLIENT_ID" `
-            --federated-credential-provider "github" `
-            --tenant-id "$Env:AZURE_TENANT_ID"
-        shell: pwsh
+      # - name: Deploy / Setup / Log in with Azure (Federated Credentials)
+      #   run: |
+      #     azd auth login `
+      #       --client-id "$Env:AZURE_CLIENT_ID" `
+      #       --federated-credential-provider "github" `
+      #       --tenant-id "$Env:AZURE_TENANT_ID"
+      #   shell: pwsh
 
       - name: Get latest image digest for the container image
         id: get_image_digest
