@@ -14,7 +14,8 @@ function parsePathToBreadcrumbs(path: string): Breadcrumb[] {
     // capitalize first letter of each word
     const name = segment.replace(/\b\w/g, (char) => char.toUpperCase());
     // create link by joining segments up to the current segment
-    const link = "/" + segments.slice(0, segments.indexOf(segment) + 1).join("/");
+    const link =
+      "/" + segments.slice(0, segments.indexOf(segment) + 1).join("/");
     breadcrumbs.push({ name, link });
   });
 
