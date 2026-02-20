@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { useProfile } from "~/iam/composables/useIam";
 
 import { useStartExam } from "../composables/useExamination";
 
@@ -8,12 +8,13 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["exam-started"]);
 
-const studentId = ref("");
 const { startExam, exam, error } = useStartExam();
+const { getProfile } = useProfile();
 
 // clickStart starts a new exam with the given examId and studentId
-const clickStart = async (libraryExamId: string, studentId: string) => {
-  await startExam(libraryExamId, studentId);
+const clickStart = async (libraryExamId: string) => {
+  const profile = await getProfile();
+  await startExam(libraryExamId, profile?.id || "");
   if (error.value) {
     console.error("Error starting exam:", error.value);
     return;
@@ -34,21 +35,11 @@ const clickStart = async (libraryExamId: string, studentId: string) => {
   <dialog id="start_exam_modal" class="modal">
     <div class="modal-box">
       <h3 class="text-lg font-bold">Take Exam</h3>
-      Enter your Student ID to begin the exam.
-      <label class="input mt-4">
-        <input
-          id="student-id-input"
-          type="text"
-          class="grow"
-          placeholder="Student ID"
-          v-model="studentId"
-        />
-      </label>
       <div class="card-actions">
         <div
           id="confirm-start-exam-button"
           class="btn btn-m btn-success text-xs mt-4"
-          @click="clickStart(props.libraryExamId, studentId)"
+          @click="clickStart(props.libraryExamId)"
         >
           Start Exam
         </div>
