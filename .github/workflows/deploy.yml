@@ -74,6 +74,7 @@ jobs:
           SHA_FOR_AMD64_LATEST=$(yq '.manifests[] | select(.platform.architecture == "amd64" and .platform.os == "linux") | .digest' -P <<< "$MANIFEST_FOR_LATEST")  
           echo "SHA for AMD64 latest: $SHA_FOR_AMD64_LATEST"
           LATEST_IMAGE_WITH_DIGEST="$CONTAINER_IMAGE@$SHA_FOR_AMD64_LATEST"
+          echo "LATEST_IMAGE_WITH_DIGEST=$LATEST_IMAGE_WITH_DIGEST" >> $GITHUB_ENV
 
       - name: Deploy / Provision Immutable Azure Infrastructure
         run: azd provision -C ./deploy/azure --no-prompt --no-state
