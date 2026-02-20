@@ -43,6 +43,14 @@
         "additionalProperties": {
           "withInterfaces": true
         }
+      },
+      "reporting": {
+        "generatorName": "typescript-fetch",
+        "output": "#{cwd}/src/reporting/services",
+        "inputSpec": "../rest/reporting/api.yaml",
+        "additionalProperties": {
+          "withInterfaces": true
+        }
       }
     }
   }

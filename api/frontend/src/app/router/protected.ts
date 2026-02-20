@@ -6,15 +6,12 @@ import examLibraryRoutes from "~/examlibrary/router";
 import examinationRoutes from "~/examination/router";
 import gradingRoutes from "~/grading/router";
 import { protectedAuthRoutes } from "~/iam/router";
+import reportingRoutes from "~/reporting/router";
 
 const appRoutes = [
   {
     path: "dashboard",
     component: HomeView,
-  },
-  {
-    path: "reporting",
-    redirect: "coming-soon",
   },
 ];
 
@@ -25,6 +22,7 @@ const protectedRoutes = [
   ...examinationRoutes,
   ...protectedAuthRoutes,
   ...gradingRoutes,
+  ...reportingRoutes,
 ];
 
 export default protectedRoutes;
