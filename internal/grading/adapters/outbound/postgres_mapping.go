@@ -31,6 +31,9 @@ func (e GradingExam) toDomain(questions ...GradingQuestion) (*grading.Exam, erro
 		e.LibraryExamID.Bytes,
 		e.ExaminationExamID.Bytes,
 		domainQuestions,
+		e.GradingCompleted,
+		e.TotalPointsPossible.Int32,
+		&e.TotalPointsReceived.Int32,
 	), nil
 }
 

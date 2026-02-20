@@ -30,6 +30,9 @@ func MapToExam(
 	libraryExamId uuid.UUID,
 	examinationExamId uuid.UUID,
 	questions []*Question,
+	gradingCompleted bool,
+	totalPointsPossible int32,
+	totalPointsReceived *int32,
 ) *Exam {
 	return &Exam{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
@@ -39,10 +42,13 @@ func MapToExam(
 			deleted,
 			deletedAt,
 		),
-		studentId:         studentId,
-		libraryExamId:     libraryExamId,
-		examinationExamId: examinationExamId,
-		questions:         questions,
+		studentId:           studentId,
+		libraryExamId:       libraryExamId,
+		examinationExamId:   examinationExamId,
+		questions:           questions,
+		gradingCompleted:    gradingCompleted,
+		totalPossiblePoints: totalPointsPossible,
+		totalPointsReceived: totalPointsReceived,
 	}
 }
 
