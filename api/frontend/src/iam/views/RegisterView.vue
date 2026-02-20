@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-import { useRegister } from "~/iam/composables/useIam";
+import { useRegister } from "../composables/useIam";
 
 const email = ref("");
 const password = ref("");

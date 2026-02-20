@@ -1,10 +1,7 @@
 import { ref } from "vue";
 
-import { BackendConfig } from "~/examlibrary/config";
-import {
-  ExamlibraryApi,
-  type GetFindOneByIDRequest,
-} from "~/examlibrary/services";
+import { BackendConfig } from "../config";
+import { ExamlibraryApi, type GetFindOneByIDRequest } from "../services";
 
 const examLibraryAPI = new ExamlibraryApi(BackendConfig);
 
@@ -15,7 +12,7 @@ export function useFindExamByID() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
 
-  const lookup = async (id: string) => {
+  const findExam = async (id: string) => {
     loading.value = true;
     error.value = null;
     try {
@@ -34,7 +31,7 @@ export function useFindExamByID() {
   };
 
   return {
-    lookup,
+    findExam,
     error,
     loading,
   };

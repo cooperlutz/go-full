@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useGetExam } from "../composables/useGrading";
+
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+
+import { useGetExam } from "../composables/useGrading";
 
 const { exam, loading, error, getExam } = useGetExam();
 const route = useRoute();
 const examId = route.params.examId as string;
+
 onMounted(() => {
   getExam(examId);
 });

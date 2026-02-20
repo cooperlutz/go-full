@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
-import { BackendConfig } from "~/examlibrary/config";
-import { ExamlibraryApi, type ExamMetadata } from "~/examlibrary/services";
+import { BackendConfig } from "../config";
+import { ExamlibraryApi, type ExamMetadata } from "../services";
 
 const examLibraryAPI = new ExamlibraryApi(BackendConfig);
 

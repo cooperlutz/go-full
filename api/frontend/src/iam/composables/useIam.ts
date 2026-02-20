@@ -1,13 +1,13 @@
 import { ref } from "vue";
 
-import { useLocalTokenStore } from "~/iam/stores/useToken";
-import { BackendConfig } from "~/iam/config";
+import { useLocalTokenStore } from "../stores/useToken";
+import { BackendConfig } from "../config";
 import {
   DefaultApi,
   type LoginUserRequest,
   type RefreshTokenRequest,
   type RegisterUserRequest,
-} from "~/iam/services";
+} from "../services";
 
 const iamAPI = new DefaultApi(BackendConfig);
 const tokenStore = useLocalTokenStore();

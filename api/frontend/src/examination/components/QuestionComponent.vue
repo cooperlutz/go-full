@@ -10,6 +10,7 @@ const props = defineProps<{
   examId: string;
   questionIndex: number;
 }>();
+const emit = defineEmits(["question-answered"]);
 
 const { getQuestion, examQuestion, loading, error } = useGetQuestion();
 
@@ -26,14 +27,17 @@ onMounted(async () => {
       <MultipleChoice
         v-if="examQuestion?.questionType === 'multiple-choice'"
         :question="examQuestion"
+        @question-answered="emit('question-answered')"
       />
       <ShortAnswer
         v-else-if="examQuestion?.questionType === 'short-answer'"
         :question="examQuestion"
+        @question-answered="emit('question-answered')"
       />
       <EssayQuestion
         v-else-if="examQuestion?.questionType === 'essay'"
         :question="examQuestion"
+        @question-answered="emit('question-answered')"
       />
       <div v-if="loading">Loading question...</div>
       <div v-if="error">Error loading question: {{ error.message }}</div>

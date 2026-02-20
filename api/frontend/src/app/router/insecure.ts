@@ -1,4 +1,5 @@
-import HealthView from "~/app/views/HealthView.vue";
+import HealthView from "../views/HealthView.vue";
+
 import { publicAuthRoutes } from "~/iam/router";
 
 const INSECURE_ROUTES = [

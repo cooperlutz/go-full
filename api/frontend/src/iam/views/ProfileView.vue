@@ -2,10 +2,16 @@
 import { onMounted, ref } from "vue";
 import { Mail, School } from "lucide-vue-next";
 
-import { type UserProfile } from "~/iam/services";
-import { useProfile } from "~/iam/composables/useIam";
+import { type UserProfile } from "../services";
+import { useProfile, useLogout } from "../composables/useIam";
 
 const userProfile = ref<UserProfile | null>(null);
+const { logout } = useLogout();
+
+function logoutAndRedirect() {
+  logout();
+  window.location.href = "/login";
+}
 
 onMounted(async () => {
   const { getProfile } = useProfile();
@@ -60,6 +66,7 @@ onMounted(async () => {
             </dl>
           </div>
         </div>
+        <button class="btn" @click="logoutAndRedirect">Logout</button>
         <button class="btn">Edit your profile</button>
       </div>
       <div class="skeleton h-32 w-full justify-center flex items-center">

@@ -6,6 +6,7 @@ const props = defineProps<{
   questionIndex: number;
   answer: string;
 }>();
+const emit = defineEmits(["question-answered"]);
 
 const { submitAnswer, loading } = useSubmitAnswer();
 </script>
@@ -15,7 +16,11 @@ const { submitAnswer, loading } = useSubmitAnswer();
     <button
       id="record-answer-button"
       class="btn btn-outline"
-      @click="submitAnswer(props.examId, props.questionIndex, props.answer)"
+      @click="
+        submitAnswer(props.examId, props.questionIndex, props.answer).then(() =>
+          emit('question-answered'),
+        )
+      "
       :disabled="loading"
     >
       Record Answer

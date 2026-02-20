@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
 const route = useRoute();

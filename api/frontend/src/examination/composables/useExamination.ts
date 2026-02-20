@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-import { BackendConfig } from "~/examination/config";
+import { BackendConfig } from "../config";
 import {
   DefaultApi,
   type Exam,
@@ -11,7 +11,7 @@ import {
   type Progress,
   type GetExamRequest,
   type SubmitExamRequest,
-} from "~/examination/services";
+} from "../services";
 
 const examinationAPI = new DefaultApi(BackendConfig);
 

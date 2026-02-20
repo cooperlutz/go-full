@@ -1,6 +1,6 @@
 import ExamGrading from "../views/ExamGrading.vue";
 import QuestionGrading from "../views/QuestionGrading.vue";
-import ExamsToGrade from "../views/ExamsToGrade.vue";
+import ExamsToGrade from "../views/GradingView.vue";
 
 const gradingRoutes = [
   {

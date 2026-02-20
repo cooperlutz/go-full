@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-import { useLoginUser } from "~/iam/composables/useIam";
+import { useLoginUser } from "../composables/useIam";
 
 const email = ref("");
 const password = ref("");

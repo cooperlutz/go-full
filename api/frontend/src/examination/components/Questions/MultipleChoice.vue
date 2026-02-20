@@ -7,6 +7,7 @@ import { type Question } from "../../services";
 const props = defineProps<{
   question: Question;
 }>();
+const emit = defineEmits(["question-answered"]);
 
 const selectedAnswer = ref<string>("");
 selectedAnswer.value = props.question.providedAnswer || "";
@@ -24,7 +25,7 @@ selectedAnswer.value = props.question.providedAnswer || "";
             :id="`multiple-choice-radio-option-${props.question.responseOptions?.indexOf(option)}`"
             type="radio"
             :value="option"
-            :name="option"
+            :name="`multiple-choice-radio-${props.question.questionIndex}`"
             class="radio"
             v-model="selectedAnswer"
           />
@@ -36,6 +37,7 @@ selectedAnswer.value = props.question.providedAnswer || "";
       :examId="props.question.examId"
       :questionIndex="props.question.questionIndex"
       :answer="selectedAnswer"
+      @question-answered="emit('question-answered')"
     />
   </div>
 </template>
