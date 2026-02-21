@@ -58,7 +58,8 @@ func (h ExamSubmittedHandler) Handle(
 	gradingCompletedHandler GradingCompletedHandler,
 ) message.NoPublishHandlerFunc {
 	return eeventdriven.TraceConsumerHandler(func(msg *message.Message) error {
-		ctx := msg.Context()
+		ctx, span := telemetree.AddSpan(msg.Context(), "grading.app.event.exam_submitted.handle")
+		defer span.End()
 
 		// unmarshal the event
 		var event ExamSubmitted

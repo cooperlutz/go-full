@@ -30,7 +30,7 @@ describe("StartExamModal", () => {
     await nextTick();
 
     // Assert
-    const studentIdInput = wrapper.find("#student-id-input");
+    const studentIdInput = wrapper.find("#confirm-start-exam-button");
     expect(studentIdInput.exists()).toBe(true);
   });
 
@@ -44,24 +44,17 @@ describe("StartExamModal", () => {
     const button = wrapper.find("#start-exam-modal-button");
     await button.trigger("click");
     await nextTick();
-    const studentIdInput = wrapper.find("#student-id-input");
-    await studentIdInput.setValue("123e4567-e89b-12d3-a456-426614174000");
     const startButton = wrapper.find("#confirm-start-exam-button");
     await startButton.trigger("click");
     await nextTick();
 
     expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(fetchSpy).toHaveBeenCalledWith(
-      expect.stringContaining("/examination/v1/exams"),
+      expect.stringContaining("/api/iam/profile"),
       expect.objectContaining({
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+        method: "GET",
+        headers: expect.objectContaining({
           Authorization: expect.stringContaining("Bearer "),
-        },
-        body: JSON.stringify({
-          studentId: "123e4567-e89b-12d3-a456-426614174000",
-          libraryExamId: "test-exam-id",
         }),
       }),
     );
