@@ -8,7 +8,9 @@ import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
     <div>
       <h2>Coming Soon</h2>
-      <p>The reporting dashboard is under development. Stay tuned for updates!</p>
+      <p>
+        The reporting dashboard is under development. Stay tuned for updates!
+      </p>
     </div>
   </div>
 </template>

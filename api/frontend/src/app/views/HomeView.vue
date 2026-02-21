@@ -4,6 +4,7 @@ import PageHeader from "../layouts/PageLayouts/PageHeader.vue";
 import DashboardCard from "~/pingpong/components/DashboardCard.vue";
 import ExamLibraryDashboardCard from "~/examlibrary/components/DashboardCard.vue";
 import GradingDashboardCard from "~/grading/components/DashboardCard.vue";
+import ReportingDashboardCard from "~/reporting/components/DashboardCard.vue";
 </script>
 
 <template>
@@ -15,5 +16,6 @@ import GradingDashboardCard from "~/grading/components/DashboardCard.vue";
     <DashboardCard />
     <ExamLibraryDashboardCard />
     <GradingDashboardCard />
+    <ReportingDashboardCard />
   </div>
 </template>

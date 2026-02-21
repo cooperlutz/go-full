@@ -12,9 +12,9 @@ const { startExam, exam, error } = useStartExam();
 const { getProfile } = useProfile();
 
 // clickStart starts a new exam with the given examId and studentId
-const clickStart = async (libraryExamId: string) => {
+const clickStart = async () => {
   const profile = await getProfile();
-  await startExam(libraryExamId, profile?.id || "");
+  await startExam(props.libraryExamId, profile?.id || "");
   if (error.value) {
     console.error("Error starting exam:", error.value);
     return;
@@ -39,7 +39,7 @@ const clickStart = async (libraryExamId: string) => {
         <div
           id="confirm-start-exam-button"
           class="btn btn-m btn-success text-xs mt-4"
-          @click="clickStart(props.libraryExamId)"
+          @click="clickStart()"
         >
           Start Exam
         </div>

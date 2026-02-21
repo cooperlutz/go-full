@@ -151,5 +151,4 @@ func authentication() {
 		slog.Error("Error logging in test user:", slog.String("error", err.Error()))
 	}
 	bearerToken = resp.JSON200.AccessToken
-
 }

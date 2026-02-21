@@ -8,7 +8,6 @@ import {
   type StartNewExamRequest,
   type Question,
   type GetExamQuestionRequest,
-  type Progress,
   type GetExamRequest,
   type SubmitExamRequest,
 } from "../services";
@@ -108,39 +107,6 @@ export function useGetExam() {
     loading,
     getExam,
     exam,
-  };
-}
-
-export function useExaminationProgress() {
-  const error = ref<Error | null>(null);
-  const loading = ref(false);
-  const progress = ref<Progress | null>(null);
-  const progressPercentage = ref<number>(0);
-
-  const getExamProgress = async (examId: string) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await examinationAPI.getExamProgress({ examId });
-      progress.value = response;
-      progressPercentage.value =
-        (response.answeredQuestions / response.totalQuestions) * 100;
-      return response;
-    } catch (err) {
-      if (err instanceof Error) {
-        error.value = err;
-      }
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  return {
-    error,
-    loading,
-    getExamProgress,
-    progress,
-    progressPercentage,
   };
 }
 
