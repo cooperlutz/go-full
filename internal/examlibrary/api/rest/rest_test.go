@@ -30,6 +30,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 		command.NewAddExamToLibrary(
 			"Sample Exam",
 			5,
+			3600,
 			[]common.ExamQuestion{
 				common.NewExamQuestion(
 					1,
@@ -46,6 +47,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 			ExamID:     fixtures.ValidUUID.String(),
 			Name:       "Sample Exam",
 			GradeLevel: 5,
+			TimeLimit:  3600,
 			Questions: []common.ExamQuestion{
 				common.NewExamQuestion(
 					1,
@@ -66,6 +68,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 {
 	"name": "Sample Exam",
 	"gradeLevel": 5,
+	"timeLimit": 3600,
 	"questions": [
 		{
 			"index": 1,

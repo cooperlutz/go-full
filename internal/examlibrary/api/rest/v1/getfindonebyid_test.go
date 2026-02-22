@@ -41,6 +41,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID(t *testing.T) {
 					Id:         new(fixtures.ValidUUID.String()),
 					Name:       new("Sample Exam"),
 					GradeLevel: new(5),
+					TimeLimit:  new(int64(3600)),
 					Questions: &[]v1_server.ExamQuestion{
 						{
 							PossiblePoints:  new(5),
@@ -60,7 +61,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID(t *testing.T) {
 			nil,
 			mock_svc.On(
 				"FindOneExamByID",
-				ctx,
+				mock.Anything,
 				query.FindOneExamByID{
 					ExamID: fixtures.ValidUUID.String(),
 				},
@@ -69,6 +70,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID(t *testing.T) {
 					ExamID:     fixtures.ValidUUID.String(),
 					Name:       "Sample Exam",
 					GradeLevel: 5,
+					TimeLimit:  3600,
 					Questions: &[]common.ExamQuestion{
 						{
 							Index:           1,
@@ -131,7 +133,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindOneByID_Failure(t *testing.T) {
 			assert.AnError,
 			mock_svc.On(
 				"FindOneExamByID",
-				ctx,
+				mock.Anything,
 				query.FindOneExamByID{
 					ExamID: fixtures.ValidUUID.String(),
 				},

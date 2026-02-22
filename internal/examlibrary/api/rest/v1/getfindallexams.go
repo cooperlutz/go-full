@@ -8,11 +8,15 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/mapper"
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 // Get all Exams
 // (GET /exams)
 func (c *ExamLibraryRestAPIControllerV1) GetFindAllExams(ctx context.Context, request server.GetFindAllExamsRequestObject) (server.GetFindAllExamsResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.getfindallexams")
+	defer span.End()
+
 	spanCtx := trace.SpanContextFromContext(ctx)
 
 	qry := query.FindAllExamsWithoutQuestions{}

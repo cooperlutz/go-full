@@ -37,6 +37,12 @@ export interface ExamMetadata {
    * @memberof ExamMetadata
    */
   gradeLevel?: number;
+  /**
+   * The time limit for the exam in seconds
+   * @type {number}
+   * @memberof ExamMetadata
+   */
+  timeLimit?: number;
 }
 
 /**
@@ -61,6 +67,7 @@ export function ExamMetadataFromJSONTyped(
     id: json["id"] == null ? undefined : json["id"],
     name: json["name"] == null ? undefined : json["name"],
     gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
+    timeLimit: json["timeLimit"] == null ? undefined : json["timeLimit"],
   };
 }
 
@@ -80,5 +87,6 @@ export function ExamMetadataToJSONTyped(
     id: value["id"],
     name: value["name"],
     gradeLevel: value["gradeLevel"],
+    timeLimit: value["timeLimit"],
   };
 }

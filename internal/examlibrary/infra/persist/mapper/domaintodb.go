@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
@@ -24,6 +25,7 @@ func FromDomainExamToDB(exam entity.Exam) persist_postgres.SaveExamParams {
 		Deleted:    exam.IsDeleted(),
 		Name:       exam.GetName(),
 		GradeLevel: pgxutil.IntToPgtypeInt4(&gradeLevel),
+		TimeLimit:  pgtype.Int8{Int64: int64(exam.GetTimeLimit()), Valid: true},
 	}
 
 	return examParams

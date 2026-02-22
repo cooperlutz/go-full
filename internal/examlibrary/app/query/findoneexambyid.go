@@ -12,5 +12,6 @@ type FindOneExamByIDResponse struct {
 	ExamID     string
 	Name       string
 	GradeLevel int
+	TimeLimit  int64
 	Questions  *[]common.ExamQuestion
 }

@@ -2,6 +2,7 @@ package entity
 
 import (
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -15,6 +16,7 @@ var (
 	meta2     = baseentitee.NewEntityMetadata()
 	meta3     = baseentitee.NewEntityMetadata()
 	dog       = "dog"
+	examTime  = 30 * time.Minute
 	questions = []ExamQuestion{
 		{
 			EntityMetadata:  meta,
@@ -51,6 +53,7 @@ func TestNewExam(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 	// Assertions
@@ -83,6 +86,7 @@ func TestExam_GetQuestionByIndex(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 	// Assertions
@@ -113,6 +117,7 @@ func TestExam_GetQuestionById(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 
@@ -142,6 +147,7 @@ func TestExam_GetQuestions(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 	// Assertions
@@ -153,9 +159,9 @@ func TestExam_AddQuestion(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		nil,
 	)
-	meta := baseentitee.NewEntityMetadata()
 	newQuestion := ExamQuestion{
 		EntityMetadata:  meta,
 		index:           1,
@@ -177,6 +183,7 @@ func TestExam_GetGradeLevel(t *testing.T) {
 	exam := NewExam(
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 	// Assertions
@@ -193,6 +200,7 @@ func TestMapToExamEntity(t *testing.T) {
 		meta.GetDeletedAtTime(),
 		"Animal Exam",
 		valueobject.GradeLevelThird,
+		examTime,
 		&questions,
 	)
 	// Assertions

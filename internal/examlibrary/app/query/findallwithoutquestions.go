@@ -13,4 +13,5 @@ type ExamWithoutQuestions struct {
 	ExamID     string
 	Name       string
 	GradeLevel int
+	TimeLimit  int64
 }

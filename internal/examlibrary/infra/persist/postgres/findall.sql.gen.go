@@ -58,12 +58,12 @@ func (q *Queries) FindAllExamQuestions(ctx context.Context, arg FindAllExamQuest
 }
 
 const findAllExams = `-- name: FindAllExams :many
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams
 `
 
 // FindAllExams
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams
 func (q *Queries) FindAllExams(ctx context.Context) ([]ExamLibraryExam, error) {
 	rows, err := q.db.Query(ctx, findAllExams)
 	if err != nil {
@@ -81,6 +81,7 @@ func (q *Queries) FindAllExams(ctx context.Context) ([]ExamLibraryExam, error) {
 			&i.Deleted,
 			&i.Name,
 			&i.GradeLevel,
+			&i.TimeLimit,
 		); err != nil {
 			return nil, err
 		}

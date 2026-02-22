@@ -17,15 +17,17 @@ type Exam struct {
 	*baseentitee.EntityMetadata
 	name       string
 	gradeLevel valueobject.GradeLevel
+	timeLimit  time.Duration
 	questions  *[]ExamQuestion
 }
 
 // NewExam creates a new Exam entity.
-func NewExam(name string, gradeLevel valueobject.GradeLevel, questions *[]ExamQuestion) *Exam {
+func NewExam(name string, gradeLevel valueobject.GradeLevel, timeLimit time.Duration, questions *[]ExamQuestion) *Exam {
 	e := &Exam{
 		EntityMetadata: baseentitee.NewEntityMetadata(),
 		name:           name,
 		gradeLevel:     gradeLevel,
+		timeLimit:      timeLimit,
 		questions:      questions,
 	}
 	e.RaiseDomainEvent(
@@ -75,13 +77,17 @@ func (e Exam) GetQuestionById(id uuid.UUID) (*ExamQuestion, error) {
 }
 
 // GetName returns the name of the exam.
-func (e *Exam) GetName() string {
+func (e Exam) GetName() string {
 	return e.name
 }
 
 // GetGradeLevel returns the grade level of the exam.
-func (e *Exam) GetGradeLevel() valueobject.GradeLevel {
+func (e Exam) GetGradeLevel() valueobject.GradeLevel {
 	return e.gradeLevel
+}
+
+func (e Exam) GetTimeLimit() time.Duration {
+	return e.timeLimit
 }
 
 // MapToExamEntity maps raw data to an Exam entity.
@@ -94,6 +100,7 @@ func MapToExamEntity(
 	deletedAt *time.Time,
 	name string,
 	gradeLevel valueobject.GradeLevel,
+	timeLimit time.Duration,
 	questions *[]ExamQuestion,
 ) Exam {
 	exam := Exam{
@@ -106,6 +113,7 @@ func MapToExamEntity(
 		),
 		name:       name,
 		gradeLevel: gradeLevel,
+		timeLimit:  timeLimit,
 		questions:  questions,
 	}
 

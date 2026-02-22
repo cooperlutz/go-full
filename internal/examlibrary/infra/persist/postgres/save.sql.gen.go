@@ -19,7 +19,8 @@ INSERT INTO exam_library.exams (
     deleted_at,
     deleted,
     name,
-    grade_level
+    grade_level,
+    time_limit
 ) VALUES (
     $1,
     $2,
@@ -27,7 +28,8 @@ INSERT INTO exam_library.exams (
     $4,
     $5,
     $6,
-    $7
+    $7,
+    $8
 )
 `
 
@@ -39,6 +41,7 @@ type SaveExamParams struct {
 	Deleted    bool               `db:"deleted" json:"deleted"`
 	Name       string             `db:"name" json:"name"`
 	GradeLevel pgtype.Int4        `db:"grade_level" json:"grade_level"`
+	TimeLimit  pgtype.Int8        `db:"time_limit" json:"time_limit"`
 }
 
 // SaveExam
@@ -50,7 +53,8 @@ type SaveExamParams struct {
 //	    deleted_at,
 //	    deleted,
 //	    name,
-//	    grade_level
+//	    grade_level,
+//	    time_limit
 //	) VALUES (
 //	    $1,
 //	    $2,
@@ -58,7 +62,8 @@ type SaveExamParams struct {
 //	    $4,
 //	    $5,
 //	    $6,
-//	    $7
+//	    $7,
+//	    $8
 //	)
 func (q *Queries) SaveExam(ctx context.Context, arg SaveExamParams) error {
 	_, err := q.db.Exec(ctx, saveExam,
@@ -69,6 +74,7 @@ func (q *Queries) SaveExam(ctx context.Context, arg SaveExamParams) error {
 		arg.Deleted,
 		arg.Name,
 		arg.GradeLevel,
+		arg.TimeLimit,
 	)
 	return err
 }

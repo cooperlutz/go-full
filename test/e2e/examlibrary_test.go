@@ -19,6 +19,7 @@ func TestRestAPIPostExam(t *testing.T) {
 	req := examLibrary_api_client_v1.Exam{
 		GradeLevel: &val,
 		Name:       &examName,
+		TimeLimit:  new(int64(3600)),
 		Questions: &[]examLibrary_api_client_v1.ExamQuestion{
 			{
 				Index:          new(1),

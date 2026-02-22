@@ -6,7 +6,8 @@ INSERT INTO exam_library.exams (
     deleted_at,
     deleted,
     name,
-    grade_level
+    grade_level,
+    time_limit
 ) VALUES (
     $1,
     $2,
@@ -14,7 +15,8 @@ INSERT INTO exam_library.exams (
     $4,
     $5,
     $6,
-    $7
+    $7,
+    $8
 );
 
 -- name: SaveExamQuestion :exec

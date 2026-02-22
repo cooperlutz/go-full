@@ -11,6 +11,7 @@ const examTableHeaders: Record<keyof ExamMetadata, string> = {
   id: "Exam ID",
   name: "Name",
   gradeLevel: "Grade Level",
+  timeLimit: "Time Limit (seconds)",
 };
 
 onMounted(async () => {
@@ -47,6 +48,7 @@ onMounted(async () => {
           </td>
           <td>{{ entity.name }}</td>
           <td>{{ entity.gradeLevel }}</td>
+          <td>{{ entity.timeLimit }}</td>
         </tr>
       </tbody>
     </table>

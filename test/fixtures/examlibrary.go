@@ -15,9 +15,8 @@ import (
 
 func ptrQuestionType(qt server.QuestionType) *server.QuestionType { return new(qt) }
 
-var ValidUUID = uuid.UUID([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
-
 var (
+	ValidUUID                          = uuid.UUID([16]byte{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0})
 	ValidApiExamQuestionMultipleChoice = server.ExamQuestion{
 		Index:           new(1),
 		QuestionText:    new("What animal is known to bark?"),
@@ -78,11 +77,13 @@ var (
 		ExamID:     "00000000-0000-0000-0000-000000000001",
 		Name:       "Sample Exam",
 		GradeLevel: 10,
+		TimeLimit:  3600,
 	}
 	ValidAppExamWithQuestions = query.ExamWithQuestions{
 		ExamID:     "00000000-0000-0000-0000-000000000001",
 		Name:       "Sample Exam",
 		GradeLevel: 10,
+		TimeLimit:  3600,
 		Questions:  ValidAppExamQuestions,
 	}
 	ValidAppExamsWithoutQuestions = []query.ExamWithoutQuestions{
@@ -113,28 +114,33 @@ var (
 		Id:         &ValidAppExamWithoutQuestions.ExamID,
 		Name:       &ValidAppExamWithoutQuestions.Name,
 		GradeLevel: &ValidAppExamWithoutQuestions.GradeLevel,
+		TimeLimit:  &ValidAppExamWithoutQuestions.TimeLimit,
 	}
 	ValidAppFindOneExamByIDResponse = query.FindOneExamByIDResponse{
 		ExamID:     ValidMetadata.GetIdString(),
 		Name:       "Sample Exam",
 		GradeLevel: 10,
+		TimeLimit:  3600,
 		Questions:  &ValidAppExamQuestions,
 	}
 	ValidApiExam = server.Exam{
 		Id:         &ValidAppFindOneExamByIDResponse.ExamID,
 		Name:       &ValidAppFindOneExamByIDResponse.Name,
 		GradeLevel: &ValidAppFindOneExamByIDResponse.GradeLevel,
+		TimeLimit:  &ValidAppFindOneExamByIDResponse.TimeLimit,
 		Questions:  &ValidApiExamQuestions,
 	}
 	ValidAppCommandAddExamToLibraryResult = command.AddExamToLibraryResult{
 		ExamID:     ValidMetadata.GetIdString(),
 		Name:       "Sample Exam",
 		GradeLevel: 10,
+		TimeLimit:  3600,
 		Questions:  ValidAppExamQuestions,
 	}
 	ValidAppCommandAddExamToLibrary = command.NewAddExamToLibrary(
 		"Sample Exam",
 		10,
+		3600,
 		ValidAppExamQuestions,
 	)
 	ValidDomainExamQuestionMultipleChoice, _ = entity.MapToExamQuestion(
@@ -181,7 +187,6 @@ var (
 		ValidDomainExamQuestionShortAnswer,
 		ValidDomainExamQuestionEssay,
 	}
-
 	ValidDBExamQuestionShortAnswer = examlibrary_postgres.SaveExamQuestionParams{
 		ExamQuestionID: pgxutil.UUIDToPgtypeUUID(ValidDomainExamQuestions[1].GetIdUUID()),
 		CreatedAt:      pgxutil.TimeToTimestampz(&ValidDBExamCreatedAt),
@@ -203,6 +208,7 @@ var (
 		ValidMetadata.GetDeletedAtTime(),
 		"Sample Exam",
 		10,
+		3600,
 		&ValidDomainExamQuestions,
 	)
 	ValidDBExamCreatedAt = ValidMetadata.GetCreatedAtTime()
@@ -215,6 +221,7 @@ var (
 		Deleted:    ValidMetadata.IsDeleted(),
 		Name:       "Sample Exam",
 		GradeLevel: pgtype.Int4{Int32: 10, Valid: true},
+		TimeLimit:  pgtype.Int8{Int64: 3600, Valid: true},
 	}
 	ValidDBExamLibraryExam = examlibrary_postgres.ExamLibraryExam{
 		ExamID:    pgxutil.UUIDToPgtypeUUID(ValidMetadata.GetIdUUID()),
@@ -225,6 +232,10 @@ var (
 		Name:      "Sample Exam",
 		GradeLevel: pgtype.Int4{
 			Int32: 10,
+			Valid: true,
+		},
+		TimeLimit: pgtype.Int8{
+			Int64: 3600,
 			Valid: true,
 		},
 	}
@@ -267,12 +278,14 @@ var (
 		ValidMetadata.GetDeletedAtTime(),
 		"Sample Exam",
 		10,
+		3600,
 		nil,
 	)
 	ValidAppCommandAddExamToLibraryResultWithNoQuestions = command.NewAddExamToLibraryResult(
 		ValidMetadata.GetIdString(),
 		"Sample Exam",
 		10,
+		3600,
 		[]common.ExamQuestion{},
 	)
 )
