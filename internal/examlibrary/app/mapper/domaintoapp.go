@@ -36,6 +36,7 @@ func FromDomainExamToAppAddExamToLibraryResult(exam entity.Exam) command.AddExam
 			exam.GetIdString(),
 			exam.GetName(),
 			exam.GetGradeLevel().Int(),
+			int64(exam.GetTimeLimit()),
 			[]common.ExamQuestion{},
 		)
 	}
@@ -49,6 +50,7 @@ func FromDomainExamToAppAddExamToLibraryResult(exam entity.Exam) command.AddExam
 		exam.GetIdString(),
 		exam.GetName(),
 		exam.GetGradeLevel().Int(),
+		int64(exam.GetTimeLimit()),
 		questions,
 	)
 }
@@ -67,6 +69,7 @@ func FromDomainExamToAppFindOneExamByIDResponse(exam entity.Exam) query.FindOneE
 		ExamID:     exam.GetIdString(),
 		Name:       exam.GetName(),
 		GradeLevel: exam.GetGradeLevel().Int(),
+		TimeLimit:  int64(exam.GetTimeLimit()),
 		Questions:  &questions,
 	}
 }
@@ -79,6 +82,7 @@ func FromDomainExamsToAppFindAllExamsWithoutQuestionsResponse(exams []entity.Exa
 			ExamID:     exam.GetIdString(),
 			Name:       exam.GetName(),
 			GradeLevel: exam.GetGradeLevel().Int(),
+			TimeLimit:  int64(exam.GetTimeLimit()),
 		})
 	}
 
@@ -104,6 +108,7 @@ func FromDomainExamsToAppFindAllExamsWithQuestionsResponse(exams []entity.Exam) 
 			ExamID:     exam.GetIdString(),
 			Name:       exam.GetName(),
 			GradeLevel: exam.GetGradeLevel().Int(),
+			TimeLimit:  int64(exam.GetTimeLimit()),
 			Questions:  questions,
 		})
 	}

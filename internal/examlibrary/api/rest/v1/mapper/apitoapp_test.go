@@ -159,11 +159,13 @@ func TestFromApiExamToAppAddExamToLibrary(t *testing.T) {
 			input: server.Exam{
 				Name:       new("Sample Exam"),
 				GradeLevel: new(5),
+				TimeLimit:  new(int64(3600)),
 				Questions:  &fixtures.ValidApiExamQuestions,
 			},
 			expected: command.NewAddExamToLibrary(
 				"Sample Exam",
 				5,
+				3600,
 				fixtures.ValidAppExamQuestions,
 			),
 			expectError: false,
@@ -190,6 +192,7 @@ func TestFromApiExamToAppAddExamToLibrary(t *testing.T) {
 				assert.NoError(t, err)
 				assert.Equal(t, tt.expected.Name, result.Name)
 				assert.Equal(t, tt.expected.GradeLevel, result.GradeLevel)
+				assert.Equal(t, tt.expected.TimeLimit, result.TimeLimit)
 				assert.Equal(t, len(tt.expected.Questions), len(result.Questions))
 				for i := range tt.expected.Questions {
 					assert.Equal(t, tt.expected.Questions[i].Index, result.Questions[i].Index)

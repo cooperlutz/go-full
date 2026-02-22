@@ -11,6 +11,7 @@ func FromAppExamWithoutQuestionsToApiExamMetadata(e query.ExamWithoutQuestions) 
 		Id:         &e.ExamID,
 		Name:       &e.Name,
 		GradeLevel: &e.GradeLevel,
+		TimeLimit:  &e.TimeLimit,
 	}
 }
 
@@ -23,6 +24,7 @@ func FromAppFindOneExamByIDResponseToApiExam(e query.FindOneExamByIDResponse) se
 		Id:         &e.ExamID,
 		Name:       &e.Name,
 		GradeLevel: &e.GradeLevel,
+		TimeLimit:  &e.TimeLimit,
 		Questions:  &questions,
 	}
 	return exam
@@ -45,6 +47,7 @@ func FromAppAddExamToLibraryResultToApiExam(cmd command.AddExamToLibraryResult) 
 		Id:         &cmd.ExamID,
 		Name:       &cmd.Name,
 		GradeLevel: &cmd.GradeLevel,
+		TimeLimit:  &cmd.TimeLimit,
 		Questions:  &questions,
 	}
 	return exam

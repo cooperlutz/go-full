@@ -1,6 +1,8 @@
 package mapper
 
 import (
+	"time"
+
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	persist_postgres "github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres"
@@ -17,6 +19,7 @@ func FromDBExamToDomain(dbExam persist_postgres.ExamLibraryExam) entity.Exam {
 		&dbExam.DeletedAt.Time,
 		dbExam.Name,
 		valueobject.GradeLevel(int(dbExam.GradeLevel.Int32)),
+		time.Duration(dbExam.TimeLimit.Int64),
 		nil, // Questions to be mapped later
 	)
 

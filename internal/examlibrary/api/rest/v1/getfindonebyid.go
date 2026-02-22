@@ -8,11 +8,15 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/mapper"
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 // Get an Exam by ID
 // (GET /exams/{examID})
 func (c *ExamLibraryRestAPIControllerV1) GetFindOneByID(ctx context.Context, request server.GetFindOneByIDRequestObject) (server.GetFindOneByIDResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.getfindonebyid")
+	defer span.End()
+
 	spanCtx := trace.SpanContextFromContext(ctx)
 
 	qry := query.FindOneExamByID{

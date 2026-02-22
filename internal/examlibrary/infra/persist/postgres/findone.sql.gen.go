@@ -12,7 +12,7 @@ import (
 )
 
 const findExamByID = `-- name: FindExamByID :one
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams WHERE exam_id = $1
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams WHERE exam_id = $1
 `
 
 type FindExamByIDParams struct {
@@ -21,7 +21,7 @@ type FindExamByIDParams struct {
 
 // FindExamByID
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams WHERE exam_id = $1
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams WHERE exam_id = $1
 func (q *Queries) FindExamByID(ctx context.Context, arg FindExamByIDParams) (ExamLibraryExam, error) {
 	row := q.db.QueryRow(ctx, findExamByID, arg.ExamID)
 	var i ExamLibraryExam
@@ -33,6 +33,7 @@ func (q *Queries) FindExamByID(ctx context.Context, arg FindExamByIDParams) (Exa
 		&i.Deleted,
 		&i.Name,
 		&i.GradeLevel,
+		&i.TimeLimit,
 	)
 	return i, err
 }

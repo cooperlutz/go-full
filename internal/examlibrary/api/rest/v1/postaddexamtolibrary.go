@@ -7,11 +7,14 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/mapper"
 	"github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
 // Add a new Exam to the Library
 // (POST /exams)
 func (c *ExamLibraryRestAPIControllerV1) PostAddExamToLibrary(ctx context.Context, request server.PostAddExamToLibraryRequestObject) (server.PostAddExamToLibraryResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.postaddexamtolibrary")
+	defer span.End()
 	spanCtx := trace.SpanContextFromContext(ctx)
 
 	cmd, err := mapper.FromApiExamToAppAddExamToLibrary(*request.Body)

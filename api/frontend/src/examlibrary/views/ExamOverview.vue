@@ -37,6 +37,7 @@ onMounted(async () => {
         <p><b>ID:</b> {{ exam?.id }}</p>
         <p><b>Name:</b> {{ exam?.name }}</p>
         <p><b>Grade Level:</b> {{ exam?.gradeLevel }}</p>
+        <p><b>Time Limit:</b> {{ exam?.timeLimit }} seconds</p>
         <div class="mt-6">
           <StartExamModal :libraryExamId="exam?.id ?? ''" />
         </div>

@@ -1,6 +1,8 @@
 package mapper
 
 import (
+	"time"
+
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
@@ -57,6 +59,7 @@ func FromAppAddExamToLibraryToDomainExam(cmd command.AddExamToLibrary) (entity.E
 	newExam := entity.NewExam(
 		cmd.Name,
 		valueobject.GradeLevel(cmd.GradeLevel),
+		time.Duration(cmd.TimeLimit)*time.Second,
 		&domainQuestions,
 	)
 

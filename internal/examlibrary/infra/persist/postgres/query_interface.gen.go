@@ -16,11 +16,11 @@ type Querier interface {
 	FindAllExamQuestions(ctx context.Context, arg FindAllExamQuestionsParams) ([]ExamLibraryExamQuestion, error)
 	//FindAllExams
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams
 	FindAllExams(ctx context.Context) ([]ExamLibraryExam, error)
 	//FindExamByID
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level FROM exam_library.exams WHERE exam_id = $1
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, name, grade_level, time_limit FROM exam_library.exams WHERE exam_id = $1
 	FindExamByID(ctx context.Context, arg FindExamByIDParams) (ExamLibraryExam, error)
 	//FindExamQuestionByID
 	//
@@ -35,7 +35,8 @@ type Querier interface {
 	//      deleted_at,
 	//      deleted,
 	//      name,
-	//      grade_level
+	//      grade_level,
+	//      time_limit
 	//  ) VALUES (
 	//      $1,
 	//      $2,
@@ -43,7 +44,8 @@ type Querier interface {
 	//      $4,
 	//      $5,
 	//      $6,
-	//      $7
+	//      $7,
+	//      $8
 	//  )
 	SaveExam(ctx context.Context, arg SaveExamParams) error
 	//SaveExamQuestion

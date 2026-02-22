@@ -38,6 +38,9 @@ type Exam struct {
 	// Name The name of the Exam
 	Name      *string         `json:"name,omitempty"`
 	Questions *[]ExamQuestion `json:"questions,omitempty"`
+
+	// TimeLimit The time limit for the exam in seconds
+	TimeLimit *int64 `json:"timeLimit,omitempty"`
 }
 
 // ExamMetadata An Exam entity containing exam metadata
@@ -48,6 +51,9 @@ type ExamMetadata struct {
 
 	// Name The name of the Exam
 	Name *string `json:"name,omitempty"`
+
+	// TimeLimit The time limit for the exam in seconds
+	TimeLimit *int64 `json:"timeLimit,omitempty"`
 }
 
 // ExamQuestion A question within an Exam, including the question text, possible answers, and the correct answer.

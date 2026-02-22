@@ -13,6 +13,7 @@ func TestNewAddExamToLibrary(t *testing.T) {
 	// Arrange
 	name := "Sample Exam"
 	gradeLevel := 10
+	timeLimit := int64(3600) // 1 hour in seconds
 	questions := []common.ExamQuestion{
 		{
 			Index:           1,
@@ -25,11 +26,12 @@ func TestNewAddExamToLibrary(t *testing.T) {
 	}
 
 	// Act
-	cmd := command.NewAddExamToLibrary(name, gradeLevel, questions)
+	cmd := command.NewAddExamToLibrary(name, gradeLevel, timeLimit, questions)
 
 	// Assert
 	assert.Equal(t, name, cmd.Name)
 	assert.Equal(t, gradeLevel, cmd.GradeLevel)
+	assert.Equal(t, timeLimit, cmd.TimeLimit)
 	assert.Equal(t, questions, cmd.Questions)
 	assert.Equal(t, 1, cmd.Questions[0].Index)
 	assert.Equal(t, "What is 2 + 2?", cmd.Questions[0].QuestionText)
@@ -44,6 +46,7 @@ func TestNewAddExamToLibraryResult(t *testing.T) {
 	examID := "exam-123"
 	name := "Sample Exam"
 	gradeLevel := 10
+	timeLimit := int64(3600) // 1 hour in seconds
 	questions := []common.ExamQuestion{
 		{
 			Index:           1,
@@ -56,12 +59,13 @@ func TestNewAddExamToLibraryResult(t *testing.T) {
 	}
 
 	// Act
-	result := command.NewAddExamToLibraryResult(examID, name, gradeLevel, questions)
+	result := command.NewAddExamToLibraryResult(examID, name, gradeLevel, timeLimit, questions)
 
 	// Assert
 	assert.Equal(t, examID, result.ExamID)
 	assert.Equal(t, name, result.Name)
 	assert.Equal(t, gradeLevel, result.GradeLevel)
+	assert.Equal(t, timeLimit, result.TimeLimit)
 	assert.Equal(t, questions, result.Questions)
 	assert.Equal(t, 1, result.Questions[0].Index)
 	assert.Equal(t, "What is 2 + 2?", result.Questions[0].QuestionText)

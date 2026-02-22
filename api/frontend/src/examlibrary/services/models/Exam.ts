@@ -46,6 +46,12 @@ export interface Exam {
    */
   gradeLevel?: number;
   /**
+   * The time limit for the exam in seconds
+   * @type {number}
+   * @memberof Exam
+   */
+  timeLimit?: number;
+  /**
    *
    * @type {Array<ExamQuestion>}
    * @memberof Exam
@@ -75,6 +81,7 @@ export function ExamFromJSONTyped(
     id: json["id"] == null ? undefined : json["id"],
     name: json["name"] == null ? undefined : json["name"],
     gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
+    timeLimit: json["timeLimit"] == null ? undefined : json["timeLimit"],
     questions:
       json["questions"] == null
         ? undefined
@@ -98,6 +105,7 @@ export function ExamToJSONTyped(
     id: value["id"],
     name: value["name"],
     gradeLevel: value["gradeLevel"],
+    timeLimit: value["timeLimit"],
     questions:
       value["questions"] == null
         ? undefined

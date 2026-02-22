@@ -28,20 +28,22 @@ describe("ExamLibraryTable", () => {
 
     // Assert
     const headers = wrapper.findAll("th");
-    expect(headers).toHaveLength(3);
+    expect(headers).toHaveLength(4);
     expect(headers[0]?.text()).toBe("Exam ID");
     expect(headers[1]?.text()).toBe("Name");
     expect(headers[2]?.text()).toBe("Grade Level");
+    expect(headers[3]?.text()).toBe("Time Limit (seconds)");
 
     const rows = wrapper.findAll("tbody tr");
     expect(rows.length).toBeGreaterThan(0);
     const firstRowCells = rows[0]?.findAll("td");
-    expect(firstRowCells?.length).toBe(3);
+    expect(firstRowCells?.length).toBe(4);
     expect(firstRowCells?.[0]?.text()).toBe(
       "5d9abb80-0706-42ad-8131-33627d3e6b17",
     );
     expect(firstRowCells?.[1]?.text()).toBe("Midterm Exam");
     expect(firstRowCells?.[2]?.text()).toBe("3");
+    expect(firstRowCells?.[3]?.text()).toBe("3600");
   });
 
   it("shows loading state initially", async () => {

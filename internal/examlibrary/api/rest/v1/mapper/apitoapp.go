@@ -53,6 +53,7 @@ func FromApiExamToAppAddExamToLibrary(exam server.Exam) (command.AddExamToLibrar
 	return command.NewAddExamToLibrary(
 		*exam.Name,
 		*exam.GradeLevel,
+		*exam.TimeLimit,
 		questions,
 	), nil
 }

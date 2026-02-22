@@ -153,6 +153,11 @@ components:
           description: The grade level for which the exam is intended
           type: integer
           example: 10
+        timeLimit:
+          description: The time limit for the exam in seconds
+          type: integer
+          format: int64
+          example: 3600
     ExamQuestion:
       description: A question within an Exam, including the question text, possible answers, and the correct answer.
       type: object

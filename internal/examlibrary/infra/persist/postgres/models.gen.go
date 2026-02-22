@@ -16,6 +16,7 @@ type ExamLibraryExam struct {
 	Deleted    bool               `db:"deleted" json:"deleted"`
 	Name       string             `db:"name" json:"name"`
 	GradeLevel pgtype.Int4        `db:"grade_level" json:"grade_level"`
+	TimeLimit  pgtype.Int8        `db:"time_limit" json:"time_limit"`
 }
 
 type ExamLibraryExamQuestion struct {

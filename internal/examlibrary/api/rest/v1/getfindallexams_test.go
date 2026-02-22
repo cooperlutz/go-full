@@ -39,6 +39,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {
 						Id:         new(fixtures.ValidUUID.String()),
 						Name:       new("Sample Exam"),
 						GradeLevel: new(5),
+						TimeLimit:  new(int64(3600)),
 					},
 				},
 				Headers: v1_server.GetFindAllExams200ResponseHeaders{
@@ -49,7 +50,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {
 			nil,
 			mock_svc.On(
 				"FindAllExamsWithoutQuestions",
-				ctx,
+				mock.Anything,
 				query.FindAllExamsWithoutQuestions{},
 			).Return(
 				query.FindAllExamsWithoutQuestionsResponse{
@@ -58,6 +59,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {
 							ExamID:     fixtures.ValidUUID.String(),
 							Name:       "Sample Exam",
 							GradeLevel: 5,
+							TimeLimit:  3600,
 						},
 					},
 				},
@@ -112,7 +114,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams_Failure(t *testing.T) {
 			assert.AnError,
 			mock_svc.On(
 				"FindAllExamsWithoutQuestions",
-				ctx,
+				mock.Anything,
 				query.FindAllExamsWithoutQuestions{},
 			).Return(
 				query.FindAllExamsWithoutQuestionsResponse{},

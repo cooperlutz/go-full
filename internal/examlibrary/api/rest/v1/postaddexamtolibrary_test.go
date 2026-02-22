@@ -40,6 +40,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 				Body: &v1_server.Exam{
 					Name:       new("Sample Exam"),
 					GradeLevel: new(5),
+					TimeLimit:  new(int64(3600)),
 					Questions: &[]v1_server.ExamQuestion{
 						{
 							Index:          new(1),
@@ -62,6 +63,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 					Id:         new(fixtures.ValidUUID.String()),
 					Name:       new("Sample Exam"),
 					GradeLevel: new(5),
+					TimeLimit:  new(int64(3600)),
 					Questions: &[]v1_server.ExamQuestion{
 						{
 							Index:          new(1),
@@ -86,10 +88,11 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			nil,
 			mock_svc.On(
 				"AddExamToLibrary",
-				ctx,
+				mock.Anything,
 				command.NewAddExamToLibrary(
 					"Sample Exam",
 					5,
+					3600,
 					[]common.ExamQuestion{
 						common.NewExamQuestion(
 							1,
@@ -106,6 +109,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 					ExamID:     fixtures.ValidUUID.String(),
 					Name:       "Sample Exam",
 					GradeLevel: 5,
+					TimeLimit:  3600,
 					Questions: []common.ExamQuestion{
 						common.NewExamQuestion(
 							1,
@@ -125,6 +129,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			v1_server.PostAddExamToLibraryRequestObject{
 				Body: &v1_server.Exam{
 					GradeLevel: new(5),
+					TimeLimit:  new(int64(3600)),
 					Questions:  &[]v1_server.ExamQuestion{},
 				},
 			},
@@ -141,6 +146,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 				Body: &v1_server.Exam{
 					Name:       new("Sample Exam"),
 					GradeLevel: new(5),
+					TimeLimit:  new(int64(3600)),
 					Questions: &[]v1_server.ExamQuestion{
 						{
 							Index:          new(1),
@@ -163,10 +169,11 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 			assert.AnError,
 			mock_svc.On(
 				"AddExamToLibrary",
-				ctx,
+				mock.Anything,
 				command.NewAddExamToLibrary(
 					"Sample Exam",
 					5,
+					3600,
 					[]common.ExamQuestion{
 						common.NewExamQuestion(
 							1,
