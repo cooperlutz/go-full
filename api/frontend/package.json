@@ -38,7 +38,7 @@
     "daisyui": "^5.5.18",
     "lucide-vue-next": "^0.563.0",
     "marked": "^17.0.3",
-    "sweetalert2": "^11.26.19",
+    "sweetalert2": "^11.26.20",
     "tailwindcss": "^4.2.0",
     "uuid": "^13.0.0",
     "vue": "^3.5.28",
