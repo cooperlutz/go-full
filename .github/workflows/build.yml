@@ -44,7 +44,7 @@ jobs:
 
       # Verify that version bump and changelog generation would succeed
       - name: Run / Bump version & generate changelog
-        uses: commitizen-tools/commitizen-action@2e8226b3e7e141ae28de9942957f267eb5d68fb6 # v0.27.0
+        uses: commitizen-tools/commitizen-action@338bbd841b75aaee6bf5340e1fa12f6ab58ff9ff # v0.27.1
         with:
           push: false
           dry_run: true
