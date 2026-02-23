@@ -7,7 +7,7 @@ import (
 func (e *Exam) Submit() error {
 	now := utilitee.RightNow()
 	e.completedAt = &now
-	e.completed = true
+	e.state = StateCompleted
 	e.MarkUpdated()
 
 	return nil

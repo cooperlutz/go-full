@@ -19,7 +19,7 @@ type Querier interface {
 	//      deleted,
 	//      student_id,
 	//      library_exam_id,
-	//      completed,
+	//      state,
 	//      completed_at,
 	//      started_at
 	//  ) VALUES (
@@ -67,7 +67,7 @@ type Querier interface {
 	AddQuestion(ctx context.Context, arg AddQuestionParams) error
 	//FindAllExams
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 	FindAllExams(ctx context.Context) ([]ExaminationExam, error)
 	//FindQuestionsForExam
 	//
@@ -76,7 +76,7 @@ type Querier interface {
 	FindQuestionsForExam(ctx context.Context, arg FindQuestionsForExamParams) ([]ExaminationQuestion, error)
 	//GetExam
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 	//  WHERE exam_id = $1
 	GetExam(ctx context.Context, arg GetExamParams) (ExaminationExam, error)
 	//GetQuestion
@@ -105,7 +105,7 @@ type Querier interface {
 	//      deleted = $5,
 	//      student_id = $6,
 	//      library_exam_id = $7,
-	//      completed = $8,
+	//      state = $8,
 	//      completed_at = $9,
 	//      started_at = $10
 	//  WHERE exam_id = $1

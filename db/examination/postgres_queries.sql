@@ -10,7 +10,7 @@ INSERT INTO examination.exams (
     deleted,
     student_id,
     library_exam_id,
-    completed,
+    state,
     completed_at,
     started_at
 ) VALUES (
@@ -85,7 +85,7 @@ SET
     deleted = $5,
     student_id = $6,
     library_exam_id = $7,
-    completed = $8,
+    state = $8,
     completed_at = $9,
     started_at = $10
 WHERE exam_id = $1;

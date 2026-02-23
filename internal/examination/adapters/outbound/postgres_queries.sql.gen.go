@@ -20,7 +20,7 @@ INSERT INTO examination.exams (
     deleted,
     student_id,
     library_exam_id,
-    completed,
+    state,
     completed_at,
     started_at
 ) VALUES (
@@ -45,7 +45,7 @@ type AddExamParams struct {
 	Deleted       bool               `db:"deleted" json:"deleted"`
 	StudentID     pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
-	Completed     bool               `db:"completed" json:"completed"`
+	State         string             `db:"state" json:"state"`
 	CompletedAt   pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
 	StartedAt     pgtype.Timestamptz `db:"started_at" json:"started_at"`
 }
@@ -60,7 +60,7 @@ type AddExamParams struct {
 //	    deleted,
 //	    student_id,
 //	    library_exam_id,
-//	    completed,
+//	    state,
 //	    completed_at,
 //	    started_at
 //	) VALUES (
@@ -84,7 +84,7 @@ func (q *Queries) AddExam(ctx context.Context, arg AddExamParams) error {
 		arg.Deleted,
 		arg.StudentID,
 		arg.LibraryExamID,
-		arg.Completed,
+		arg.State,
 		arg.CompletedAt,
 		arg.StartedAt,
 	)
@@ -184,12 +184,12 @@ func (q *Queries) AddQuestion(ctx context.Context, arg AddQuestionParams) error 
 }
 
 const findAllExams = `-- name: FindAllExams :many
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 `
 
 // FindAllExams
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 	rows, err := q.db.Query(ctx, findAllExams)
 	if err != nil {
@@ -207,7 +207,7 @@ func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 			&i.Deleted,
 			&i.StudentID,
 			&i.LibraryExamID,
-			&i.Completed,
+			&i.State,
 			&i.CompletedAt,
 			&i.StartedAt,
 		); err != nil {
@@ -268,7 +268,7 @@ func (q *Queries) FindQuestionsForExam(ctx context.Context, arg FindQuestionsFor
 }
 
 const getExam = `-- name: GetExam :one
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 WHERE exam_id = $1
 `
 
@@ -278,7 +278,7 @@ type GetExamParams struct {
 
 // GetExam
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at FROM examination.exams
 //	WHERE exam_id = $1
 func (q *Queries) GetExam(ctx context.Context, arg GetExamParams) (ExaminationExam, error) {
 	row := q.db.QueryRow(ctx, getExam, arg.ExamID)
@@ -291,7 +291,7 @@ func (q *Queries) GetExam(ctx context.Context, arg GetExamParams) (ExaminationEx
 		&i.Deleted,
 		&i.StudentID,
 		&i.LibraryExamID,
-		&i.Completed,
+		&i.State,
 		&i.CompletedAt,
 		&i.StartedAt,
 	)
@@ -422,7 +422,7 @@ SET
     deleted = $5,
     student_id = $6,
     library_exam_id = $7,
-    completed = $8,
+    state = $8,
     completed_at = $9,
     started_at = $10
 WHERE exam_id = $1
@@ -436,7 +436,7 @@ type SaveExamParams struct {
 	Deleted       bool               `db:"deleted" json:"deleted"`
 	StudentID     pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
-	Completed     bool               `db:"completed" json:"completed"`
+	State         string             `db:"state" json:"state"`
 	CompletedAt   pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
 	StartedAt     pgtype.Timestamptz `db:"started_at" json:"started_at"`
 }
@@ -451,7 +451,7 @@ type SaveExamParams struct {
 //	    deleted = $5,
 //	    student_id = $6,
 //	    library_exam_id = $7,
-//	    completed = $8,
+//	    state = $8,
 //	    completed_at = $9,
 //	    started_at = $10
 //	WHERE exam_id = $1
@@ -464,7 +464,7 @@ func (q *Queries) SaveExam(ctx context.Context, arg SaveExamParams) error {
 		arg.Deleted,
 		arg.StudentID,
 		arg.LibraryExamID,
-		arg.Completed,
+		arg.State,
 		arg.CompletedAt,
 		arg.StartedAt,
 	)

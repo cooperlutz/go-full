@@ -33,9 +33,14 @@ func MapToExam(
 	libraryExamId uuid.UUID,
 	startedAt *time.Time,
 	completedAt *time.Time,
-	completed bool,
+	state string,
 	questions []*Question,
-) *Exam {
+) (*Exam, error) {
+	examState, err := ExamStateFromString(state)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Exam{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
 			id,
@@ -48,9 +53,9 @@ func MapToExam(
 		libraryExamId: libraryExamId,
 		startedAt:     startedAt,
 		completedAt:   completedAt,
-		completed:     completed,
+		state:         examState,
 		questions:     questions,
-	}
+	}, nil
 }
 
 // MapToQuestion maps raw data to a Question entity.

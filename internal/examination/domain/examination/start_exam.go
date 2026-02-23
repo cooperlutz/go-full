@@ -11,12 +11,13 @@ func (e ErrExamAlreadyStarted) Error() string {
 }
 
 func (e *Exam) StartExam() error {
-	if e.startedAt != nil {
+	if e.state != StateNotStarted {
 		return ErrExamAlreadyStarted{}
 	}
 
 	now := utilitee.RightNow()
 	e.startedAt = &now
+	e.state = StateInProgress
 	e.MarkUpdated()
 
 	return nil

@@ -16,7 +16,7 @@ func (e *Exam) FinishExam() error {
 	}
 
 	now := utilitee.RightNow()
-	e.completed = true
+	e.state = StateCompleted
 	e.completedAt = &now
 	e.MarkUpdated()
 

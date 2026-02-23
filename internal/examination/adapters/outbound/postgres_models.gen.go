@@ -16,7 +16,7 @@ type ExaminationExam struct {
 	Deleted       bool               `db:"deleted" json:"deleted"`
 	StudentID     pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
-	Completed     bool               `db:"completed" json:"completed"`
+	State         string             `db:"state" json:"state"`
 	CompletedAt   pgtype.Timestamptz `db:"completed_at" json:"completed_at"`
 	StartedAt     pgtype.Timestamptz `db:"started_at" json:"started_at"`
 }

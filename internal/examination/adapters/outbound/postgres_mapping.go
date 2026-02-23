@@ -31,9 +31,9 @@ func (e ExaminationExam) toDomain(questions ...ExaminationQuestion) (*examinatio
 		e.LibraryExamID.Bytes,
 		pgxutil.TimestampzToTimePtr(e.StartedAt),
 		pgxutil.TimestampzToTimePtr(e.CompletedAt),
-		e.Completed,
+		e.State,
 		domainQuestions,
-	), nil
+	)
 }
 
 // toQueryExam maps the ExaminationExam to the query.Exam.
@@ -109,7 +109,7 @@ func mapEntityExamToDB(exam *examination.Exam) ExaminationExam {
 		LibraryExamID: pgxutil.UUIDToPgtypeUUID(exam.GetLibraryExamIdUUID()),
 		StartedAt:     pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
 		CompletedAt:   pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
-		Completed:     exam.IsCompleted(),
+		State:         exam.GetState().String(),
 	}
 }
 

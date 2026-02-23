@@ -12,10 +12,13 @@ type Exam struct {
 	*baseentitee.EntityMetadata
 	studentId     uuid.UUID
 	libraryExamId uuid.UUID
-	startedAt     *time.Time
-	completedAt   *time.Time
-	completed     bool
-	questions     []*Question
+
+	startedAt   *time.Time
+	completedAt *time.Time
+
+	state ExamState
+
+	questions []*Question
 }
 
 func NewExam(studentId, libraryExamId uuid.UUID, questions []*Question) *Exam {
@@ -24,6 +27,7 @@ func NewExam(studentId, libraryExamId uuid.UUID, questions []*Question) *Exam {
 		studentId:      studentId,
 		libraryExamId:  libraryExamId,
 		questions:      questions,
+		state:          StateNotStarted,
 	}
 }
 
@@ -52,7 +56,7 @@ func (e Exam) GetCompletedAtTime() *time.Time {
 }
 
 func (e Exam) IsCompleted() bool {
-	return e.completed
+	return e.state == StateCompleted
 }
 
 func (e Exam) GetStudentIdUUID() uuid.UUID {
@@ -67,13 +71,52 @@ func (e Exam) GetStudentIdString() string {
 	return e.studentId.String()
 }
 
+type ExamState int
+
+const (
+	StateNotStarted ExamState = iota
+	StateInProgress
+	StateCompleted
+)
+
+var stateName = map[ExamState]string{
+	StateNotStarted: "not-started",
+	StateInProgress: "in-progress",
+	StateCompleted:  "completed",
+}
+
+func (es ExamState) String() string {
+	return stateName[es]
+}
+
+type ErrInvalidExamState struct{}
+
+func (e ErrInvalidExamState) Error() string {
+	return "invalid exam state"
+}
+
+func ExamStateFromString(s string) (ExamState, error) {
+	for es, name := range stateName {
+		if name == s {
+			return es, nil
+		}
+	}
+
+	return StateNotStarted, ErrInvalidExamState{}
+}
+
+func (e Exam) GetState() ExamState {
+	return e.state
+}
+
 type Question struct {
 	*baseentitee.EntityMetadata
-	examId          uuid.UUID
-	index           int32
-	answered        bool
+	examId       uuid.UUID
+	questionType QuestionType
+	index        int32
+	answered     bool
+
 	questionText    string
-	questionType    QuestionType
 	providedAnswer  *string
 	responseOptions *[]string
 }

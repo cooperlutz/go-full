@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS examination.exams (
     -- 
     student_id UUID NOT NULL,
     library_exam_id UUID NOT NULL,
-    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    state TEXT NOT NULL,
     completed_at TIMESTAMPTZ,
     started_at TIMESTAMPTZ
 );
