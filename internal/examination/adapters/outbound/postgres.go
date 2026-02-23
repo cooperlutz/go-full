@@ -150,7 +150,7 @@ func (p PostgresAdapter) addQuestions(ctx context.Context, exam *examination.Exa
 // UpdateExam updates an existing exam in the database.
 func (p PostgresAdapter) UpdateExam(
 	ctx context.Context,
-	exam *examination.Exam,
+	examId uuid.UUID,
 	updateFn func(e *examination.Exam) (*examination.Exam, error),
 ) error {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.updateexam")
@@ -158,6 +158,13 @@ func (p PostgresAdapter) UpdateExam(
 
 	tx, err := p.Handler.Begin(ctx)
 	if err != nil {
+		return err
+	}
+
+	exam, err := p.GetExam(ctx, examId)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
 		return err
 	}
 

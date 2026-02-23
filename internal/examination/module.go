@@ -40,7 +40,7 @@ func NewModule(
 
 	apiServer := inbound.NewHttpServer(application)
 
-	inbound.RegisterEventHandlers(pubSub)
+	inbound.NewSqlSubscriberAdapter(pubSub).RegisterEventHandlers()
 
 	module := &ExaminationModule{
 		RestApi: inbound.HandlerFromMux(

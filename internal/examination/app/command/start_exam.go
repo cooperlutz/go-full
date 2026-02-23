@@ -28,7 +28,7 @@ func NewStartExamHandler(
 }
 
 func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.startexam.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.start_exam.handle")
 	defer span.End()
 
 	questions, err := h.examLibraryAdapter.RetrieveExamQuestionsFromLibrary(ctx, cmd.ExamLibraryID)

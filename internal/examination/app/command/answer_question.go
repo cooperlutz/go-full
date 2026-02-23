@@ -29,7 +29,7 @@ func NewAnswerQuestionHandler(
 }
 
 func (h AnswerQuestionHandler) Handle(ctx context.Context, cmd AnswerQuestion) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.answerquestion.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.answer_question.handle")
 	defer span.End()
 
 	examIdUuid, err := uuid.Parse(cmd.ExamID)
@@ -39,14 +39,7 @@ func (h AnswerQuestionHandler) Handle(ctx context.Context, cmd AnswerQuestion) e
 		return err
 	}
 
-	exam, err := h.examinationRepo.GetExam(ctx, examIdUuid)
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	err = h.examinationRepo.UpdateExam(ctx, exam, func(e *examination.Exam) (*examination.Exam, error) {
+	return h.examinationRepo.UpdateExam(ctx, examIdUuid, func(e *examination.Exam) (*examination.Exam, error) {
 		err = e.AnswerQuestion(cmd.QuestionIndex, cmd.Answer)
 		if err != nil {
 			telemetree.RecordError(ctx, err)
@@ -56,11 +49,4 @@ func (h AnswerQuestionHandler) Handle(ctx context.Context, cmd AnswerQuestion) e
 
 		return e, nil
 	})
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	return nil
 }

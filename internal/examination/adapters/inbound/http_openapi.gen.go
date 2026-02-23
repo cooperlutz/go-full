@@ -77,7 +77,7 @@ type AnswerQuestionJSONRequestBody = Answer
 type ServerInterface interface {
 
 	// (GET /v1/exams)
-	GetAvailableExams(w http.ResponseWriter, r *http.Request)
+	FindAllExams(w http.ResponseWriter, r *http.Request)
 
 	// (POST /v1/exams)
 	StartNewExam(w http.ResponseWriter, r *http.Request)
@@ -103,7 +103,7 @@ type ServerInterface interface {
 type Unimplemented struct{}
 
 // (GET /v1/exams)
-func (_ Unimplemented) GetAvailableExams(w http.ResponseWriter, r *http.Request) {
+func (_ Unimplemented) FindAllExams(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -146,11 +146,11 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// GetAvailableExams operation middleware
-func (siw *ServerInterfaceWrapper) GetAvailableExams(w http.ResponseWriter, r *http.Request) {
+// FindAllExams operation middleware
+func (siw *ServerInterfaceWrapper) FindAllExams(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetAvailableExams(w, r)
+		siw.Handler.FindAllExams(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -431,7 +431,7 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/exams", wrapper.GetAvailableExams)
+		r.Get(options.BaseURL+"/v1/exams", wrapper.FindAllExams)
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/v1/exams", wrapper.StartNewExam)
@@ -455,28 +455,28 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	return r
 }
 
-type GetAvailableExamsRequestObject struct {
+type FindAllExamsRequestObject struct {
 }
 
-type GetAvailableExamsResponseObject interface {
-	VisitGetAvailableExamsResponse(w http.ResponseWriter) error
+type FindAllExamsResponseObject interface {
+	VisitFindAllExamsResponse(w http.ResponseWriter) error
 }
 
-type GetAvailableExams200JSONResponse []Exam
+type FindAllExams200JSONResponse []Exam
 
-func (response GetAvailableExams200JSONResponse) VisitGetAvailableExamsResponse(w http.ResponseWriter) error {
+func (response FindAllExams200JSONResponse) VisitFindAllExamsResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type GetAvailableExamsdefaultJSONResponse struct {
+type FindAllExamsdefaultJSONResponse struct {
 	Body       Error
 	StatusCode int
 }
 
-func (response GetAvailableExamsdefaultJSONResponse) VisitGetAvailableExamsResponse(w http.ResponseWriter) error {
+func (response FindAllExamsdefaultJSONResponse) VisitFindAllExamsResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.StatusCode)
 
@@ -663,7 +663,7 @@ func (response SubmitExamdefaultJSONResponse) VisitSubmitExamResponse(w http.Res
 type StrictServerInterface interface {
 
 	// (GET /v1/exams)
-	GetAvailableExams(ctx context.Context, request GetAvailableExamsRequestObject) (GetAvailableExamsResponseObject, error)
+	FindAllExams(ctx context.Context, request FindAllExamsRequestObject) (FindAllExamsResponseObject, error)
 
 	// (POST /v1/exams)
 	StartNewExam(ctx context.Context, request StartNewExamRequestObject) (StartNewExamResponseObject, error)
@@ -713,23 +713,23 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
-// GetAvailableExams operation middleware
-func (sh *strictHandler) GetAvailableExams(w http.ResponseWriter, r *http.Request) {
-	var request GetAvailableExamsRequestObject
+// FindAllExams operation middleware
+func (sh *strictHandler) FindAllExams(w http.ResponseWriter, r *http.Request) {
+	var request FindAllExamsRequestObject
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.GetAvailableExams(ctx, request.(GetAvailableExamsRequestObject))
+		return sh.ssi.FindAllExams(ctx, request.(FindAllExamsRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "GetAvailableExams")
+		handler = middleware(handler, "FindAllExams")
 	}
 
 	response, err := handler(r.Context(), w, r, request)
 
 	if err != nil {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(GetAvailableExamsResponseObject); ok {
-		if err := validResponse.VisitGetAvailableExamsResponse(w); err != nil {
+	} else if validResponse, ok := response.(FindAllExamsResponseObject); ok {
+		if err := validResponse.VisitFindAllExamsResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -910,20 +910,20 @@ func (sh *strictHandler) SubmitExam(w http.ResponseWriter, r *http.Request, exam
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9xXT2/7Ngz9Kga3o/Fz+uvNtwwohl62Duut6EGxmUSFLKkUnSYI/N0HybGdOM6fruna",
-	"7BQ7okk+vkeJWkNmCms0anaQrsFlcyxEeBxr94bknywZi8QS3eZtIXPMu3VeWYQUHJPUM6iqGAhfS0mY",
-	"Q/rUt3+OG3szecGMoYrhjsgMRMpMjv53aqgQDClIzbc/oXUgNeMMyXso0Dkxw+Fs9uMtRbEfToQEMf+r",
-	"RMfSaHdmbF9BhezRttEnxigU2i/jUhT3+UBmMSg5IUGru8MWr9u5SMYiPPxKOIUUfkk68pINc0mTPXTA",
-	"BZFY+XfHZY6aD8Riw0K9D3yP6g3U7UDb5Rmi/oHMjNC5y9HxcRg9D/FAKkNQ2sofhPJugZzstU4hJwR0",
-	"r3NcnlnB5ptHXPJRp49hYcCA0FmjHf5p98W7r7sdlfa42IIXd/raRdXLuJdfR98ga3+zIB7eEE6357GG",
-	"6gHZboldx/tZ+W+lnprgVbLya95YauFhReOHe4hhgeSC3ODmx+jHyOdjLGphJaRwG/6KwQqeBzDJ4ibx",
-	"9QsvMwzEerCiEQ/8jjxeCKnEROFdsOyIDF/9HI3qbVkz6uBAWKtkFlwkL66Wfr0Rnb1fhdLvq6CKIUeX",
-	"kbR1S8E4UtJxZKZRjSIYTEWp+F05HU0lHEMDsUuNS4sZYx5hZ2ONG6hi0NMf+BZw1RJAx7+ZfHWxPDvJ",
-	"VrsqYyqx2iPt5nIFamPu1sf/H2WEwlfIlVmGzk1LpVZfzlIVd8JP1vX+UR3rgA1tVpAokJEcpE9rkN6/",
-	"byWIQYvCC7Xdi3bLH2+h6G8Izx/sp39NTY4spHIRIZPExVWQlNityeAYW+0EcYWstbkfYq4pwnVR106t",
-	"yXrnpD7Zee0I9UlcxoOO+tPEYX+nJ8nPVEs32h9QSwPku6rl0JlZj7f/E/Ivf95vpv+zDvv/Rm11RpEr",
-	"J4Xk6zj0kzrZMOUPD25h/QvO/4FG/q6F9VcepEVTlpIUpDBnti5NkvXcOPbVqRJ/B4lhIUj6y0QA2yzW",
-	"iDcgQJlMKL/k3T9X/wQAAP//Nbvx9o8SAAA=",
+	"H4sIAAAAAAAC/9xXT2/bPgz9KgZ/v6NRp+3Ntwzohl62Duut6EGxmUSFLKkSnSYI/N0HybGd+E+Sruna",
+	"7BQ7okg+vkeJXkOiMq0kSrIQr8Emc8yYfxxL+4LGPWmjNBriaDdvC55i2qzTSiPEYMlwOYOiCMHgc84N",
+	"phA/tO0fw8peTZ4wIShCuDFG9URKVIrud6pMxghi4JKur6B2wCXhDI3zkKG1bIb92XTjLVnWDcd8gpj+",
+	"zNESV9IeGdtVUCA5tHX0iVICmXTLuGTZbdqTWQiCTwwzq5thi+ftXDhh5h/+NziFGP6LGvKiDXNRlT00",
+	"wJkxbOXeLeUpShqIRYqYeB34FtUbqNuBtsvTR/2dUTOD1p6OjrfDaHkIe1Lpg1JXfhDKqwVysNcahRwQ",
+	"0K1McXlkBas997ikvU7v/UKPgUGrlbT4Q3fF29XdjkpbXGzBCxt97aJqZdzKr6Gvl7VfxAz1HwiH23Nf",
+	"Q7WAbLfEruNuVm4vl1PlvXISbs0Zc8kcrGB8dwshLNBYLze4vBhdjFw+SqNkmkMM1/6vEDSjuQcTLS4j",
+	"Vz//MkNPrAPLKvHAVy7TsRA33qjh0G+4Go3KE1kSSr+XaS144ndHT7ZUfXkGHX1U+ap3BVCEkKJNDNdl",
+	"N8E4ENxSoKZBCcAbTFku6FU57U3F30A9sXOJS40JYRpgY6OV7Smgl9J3fPG4SvbR0heVrk6WZ6PWYldg",
+	"ZHIsOqRdnq5Adczd+rj/g8QgcxWyeZKgtdNciNWHs1SEjeajdXl0FIPi/4a0oU0zwzIkNBbihzVw5991",
+	"EYQgWeaEWh9Du+UPt1C0z4LHN/bTH1OTIjEubGCQDMfFWZAU6a2hYB9b9fBwhqzVuQ8xVxXhvKirB9Zo",
+	"vXNJH+y8enp6Jy7DXkftQWLY3+Eh8j3V0kz1A2qpgHxWtQzdmeVk+4+Qf/r7fjP4H3XZ/x21lRkFNp9k",
+	"nM7j0o/KZP2A3z+4+fUPuP97GvmzFtZ97aBZVGXJjYAY5kTaxlG0nitLrjpF5D4/Qlgww9lElGCrxRLx",
+	"BgQIlTDhlpz7x+J3AAAA//+Y2z0RihIAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

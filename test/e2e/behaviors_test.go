@@ -217,7 +217,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 		return countOfQuery("examination", "questions")
 	}
 	countOfExaminationEventsBefore, err := queryCountOfExaminationEvents()
-	examsBefore, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
+	examsBefore, err := examinationApiClient.FindAllExamsWithResponse(ctx)
 	countOfExaminationExamsBefore := len(*examsBefore.JSON200)
 	countOfExaminationQuestionsBefore, err := queryCountOfExaminationQuestions()
 	metricNumberOfExamsInProgressBefore, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_in_progress")
@@ -274,7 +274,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	valueMetricNumberOfExamsCompletedAfter := *metricNumberOfExamsCompletedAfter.JSON200.MetricValue
 	countOfExaminationEventsAfter, err := queryCountOfExaminationEvents()
 	countOfExaminationQuestionsAfter, err := queryCountOfExaminationQuestions()
-	examsAfter, err := examinationApiClient.GetAvailableExamsWithResponse(ctx)
+	examsAfter, err := examinationApiClient.FindAllExamsWithResponse(ctx)
 	countOfExaminationExamsAfter := len(*examsAfter.JSON200)
 
 	assert.Equal(t, countOfExaminationExamsBefore+1, countOfExaminationExamsAfter, "Expected number of exams to increase by 1")

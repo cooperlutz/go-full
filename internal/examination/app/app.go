@@ -23,9 +23,9 @@ type Commands struct {
 }
 
 type Queries struct {
-	AvailableExams query.AvailableExamsHandler
-	FindQuestion   query.FindQuestionHandler
-	FindExam       query.FindExamHandler
+	FindAllExams query.AllExamsHandler
+	FindQuestion query.FindQuestionHandler
+	FindExam     query.FindExamHandler
 }
 
 type Events struct {
@@ -65,7 +65,7 @@ func NewApplication(
 			),
 		},
 		Queries: Queries{
-			AvailableExams: query.NewAvailableExamsHandler(
+			FindAllExams: query.NewFindAllExamsHandler(
 				examinationRepository,
 			),
 			FindQuestion: query.NewFindQuestionHandler(
