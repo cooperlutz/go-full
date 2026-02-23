@@ -30,10 +30,10 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
-	Completed         bool        `json:"completed"`
 	ExamId            string      `json:"examId"`
 	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
 	Questions         *[]Question `json:"questions,omitempty"`
+	State             string      `json:"state"`
 	StudentId         string      `json:"studentId"`
 	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
 }

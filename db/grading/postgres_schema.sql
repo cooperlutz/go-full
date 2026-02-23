@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS grading.exams (
     student_id UUID NOT NULL,
     library_exam_id UUID NOT NULL,
     examination_exam_id UUID NOT NULL,
-    grading_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    state TEXT NOT NULL,
     total_points_received INTEGER,
     total_points_possible INTEGER
 );

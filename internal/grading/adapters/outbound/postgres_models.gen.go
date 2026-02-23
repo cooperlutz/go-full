@@ -17,7 +17,7 @@ type GradingExam struct {
 	StudentID           pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID       pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
 	ExaminationExamID   pgtype.UUID        `db:"examination_exam_id" json:"examination_exam_id"`
-	GradingCompleted    bool               `db:"grading_completed" json:"grading_completed"`
+	State               string             `db:"state" json:"state"`
 	TotalPointsReceived pgtype.Int4        `db:"total_points_received" json:"total_points_received"`
 	TotalPointsPossible pgtype.Int4        `db:"total_points_possible" json:"total_points_possible"`
 }

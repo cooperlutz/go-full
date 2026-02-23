@@ -174,8 +174,8 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 		AnsweredQuestions: &numberThreeInt32,
 		TotalQuestions:    &numberThreeInt32,
 		// StudentId:         ,
-		Completed: true,
-		ExamId:    "", // we don't know the exam ID ahead of time
+		State:  "completed",
+		ExamId: "", // we don't know the exam ID ahead of time
 		Questions: &[]api_client.Question{
 			{
 				QuestionIndex: 1,
@@ -285,7 +285,7 @@ func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
 	// assert.Equal(t, expect.StudentId, actual.JSON200.StudentId, "Expected StudentId to match")
 	assert.Equal(t, *expect.AnsweredQuestions, *actual.JSON200.AnsweredQuestions, "Expected AnsweredQuestions to match")
 	assert.Equal(t, *expect.TotalQuestions, *actual.JSON200.TotalQuestions, "Expected TotalQuestions to match")
-	assert.Equal(t, expect.Completed, actual.JSON200.Completed, "Expected Completed to match")
+	assert.Equal(t, expect.State, actual.JSON200.State, "Expected State to match")
 	assert.Equal(t, len(*expect.Questions), len(*actual.JSON200.Questions), "Expected number of questions to match")
 	for i, expectedQuestion := range *expect.Questions {
 		actualQuestion := (*actual.JSON200.Questions)[i]

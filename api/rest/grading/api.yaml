@@ -68,7 +68,7 @@ paths:
 
   /v1/exams/ungraded:
     get:
-      operationId: getUngradedExams
+      operationId: getFindIncompleteExams
       responses:
         '200':
           description: Ungraded exams retrieved successfully
@@ -133,7 +133,7 @@ components:
       type: object
       required:
         - examId
-        - gradingCompleted
+        - state
         - totalPointsPossible
         - questions
       properties:
@@ -145,8 +145,8 @@ components:
         totalPointsEarned:
           type: integer
           format: int32
-        gradingCompleted:
-          type: boolean
+        state:
+          type: string
         questions:
           type: array
           items:

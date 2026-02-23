@@ -35,10 +35,10 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
-	Completed         bool        `json:"completed"`
 	ExamId            string      `json:"examId"`
 	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
 	Questions         *[]Question `json:"questions,omitempty"`
+	State             string      `json:"state"`
 	StudentId         string      `json:"studentId"`
 	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
 }
@@ -910,20 +910,20 @@ func (sh *strictHandler) SubmitExam(w http.ResponseWriter, r *http.Request, exam
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/9xXT2/bPgz9KgZ/v6NRp+3Ntwzohl62Duut6EGxmUSFLKkSnSYI/N0HybGd+E+Sruna",
-	"7BQ7okg+vkeJXkOiMq0kSrIQr8Emc8yYfxxL+4LGPWmjNBriaDdvC55i2qzTSiPEYMlwOYOiCMHgc84N",
-	"phA/tO0fw8peTZ4wIShCuDFG9URKVIrud6pMxghi4JKur6B2wCXhDI3zkKG1bIb92XTjLVnWDcd8gpj+",
-	"zNESV9IeGdtVUCA5tHX0iVICmXTLuGTZbdqTWQiCTwwzq5thi+ftXDhh5h/+NziFGP6LGvKiDXNRlT00",
-	"wJkxbOXeLeUpShqIRYqYeB34FtUbqNuBtsvTR/2dUTOD1p6OjrfDaHkIe1Lpg1JXfhDKqwVysNcahRwQ",
-	"0K1McXlkBas997ikvU7v/UKPgUGrlbT4Q3fF29XdjkpbXGzBCxt97aJqZdzKr6Gvl7VfxAz1HwiH23Nf",
-	"Q7WAbLfEruNuVm4vl1PlvXISbs0Zc8kcrGB8dwshLNBYLze4vBhdjFw+SqNkmkMM1/6vEDSjuQcTLS4j",
-	"Vz//MkNPrAPLKvHAVy7TsRA33qjh0G+4Go3KE1kSSr+XaS144ndHT7ZUfXkGHX1U+ap3BVCEkKJNDNdl",
-	"N8E4ENxSoKZBCcAbTFku6FU57U3F30A9sXOJS40JYRpgY6OV7Smgl9J3fPG4SvbR0heVrk6WZ6PWYldg",
-	"ZHIsOqRdnq5Adczd+rj/g8QgcxWyeZKgtdNciNWHs1SEjeajdXl0FIPi/4a0oU0zwzIkNBbihzVw5991",
-	"EYQgWeaEWh9Du+UPt1C0z4LHN/bTH1OTIjEubGCQDMfFWZAU6a2hYB9b9fBwhqzVuQ8xVxXhvKirB9Zo",
-	"vXNJH+y8enp6Jy7DXkftQWLY3+Eh8j3V0kz1A2qpgHxWtQzdmeVk+4+Qf/r7fjP4H3XZ/x21lRkFNp9k",
-	"nM7j0o/KZP2A3z+4+fUPuP97GvmzFtZ97aBZVGXJjYAY5kTaxlG0nitLrjpF5D4/Qlgww9lElGCrxRLx",
-	"BgQIlTDhlpz7x+J3AAAA//+Y2z0RihIAAA==",
+	"H4sIAAAAAAAC/9xXQW/qOBD+K9HsHqOGtrfcWKm76mW3q+2t6sEkA7hybNeeUBDKf1/ZIQkEB+grfS3v",
+	"RILHM/PN9409WUOmCq0kSrKQrsFmcyyYfxxL+4bGPWmjNBriaDdvC55j3q3TSiOkYMlwOYOqisHga8kN",
+	"5pA+9e2f48ZeTV4wI6hiuDNGBSJlKkf3O1WmYAQpcEm3N9A64JJwhsZ5KNBaNsNwNvvxlqzYD8d8gpj/",
+	"W6IlrqQ9MTYuWXGfB0LHIPjEMLO6G7Z43Q7GCQv/8LvBKaTwW9Kxk2yoSZr0oEPGjGEr926JEQbjWCpz",
+	"lDSQBSli4n24eyxvirAdqEknxPiDUTOD1p6PhY9D6HmIA6mEoLR8DELZKvlEKYFMHpHN0RbrdHNEVvcy",
+	"x+WJFWz2POKSDjp99AsBA4NWK2nxH70v6X3N7Wi3x8UWvLjT1i6qXsa9/Dr6gqz9R8xQ+Bw43rSHmqkH",
+	"ZLsddh3vZ+X2cjlV3isn4dacMZfMwYrGD/cQwwKN9XKD66vR1cjlozRKpjmkcOv/ikEzmnswyeI6cfXz",
+	"LzP0xDqwrBEP/MllPhbizht1HPoNN6NRfRBLQun3Mq0Fz/zu5MXWqq9PppMPMF/1fQFUMeRoM8N13U0w",
+	"jgS3FKlpVAPwBlNWCnpXTgdT8RdPIHYpcakxI8wj7Gy0soECein9jW8eV80+WvpD5auz5dmptdoVGJkS",
+	"qz3Srs9XoDbmbn3c/1FmkLkK2TLL0NppKcTqy1mq4k7zybo+OqpB8f+FtKFNM8MKJDQW0qc1cOffdRHE",
+	"IFnhhNoeQ7vlj7dQ9M+C5w/20w9TkyMxLmxkkAzHxUWQlOitoeAQW+3wcIGstbkPMdcU4bKoa8fYZL1z",
+	"SR/tvHZ6+iQu46Cj/iAx7O/4EPmZaulm/QG1NEC+q1qG7sx6sv1FyD//fb8Z/E+67H+O2uqMIltOCk6X",
+	"cekndbJ+wA8Pbn79C+7/QCN/18K6rx00i6YspRGQwpxI2zRJ1nNlyVWnStznRwwLZjibiBpss1gj3oAA",
+	"oTIm3JJz/1z9HwAA//88BCcEgRIAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

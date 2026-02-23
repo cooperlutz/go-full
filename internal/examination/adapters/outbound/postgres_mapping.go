@@ -145,7 +145,7 @@ func mapEntityExamToQuery(exam *examination.Exam) query.Exam {
 		ExamId:            exam.GetIdString(),
 		StudentId:         exam.GetStudentIdString(),
 		LibraryExamId:     exam.GetLibraryExamIdUUID().String(),
-		Completed:         exam.IsCompleted(),
+		State:             exam.GetState().String(),
 		AnsweredQuestions: exam.AnsweredQuestionsCount(),
 		TotalQuestions:    exam.NumberOfQuestions(),
 		Questions:         questions,

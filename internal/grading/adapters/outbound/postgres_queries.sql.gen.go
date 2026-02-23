@@ -21,7 +21,7 @@ INSERT INTO grading.exams (
     student_id,
     library_exam_id,
     examination_exam_id,
-    grading_completed,
+    state,
     total_points_received,
     total_points_possible
 ) VALUES (
@@ -48,7 +48,7 @@ type AddExamParams struct {
 	StudentID           pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID       pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
 	ExaminationExamID   pgtype.UUID        `db:"examination_exam_id" json:"examination_exam_id"`
-	GradingCompleted    bool               `db:"grading_completed" json:"grading_completed"`
+	State               string             `db:"state" json:"state"`
 	TotalPointsReceived pgtype.Int4        `db:"total_points_received" json:"total_points_received"`
 	TotalPointsPossible pgtype.Int4        `db:"total_points_possible" json:"total_points_possible"`
 }
@@ -64,7 +64,7 @@ type AddExamParams struct {
 //	    student_id,
 //	    library_exam_id,
 //	    examination_exam_id,
-//	    grading_completed,
+//	    state,
 //	    total_points_received,
 //	    total_points_possible
 //	) VALUES (
@@ -90,7 +90,7 @@ func (q *Queries) AddExam(ctx context.Context, arg AddExamParams) error {
 		arg.StudentID,
 		arg.LibraryExamID,
 		arg.ExaminationExamID,
-		arg.GradingCompleted,
+		arg.State,
 		arg.TotalPointsReceived,
 		arg.TotalPointsPossible,
 	)
@@ -208,12 +208,12 @@ func (q *Queries) AddQuestion(ctx context.Context, arg AddQuestionParams) error 
 }
 
 const findAllIncompleteExams = `-- name: FindAllIncompleteExams :many
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams WHERE grading_completed = FALSE
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams WHERE state != 'completed'
 `
 
 // FindAllIncompleteExams
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams WHERE grading_completed = FALSE
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams WHERE state != 'completed'
 func (q *Queries) FindAllIncompleteExams(ctx context.Context) ([]GradingExam, error) {
 	rows, err := q.db.Query(ctx, findAllIncompleteExams)
 	if err != nil {
@@ -232,7 +232,7 @@ func (q *Queries) FindAllIncompleteExams(ctx context.Context) ([]GradingExam, er
 			&i.StudentID,
 			&i.LibraryExamID,
 			&i.ExaminationExamID,
-			&i.GradingCompleted,
+			&i.State,
 			&i.TotalPointsReceived,
 			&i.TotalPointsPossible,
 		); err != nil {
@@ -284,7 +284,7 @@ func (q *Queries) FindQuestionByExamIdAndQuestionIndex(ctx context.Context, arg 
 }
 
 const getExam = `-- name: GetExam :one
-SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams
 WHERE exam_id = $1
 `
 
@@ -294,7 +294,7 @@ type GetExamParams struct {
 
 // GetExam
 //
-//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams
 //	WHERE exam_id = $1
 func (q *Queries) GetExam(ctx context.Context, arg GetExamParams) (GradingExam, error) {
 	row := q.db.QueryRow(ctx, getExam, arg.ExamID)
@@ -308,7 +308,7 @@ func (q *Queries) GetExam(ctx context.Context, arg GetExamParams) (GradingExam, 
 		&i.StudentID,
 		&i.LibraryExamID,
 		&i.ExaminationExamID,
-		&i.GradingCompleted,
+		&i.State,
 		&i.TotalPointsReceived,
 		&i.TotalPointsPossible,
 	)
@@ -411,7 +411,7 @@ UPDATE grading.exams SET
     student_id = $6,
     library_exam_id = $7,
     examination_exam_id = $8,
-    grading_completed = $9,
+    state = $9,
     total_points_received = $10,
     total_points_possible = $11
 WHERE exam_id = $1
@@ -426,7 +426,7 @@ type UpdateExamParams struct {
 	StudentID           pgtype.UUID        `db:"student_id" json:"student_id"`
 	LibraryExamID       pgtype.UUID        `db:"library_exam_id" json:"library_exam_id"`
 	ExaminationExamID   pgtype.UUID        `db:"examination_exam_id" json:"examination_exam_id"`
-	GradingCompleted    bool               `db:"grading_completed" json:"grading_completed"`
+	State               string             `db:"state" json:"state"`
 	TotalPointsReceived pgtype.Int4        `db:"total_points_received" json:"total_points_received"`
 	TotalPointsPossible pgtype.Int4        `db:"total_points_possible" json:"total_points_possible"`
 }
@@ -441,7 +441,7 @@ type UpdateExamParams struct {
 //	    student_id = $6,
 //	    library_exam_id = $7,
 //	    examination_exam_id = $8,
-//	    grading_completed = $9,
+//	    state = $9,
 //	    total_points_received = $10,
 //	    total_points_possible = $11
 //	WHERE exam_id = $1
@@ -455,7 +455,7 @@ func (q *Queries) UpdateExam(ctx context.Context, arg UpdateExamParams) error {
 		arg.StudentID,
 		arg.LibraryExamID,
 		arg.ExaminationExamID,
-		arg.GradingCompleted,
+		arg.State,
 		arg.TotalPointsReceived,
 		arg.TotalPointsPossible,
 	)

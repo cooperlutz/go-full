@@ -30,8 +30,8 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	ExamId              string     `json:"examId"`
-	GradingCompleted    bool       `json:"gradingCompleted"`
 	Questions           []Question `json:"questions"`
+	State               string     `json:"state"`
 	TotalPointsEarned   *int32     `json:"totalPointsEarned,omitempty"`
 	TotalPointsPossible int32      `json:"totalPointsPossible"`
 }
@@ -62,7 +62,7 @@ type GradeExamQuestionJSONRequestBody = GradeQuestion
 type ServerInterface interface {
 
 	// (GET /v1/exams/ungraded)
-	GetUngradedExams(w http.ResponseWriter, r *http.Request)
+	GetFindIncompleteExams(w http.ResponseWriter, r *http.Request)
 
 	// (GET /v1/exams/{examId})
 	GetExam(w http.ResponseWriter, r *http.Request, examId string)
@@ -79,7 +79,7 @@ type ServerInterface interface {
 type Unimplemented struct{}
 
 // (GET /v1/exams/ungraded)
-func (_ Unimplemented) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
+func (_ Unimplemented) GetFindIncompleteExams(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -107,11 +107,11 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// GetUngradedExams operation middleware
-func (siw *ServerInterfaceWrapper) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
+// GetFindIncompleteExams operation middleware
+func (siw *ServerInterfaceWrapper) GetFindIncompleteExams(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetUngradedExams(w, r)
+		siw.Handler.GetFindIncompleteExams(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -328,7 +328,7 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/exams/ungraded", wrapper.GetUngradedExams)
+		r.Get(options.BaseURL+"/v1/exams/ungraded", wrapper.GetFindIncompleteExams)
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/v1/exams/{examId}", wrapper.GetExam)
@@ -343,28 +343,28 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	return r
 }
 
-type GetUngradedExamsRequestObject struct {
+type GetFindIncompleteExamsRequestObject struct {
 }
 
-type GetUngradedExamsResponseObject interface {
-	VisitGetUngradedExamsResponse(w http.ResponseWriter) error
+type GetFindIncompleteExamsResponseObject interface {
+	VisitGetFindIncompleteExamsResponse(w http.ResponseWriter) error
 }
 
-type GetUngradedExams200JSONResponse []Exam
+type GetFindIncompleteExams200JSONResponse []Exam
 
-func (response GetUngradedExams200JSONResponse) VisitGetUngradedExamsResponse(w http.ResponseWriter) error {
+func (response GetFindIncompleteExams200JSONResponse) VisitGetFindIncompleteExamsResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 
 	return json.NewEncoder(w).Encode(response)
 }
 
-type GetUngradedExamsdefaultJSONResponse struct {
+type GetFindIncompleteExamsdefaultJSONResponse struct {
 	Body       Error
 	StatusCode int
 }
 
-func (response GetUngradedExamsdefaultJSONResponse) VisitGetUngradedExamsResponse(w http.ResponseWriter) error {
+func (response GetFindIncompleteExamsdefaultJSONResponse) VisitGetFindIncompleteExamsResponse(w http.ResponseWriter) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(response.StatusCode)
 
@@ -465,7 +465,7 @@ func (response GradeExamQuestiondefaultJSONResponse) VisitGradeExamQuestionRespo
 type StrictServerInterface interface {
 
 	// (GET /v1/exams/ungraded)
-	GetUngradedExams(ctx context.Context, request GetUngradedExamsRequestObject) (GetUngradedExamsResponseObject, error)
+	GetFindIncompleteExams(ctx context.Context, request GetFindIncompleteExamsRequestObject) (GetFindIncompleteExamsResponseObject, error)
 
 	// (GET /v1/exams/{examId})
 	GetExam(ctx context.Context, request GetExamRequestObject) (GetExamResponseObject, error)
@@ -506,23 +506,23 @@ type strictHandler struct {
 	options     StrictHTTPServerOptions
 }
 
-// GetUngradedExams operation middleware
-func (sh *strictHandler) GetUngradedExams(w http.ResponseWriter, r *http.Request) {
-	var request GetUngradedExamsRequestObject
+// GetFindIncompleteExams operation middleware
+func (sh *strictHandler) GetFindIncompleteExams(w http.ResponseWriter, r *http.Request) {
+	var request GetFindIncompleteExamsRequestObject
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.GetUngradedExams(ctx, request.(GetUngradedExamsRequestObject))
+		return sh.ssi.GetFindIncompleteExams(ctx, request.(GetFindIncompleteExamsRequestObject))
 	}
 	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "GetUngradedExams")
+		handler = middleware(handler, "GetFindIncompleteExams")
 	}
 
 	response, err := handler(r.Context(), w, r, request)
 
 	if err != nil {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(GetUngradedExamsResponseObject); ok {
-		if err := validResponse.VisitGetUngradedExamsResponse(w); err != nil {
+	} else if validResponse, ok := response.(GetFindIncompleteExamsResponseObject); ok {
+		if err := validResponse.VisitGetFindIncompleteExamsResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -620,18 +620,18 @@ func (sh *strictHandler) GradeExamQuestion(w http.ResponseWriter, r *http.Reques
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

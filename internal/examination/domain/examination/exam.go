@@ -79,7 +79,7 @@ const (
 	StateCompleted
 )
 
-var stateName = map[ExamState]string{
+var stateName = map[ExamState]string{ //nolint:gochecknoglobals // global is ok here for enum
 	StateNotStarted: "not-started",
 	StateInProgress: "in-progress",
 	StateCompleted:  "completed",

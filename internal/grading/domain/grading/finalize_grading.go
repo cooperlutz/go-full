@@ -4,7 +4,7 @@ package grading
 // this should only be called once all questions have been graded, and should not be called directly outside of the domain.
 func (e *Exam) finalizeGrading() {
 	e.CalculateTotalPointsReceived()
-	e.gradingCompleted = true
+	e.state = StateCompleted
 	e.MarkUpdated()
 }
 

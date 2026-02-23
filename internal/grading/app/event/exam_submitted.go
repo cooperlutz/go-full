@@ -19,7 +19,7 @@ type ExamSubmitted struct {
 	ExamId            string                  `json:"ExamId"`
 	LibraryExamId     string                  `json:"LibraryExamId"`
 	StudentId         string                  `json:"StudentId"`
-	Completed         bool                    `json:"Completed"`
+	State             string                  `json:"State"`
 	AnsweredQuestions int32                   `json:"AnsweredQuestions"`
 	TotalQuestions    int32                   `json:"TotalQuestions"`
 	Questions         []ExamSubmittedQuestion `json:"Questions"`

@@ -165,7 +165,7 @@ func (h HttpServer) SubmitExam(ctx context.Context, request SubmitExamRequestObj
 		ExamId:            exam.ExamId,
 		LibraryExamId:     exam.LibraryExamId,
 		StudentId:         exam.StudentId,
-		Completed:         exam.Completed,
+		ExamState:         exam.State,
 		AnsweredQuestions: exam.AnsweredQuestions,
 		TotalQuestions:    exam.TotalQuestions,
 		Questions: func() []event.ExamSubmittedQuestion {
@@ -203,7 +203,7 @@ func queryExamToHttpExam(e query.Exam) Exam {
 		ExamId:            e.ExamId,
 		LibraryExamId:     &e.LibraryExamId,
 		StudentId:         e.StudentId,
-		Completed:         e.Completed,
+		State:             e.State,
 		AnsweredQuestions: &e.AnsweredQuestions,
 		TotalQuestions:    &e.TotalQuestions,
 		Questions:         &questions,

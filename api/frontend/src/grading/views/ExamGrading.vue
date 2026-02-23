@@ -21,7 +21,7 @@ onMounted(() => {
     <div v-else-if="error">Error: {{ error }}</div>
     <div v-else-if="exam" id="exam-grading-component">
       <h2>Exam ID: {{ exam.examId }}</h2>
-      <p>Grading Completed: {{ exam.gradingCompleted }}</p>
+      <p>Grading State: {{ exam.state }}</p>
       <p>Number of Questions: {{ exam.questions.length }}</p>
       <ul
         class="list bg-base-100 rounded-box shadow-md border border-neutral"

@@ -3,14 +3,14 @@ import { onMounted } from "vue";
 
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
-import { useGetUngradedExams } from "../composables/useGrading";
+import { useGetFindIncompleteExams } from "../composables/useGrading";
 import ExamsToGradeTable from "../components/ExamsToGradeTable.vue";
 
-const { ungradedExams, loading, error, getUngradedExams } =
-  useGetUngradedExams();
+const { incompleteExams, loading, error, getFindIncompleteExams } =
+  useGetFindIncompleteExams();
 
 onMounted(async () => {
-  await getUngradedExams();
+  await getFindIncompleteExams();
 });
 </script>
 <template>
@@ -23,10 +23,13 @@ onMounted(async () => {
 
     <div
       v-else-if="
-        !loading && !error && ungradedExams != null && ungradedExams.length > 0
+        !loading &&
+        !error &&
+        incompleteExams != null &&
+        incompleteExams.length > 0
       "
     >
-      <ExamsToGradeTable :exams="ungradedExams" />
+      <ExamsToGradeTable :exams="incompleteExams" />
     </div>
   </div>
 </template>

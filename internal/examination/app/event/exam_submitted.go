@@ -11,7 +11,7 @@ type ExamSubmitted struct {
 	ExamId            string
 	LibraryExamId     string
 	StudentId         string
-	Completed         bool
+	ExamState         string
 	AnsweredQuestions int32
 	TotalQuestions    int32
 	Questions         []ExamSubmittedQuestion
