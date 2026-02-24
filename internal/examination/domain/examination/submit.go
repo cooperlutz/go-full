@@ -1,14 +1,19 @@
 package examination
 
-import (
-	"github.com/cooperlutz/go-full/pkg/utilitee"
-)
-
 func (e *Exam) Submit() error {
-	now := utilitee.RightNow()
-	e.completedAt = &now
-	e.state = StateCompleted
-	e.MarkUpdated()
+	err := e.checkTimeLimit()
+	if err != nil {
+		return err
+	}
+
+	if !e.allQuestionsAnswered() {
+		return ErrNotAllQuestionsAnswered{}
+	}
+
+	err = e.finishExam()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

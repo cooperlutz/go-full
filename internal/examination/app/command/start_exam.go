@@ -27,25 +27,53 @@ func NewStartExamHandler(
 	return StartExamHandler{examinationRepo: examinationRepo, examLibraryAdapter: examLibraryAdapter}
 }
 
-func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) {
+func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) { //nolint:funlen // it's fine
 	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.start_exam.handle")
 	defer span.End()
 
-	questions, err := h.examLibraryAdapter.RetrieveExamQuestionsFromLibrary(ctx, cmd.ExamLibraryID)
+	// retrieve the exam questions from the Exam Library service using the provided exam library ID
+	examLibraryExam, err := h.examLibraryAdapter.RetrieveExamQuestionsFromLibrary(ctx, cmd.ExamLibraryID)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return Exam{}, err
 	}
 
-	examIdUuid, err := uuid.Parse(cmd.StudentId)
+	// map the retrieved exam questions to the domain entity format
+	var questions []*examination.Question
+
+	if examLibraryExam.Questions != nil {
+		for _, q := range *examLibraryExam.Questions {
+			questionType, err := examination.QuestionTypeFromString(q.QuestionType)
+			if err != nil {
+				telemetree.RecordError(ctx, err)
+
+				return Exam{}, err
+			}
+
+			question := examination.NewQuestion(
+				int32(q.Index),
+				q.QuestionText,
+				questionType,
+				q.ResponseOptions,
+			)
+			questions = append(questions, question)
+		}
+	}
+
+	studentIdUuid, err := uuid.Parse(cmd.StudentId)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return Exam{}, err
 	}
 
-	exam := examination.NewExam(examIdUuid, uuid.MustParse(cmd.ExamLibraryID), questions)
+	exam := examination.NewExam(
+		studentIdUuid,
+		uuid.MustParse(cmd.ExamLibraryID),
+		examLibraryExam.TimeLimit,
+		questions,
+	)
 
 	err = exam.StartExam()
 	if err != nil {
@@ -64,11 +92,14 @@ func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, erro
 	var questionsForExam []Question
 	for _, q := range questions {
 		questionsForExam = append(questionsForExam, Question{
+			ExamId:          exam.GetIdString(),
+			Answered:        q.IsAnswered(),
 			QuestionID:      q.GetIdString(),
 			QuestionIndex:   q.GetIndex(),
 			QuestionText:    q.GetQuestionText(),
 			QuestionType:    q.GetQuestionType().String(),
-			ResponseOptions: *q.GetResponseOptions(),
+			ResponseOptions: q.GetResponseOptions(),
+			ProvidedAnswer:  q.GetProvidedAnswer(),
 		})
 	}
 

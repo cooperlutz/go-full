@@ -13,21 +13,27 @@ type Exam struct {
 	studentId     uuid.UUID
 	libraryExamId uuid.UUID
 
-	startedAt   *time.Time
-	completedAt *time.Time
+	timeLimit       int64
+	timeOfTimeLimit *time.Time
+	startedAt       *time.Time
+	completedAt     *time.Time
 
 	state ExamState
 
 	questions []*Question
 }
 
-func NewExam(studentId, libraryExamId uuid.UUID, questions []*Question) *Exam {
+func NewExam(studentId, libraryExamId uuid.UUID, timeLimit int64, questions []*Question) *Exam {
 	return &Exam{
-		EntityMetadata: baseentitee.NewEntityMetadata(),
-		studentId:      studentId,
-		libraryExamId:  libraryExamId,
-		questions:      questions,
-		state:          StateNotStarted,
+		EntityMetadata:  baseentitee.NewEntityMetadata(),
+		studentId:       studentId,
+		libraryExamId:   libraryExamId,
+		timeLimit:       timeLimit,
+		timeOfTimeLimit: nil, // timeOfTimeLimit is set when the exam is started
+		startedAt:       nil, // startedAt is set when the exam is started
+		completedAt:     nil, // completedAt is set when the exam is completed
+		state:           StateNotStarted,
+		questions:       questions,
 	}
 }
 

@@ -15,7 +15,7 @@ var FixtureExamQuestions = []*Question{
 }
 
 func TestExam(t *testing.T) {
-	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), uuid.MustParse("00000000-0000-0000-0000-000000000123"), FixtureExamQuestions)
+	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), uuid.MustParse("00000000-0000-0000-0000-000000000123"), 3600, FixtureExamQuestions)
 	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
 	err := exam.StartExam()
 	assert.Nil(t, err)
@@ -49,7 +49,7 @@ func TestExam(t *testing.T) {
 	answeredQuestion := exam.GetQuestionByIndex(1)
 	assert.Equal(t, "4", *answeredQuestion.GetProvidedAnswer())
 
-	err = exam.FinishExam()
+	err = exam.Submit()
 	assert.Error(t, err)
 	assert.False(t, exam.IsCompleted())
 	assert.Nil(t, exam.GetCompletedAtTime())
@@ -71,7 +71,7 @@ func TestExam(t *testing.T) {
 	assert.ErrorIs(t, err, ErrNoMoreQuestions{})
 	assert.Equal(t, "no more questions available", err.Error())
 
-	err = exam.FinishExam()
+	err = exam.Submit()
 	assert.Nil(t, err)
 	assert.True(t, exam.IsCompleted())
 	assert.NotNil(t, exam.GetCompletedAtTime())

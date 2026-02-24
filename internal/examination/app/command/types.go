@@ -17,6 +17,6 @@ type Question struct {
 	QuestionIndex   int32
 	QuestionText    string
 	QuestionType    string
-	ResponseOptions []string
-	ProvidedAnswer  string
+	ResponseOptions *[]string
+	ProvidedAnswer  *string
 }
