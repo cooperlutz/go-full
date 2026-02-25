@@ -16,7 +16,7 @@ func (e Exam) timeLimitExceeded() bool {
 	return utilitee.RightNow().After(*e.timeOfTimeLimit)
 }
 
-func (e Exam) checkTimeLimit() error {
+func (e Exam) CheckTimeLimit() error {
 	if e.timeLimitExceeded() {
 		err := e.finishExam()
 		if err != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
 
 	"github.com/exaring/otelpgx"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -19,6 +20,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
+	"github.com/cooperlutz/go-full/pkg/worker"
 )
 
 // Application represents the main application structure.
@@ -59,6 +61,11 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		os.Exit(1)
 	}
 
+	backgroundWorker := worker.NewWorker(
+		a.conf.Telemetry,
+		10*time.Second, //nolint: mnd // want the worker to run every 10 seconds
+	)
+
 	/* -----------------------------------------------------------------------------------
 	Modular Service Initializations:
 
@@ -86,6 +93,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		conn,
 		pubSub,
 		examLibraryModule.UseCase,
+		backgroundWorker,
 	)
 	if err != nil {
 		os.Exit(1)
@@ -207,6 +215,14 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 	}()
 	go func() {
 		err = pubSub.Run()
+		if err != nil {
+			errChannel <- err
+		}
+	}()
+
+	// the Background Worker
+	go func() {
+		err = backgroundWorker.Run()
 		if err != nil {
 			errChannel <- err
 		}

@@ -1,7 +1,7 @@
 package examination
 
 func (e *Exam) Submit() error {
-	err := e.checkTimeLimit()
+	err := e.CheckTimeLimit()
 	if err != nil {
 		return err
 	}

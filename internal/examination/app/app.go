@@ -17,9 +17,10 @@ type Application struct {
 }
 
 type Commands struct {
-	StartExam      command.StartExamHandler
-	AnswerQuestion command.AnswerQuestionHandler
-	SubmitExam     command.SubmitExamHandler
+	StartExam                  command.StartExamHandler
+	AnswerQuestion             command.AnswerQuestionHandler
+	SubmitExam                 command.SubmitExamHandler
+	CompleteExamsPastTimeLimit command.CompleteExamsPastTimeLimitHandler
 }
 
 type Queries struct {
@@ -62,6 +63,10 @@ func NewApplication(
 				outbound.NewExamLibraryAdapter(
 					examLibraryUseCase,
 				),
+			),
+			CompleteExamsPastTimeLimit: command.NewCompleteExamsPastTimeLimitHandler(
+				examinationRepository,
+				examinationRepository,
 			),
 		},
 		Queries: Queries{
