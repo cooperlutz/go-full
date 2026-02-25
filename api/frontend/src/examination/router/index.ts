@@ -1,6 +1,6 @@
 import ExaminationView from "../views/ExaminationView.vue";
-import ExamSubmission from "../components/SubmitExamButton.vue";
 import ExaminationOverview from "../views/ExaminationOverview.vue";
+import ExamSubmitted from "../views/ExaminationSubmitted.vue";
 
 const examinationRoutes = [
   {
@@ -8,8 +8,9 @@ const examinationRoutes = [
     component: ExaminationOverview,
   },
   {
-    path: "/exam/:id/submit",
-    component: ExamSubmission,
+    path: "/exam/submitted",
+    component: ExamSubmitted,
+    name: "ExamSubmitted",
   },
   {
     path: "/exam/:id/question/:index",

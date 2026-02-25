@@ -34,14 +34,16 @@ const clickStart = async () => {
   </button>
   <dialog id="start_exam_modal" class="modal">
     <div class="modal-box">
-      <h3 class="text-lg font-bold">Take Exam</h3>
+      <h3 class="text-lg font-bold">
+        Are you sure you want to start the exam?
+      </h3>
       <div class="card-actions">
         <div
           id="confirm-start-exam-button"
           class="btn btn-m btn-success text-xs mt-4"
           @click="clickStart()"
         >
-          Start Exam
+          Start!
         </div>
       </div>
     </div>
