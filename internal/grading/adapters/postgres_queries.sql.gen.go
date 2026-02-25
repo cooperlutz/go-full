@@ -3,7 +3,7 @@
 //   sqlc v1.30.0
 // source: postgres_queries.sql
 
-package outbound
+package adapters
 
 import (
 	"context"

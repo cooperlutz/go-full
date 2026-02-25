@@ -152,8 +152,8 @@ sql:
   strict_order_by: true
   gen:
     go:
-      package: outbound
-      out: /internal/grading/adapters/outbound
+      package: adapters
+      out: /internal/grading/adapters
       sql_package: pgx/v5
       sql_driver: github.com/jackc/pgx/v5
       json_tags_id_uppercase: false

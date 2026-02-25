@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
-	"github.com/cooperlutz/go-full/internal/grading/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/grading/adapters"
 	"github.com/cooperlutz/go-full/internal/grading/app/command"
 	"github.com/cooperlutz/go-full/internal/grading/app/event"
 	"github.com/cooperlutz/go-full/internal/grading/app/query"
@@ -38,7 +38,7 @@ func NewApplication(
 	pubSub *eeventdriven.BasePgsqlPubSubProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
 ) (Application, error) {
-	gradingRepo := outbound.NewPostgresAdapter(pgconn)
+	gradingRepo := adapters.NewPostgresAdapter(pgconn)
 
 	app := Application{
 		Commands: Commands{

@@ -1,4 +1,4 @@
-package outbound
+package adapters
 
 import (
 	"github.com/google/uuid"
