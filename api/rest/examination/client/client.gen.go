@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/oapi-codegen/runtime"
 )
@@ -30,11 +31,15 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
+	CompletedAt       *time.Time  `json:"completedAt,omitempty"`
 	ExamId            string      `json:"examId"`
 	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
 	Questions         *[]Question `json:"questions,omitempty"`
+	StartedAt         *time.Time  `json:"startedAt,omitempty"`
 	State             string      `json:"state"`
 	StudentId         string      `json:"studentId"`
+	TimeLimitSeconds  *int64      `json:"timeLimitSeconds,omitempty"`
+	TimeOfTimeLimit   *time.Time  `json:"timeOfTimeLimit,omitempty"`
 	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
 }
 

@@ -17,16 +17,25 @@ var FixtureExamQuestions = []*Question{
 func TestExam(t *testing.T) {
 	exam := NewExam(uuid.MustParse("00000000-0000-0000-0000-000000000123"), uuid.MustParse("00000000-0000-0000-0000-000000000123"), 3600, FixtureExamQuestions)
 	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*10)
+	assert.Nil(t, exam.GetStartedAtTime())
+	assert.Nil(t, exam.GetCompletedAtTime())
+	assert.Nil(t, exam.GetTimeOfTimeLimit())
+	assert.Nil(t, exam.GetDeletedAtTime())
+	assert.False(t, exam.IsDeleted())
+	assert.Equal(t, int64(3600), exam.GetTimeLimitSeconds())
+	assert.Equal(t, StateNotStarted, exam.GetState())
+
 	err := exam.StartExam()
 	assert.Nil(t, err)
 
+	assert.Equal(t, StateInProgress, exam.GetState())
 	assert.WithinDuration(t, time.Now(), *exam.GetStartedAtTime(), time.Microsecond*10)
 	assert.Nil(t, exam.GetCompletedAtTime())
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
-	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.studentId)
-	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.libraryExamId)
-	assert.Equal(t, FixtureExamQuestions, exam.questions)
+	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.GetStudentIdUUID())
+	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.GetLibraryExamIdUUID())
+	assert.Equal(t, FixtureExamQuestions, exam.GetQuestions())
 
 	err = exam.StartExam()
 	assert.Error(t, err)
@@ -73,8 +82,67 @@ func TestExam(t *testing.T) {
 
 	err = exam.Submit()
 	assert.Nil(t, err)
+	assert.Equal(t, StateCompleted, exam.GetState())
 	assert.True(t, exam.IsCompleted())
 	assert.NotNil(t, exam.GetCompletedAtTime())
 	assert.WithinDuration(t, time.Now(), *exam.GetCompletedAtTime(), time.Microsecond*10)
 	assert.WithinDuration(t, time.Now(), exam.GetUpdatedAtTime(), time.Microsecond*10)
+}
+
+func TestExamStateFromString(t *testing.T) {
+	state, err := ExamStateFromString("not-started")
+	assert.Nil(t, err)
+	assert.Equal(t, StateNotStarted, state)
+
+	state, err = ExamStateFromString("in-progress")
+	assert.Nil(t, err)
+	assert.Equal(t, StateInProgress, state)
+
+	state, err = ExamStateFromString("completed")
+	assert.Nil(t, err)
+	assert.Equal(t, StateCompleted, state)
+
+	_, err = ExamStateFromString("INVALID STATE")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrInvalidExamState{})
+	assert.Equal(t, "invalid exam state", err.Error())
+}
+
+func TestQuestionTypeFromString(t *testing.T) {
+	questionType, err := QuestionTypeFromString("multiple-choice")
+	assert.Nil(t, err)
+	assert.Equal(t, QuestionMultipleChoice, questionType)
+
+	questionType, err = QuestionTypeFromString("short-answer")
+	assert.Nil(t, err)
+	assert.Equal(t, QuestionShortAnswer, questionType)
+
+	questionType, err = QuestionTypeFromString("essay")
+	assert.Nil(t, err)
+	assert.Equal(t, QuestionEssay, questionType)
+
+	_, err = QuestionTypeFromString("INVALID TYPE")
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrInvalidQuestionType{})
+	assert.Equal(t, "invalid question type", err.Error())
+}
+
+func TestQuestion(t *testing.T) {
+	question := NewQuestion(1, "What is 2 + 2?", QuestionMultipleChoice, &[]string{"3", "4", "5"})
+	assert.Equal(t, int32(1), question.GetIndex())
+	assert.Equal(t, "What is 2 + 2?", question.GetQuestionText())
+	assert.Equal(t, QuestionMultipleChoice, question.GetQuestionType())
+	assert.Equal(t, []string{"3", "4", "5"}, *question.GetResponseOptions())
+}
+
+func TestQuestionType_Int(t *testing.T) {
+	assert.Equal(t, 0, QuestionMultipleChoice.Int())
+	assert.Equal(t, 1, QuestionEssay.Int())
+	assert.Equal(t, 2, QuestionShortAnswer.Int())
+}
+
+func TestQuestionType_String(t *testing.T) {
+	assert.Equal(t, "multiple-choice", QuestionMultipleChoice.String())
+	assert.Equal(t, "essay", QuestionEssay.String())
+	assert.Equal(t, "short-answer", QuestionShortAnswer.String())
 }

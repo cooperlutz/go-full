@@ -33,6 +33,8 @@ func MapToExam(
 	libraryExamId uuid.UUID,
 	startedAt *time.Time,
 	completedAt *time.Time,
+	timeLimitSeconds int64,
+	timeOfTimeLimit *time.Time,
 	state string,
 	questions []*Question,
 ) (*Exam, error) {
@@ -49,12 +51,14 @@ func MapToExam(
 			deleted,
 			deletedAt,
 		),
-		studentId:     studentId,
-		libraryExamId: libraryExamId,
-		startedAt:     startedAt,
-		completedAt:   completedAt,
-		state:         examState,
-		questions:     questions,
+		studentId:       studentId,
+		libraryExamId:   libraryExamId,
+		startedAt:       startedAt,
+		completedAt:     completedAt,
+		state:           examState,
+		questions:       questions,
+		timeLimit:       timeLimitSeconds,
+		timeOfTimeLimit: timeOfTimeLimit,
 	}, nil
 }
 

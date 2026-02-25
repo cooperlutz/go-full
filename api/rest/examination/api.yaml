@@ -211,6 +211,18 @@ components:
           format: int32
         state:
           type: string
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        timeLimitSeconds:
+          type: integer
+          format: int64
+        timeOfTimeLimit:
+          type: string
+          format: date-time
         questions:
           type: array
           items:

@@ -57,6 +57,14 @@ func (e Exam) GetFirstQuestion() *Question {
 	return e.GetQuestionByIndex(1)
 }
 
+func (e Exam) GetTimeLimitSeconds() int64 {
+	return e.timeLimit
+}
+
+func (e Exam) GetTimeOfTimeLimit() *time.Time {
+	return e.timeOfTimeLimit
+}
+
 func (e Exam) GetCompletedAtTime() *time.Time {
 	return e.completedAt
 }
