@@ -83,12 +83,14 @@ INSERT INTO iam.users (
     id,
     email,
     password_hash,
+    created_at,
     last_login
 ) VALUES (
     $1,
     $2,
     $3,
-    $4
+    $4,
+    $5
 )
 RETURNING id, email, password_hash, created_at, last_login
 `
@@ -97,6 +99,7 @@ type CreateUserParams struct {
 	ID           pgtype.UUID      `db:"id" json:"id"`
 	Email        string           `db:"email" json:"email"`
 	PasswordHash string           `db:"password_hash" json:"password_hash"`
+	CreatedAt    pgtype.Timestamp `db:"created_at" json:"created_at"`
 	LastLogin    pgtype.Timestamp `db:"last_login" json:"last_login"`
 }
 
@@ -106,12 +109,14 @@ type CreateUserParams struct {
 //	    id,
 //	    email,
 //	    password_hash,
+//	    created_at,
 //	    last_login
 //	) VALUES (
 //	    $1,
 //	    $2,
 //	    $3,
-//	    $4
+//	    $4,
+//	    $5
 //	)
 //	RETURNING id, email, password_hash, created_at, last_login
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (IamUser, error) {
@@ -119,8 +124,61 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (IamUser
 		arg.ID,
 		arg.Email,
 		arg.PasswordHash,
+		arg.CreatedAt,
 		arg.LastLogin,
 	)
+	var i IamUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.CreatedAt,
+		&i.LastLogin,
+	)
+	return i, err
+}
+
+const findUserByEmail = `-- name: FindUserByEmail :one
+SELECT id, email, password_hash, created_at, last_login FROM iam.users
+WHERE email = $1
+`
+
+type FindUserByEmailParams struct {
+	Email string `db:"email" json:"email"`
+}
+
+// FindUserByEmail
+//
+//	SELECT id, email, password_hash, created_at, last_login FROM iam.users
+//	WHERE email = $1
+func (q *Queries) FindUserByEmail(ctx context.Context, arg FindUserByEmailParams) (IamUser, error) {
+	row := q.db.QueryRow(ctx, findUserByEmail, arg.Email)
+	var i IamUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.CreatedAt,
+		&i.LastLogin,
+	)
+	return i, err
+}
+
+const findUserByID = `-- name: FindUserByID :one
+SELECT id, email, password_hash, created_at, last_login FROM iam.users
+WHERE id = $1
+`
+
+type FindUserByIDParams struct {
+	ID pgtype.UUID `db:"id" json:"id"`
+}
+
+// FindUserByID
+//
+//	SELECT id, email, password_hash, created_at, last_login FROM iam.users
+//	WHERE id = $1
+func (q *Queries) FindUserByID(ctx context.Context, arg FindUserByIDParams) (IamUser, error) {
+	row := q.db.QueryRow(ctx, findUserByID, arg.ID)
 	var i IamUser
 	err := row.Scan(
 		&i.ID,
@@ -159,47 +217,21 @@ func (q *Queries) GetRefreshToken(ctx context.Context, arg GetRefreshTokenParams
 	return i, err
 }
 
-const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, email, password_hash, created_at, last_login FROM iam.users
-WHERE email = $1
-`
-
-type GetUserByEmailParams struct {
-	Email string `db:"email" json:"email"`
-}
-
-// GetUserByEmail
-//
-//	SELECT id, email, password_hash, created_at, last_login FROM iam.users
-//	WHERE email = $1
-func (q *Queries) GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (IamUser, error) {
-	row := q.db.QueryRow(ctx, getUserByEmail, arg.Email)
-	var i IamUser
-	err := row.Scan(
-		&i.ID,
-		&i.Email,
-		&i.PasswordHash,
-		&i.CreatedAt,
-		&i.LastLogin,
-	)
-	return i, err
-}
-
-const getUserByID = `-- name: GetUserByID :one
+const getUser = `-- name: GetUser :one
 SELECT id, email, password_hash, created_at, last_login FROM iam.users
 WHERE id = $1
 `
 
-type GetUserByIDParams struct {
+type GetUserParams struct {
 	ID pgtype.UUID `db:"id" json:"id"`
 }
 
-// GetUserByID
+// GetUser
 //
 //	SELECT id, email, password_hash, created_at, last_login FROM iam.users
 //	WHERE id = $1
-func (q *Queries) GetUserByID(ctx context.Context, arg GetUserByIDParams) (IamUser, error) {
-	row := q.db.QueryRow(ctx, getUserByID, arg.ID)
+func (q *Queries) GetUser(ctx context.Context, arg GetUserParams) (IamUser, error) {
+	row := q.db.QueryRow(ctx, getUser, arg.ID)
 	var i IamUser
 	err := row.Scan(
 		&i.ID,
@@ -229,4 +261,101 @@ type RevokeRefreshTokenParams struct {
 func (q *Queries) RevokeRefreshToken(ctx context.Context, arg RevokeRefreshTokenParams) error {
 	_, err := q.db.Exec(ctx, revokeRefreshToken, arg.ID)
 	return err
+}
+
+const updateRefreshToken = `-- name: UpdateRefreshToken :one
+UPDATE iam.refresh_tokens
+SET user_id = $2,
+    token = $3,
+    expires_at = $4,
+    created_at = $5,
+    revoked = $6
+WHERE id = $1
+RETURNING id, user_id, token, expires_at, created_at, revoked
+`
+
+type UpdateRefreshTokenParams struct {
+	ID        pgtype.UUID      `db:"id" json:"id"`
+	UserID    pgtype.UUID      `db:"user_id" json:"user_id"`
+	Token     string           `db:"token" json:"token"`
+	ExpiresAt pgtype.Timestamp `db:"expires_at" json:"expires_at"`
+	CreatedAt pgtype.Timestamp `db:"created_at" json:"created_at"`
+	Revoked   bool             `db:"revoked" json:"revoked"`
+}
+
+// UpdateRefreshToken
+//
+//	UPDATE iam.refresh_tokens
+//	SET user_id = $2,
+//	    token = $3,
+//	    expires_at = $4,
+//	    created_at = $5,
+//	    revoked = $6
+//	WHERE id = $1
+//	RETURNING id, user_id, token, expires_at, created_at, revoked
+func (q *Queries) UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (IamRefreshToken, error) {
+	row := q.db.QueryRow(ctx, updateRefreshToken,
+		arg.ID,
+		arg.UserID,
+		arg.Token,
+		arg.ExpiresAt,
+		arg.CreatedAt,
+		arg.Revoked,
+	)
+	var i IamRefreshToken
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Token,
+		&i.ExpiresAt,
+		&i.CreatedAt,
+		&i.Revoked,
+	)
+	return i, err
+}
+
+const updateUser = `-- name: UpdateUser :one
+UPDATE iam.users
+SET email = $2,
+    password_hash = $3,
+    last_login = $4,
+    created_at = $5
+WHERE id = $1
+RETURNING id, email, password_hash, created_at, last_login
+`
+
+type UpdateUserParams struct {
+	ID           pgtype.UUID      `db:"id" json:"id"`
+	Email        string           `db:"email" json:"email"`
+	PasswordHash string           `db:"password_hash" json:"password_hash"`
+	LastLogin    pgtype.Timestamp `db:"last_login" json:"last_login"`
+	CreatedAt    pgtype.Timestamp `db:"created_at" json:"created_at"`
+}
+
+// UpdateUser
+//
+//	UPDATE iam.users
+//	SET email = $2,
+//	    password_hash = $3,
+//	    last_login = $4,
+//	    created_at = $5
+//	WHERE id = $1
+//	RETURNING id, email, password_hash, created_at, last_login
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (IamUser, error) {
+	row := q.db.QueryRow(ctx, updateUser,
+		arg.ID,
+		arg.Email,
+		arg.PasswordHash,
+		arg.LastLogin,
+		arg.CreatedAt,
+	)
+	var i IamUser
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.PasswordHash,
+		&i.CreatedAt,
+		&i.LastLogin,
+	)
+	return i, err
 }
