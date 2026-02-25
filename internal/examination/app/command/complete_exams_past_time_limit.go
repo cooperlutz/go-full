@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"errors"
 
 	"github.com/google/uuid"
 
@@ -13,7 +14,7 @@ import (
 type CompleteExamsPastTimeLimit struct{}
 
 type AllExamsReadModel interface {
-	FindAll(ctx context.Context) ([]query.Exam, error)
+	FindAllInProgress(ctx context.Context) ([]query.Exam, error)
 }
 
 type CompleteExamsPastTimeLimitHandler struct {
@@ -35,7 +36,7 @@ func (h CompleteExamsPastTimeLimitHandler) Handle(ctx context.Context) error {
 	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.complete_exams_past_time_limit.handle")
 	defer span.End()
 
-	exams, err := h.allExamsReadModel.FindAll(ctx)
+	exams, err := h.allExamsReadModel.FindAllInProgress(ctx)
 	if err != nil {
 		return err
 	}
@@ -43,7 +44,7 @@ func (h CompleteExamsPastTimeLimitHandler) Handle(ctx context.Context) error {
 	for _, exam := range exams {
 		err = h.examinationRepo.UpdateExam(ctx, uuid.MustParse(exam.ExamId), func(e *examination.Exam) (*examination.Exam, error) {
 			err = e.CheckTimeLimit()
-			if err != nil {
+			if err != nil && !errors.Is(err, examination.ErrTimeLimitExceeded{}) {
 				telemetree.RecordError(ctx, err)
 
 				return nil, err

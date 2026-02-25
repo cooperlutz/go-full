@@ -73,6 +73,11 @@ type Querier interface {
 	//
 	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
 	FindAllExams(ctx context.Context) ([]ExaminationExam, error)
+	//FindAllInProgressExams
+	//
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
+	//  WHERE state = 'in-progress'
+	FindAllInProgressExams(ctx context.Context) ([]ExaminationExam, error)
 	//FindQuestionsForExam
 	//
 	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions

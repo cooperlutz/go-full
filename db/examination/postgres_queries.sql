@@ -1,6 +1,10 @@
 -- name: FindAllExams :many
 SELECT * FROM examination.exams;
 
+-- name: FindAllInProgressExams :many
+SELECT * FROM examination.exams
+WHERE state = 'in-progress';
+
 -- name: AddExam :exec
 INSERT INTO examination.exams (
     exam_id,

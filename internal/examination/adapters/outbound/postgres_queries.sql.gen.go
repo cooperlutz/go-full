@@ -235,6 +235,48 @@ func (q *Queries) FindAllExams(ctx context.Context) ([]ExaminationExam, error) {
 	return items, nil
 }
 
+const findAllInProgressExams = `-- name: FindAllInProgressExams :many
+SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
+WHERE state = 'in-progress'
+`
+
+// FindAllInProgressExams
+//
+//	SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
+//	WHERE state = 'in-progress'
+func (q *Queries) FindAllInProgressExams(ctx context.Context) ([]ExaminationExam, error) {
+	rows, err := q.db.Query(ctx, findAllInProgressExams)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []ExaminationExam
+	for rows.Next() {
+		var i ExaminationExam
+		if err := rows.Scan(
+			&i.ExamID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.DeletedAt,
+			&i.Deleted,
+			&i.StudentID,
+			&i.LibraryExamID,
+			&i.State,
+			&i.CompletedAt,
+			&i.StartedAt,
+			&i.TimeLimit,
+			&i.TimeOfTimeLimit,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const findQuestionsForExam = `-- name: FindQuestionsForExam :many
 SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions
 WHERE exam_id = $1

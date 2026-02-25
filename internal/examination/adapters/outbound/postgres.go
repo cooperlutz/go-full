@@ -40,6 +40,21 @@ func (p PostgresAdapter) FindAll(ctx context.Context) ([]query.Exam, error) {
 	return examinationExamsToQuery(exams)
 }
 
+// FindAllInProgress retrieves all in-progress exams from the database and maps them to domain entities.
+func (p PostgresAdapter) FindAllInProgress(ctx context.Context) ([]query.Exam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findallinprogress")
+	defer span.End()
+
+	exams, err := p.Handler.FindAllInProgressExams(ctx)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return nil, err
+	}
+
+	return examinationExamsToQuery(exams)
+}
+
 // FindQuestion retrieves a question by its exam ID and question index from the database.
 func (p PostgresAdapter) FindQuestion(ctx context.Context, id uuid.UUID, questionIndex int32) (query.Question, error) {
 	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findquestion")
