@@ -31,6 +31,7 @@ func (a PostgresAdapter) CreateUser(ctx context.Context, user *iam.User) error {
 		ID:           pgtype.UUID{Bytes: user.ID, Valid: true},
 		Email:        user.Email,
 		PasswordHash: user.PasswordHash,
+		CreatedAt:    pgtype.Timestamp{Time: user.CreatedAt, Valid: true},
 		LastLogin:    pgtype.Timestamp{Time: time.Time{}, Valid: false},
 	})
 

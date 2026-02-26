@@ -3,6 +3,7 @@ package iam
 import (
 	"time"
 
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/google/uuid"
 )
 
@@ -17,14 +18,14 @@ type RefreshToken struct {
 
 func NewRefreshToken(userID uuid.UUID, refreshTokenTTL time.Duration) *RefreshToken {
 	tokenID := uuid.New()
-	expiresAt := time.Now().Add(refreshTokenTTL)
+	expiresAt := utilitee.RightNow().Add(refreshTokenTTL)
 
 	token := &RefreshToken{
 		ID:        tokenID,
 		UserID:    userID,
 		Token:     tokenID.String(), // Use the UUID as the token
 		ExpiresAt: expiresAt,
-		CreatedAt: time.Now(),
+		CreatedAt: utilitee.RightNow(),
 		Revoked:   false,
 	}
 
