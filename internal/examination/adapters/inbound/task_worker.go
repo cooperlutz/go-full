@@ -2,15 +2,15 @@ package inbound
 
 import (
 	"github.com/cooperlutz/go-full/internal/examination/app"
-	"github.com/cooperlutz/go-full/pkg/worker"
+	"github.com/cooperlutz/go-full/pkg/workerbee"
 )
 
 type WorkerAdapter struct {
-	worker *worker.Worker
+	worker *workerbee.Worker
 	app    app.Application
 }
 
-func NewTaskWorkerAdapter(wrk *worker.Worker, app app.Application) *WorkerAdapter {
+func NewTaskWorkerAdapter(wrk *workerbee.Worker, app app.Application) *WorkerAdapter {
 	examinationWorker := &WorkerAdapter{
 		worker: wrk,
 		app:    app,
