@@ -13,7 +13,7 @@ const examTableHeaders: Record<keyof Omit<Exam, "questions">, string> = {
   examId: "Exam ID",
   totalPointsEarned: "Total Points Earned",
   totalPointsPossible: "Total Points Possible",
-  gradingCompleted: "Grading Completed",
+  state: "Grading State",
 };
 </script>
 
@@ -42,7 +42,7 @@ const examTableHeaders: Record<keyof Omit<Exam, "questions">, string> = {
           <td>{{ exam.examId }}</td>
           <td>{{ exam.totalPointsEarned }}</td>
           <td>{{ exam.totalPointsPossible }}</td>
-          <td>{{ exam.gradingCompleted }}</td>
+          <td>{{ exam.state }}</td>
         </tr>
       </tbody>
     </table>

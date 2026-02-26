@@ -1,6 +1,10 @@
 -- name: FindAllExams :many
 SELECT * FROM examination.exams;
 
+-- name: FindAllInProgressExams :many
+SELECT * FROM examination.exams
+WHERE state = 'in-progress';
+
 -- name: AddExam :exec
 INSERT INTO examination.exams (
     exam_id,
@@ -10,9 +14,11 @@ INSERT INTO examination.exams (
     deleted,
     student_id,
     library_exam_id,
-    completed,
+    state,
     completed_at,
-    started_at
+    started_at,
+    time_limit,
+    time_of_time_limit
 ) VALUES (
     $1,
     $2,
@@ -23,7 +29,9 @@ INSERT INTO examination.exams (
     $7,
     $8,
     $9,
-    $10
+    $10,
+    $11,
+    $12
 );
 
 -- name: FindQuestionsForExam :many
@@ -85,9 +93,11 @@ SET
     deleted = $5,
     student_id = $6,
     library_exam_id = $7,
-    completed = $8,
+    state = $8,
     completed_at = $9,
-    started_at = $10
+    started_at = $10,
+    time_limit = $11,
+    time_of_time_limit = $12
 WHERE exam_id = $1;
 
 -- name: SaveQuestion :exec

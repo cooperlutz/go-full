@@ -12,7 +12,7 @@ import (
 
 // FindAllExams finds all exams in the database.
 func (r *examLibraryPersistPostgresRepository) FindAllExams(ctx context.Context) ([]entity.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findAllExams")
+	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.find_all_exams")
 	defer span.End()
 
 	dbExams, err := r.query.FindAllExams(ctx)

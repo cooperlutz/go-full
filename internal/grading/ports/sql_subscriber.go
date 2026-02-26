@@ -1,4 +1,4 @@
-package inbound
+package ports
 
 import (
 	"github.com/cooperlutz/go-full/internal/grading/app"

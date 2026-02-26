@@ -41,7 +41,7 @@ func (p PostgresAdapter) FindReport(ctx context.Context, name string) (query.Rep
 
 // FindMetric retrieves a metric by its ID and maps it to a query.ReportMetric.
 func (p PostgresAdapter) FindMetric(ctx context.Context, name reporting.MetricName) (query.ReportMetric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.findmetric")
+	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.find_metric")
 	defer span.End()
 
 	metric, err := p.GetMetric(ctx, name)
@@ -123,7 +123,7 @@ func (p PostgresAdapter) UpdateReport(
 }
 
 func (p PostgresAdapter) AddMetric(ctx context.Context, metric *reporting.Metric) error {
-	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.addmetric")
+	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.add_metric")
 	defer span.End()
 
 	dbMetric := mapEntityMetricToDb(metric)
@@ -140,7 +140,7 @@ func (p PostgresAdapter) AddMetric(ctx context.Context, metric *reporting.Metric
 
 // GetMetric retrieves a metric by its name from the database.
 func (p PostgresAdapter) GetMetric(ctx context.Context, name reporting.MetricName) (*reporting.Metric, error) {
-	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.getmetric")
+	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.get_metric")
 	defer span.End()
 
 	metric, err := p.Handler.GetMetricByName(
@@ -162,7 +162,7 @@ func (p PostgresAdapter) UpdateMetric(
 	name reporting.MetricName,
 	updateFn func(r *reporting.Metric) (*reporting.Metric, error),
 ) error {
-	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.updatemetric")
+	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.outbound.postgres.update_metric")
 	defer span.End()
 
 	tx, err := p.Handler.Begin(ctx)

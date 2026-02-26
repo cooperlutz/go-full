@@ -28,7 +28,7 @@ type FindQuestionReadModel interface {
 }
 
 func (h FindQuestionHandler) Handle(ctx context.Context, query FindQuestion) (Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.query.findquestion.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.query.find_question.handle")
 	defer span.End()
 
 	examId, err := uuid.Parse(query.ExamID)

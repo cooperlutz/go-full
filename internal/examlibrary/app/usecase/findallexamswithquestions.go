@@ -10,7 +10,7 @@ import (
 
 // FindAllExamsWithQuestions finds all exams with their questions.
 func (uc *examLibraryUseCase) FindAllExamsWithQuestions(ctx context.Context, qry query.FindAllExamsWithQuestions) (query.FindAllExamsWithQuestionsResponse, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findallexamswithquestions")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.find_all_exams_with_questions")
 	defer span.End()
 
 	entity, err := uc.Persist.FindAllExams(ctx)

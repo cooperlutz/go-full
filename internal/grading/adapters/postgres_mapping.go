@@ -1,4 +1,4 @@
-package outbound
+package adapters
 
 import (
 	"github.com/google/uuid"
@@ -31,10 +31,10 @@ func (e GradingExam) toDomain(questions ...GradingQuestion) (*grading.Exam, erro
 		e.LibraryExamID.Bytes,
 		e.ExaminationExamID.Bytes,
 		domainQuestions,
-		e.GradingCompleted,
 		e.TotalPointsPossible.Int32,
 		&e.TotalPointsReceived.Int32,
-	), nil
+		e.State,
+	)
 }
 
 func (e GradingExam) toQuery(questions ...GradingQuestion) query.Exam {
@@ -45,7 +45,7 @@ func (e GradingExam) toQuery(questions ...GradingQuestion) query.Exam {
 
 	return query.Exam{
 		ExamId:              e.ExamID.String(),
-		GradingCompleted:    e.GradingCompleted,
+		State:               e.State,
 		TotalPointsPossible: e.TotalPointsPossible.Int32,
 		TotalPointsReceived: &e.TotalPointsReceived.Int32,
 		Questions:           qs,
@@ -103,7 +103,7 @@ func mapEntityExamToDB(exam *grading.Exam) GradingExam {
 		StudentID:           pgxutil.UUIDToPgtypeUUID(exam.GetStudentId()),
 		LibraryExamID:       pgxutil.UUIDToPgtypeUUID(exam.GetExamLibraryExamId()),
 		ExaminationExamID:   pgxutil.UUIDToPgtypeUUID(exam.GetExaminationExamId()),
-		GradingCompleted:    exam.IsCompleted(),
+		State:               exam.GetState().String(),
 		TotalPointsPossible: pgxutil.Int32ToPgtypeInt4(&pointsPossible),
 		TotalPointsReceived: pgxutil.Int32ToPgtypeInt4(exam.GetTotalPointsReceived()),
 	}

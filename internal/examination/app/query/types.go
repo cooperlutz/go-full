@@ -1,12 +1,18 @@
 package query
 
+import "time"
+
 type Exam struct {
 	ExamId            string
 	LibraryExamId     string
 	StudentId         string
-	Completed         bool
+	State             string
 	AnsweredQuestions int32
 	TotalQuestions    int32
+	StartedAt         *time.Time
+	CompletedAt       *time.Time
+	TimeLimitSeconds  int64
+	TimeOfTimeLimit   *time.Time
 	Questions         []Question
 }
 

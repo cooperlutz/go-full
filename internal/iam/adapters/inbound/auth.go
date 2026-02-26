@@ -10,7 +10,7 @@ import (
 )
 
 func NewIamAuthApiController(iamSvc *service.IamService) http.Handler {
-	iamRouter := hteeteepee.NewRouter("iam.auth")
+	iamRouter := hteeteepee.NewRouter("iam.adapter.inbound.auth")
 	authHandler := NewAuthHandler(iamSvc)
 	iamRouter.HandleFunc("/register", authHandler.Register)
 	iamRouter.HandleFunc("/login", authHandler.Login)
@@ -115,11 +115,10 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Attempt to login with refresh token generation
-	accessToken, refreshToken, err := h.authService.LoginWithRefresh(
+	accessToken, refreshToken, err := h.authService.Login(
 		r.Context(),
 		req.Email,
 		req.Password,
-		h.authService.GetRefreshTokenTTL(),
 	)
 	if err != nil {
 		if errors.Is(err, service.ErrInvalidCredentials{}) {

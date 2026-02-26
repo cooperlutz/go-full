@@ -20,35 +20,32 @@
     "openapi": "openapi-generator-cli --openapitools .openapitools.json generate"
   },
   "pnpm": {
-    "overrides": {
-      "axios": "^1.13.5"
-    },
+    "overrides": {},
     "auditConfig": {
       "ignoreGhsas": [
-        "GHSA-2g4f-4pwh-qvx6",
         "GHSA-3ppc-4f35-3m26"
       ]
     }
   },
   "dependencies": {
     "@lucide/lab": "^0.1.2",
-    "@tailwindcss/vite": "^4.2.0",
+    "@tailwindcss/vite": "^4.2.1",
     "@vueuse/core": "^14.2.1",
     "chart.js": "^4.5.1",
-    "daisyui": "^5.5.18",
+    "daisyui": "^5.5.19",
     "lucide-vue-next": "^0.563.0",
     "marked": "^17.0.3",
-    "sweetalert2": "^11.26.19",
-    "tailwindcss": "^4.2.0",
+    "sweetalert2": "^11.26.20",
+    "tailwindcss": "^4.2.1",
     "uuid": "^13.0.0",
-    "vue": "^3.5.28",
+    "vue": "^3.5.29",
     "vue-chartjs": "^5.3.3",
-    "vue-router": "^5.0.2"
+    "vue-router": "^5.0.3"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.29.0",
+    "@openapitools/openapi-generator-cli": "^2.30.0",
     "@tsconfig/node22": "^22.0.5",
-    "@types/node": "^25.3.0",
+    "@types/node": "^25.3.1",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vitejs/plugin-vue-jsx": "^5.1.4",
     "@vitest/coverage-v8": "4.0.10",
@@ -59,19 +56,19 @@
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
-    "autoprefixer": "^10.4.24",
-    "eslint": "^9.39.2",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^9.39.3",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.3.0",
-    "happy-dom": "^20.6.3",
-    "knip": "^5.84.1",
+    "happy-dom": "^20.7.0",
+    "knip": "^5.85.0",
     "msw": "2.12.9",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vitest": "^4.0.18",
-    "vue-tsc": "^3.2.4"
+    "vue-tsc": "^3.2.5"
   }
 }
