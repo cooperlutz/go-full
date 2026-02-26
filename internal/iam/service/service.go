@@ -153,7 +153,7 @@ func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
 }
 
 // Login authenticates a user and returns both access and refresh tokens.
-func (s *IamService) Login(ctx context.Context, email, password string) (accessToken string, refreshTokenToken string, err error) {
+func (s *IamService) Login(ctx context.Context, email, password string) (accessToken, refreshTokenToken string, err error) {
 	ctx, span := telemetree.AddSpan(ctx, "iam.service.login")
 	defer span.End()
 

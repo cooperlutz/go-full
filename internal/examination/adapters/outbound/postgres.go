@@ -27,7 +27,7 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 
 // FindAll retrieves all exams from the database and maps them to domain entities.
 func (p PostgresAdapter) FindAll(ctx context.Context) ([]query.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findall")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_all")
 	defer span.End()
 
 	exams, err := p.Handler.FindAllExams(ctx)
@@ -42,7 +42,7 @@ func (p PostgresAdapter) FindAll(ctx context.Context) ([]query.Exam, error) {
 
 // FindAllInProgress retrieves all in-progress exams from the database and maps them to domain entities.
 func (p PostgresAdapter) FindAllInProgress(ctx context.Context) ([]query.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findallinprogress")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_all_in_progress")
 	defer span.End()
 
 	exams, err := p.Handler.FindAllInProgressExams(ctx)
@@ -57,7 +57,7 @@ func (p PostgresAdapter) FindAllInProgress(ctx context.Context) ([]query.Exam, e
 
 // FindQuestion retrieves a question by its exam ID and question index from the database.
 func (p PostgresAdapter) FindQuestion(ctx context.Context, id uuid.UUID, questionIndex int32) (query.Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findquestion")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_question")
 	defer span.End()
 
 	question, err := p.Handler.GetQuestionByExamAndIndex(
@@ -78,7 +78,7 @@ func (p PostgresAdapter) FindQuestion(ctx context.Context, id uuid.UUID, questio
 
 // FindExam retrieves an exam by its ID and maps it to a query.Exam.
 func (p PostgresAdapter) FindExam(ctx context.Context, id uuid.UUID) (query.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.findexam")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_exam")
 	defer span.End()
 
 	exam, err := p.GetExam(ctx, id)
@@ -93,7 +93,7 @@ func (p PostgresAdapter) FindExam(ctx context.Context, id uuid.UUID) (query.Exam
 
 // FindExam retrieves an exam by its ID from the database.
 func (p PostgresAdapter) GetExam(ctx context.Context, id uuid.UUID) (*examination.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.getexam")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.get_exam")
 	defer span.End()
 
 	exam, err := p.Handler.GetExam(
@@ -121,7 +121,7 @@ func (p PostgresAdapter) GetExam(ctx context.Context, id uuid.UUID) (*examinatio
 
 // AddExam adds a new exam to the database.
 func (p PostgresAdapter) AddExam(ctx context.Context, exam *examination.Exam) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.addexam")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.add_exam")
 	defer span.End()
 
 	dbExam := mapEntityExamToDB(exam)
@@ -145,7 +145,7 @@ func (p PostgresAdapter) AddExam(ctx context.Context, exam *examination.Exam) er
 
 // addQuestions adds questions associated with an exam to the database.
 func (p PostgresAdapter) addQuestions(ctx context.Context, exam *examination.Exam) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.addquestions")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.add_questions")
 	defer span.End()
 
 	for _, question := range exam.GetQuestions() {
@@ -168,7 +168,7 @@ func (p PostgresAdapter) UpdateExam(
 	examId uuid.UUID,
 	updateFn func(e *examination.Exam) (*examination.Exam, error),
 ) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.updateexam")
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.update_exam")
 	defer span.End()
 
 	tx, err := p.Handler.Begin(ctx)

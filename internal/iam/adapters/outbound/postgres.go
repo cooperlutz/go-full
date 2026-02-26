@@ -24,7 +24,7 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 }
 
 func (a PostgresAdapter) CreateUser(ctx context.Context, user *iam.User) error {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.create_user")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.create_user")
 	defer span.End()
 
 	_, err := a.Handler.CreateUser(ctx, CreateUserParams{
@@ -38,7 +38,7 @@ func (a PostgresAdapter) CreateUser(ctx context.Context, user *iam.User) error {
 }
 
 func (p PostgresAdapter) UpdateUser(ctx context.Context, userId string, updateFn func(*iam.User) (*iam.User, error)) error {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.update_user")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.update_user")
 	defer span.End()
 
 	tx, err := p.Handler.Begin(ctx)
@@ -76,7 +76,7 @@ func (p PostgresAdapter) UpdateUser(ctx context.Context, userId string, updateFn
 }
 
 func (p PostgresAdapter) FindUserByEmail(ctx context.Context, email string) (IamUser, error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.find_user_by_email")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.find_user_by_email")
 	defer span.End()
 
 	return p.Handler.FindUserByEmail(ctx, FindUserByEmailParams{
@@ -85,7 +85,7 @@ func (p PostgresAdapter) FindUserByEmail(ctx context.Context, email string) (Iam
 }
 
 func (p PostgresAdapter) FindUserByID(ctx context.Context, id string) (IamUser, error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.find_user_by_id")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.find_user_by_id")
 	defer span.End()
 
 	return p.Handler.FindUserByID(ctx, FindUserByIDParams{
@@ -94,7 +94,7 @@ func (p PostgresAdapter) FindUserByID(ctx context.Context, id string) (IamUser, 
 }
 
 func (p PostgresAdapter) GetUser(ctx context.Context, id string) (*iam.User, error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.get_user")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.get_user")
 	defer span.End()
 
 	user, err := p.Handler.GetUser(ctx, GetUserParams{
@@ -121,7 +121,7 @@ func (p PostgresAdapter) GetUser(ctx context.Context, id string) (*iam.User, err
 }
 
 func (p PostgresAdapter) CreateRefreshToken(ctx context.Context, token *iam.RefreshToken) error {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.create_refresh_token")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.create_refresh_token")
 	defer span.End()
 
 	_, err := p.Handler.CreateRefreshToken(ctx, CreateRefreshTokenParams{
@@ -132,11 +132,12 @@ func (p PostgresAdapter) CreateRefreshToken(ctx context.Context, token *iam.Refr
 		CreatedAt: pgtype.Timestamp{Time: token.CreatedAt, Valid: true},
 		Revoked:   token.Revoked,
 	})
+
 	return err
 }
 
 func (p PostgresAdapter) GetRefreshToken(ctx context.Context, id string) (*iam.RefreshToken, error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.get_refresh_token")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.get_refresh_token")
 	defer span.End()
 
 	tokenRow, err := p.Handler.GetRefreshToken(ctx, GetRefreshTokenParams{
@@ -157,7 +158,7 @@ func (p PostgresAdapter) GetRefreshToken(ctx context.Context, id string) (*iam.R
 }
 
 func (p PostgresAdapter) UpdateRefreshToken(ctx context.Context, tokenId string, updateFn func(*iam.RefreshToken) (*iam.RefreshToken, error)) error {
-	ctx, span := telemetree.AddSpan(ctx, "iam.outbound.postgres.update_refresh_token")
+	ctx, span := telemetree.AddSpan(ctx, "iam.adapters.outbound.postgres.update_refresh_token")
 	defer span.End()
 
 	tx, err := p.Handler.Begin(ctx)

@@ -13,7 +13,7 @@ import (
 // Add a new Exam to the Library
 // (POST /exams)
 func (c *ExamLibraryRestAPIControllerV1) PostAddExamToLibrary(ctx context.Context, request server.PostAddExamToLibraryRequestObject) (server.PostAddExamToLibraryResponseObject, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.postaddexamtolibrary")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.post_add_exam_to_library")
 	defer span.End()
 	spanCtx := trace.SpanContextFromContext(ctx)
 

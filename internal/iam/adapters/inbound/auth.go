@@ -10,7 +10,7 @@ import (
 )
 
 func NewIamAuthApiController(iamSvc *service.IamService) http.Handler {
-	iamRouter := hteeteepee.NewRouter("iam.auth")
+	iamRouter := hteeteepee.NewRouter("iam.adapter.inbound.auth")
 	authHandler := NewAuthHandler(iamSvc)
 	iamRouter.HandleFunc("/register", authHandler.Register)
 	iamRouter.HandleFunc("/login", authHandler.Login)
