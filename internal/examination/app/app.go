@@ -17,15 +17,16 @@ type Application struct {
 }
 
 type Commands struct {
-	StartExam      command.StartExamHandler
-	AnswerQuestion command.AnswerQuestionHandler
-	SubmitExam     command.SubmitExamHandler
+	StartExam                  command.StartExamHandler
+	AnswerQuestion             command.AnswerQuestionHandler
+	SubmitExam                 command.SubmitExamHandler
+	CompleteExamsPastTimeLimit command.CompleteExamsPastTimeLimitHandler
 }
 
 type Queries struct {
-	AvailableExams query.AvailableExamsHandler
-	FindQuestion   query.FindQuestionHandler
-	FindExam       query.FindExamHandler
+	FindAllExams query.AllExamsHandler
+	FindQuestion query.FindQuestionHandler
+	FindExam     query.FindExamHandler
 }
 
 type Events struct {
@@ -63,9 +64,13 @@ func NewApplication(
 					examLibraryUseCase,
 				),
 			),
+			CompleteExamsPastTimeLimit: command.NewCompleteExamsPastTimeLimitHandler(
+				examinationRepository,
+				examinationRepository,
+			),
 		},
 		Queries: Queries{
-			AvailableExams: query.NewAvailableExamsHandler(
+			FindAllExams: query.NewFindAllExamsHandler(
 				examinationRepository,
 			),
 			FindQuestion: query.NewFindQuestionHandler(

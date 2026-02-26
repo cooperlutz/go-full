@@ -4,16 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/jackc/pgx/v5/pgtype"
-
-	"github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/iam/service"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
 )
 
-func NewIamUserApiController(iamRepo outbound.Querier) http.Handler {
-	iamUserRouter := hteeteepee.NewRouter("iam.user")
-	handler := NewUserHandler(iamRepo)
+func NewIamUserApiController(iamSvc *service.IamService) http.Handler {
+	iamUserRouter := hteeteepee.NewRouter("iam.adapter.inbound.user")
+	handler := NewUserHandler(iamSvc)
 	iamUserRouter.HandleFunc("/profile", handler.Profile)
 
 	return iamUserRouter
@@ -21,13 +19,13 @@ func NewIamUserApiController(iamRepo outbound.Querier) http.Handler {
 
 // UserHandler contains HTTP handlers for user-related endpoints.
 type UserHandler struct {
-	userRepo outbound.Querier
+	userRepo service.IIamQueries
 }
 
 // NewUserHandler creates a new user handler.
-func NewUserHandler(userRepo outbound.Querier) *UserHandler {
+func NewUserHandler(iamSvc *service.IamService) *UserHandler {
 	return &UserHandler{
-		userRepo: userRepo,
+		userRepo: iamSvc.Queries,
 	}
 }
 
@@ -48,12 +46,7 @@ func (h *UserHandler) Profile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get user from database
-	user, err := h.userRepo.GetUserByID(r.Context(), outbound.GetUserByIDParams{
-		ID: pgtype.UUID{
-			Bytes: userID,
-			Valid: true,
-		},
-	})
+	user, err := h.userRepo.FindUserByID(r.Context(), userID.String())
 	if err != nil {
 		http.Error(w, "User not found", http.StatusNotFound)
 

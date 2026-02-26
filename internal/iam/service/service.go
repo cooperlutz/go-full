@@ -8,9 +8,9 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/cooperlutz/go-full/internal/iam/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/iam/domain/iam"
 	"github.com/cooperlutz/go-full/pkg/securitee"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -45,26 +45,38 @@ func (e ErrEmailInUse) Error() string {
 	return "email already in use"
 }
 
+type IIamQueries interface {
+	FindUserByEmail(ctx context.Context, email string) (outbound.IamUser, error)
+	FindUserByID(ctx context.Context, id string) (outbound.IamUser, error)
+}
+
 // IamService provides authentication functionality.
 type IamService struct {
-	iamRepository   outbound.Querier
 	jwtSecret       []byte
 	accessTokenTTL  time.Duration
 	refreshTokenTTL time.Duration
+
+	iamRepository          iam.UserRepository
+	refreshTokenRepository iam.RefreshTokenRepository
+	Queries                IIamQueries
 }
 
 // NewIamService creates a new authentication service.
-func NewIamService(iamRepository outbound.Querier, jwtSecret string, accessTokenTTL, refreshTokenTTL time.Duration) *IamService {
+func NewIamService(
+	iamRepository iam.UserRepository,
+	refreshTokenRepository iam.RefreshTokenRepository,
+	iamQueryInterface IIamQueries,
+	jwtSecret string,
+	accessTokenTTL, refreshTokenTTL time.Duration,
+) *IamService {
 	return &IamService{
-		iamRepository:   iamRepository,
-		jwtSecret:       []byte(jwtSecret),
-		accessTokenTTL:  accessTokenTTL,
-		refreshTokenTTL: refreshTokenTTL,
+		iamRepository:          iamRepository,
+		refreshTokenRepository: refreshTokenRepository,
+		Queries:                iamQueryInterface,
+		jwtSecret:              []byte(jwtSecret),
+		accessTokenTTL:         accessTokenTTL,
+		refreshTokenTTL:        refreshTokenTTL,
 	}
-}
-
-func (s *IamService) GetRefreshTokenTTL() time.Duration {
-	return s.refreshTokenTTL
 }
 
 // Register creates a new user with the provided credentials.
@@ -72,60 +84,46 @@ func (s *IamService) Register(ctx context.Context, email, password string) (outb
 	ctx, span := telemetree.AddSpan(ctx, "iam.service.register")
 	defer span.End()
 
-	_, err := s.iamRepository.GetUserByEmail(ctx, outbound.GetUserByEmailParams{Email: email})
+	_, err := s.Queries.FindUserByEmail(ctx, email)
 	if err == nil {
+		telemetree.RecordError(ctx, ErrEmailInUse{}, "email already in use")
+
 		return outbound.IamUser{}, ErrEmailInUse{}
 	}
 
 	// Only proceed if the error was "user not found"
 	if !errors.Is(err, sql.ErrNoRows) {
+		telemetree.RecordError(ctx, err, "failed to check if email is already in use")
+
 		return outbound.IamUser{}, err
 	}
 
 	// Hash the password
 	hashedPassword, err := securitee.HashPassword(password)
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to hash password")
+
 		return outbound.IamUser{}, err
 	}
 
-	userId := uuid.New()
+	user := iam.NewUser(email, hashedPassword)
 
 	// Create the user
-	user, err := s.iamRepository.CreateUser(ctx, outbound.CreateUserParams{
-		ID:           pgtype.UUID{Bytes: userId, Valid: true},
-		Email:        email,
-		PasswordHash: hashedPassword,
-		LastLogin:    pgtype.Timestamp{Time: time.Time{}, Valid: false},
-	})
+	err = s.iamRepository.CreateUser(ctx, user)
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to create user")
+
 		return outbound.IamUser{}, err
 	}
 
-	return user, nil
-}
-
-// generateAccessToken creates a new JWT access token.
-func (s *IamService) generateAccessToken(user outbound.IamUser) (string, error) {
-	expirationTime := time.Now().Add(s.accessTokenTTL)
-
-	// Create the JWT claims
-	claims := jwt.MapClaims{
-		"sub":   user.ID.String(),      // subject (user ID)
-		"email": user.Email,            // custom claim
-		"exp":   expirationTime.Unix(), // expiration time
-		"iat":   time.Now().Unix(),     // issued at time
-	}
-
-	// Create the token with claims
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	// Sign the token with our secret key
-	tokenString, err := token.SignedString(s.jwtSecret)
+	createdUser, err := s.Queries.FindUserByEmail(ctx, email)
 	if err != nil {
-		return "", err
+		telemetree.RecordError(ctx, err, "failed to retrieve created user")
+
+		return outbound.IamUser{}, ErrUserNotFound{}
 	}
 
-	return tokenString, nil
+	return createdUser, nil
 }
 
 // ValidateToken verifies a JWT token and returns the claims.
@@ -154,55 +152,57 @@ func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
 	return nil, ErrInvalidToken{}
 }
 
-// LoginWithRefresh authenticates a user and returns both access and refresh tokens.
-func (s *IamService) LoginWithRefresh(ctx context.Context, email, password string, refreshTokenTTL time.Duration) (accessToken, refreshToken string, err error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.service.loginwithrefresh")
+// Login authenticates a user and returns both access and refresh tokens.
+func (s *IamService) Login(ctx context.Context, email, password string) (accessToken, refreshTokenToken string, err error) {
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.login")
 	defer span.End()
 
-	user, err := s.iamRepository.GetUserByEmail(ctx, outbound.GetUserByEmailParams{Email: email})
+	existingUser, err := s.Queries.FindUserByEmail(ctx, email)
 	if err != nil {
-		return "", "", ErrInvalidCredentials{}
+		telemetree.RecordError(ctx, err, "failed to find user by email during login")
+
+		return "", "", ErrUserNotFound{}
 	}
 
 	// Verify the password
-	if err := securitee.VerifyPassword(user.PasswordHash, password); err != nil {
+	if err := securitee.VerifyPassword(existingUser.PasswordHash, password); err != nil {
+		telemetree.RecordError(ctx, err, "invalid password during login")
+
 		return "", "", ErrInvalidCredentials{}
 	}
 
+	user, err := s.iamRepository.GetUser(ctx, existingUser.ID.String())
+	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to get user during login")
+
+		return "", "", err
+	}
+
 	// Generate an access token
-	accessToken, err = s.generateAccessToken(user)
+	accessToken, err = user.NewAccessToken(s.jwtSecret, s.accessTokenTTL)
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to generate access token during login")
+
 		return "", "", err
 	}
 
-	expiresAt := time.Now().Add(refreshTokenTTL)
-	refreshTokenId := uuid.New()
-
-	// Create a refresh token
-	token, err := s.iamRepository.CreateRefreshToken(ctx, outbound.CreateRefreshTokenParams{
-		ID:        pgtype.UUID{Bytes: refreshTokenId, Valid: true},
-		UserID:    user.ID,
-		Token:     accessToken,
-		ExpiresAt: pgtype.Timestamp{Time: expiresAt, Valid: true},
-		CreatedAt: pgtype.Timestamp{Time: time.Now(), Valid: true},
-		Revoked:   false,
-	})
+	refreshToken, err := s.createRefreshToken(ctx, user.ID)
 	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to create refresh token during login")
+
 		return "", "", err
 	}
 
-	return token.Token, refreshTokenId.String(), nil
+	return accessToken, refreshToken.Token, nil
 }
 
 // RefreshAccessToken creates a new access token using a refresh token.
 func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString string) (string, error) {
-	ctx, span := telemetree.AddSpan(ctx, "iam.service.refreshaccesstoken")
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.refresh_access_token")
 	defer span.End()
 
 	// Retrieve the refresh token
-	token, err := s.iamRepository.GetRefreshToken(ctx, outbound.GetRefreshTokenParams{
-		ID: pgtype.UUID{Bytes: uuid.MustParse(refreshTokenString), Valid: true},
-	})
+	token, err := s.refreshTokenRepository.GetRefreshToken(ctx, refreshTokenString)
 	if err != nil {
 		telemetree.RecordError(ctx, err, "failed to get refresh token")
 
@@ -217,14 +217,14 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	}
 
 	// Check if the token has expired
-	if time.Now().After(token.ExpiresAt.Time) {
+	if time.Now().After(token.ExpiresAt) {
 		telemetree.RecordError(ctx, ErrExpiredToken{}, "refresh token expired")
 
 		return "", ErrExpiredToken{}
 	}
 
 	// Get the user
-	user, err := s.iamRepository.GetUserByID(ctx, outbound.GetUserByIDParams{ID: token.UserID})
+	user, err := s.iamRepository.GetUser(ctx, token.UserID.String())
 	if err != nil {
 		telemetree.RecordError(ctx, err, "failed to get user for refresh token")
 
@@ -232,7 +232,7 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	}
 
 	// Generate a new access token
-	accessToken, err := s.generateAccessToken(user)
+	accessToken, err := user.NewAccessToken(s.jwtSecret, s.accessTokenTTL)
 	if err != nil {
 		telemetree.RecordError(ctx, err, "failed to generate access token")
 
@@ -240,4 +240,21 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	}
 
 	return accessToken, nil
+}
+
+func (s *IamService) createRefreshToken(ctx context.Context, userId uuid.UUID) (*iam.RefreshToken, error) {
+	ctx, span := telemetree.AddSpan(ctx, "iam.service.create_refresh_token")
+	defer span.End()
+
+	refreshToken := iam.NewRefreshToken(userId, s.refreshTokenTTL)
+
+	// Create a refresh token
+	err := s.refreshTokenRepository.CreateRefreshToken(ctx, refreshToken)
+	if err != nil {
+		telemetree.RecordError(ctx, err, "failed to create refresh token")
+
+		return nil, err
+	}
+
+	return refreshToken, nil
 }

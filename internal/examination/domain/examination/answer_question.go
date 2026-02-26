@@ -44,9 +44,14 @@ func (q *Question) validateAnswer(answer string) bool {
 }
 
 func (e *Exam) AnswerQuestion(index int32, answer string) error {
+	err := e.CheckTimeLimit()
+	if err != nil {
+		return err
+	}
+
 	question := e.GetQuestionByIndex(index)
 
-	err := question.setAnswer(answer)
+	err = question.setAnswer(answer)
 	if err != nil {
 		return err
 	}

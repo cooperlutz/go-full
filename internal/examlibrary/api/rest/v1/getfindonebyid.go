@@ -14,7 +14,7 @@ import (
 // Get an Exam by ID
 // (GET /exams/{examID})
 func (c *ExamLibraryRestAPIControllerV1) GetFindOneByID(ctx context.Context, request server.GetFindOneByIDRequestObject) (server.GetFindOneByIDResponseObject, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.getfindonebyid")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.get_find_one_by_id")
 	defer span.End()
 
 	spanCtx := trace.SpanContextFromContext(ctx)

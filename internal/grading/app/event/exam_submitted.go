@@ -3,6 +3,7 @@ package event
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/google/uuid"
@@ -19,9 +20,13 @@ type ExamSubmitted struct {
 	ExamId            string                  `json:"ExamId"`
 	LibraryExamId     string                  `json:"LibraryExamId"`
 	StudentId         string                  `json:"StudentId"`
-	Completed         bool                    `json:"Completed"`
+	State             string                  `json:"State"`
 	AnsweredQuestions int32                   `json:"AnsweredQuestions"`
 	TotalQuestions    int32                   `json:"TotalQuestions"`
+	TimeLimitSeconds  int64                   `json:"TimeLimitSeconds"`
+	TimeOfTimeLimit   time.Time               `json:"TimeOfTimeLimit"`
+	StartedAt         time.Time               `json:"StartedAt"`
+	CompletedAt       time.Time               `json:"CompletedAt"`
 	Questions         []ExamSubmittedQuestion `json:"Questions"`
 }
 

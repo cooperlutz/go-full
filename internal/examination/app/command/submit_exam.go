@@ -27,7 +27,7 @@ func NewSubmitExamHandler(
 }
 
 func (h SubmitExamHandler) Handle(ctx context.Context, cmd SubmitExam) error {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.submitexam.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.submit_exam.handle")
 	defer span.End()
 
 	examIdUuid, err := uuid.Parse(cmd.ExamID)
@@ -37,14 +37,7 @@ func (h SubmitExamHandler) Handle(ctx context.Context, cmd SubmitExam) error {
 		return err
 	}
 
-	exam, err := h.examinationRepo.GetExam(ctx, examIdUuid)
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	err = h.examinationRepo.UpdateExam(ctx, exam, func(e *examination.Exam) (*examination.Exam, error) {
+	return h.examinationRepo.UpdateExam(ctx, examIdUuid, func(e *examination.Exam) (*examination.Exam, error) {
 		err = e.Submit()
 		if err != nil {
 			telemetree.RecordError(ctx, err)
@@ -54,11 +47,4 @@ func (h SubmitExamHandler) Handle(ctx context.Context, cmd SubmitExam) error {
 
 		return e, nil
 	})
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	return nil
 }

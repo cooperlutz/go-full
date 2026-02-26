@@ -10,13 +10,9 @@ func (e ErrNotAllQuestionsAnswered) Error() string {
 	return "not all questions have been answered"
 }
 
-func (e *Exam) FinishExam() error {
-	if !e.allQuestionsAnswered() {
-		return ErrNotAllQuestionsAnswered{}
-	}
-
+func (e *Exam) finishExam() error {
 	now := utilitee.RightNow()
-	e.completed = true
+	e.state = StateCompleted
 	e.completedAt = &now
 	e.MarkUpdated()
 

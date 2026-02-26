@@ -13,7 +13,7 @@ type Exam struct {
 	examinationExamId uuid.UUID // corresponds to the examId in the examination domain
 	questions         []*Question
 
-	gradingCompleted    bool
+	state               ExamState
 	totalPointsReceived *int32
 	totalPossiblePoints int32
 }
@@ -38,7 +38,7 @@ func (e ErrGradingNotCompleted) Error() string {
 }
 
 func (e Exam) GetGrade() (float64, error) {
-	if !e.gradingCompleted {
+	if !e.IsCompleted() {
 		return 0, ErrGradingNotCompleted{}
 	}
 
@@ -152,7 +152,7 @@ func (e Exam) GetFirstQuestion() *Question {
 }
 
 func (e Exam) IsCompleted() bool {
-	return e.gradingCompleted
+	return e.state == StateCompleted
 }
 
 func (e Exam) GetStudentId() uuid.UUID {
@@ -161,6 +161,44 @@ func (e Exam) GetStudentId() uuid.UUID {
 
 func (e Exam) GetStudentIdString() string {
 	return e.studentId.String()
+}
+
+type ExamState int
+
+const (
+	StateNotStarted ExamState = iota
+	StateInProgress
+	StateCompleted
+)
+
+var stateName = map[ExamState]string{ //nolint:gochecknoglobals // global is ok here for enum
+	StateNotStarted: "not-started",
+	StateInProgress: "in-progress",
+	StateCompleted:  "completed",
+}
+
+func (es ExamState) String() string {
+	return stateName[es]
+}
+
+type ErrInvalidExamState struct{}
+
+func (e ErrInvalidExamState) Error() string {
+	return "invalid exam state"
+}
+
+func ExamStateFromString(s string) (ExamState, error) {
+	for es, name := range stateName {
+		if name == s {
+			return es, nil
+		}
+	}
+
+	return StateNotStarted, ErrInvalidExamState{}
+}
+
+func (e Exam) GetState() ExamState {
+	return e.state
 }
 
 type Question struct {

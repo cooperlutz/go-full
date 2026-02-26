@@ -2,6 +2,7 @@ package event
 
 import (
 	"context"
+	"time"
 
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
@@ -11,9 +12,13 @@ type ExamSubmitted struct {
 	ExamId            string
 	LibraryExamId     string
 	StudentId         string
-	Completed         bool
+	ExamState         string
 	AnsweredQuestions int32
 	TotalQuestions    int32
+	TimeLimitSeconds  int64
+	TimeOfTimeLimit   time.Time
+	StartedAt         time.Time
+	CompletedAt       time.Time
 	Questions         []ExamSubmittedQuestion
 }
 

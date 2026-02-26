@@ -47,10 +47,10 @@ export interface Exam {
   totalPointsEarned?: number;
   /**
    *
-   * @type {boolean}
+   * @type {string}
    * @memberof Exam
    */
-  gradingCompleted: boolean;
+  state: string;
   /**
    *
    * @type {Array<Question>}
@@ -69,8 +69,7 @@ export function instanceOfExam(value: object): value is Exam {
     value["totalPointsPossible"] === undefined
   )
     return false;
-  if (!("gradingCompleted" in value) || value["gradingCompleted"] === undefined)
-    return false;
+  if (!("state" in value) || value["state"] === undefined) return false;
   if (!("questions" in value) || value["questions"] === undefined) return false;
   return true;
 }
@@ -91,7 +90,7 @@ export function ExamFromJSONTyped(
     totalPointsPossible: json["totalPointsPossible"],
     totalPointsEarned:
       json["totalPointsEarned"] == null ? undefined : json["totalPointsEarned"],
-    gradingCompleted: json["gradingCompleted"],
+    state: json["state"],
     questions: (json["questions"] as Array<any>).map(QuestionFromJSON),
   };
 }
@@ -112,7 +111,7 @@ export function ExamToJSONTyped(
     examId: value["examId"],
     totalPointsPossible: value["totalPointsPossible"],
     totalPointsEarned: value["totalPointsEarned"],
-    gradingCompleted: value["gradingCompleted"],
+    state: value["state"],
     questions: (value["questions"] as Array<any>).map(QuestionToJSON),
   };
 }

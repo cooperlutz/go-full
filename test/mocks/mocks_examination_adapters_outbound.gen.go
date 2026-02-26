@@ -481,6 +481,68 @@ func (_c *MockQuerier_FindAllExams_Call) RunAndReturn(run func(ctx context.Conte
 	return _c
 }
 
+// FindAllInProgressExams provides a mock function for the type MockQuerier
+func (_mock *MockQuerier) FindAllInProgressExams(ctx context.Context) ([]outbound.ExaminationExam, error) {
+	ret := _mock.Called(ctx)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindAllInProgressExams")
+	}
+
+	var r0 []outbound.ExaminationExam
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]outbound.ExaminationExam, error)); ok {
+		return returnFunc(ctx)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context) []outbound.ExaminationExam); ok {
+		r0 = returnFunc(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]outbound.ExaminationExam)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = returnFunc(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockQuerier_FindAllInProgressExams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllInProgressExams'
+type MockQuerier_FindAllInProgressExams_Call struct {
+	*mock.Call
+}
+
+// FindAllInProgressExams is a helper method to define mock.On call
+//   - ctx context.Context
+func (_e *MockQuerier_Expecter) FindAllInProgressExams(ctx interface{}) *MockQuerier_FindAllInProgressExams_Call {
+	return &MockQuerier_FindAllInProgressExams_Call{Call: _e.mock.On("FindAllInProgressExams", ctx)}
+}
+
+func (_c *MockQuerier_FindAllInProgressExams_Call) Run(run func(ctx context.Context)) *MockQuerier_FindAllInProgressExams_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockQuerier_FindAllInProgressExams_Call) Return(examinationExams []outbound.ExaminationExam, err error) *MockQuerier_FindAllInProgressExams_Call {
+	_c.Call.Return(examinationExams, err)
+	return _c
+}
+
+func (_c *MockQuerier_FindAllInProgressExams_Call) RunAndReturn(run func(ctx context.Context) ([]outbound.ExaminationExam, error)) *MockQuerier_FindAllInProgressExams_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // FindQuestionsForExam provides a mock function for the type MockQuerier
 func (_mock *MockQuerier) FindQuestionsForExam(ctx context.Context, arg outbound.FindQuestionsForExamParams) ([]outbound.ExaminationQuestion, error) {
 	ret := _mock.Called(ctx, arg)
@@ -1339,6 +1401,68 @@ func (_c *MockIQuerierExamination_FindAllExams_Call) Return(examinationExams []o
 }
 
 func (_c *MockIQuerierExamination_FindAllExams_Call) RunAndReturn(run func(ctx context.Context) ([]outbound.ExaminationExam, error)) *MockIQuerierExamination_FindAllExams_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// FindAllInProgressExams provides a mock function for the type MockIQuerierExamination
+func (_mock *MockIQuerierExamination) FindAllInProgressExams(ctx context.Context) ([]outbound.ExaminationExam, error) {
+	ret := _mock.Called(ctx)
+
+	if len(ret) == 0 {
+		panic("no return value specified for FindAllInProgressExams")
+	}
+
+	var r0 []outbound.ExaminationExam
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context) ([]outbound.ExaminationExam, error)); ok {
+		return returnFunc(ctx)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context) []outbound.ExaminationExam); ok {
+		r0 = returnFunc(ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]outbound.ExaminationExam)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context) error); ok {
+		r1 = returnFunc(ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockIQuerierExamination_FindAllInProgressExams_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'FindAllInProgressExams'
+type MockIQuerierExamination_FindAllInProgressExams_Call struct {
+	*mock.Call
+}
+
+// FindAllInProgressExams is a helper method to define mock.On call
+//   - ctx context.Context
+func (_e *MockIQuerierExamination_Expecter) FindAllInProgressExams(ctx interface{}) *MockIQuerierExamination_FindAllInProgressExams_Call {
+	return &MockIQuerierExamination_FindAllInProgressExams_Call{Call: _e.mock.On("FindAllInProgressExams", ctx)}
+}
+
+func (_c *MockIQuerierExamination_FindAllInProgressExams_Call) Run(run func(ctx context.Context)) *MockIQuerierExamination_FindAllInProgressExams_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
+	})
+	return _c
+}
+
+func (_c *MockIQuerierExamination_FindAllInProgressExams_Call) Return(examinationExams []outbound.ExaminationExam, err error) *MockIQuerierExamination_FindAllInProgressExams_Call {
+	_c.Call.Return(examinationExams, err)
+	return _c
+}
+
+func (_c *MockIQuerierExamination_FindAllInProgressExams_Call) RunAndReturn(run func(ctx context.Context) ([]outbound.ExaminationExam, error)) *MockIQuerierExamination_FindAllInProgressExams_Call {
 	_c.Call.Return(run)
 	return _c
 }

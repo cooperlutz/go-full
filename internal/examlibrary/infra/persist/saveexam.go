@@ -10,7 +10,7 @@ import (
 
 // SaveExam saves an exam to the database.
 func (r *examLibraryPersistPostgresRepository) SaveExam(ctx context.Context, exam entity.Exam) error {
-	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.saveExam")
+	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.save_exam")
 	defer span.End()
 
 	tx, err := r.db.Begin(ctx)
