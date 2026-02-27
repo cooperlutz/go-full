@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
+import QuestionsToGradeTable from "../components/QuestionsToGradeTable.vue";
 import { useGetExam } from "../composables/useGrading";
 
 const { exam, loading, error, getExam } = useGetExam();
@@ -20,31 +21,18 @@ onMounted(() => {
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">Error: {{ error }}</div>
     <div v-else-if="exam" id="exam-grading-component">
-      <h2>Exam ID: {{ exam.examId }}</h2>
-      <p>Grading State: {{ exam.state }}</p>
-      <p>Number of Questions: {{ exam.questions.length }}</p>
-      <ul
-        class="list bg-base-100 rounded-box shadow-md border border-neutral"
-        id="grading-ungraded-questions-list"
-      >
-        <li class="p-4 pb-2 text-xs opacity-60 tracking-wide">
-          Exam Questions
-        </li>
-        <li
-          class="list-row"
-          v-for="question in exam.questions"
-          :key="question.questionId"
-        >
-          <div>
-            <a
-              :href="`/grading/exam/${examId}/question/${question.questionIndex}`"
-            >
-              {{ question.questionId }}
-            </a>
-            - Graded: {{ question.graded }}
-          </div>
-        </li>
-      </ul>
+      <div class="card border border-neutral">
+        <div class="card-body shadow-sm">
+          <p><b>Exam ID:</b> {{ exam.examId }}</p>
+          <p><b>Grading State:</b> {{ exam.state }}</p>
+          <p><b>Number of Questions:</b> {{ exam.questions.length }}</p>
+          <p><b>Total Points Earned:</b> {{ exam.totalPointsEarned }}</p>
+          <p><b>Total Points Possible:</b> {{ exam.totalPointsPossible }}</p>
+        </div>
+        <div class="p-6">
+          <QuestionsToGradeTable :questions="exam.questions" />
+        </div>
+      </div>
     </div>
   </div>
 </template>

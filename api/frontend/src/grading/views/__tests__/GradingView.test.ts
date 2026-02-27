@@ -37,7 +37,7 @@ describe("GradingView", () => {
     const rows = wrapper.findAll("tbody tr");
     expect(rows.length).toBeGreaterThan(0);
     const firstRowCells = rows[0]?.findAll("td");
-    expect(firstRowCells?.length).toBe(4);
+    expect(firstRowCells?.length).toBe(5);
     expect(firstRowCells?.[0]?.text()).toBe(
       "5d9abb80-0706-42ad-8131-33627d3e6b17",
     );

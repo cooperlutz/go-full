@@ -58,18 +58,27 @@ onMounted(() => {
           <p>{{ question.providedAnswer }}</p>
         </div>
         <div class="col-span-1">
-          <textarea
-            class="textarea"
-            placeholder="Type feedback here"
-            v-model="graderComments"
-          ></textarea>
-          <input
-            type="number"
-            placeholder="Type points here"
-            class="input"
-            v-model="pointsToGive"
-          />
-          <button class="btn btn-primary" @click="gradeQuestion">Send</button>
+          <form class="fieldset">
+            <fieldset class="fieldset">
+              <textarea
+                class="textarea"
+                placeholder="Type feedback here"
+                v-model="graderComments"
+              ></textarea>
+            </fieldset>
+            <fieldset class="fieldset">
+              <input
+                type="number"
+                placeholder="Type points here"
+                class="input validator"
+                min="0"
+                required
+                :max="question.pointsPossible"
+                v-model="pointsToGive"
+              />
+            </fieldset>
+            <button class="btn btn-primary" :click="gradeQuestion">Send</button>
+          </form>
         </div>
       </div>
     </div>

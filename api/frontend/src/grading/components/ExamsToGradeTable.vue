@@ -34,15 +34,23 @@ const examTableHeaders: Record<keyof Omit<Exam, "questions">, string> = {
       </thead>
       <tbody>
         <tr
-          v-for="exam in props.exams"
+          v-for="(exam, index) in props.exams"
           :key="exam.examId"
-          @click="() => router.push(`/grading/exam/${exam.examId}`)"
           class="hover:bg-base-300"
         >
           <td>{{ exam.examId }}</td>
           <td>{{ exam.totalPointsEarned }}</td>
           <td>{{ exam.totalPointsPossible }}</td>
           <td>{{ exam.state }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-primary"
+              @click="() => router.push(`/grading/exam/${exam.examId}`)"
+              :id="`grading-grade-exam-button-${index}`"
+            >
+              Grade
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -11,6 +11,9 @@ vi.mock("vue-router", () => ({
       questionIndex: "1",
     },
   }),
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
 }));
 
 describe("ExamGrading", () => {
@@ -35,15 +38,5 @@ describe("ExamGrading", () => {
 
     // Assert
     expect(wrapper.text()).toContain("Loading...");
-  });
-
-  it("renders the list of questions that need to be graded", async () => {
-    const wrapper = mount(ExamGrading);
-
-    await flushPromises();
-    await nextTick();
-
-    const examDiv = wrapper.find("#grading-ungraded-questions-list");
-    expect(examDiv.text()).toContain("1 - Graded: false");
   });
 });
