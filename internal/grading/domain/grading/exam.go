@@ -122,6 +122,8 @@ func (e ErrMultipleChoiceGradingFailed) Error() string {
 }
 
 func (e *Exam) GradeMultipleChoiceQuestions() (bool, error) {
+	e.startGrading() // ignore error here since we want to allow grading multiple choice questions even if grading has already been started
+
 	for _, q := range e.GetMultiplChoiceQuestions() {
 		err := q.gradeQuestion(GradeQuestionOption{})
 		if err != nil {
