@@ -11,7 +11,7 @@ import (
 	api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
 )
 
-func TestUserStartsAnExamFromExamLibrary(t *testing.T) {
+func TestEndToEndMakingTheGradeLifecycle(t *testing.T) {
 	numberThreeInt32 := int32(3)
 	expect := api_client.Exam{
 		LibraryExamId:     new("11111111-1111-1111-1111-111111111111"),
