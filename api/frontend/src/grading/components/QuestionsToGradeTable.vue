@@ -25,9 +25,7 @@ const questionTableHeaders: Record<
 </script>
 
 <template>
-  <div
-    class="card w-full"
-  >
+  <div class="card w-full">
     <div class="card-body">
       <h2 class="card-title">Questions to Grade</h2>
     </div>

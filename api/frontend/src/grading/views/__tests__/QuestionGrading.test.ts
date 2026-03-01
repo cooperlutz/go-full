@@ -11,6 +11,9 @@ vi.mock("vue-router", () => ({
       questionIndex: "1",
     },
   }),
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
 }));
 
 describe("QuestionGrading", () => {
