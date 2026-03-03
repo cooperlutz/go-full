@@ -91,8 +91,10 @@ func TestEndToEndMakingTheGradeLifecycle(t *testing.T) {
 	valueMetricNumberOfExamsInProgressDuring := *metricNumberOfExamsInProgressDuring.JSON200.MetricValue
 	mcRadioOpt1, err := page.Locator("#multiple-choice-radio-option-0").All()
 	err = mcRadioOpt1[0].Click()
+	time.Sleep(1 * time.Second)
 	subQuestionBtn, err := page.Locator("#record-answer-button").All()
 	err = subQuestionBtn[0].Click()
+	time.Sleep(1 * time.Second)
 	questionNavItem2, err := page.Locator("#question-nav-item-2").All()
 	err = questionNavItem2[0].Click()
 	time.Sleep(1 * time.Second)
@@ -100,15 +102,19 @@ func TestEndToEndMakingTheGradeLifecycle(t *testing.T) {
 	err = shortAnswerInput[0].Fill("A programming language developed by Google.")
 	subQuestionBtn2, err := page.Locator("#record-answer-button").All()
 	err = subQuestionBtn2[0].Click()
+	time.Sleep(1 * time.Second)
 	questionNavItem3, err := page.Locator("#question-nav-item-3").All()
 	err = questionNavItem3[0].Click()
+	time.Sleep(1 * time.Second)
 	err = page.Locator("#essay-question-input").Fill("It's about the relationship between space and time.")
 	subQuestionBtn3, err := page.Locator("#record-answer-button").All()
 	err = subQuestionBtn3[0].Click()
+	time.Sleep(1 * time.Second)
 	submitExamBtn, err := page.Locator("#exam-submission-button").All()
 	err = submitExamBtn[0].Click()
 	submissionValidationBtn, err := page.Locator("#confirm-exam-submission-button").All()
 	err = submissionValidationBtn[0].Click()
+	time.Sleep(2 * time.Second)
 
 	// Grade the Exam
 	_, err = page.Goto(serverAddr + "/grading")
@@ -118,10 +124,12 @@ func TestEndToEndMakingTheGradeLifecycle(t *testing.T) {
 	time.Sleep(1 * time.Second)
 	gradingGradeQuestion2Btn, err := page.Locator("#grading-grade-question-button-1").All()
 	err = gradingGradeQuestion2Btn[0].Click()
+	time.Sleep(1 * time.Second)
 	err = page.Locator("#grader-comments").Fill("not great")
 	err = page.Locator("#points-to-give").Fill("2")
 	saveFeedbackBtnQ2, err := page.Locator("#save-feedback-and-points").All()
 	err = saveFeedbackBtnQ2[0].Click()
+	time.Sleep(1 * time.Second)
 
 	metricNumberOfExamsBeingGradedAfter, err := reportingApiClient.GetMetricWithResponse(ctx, "number_of_exams_being_graded")
 	valueMetricNumberOfExamsBeingGradedAfter := *metricNumberOfExamsBeingGradedAfter.JSON200.MetricValue
