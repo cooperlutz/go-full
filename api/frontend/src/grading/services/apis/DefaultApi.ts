@@ -90,13 +90,13 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  getUngradedExamsRaw(
+  getFindIncompleteExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<Exam>>>;
 
   /**
    */
-  getUngradedExams(
+  getFindIncompleteExams(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>>;
 
@@ -238,7 +238,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
   /**
    */
-  async getUngradedExamsRaw(
+  async getFindIncompleteExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<Exam>>> {
     const queryParameters: any = {};
@@ -264,10 +264,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
   /**
    */
-  async getUngradedExams(
+  async getFindIncompleteExams(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>> {
-    const response = await this.getUngradedExamsRaw(initOverrides);
+    const response = await this.getFindIncompleteExamsRaw(initOverrides);
     return await response.value();
   }
 

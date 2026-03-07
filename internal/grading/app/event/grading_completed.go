@@ -25,7 +25,7 @@ func NewGradingCompletedHandler(
 }
 
 func (h GradingCompletedHandler) Handle(ctx context.Context, event GradingCompleted) error {
-	ctx, span := telemetree.AddSpan(ctx, "grading.app.event.gradingcompleted.handle")
+	ctx, span := telemetree.AddSpan(ctx, "grading.app.event.grading_completed.handle")
 	defer span.End()
 
 	msg, err := eeventdriven.EventPayloadToMessage(event)

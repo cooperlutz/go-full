@@ -2,7 +2,7 @@ package query
 
 type Exam struct {
 	ExamId              string
-	GradingCompleted    bool
+	State               string
 	TotalPointsPossible int32
 	TotalPointsReceived *int32
 	Questions           []Question

@@ -29,7 +29,7 @@ func NewGradeQuestionHandler(
 }
 
 func (h GradeQuestionHandler) Handle(ctx context.Context, cmd GradeQuestion) error {
-	ctx, span := telemetree.AddSpan(ctx, "grading.app.command.gradequestion.handle")
+	ctx, span := telemetree.AddSpan(ctx, "grading.app.command.grade_question.handle")
 	defer span.End()
 
 	return h.gradingRepo.UpdateExam(ctx, uuid.MustParse(cmd.ExamId), func(e *grading.Exam) (*grading.Exam, error) {

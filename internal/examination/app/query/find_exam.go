@@ -27,7 +27,7 @@ type FindExamReadModel interface {
 }
 
 func (h FindExamHandler) Handle(ctx context.Context, qry FindExam) (Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.query.findexam.handle")
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.query.find_exam.handle")
 	defer span.End()
 
 	examId := uuid.MustParse(qry.ExamID)

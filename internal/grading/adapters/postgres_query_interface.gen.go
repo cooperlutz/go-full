@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.30.0
 
-package outbound
+package adapters
 
 import (
 	"context"
@@ -20,7 +20,7 @@ type Querier interface {
 	//      student_id,
 	//      library_exam_id,
 	//      examination_exam_id,
-	//      grading_completed,
+	//      state,
 	//      total_points_received,
 	//      total_points_possible
 	//  ) VALUES (
@@ -75,7 +75,7 @@ type Querier interface {
 	AddQuestion(ctx context.Context, arg AddQuestionParams) error
 	//FindAllIncompleteExams
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams WHERE grading_completed = FALSE
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams WHERE state != 'completed'
 	FindAllIncompleteExams(ctx context.Context) ([]GradingExam, error)
 	//FindQuestionByExamIdAndQuestionIndex
 	//
@@ -84,7 +84,7 @@ type Querier interface {
 	FindQuestionByExamIdAndQuestionIndex(ctx context.Context, arg FindQuestionByExamIdAndQuestionIndexParams) (GradingQuestion, error)
 	//GetExam
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, grading_completed, total_points_received, total_points_possible FROM grading.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, examination_exam_id, state, total_points_received, total_points_possible FROM grading.exams
 	//  WHERE exam_id = $1
 	GetExam(ctx context.Context, arg GetExamParams) (GradingExam, error)
 	//GetQuestion
@@ -108,7 +108,7 @@ type Querier interface {
 	//      student_id = $6,
 	//      library_exam_id = $7,
 	//      examination_exam_id = $8,
-	//      grading_completed = $9,
+	//      state = $9,
 	//      total_points_received = $10,
 	//      total_points_possible = $11
 	//  WHERE exam_id = $1

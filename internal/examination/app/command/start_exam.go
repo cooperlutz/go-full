@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/cooperlutz/go-full/internal/examination/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/examination/app/event"
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -18,34 +19,68 @@ type StartExam struct {
 type StartExamHandler struct {
 	examinationRepo    examination.Repository
 	examLibraryAdapter outbound.ExamLibraryAdapter
+	examStartedHandler event.ExamStartedHandler
 }
 
 func NewStartExamHandler(
 	examinationRepo examination.Repository,
 	examLibraryAdapter outbound.ExamLibraryAdapter,
+	examStartedHandler event.ExamStartedHandler,
 ) StartExamHandler {
-	return StartExamHandler{examinationRepo: examinationRepo, examLibraryAdapter: examLibraryAdapter}
+	return StartExamHandler{
+		examinationRepo:    examinationRepo,
+		examLibraryAdapter: examLibraryAdapter,
+		examStartedHandler: examStartedHandler,
+	}
 }
 
-func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.startexam.handle")
+func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) { //nolint:funlen // it's fine
+	ctx, span := telemetree.AddSpan(ctx, "examination.app.command.start_exam.handle")
 	defer span.End()
 
-	questions, err := h.examLibraryAdapter.RetrieveExamQuestionsFromLibrary(ctx, cmd.ExamLibraryID)
+	// retrieve the exam questions from the Exam Library service using the provided exam library ID
+	examLibraryExam, err := h.examLibraryAdapter.RetrieveExamQuestionsFromLibrary(ctx, cmd.ExamLibraryID)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return Exam{}, err
 	}
 
-	examIdUuid, err := uuid.Parse(cmd.StudentId)
+	// map the retrieved exam questions to the domain entity format
+	var questions []*examination.Question
+
+	if examLibraryExam.Questions != nil {
+		for _, q := range *examLibraryExam.Questions {
+			questionType, err := examination.QuestionTypeFromString(q.QuestionType)
+			if err != nil {
+				telemetree.RecordError(ctx, err)
+
+				return Exam{}, err
+			}
+
+			question := examination.NewQuestion(
+				int32(q.Index),
+				q.QuestionText,
+				questionType,
+				q.ResponseOptions,
+			)
+			questions = append(questions, question)
+		}
+	}
+
+	studentIdUuid, err := uuid.Parse(cmd.StudentId)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return Exam{}, err
 	}
 
-	exam := examination.NewExam(examIdUuid, uuid.MustParse(cmd.ExamLibraryID), questions)
+	exam := examination.NewExam(
+		studentIdUuid,
+		uuid.MustParse(cmd.ExamLibraryID),
+		examLibraryExam.TimeLimit,
+		questions,
+	)
 
 	err = exam.StartExam()
 	if err != nil {
@@ -61,14 +96,27 @@ func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, erro
 		return Exam{}, err
 	}
 
+	err = h.examStartedHandler.Handle(ctx, event.ExamStarted{
+		ExamID:    exam.GetIdString(),
+		StudentID: exam.GetStudentIdString(),
+	})
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return Exam{}, err
+	}
+
 	var questionsForExam []Question
 	for _, q := range questions {
 		questionsForExam = append(questionsForExam, Question{
+			ExamId:          exam.GetIdString(),
+			Answered:        q.IsAnswered(),
 			QuestionID:      q.GetIdString(),
 			QuestionIndex:   q.GetIndex(),
 			QuestionText:    q.GetQuestionText(),
 			QuestionType:    q.GetQuestionType().String(),
-			ResponseOptions: *q.GetResponseOptions(),
+			ResponseOptions: q.GetResponseOptions(),
+			ProvidedAnswer:  q.GetProvidedAnswer(),
 		})
 	}
 

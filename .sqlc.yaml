@@ -100,10 +100,10 @@ sql:
       emit_methods_with_db_argument: false
       emit_pointers_for_null_types: false
       omit_unused_structs: false
-      output_db_file_name: postgres_repository.gen.go
+      output_db_file_name: postgres_database.gen.go
       output_files_suffix: .gen.go
       output_models_file_name: postgres_models.gen.go
-      output_querier_file_name: query_interface.gen.go
+      output_querier_file_name: postgres_query_interface.gen.go
       query_parameter_limit: 0 # always return a struct, even if its empty
 
 - name: iam_postgres
@@ -133,10 +133,10 @@ sql:
       emit_methods_with_db_argument: false
       emit_pointers_for_null_types: false
       omit_unused_structs: false
-      output_db_file_name: postgres_repository.gen.go
+      output_db_file_name: postgres_database.gen.go
       output_files_suffix: .gen.go
       output_models_file_name: postgres_models.gen.go
-      output_querier_file_name: query_interface.gen.go
+      output_querier_file_name: postgres_query_interface.gen.go
       query_parameter_limit: 0 # always return a struct, even if its empty
 
 - name: grading_postgres
@@ -152,8 +152,8 @@ sql:
   strict_order_by: true
   gen:
     go:
-      package: outbound
-      out: /internal/grading/adapters/outbound
+      package: adapters
+      out: /internal/grading/adapters
       sql_package: pgx/v5
       sql_driver: github.com/jackc/pgx/v5
       json_tags_id_uppercase: false
@@ -166,7 +166,7 @@ sql:
       emit_methods_with_db_argument: false
       emit_pointers_for_null_types: false
       omit_unused_structs: false
-      output_db_file_name: postgres_repository.gen.go
+      output_db_file_name: postgres_database.gen.go
       output_files_suffix: .gen.go
       output_models_file_name: postgres_models.gen.go
       output_querier_file_name: postgres_query_interface.gen.go
@@ -199,7 +199,7 @@ sql:
       emit_methods_with_db_argument: false
       emit_pointers_for_null_types: false
       omit_unused_structs: false
-      output_db_file_name: postgres_repository.gen.go
+      output_db_file_name: postgres_database.gen.go
       output_files_suffix: .gen.go
       output_models_file_name: postgres_models.gen.go
       output_querier_file_name: postgres_query_interface.gen.go

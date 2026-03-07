@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router";
+
 import { useSubmitExam } from "../composables/useExamination";
 
 defineProps<{
@@ -6,11 +8,13 @@ defineProps<{
 }>();
 const emit = defineEmits(["exam-submitted"]);
 
+const router = useRouter();
 const { submitExam } = useSubmitExam();
 
 function submitExamHandler(examId: string) {
   submitExam(examId);
   emit("exam-submitted");
+  router.push({ name: "ExamSubmitted" });
 }
 </script>
 

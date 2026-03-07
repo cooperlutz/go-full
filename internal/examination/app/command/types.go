@@ -1,5 +1,7 @@
 package command
 
+import "time"
+
 type Exam struct {
 	ExamId            string
 	LibraryExamId     string
@@ -7,6 +9,10 @@ type Exam struct {
 	Completed         bool
 	AnsweredQuestions int32
 	TotalQuestions    int32
+	StartedAt         *time.Time
+	CompletedAt       *time.Time
+	TimeLimitSeconds  int64
+	TimeOfTimeLimit   *time.Time
 	Questions         []Question
 }
 
@@ -17,6 +23,6 @@ type Question struct {
 	QuestionIndex   int32
 	QuestionText    string
 	QuestionType    string
-	ResponseOptions []string
-	ProvidedAnswer  string
+	ResponseOptions *[]string
+	ProvidedAnswer  *string
 }

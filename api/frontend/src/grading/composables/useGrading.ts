@@ -5,17 +5,17 @@ import { DefaultApi, type Exam, type Question } from "../services";
 
 const gradingAPI = new DefaultApi(BackendConfig);
 
-export function useGetUngradedExams() {
+export function useGetFindIncompleteExams() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const ungradedExams = ref<Array<Exam> | null>(null);
+  const incompleteExams = ref<Array<Exam> | null>(null);
 
-  const getUngradedExams = async () => {
+  const getFindIncompleteExams = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await gradingAPI.getUngradedExams();
-      ungradedExams.value = response;
+      const response = await gradingAPI.getFindIncompleteExams();
+      incompleteExams.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -28,8 +28,8 @@ export function useGetUngradedExams() {
   return {
     error,
     loading,
-    ungradedExams,
-    getUngradedExams,
+    incompleteExams,
+    getFindIncompleteExams,
   };
 }
 

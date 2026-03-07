@@ -31,9 +31,11 @@ func (e ExaminationExam) toDomain(questions ...ExaminationQuestion) (*examinatio
 		e.LibraryExamID.Bytes,
 		pgxutil.TimestampzToTimePtr(e.StartedAt),
 		pgxutil.TimestampzToTimePtr(e.CompletedAt),
-		e.Completed,
+		e.TimeLimit,
+		pgxutil.TimestampzToTimePtr(e.TimeOfTimeLimit),
+		e.State,
 		domainQuestions,
-	), nil
+	)
 }
 
 // toQueryExam maps the ExaminationExam to the query.Exam.
@@ -100,16 +102,18 @@ func mapEntityExamToDB(exam *examination.Exam) ExaminationExam {
 	updatedAt := exam.GetUpdatedAtTime()
 
 	return ExaminationExam{
-		ExamID:        pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
-		CreatedAt:     pgxutil.TimeToTimestampz(&createdAt),
-		UpdatedAt:     pgxutil.TimeToTimestampz(&updatedAt),
-		Deleted:       exam.IsDeleted(),
-		DeletedAt:     pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
-		StudentID:     pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
-		LibraryExamID: pgxutil.UUIDToPgtypeUUID(exam.GetLibraryExamIdUUID()),
-		StartedAt:     pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
-		CompletedAt:   pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
-		Completed:     exam.IsCompleted(),
+		ExamID:          pgxutil.UUIDToPgtypeUUID(exam.GetIdUUID()),
+		CreatedAt:       pgxutil.TimeToTimestampz(&createdAt),
+		UpdatedAt:       pgxutil.TimeToTimestampz(&updatedAt),
+		Deleted:         exam.IsDeleted(),
+		DeletedAt:       pgxutil.TimeToTimestampz(exam.GetDeletedAtTime()),
+		StudentID:       pgxutil.UUIDToPgtypeUUID(exam.GetStudentIdUUID()),
+		LibraryExamID:   pgxutil.UUIDToPgtypeUUID(exam.GetLibraryExamIdUUID()),
+		StartedAt:       pgxutil.TimeToTimestampz(exam.GetStartedAtTime()),
+		CompletedAt:     pgxutil.TimeToTimestampz(exam.GetCompletedAtTime()),
+		TimeLimit:       exam.GetTimeLimitSeconds(),
+		TimeOfTimeLimit: pgxutil.TimeToTimestampz(exam.GetTimeOfTimeLimit()),
+		State:           exam.GetState().String(),
 	}
 }
 
@@ -145,9 +149,13 @@ func mapEntityExamToQuery(exam *examination.Exam) query.Exam {
 		ExamId:            exam.GetIdString(),
 		StudentId:         exam.GetStudentIdString(),
 		LibraryExamId:     exam.GetLibraryExamIdUUID().String(),
-		Completed:         exam.IsCompleted(),
+		State:             exam.GetState().String(),
 		AnsweredQuestions: exam.AnsweredQuestionsCount(),
 		TotalQuestions:    exam.NumberOfQuestions(),
+		StartedAt:         exam.GetStartedAtTime(),
+		CompletedAt:       exam.GetCompletedAtTime(),
+		TimeLimitSeconds:  exam.GetTimeLimitSeconds(),
+		TimeOfTimeLimit:   exam.GetTimeOfTimeLimit(),
 		Questions:         questions,
 	}
 }

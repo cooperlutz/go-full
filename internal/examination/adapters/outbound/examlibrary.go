@@ -3,11 +3,9 @@ package outbound
 import (
 	"context"
 
-	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // ExamLibraryAdapter provides an adapter to interact with the Exam Library service.
@@ -27,35 +25,59 @@ func NewExamLibraryAdapter(uc usecase.IExamLibraryUseCase) ExamLibraryAdapter {
 func (a ExamLibraryAdapter) RetrieveExamQuestionsFromLibrary(
 	ctx context.Context,
 	examID string,
-) ([]*examination.Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.examlibrary.retrieveexamquestionsfromlibrary")
+) (ExamLibraryExam, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.examlibrary.retrieve_exam_questions_from_library")
 	defer span.End()
 
 	response, err := a.uc.FindOneExamByID(ctx, query.FindOneExamByID{ExamID: examID})
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return nil, err
+		return ExamLibraryExam{}, err
 	}
 
-	var questions []*examination.Question
+	var questions []ExamLibraryExamQuestion
 
 	if response.Questions != nil {
 		for _, q := range *response.Questions {
-			questionType, err := examination.QuestionTypeFromString(q.QuestionType)
-			if err != nil {
-				return nil, err
+			question := ExamLibraryExamQuestion{
+				Index:           q.Index,
+				QuestionText:    q.QuestionText,
+				QuestionType:    q.QuestionType,
+				PossiblePoints:  q.PossiblePoints,
+				CorrectAnswer:   q.CorrectAnswer,
+				ResponseOptions: q.ResponseOptions,
 			}
-
-			question := examination.NewQuestion(
-				utilitee.SafeIntToInt32(&q.Index),
-				q.QuestionText,
-				questionType,
-				q.ResponseOptions,
-			)
 			questions = append(questions, question)
 		}
 	}
 
-	return questions, nil
+	exam := ExamLibraryExam{
+		ExamID:     response.ExamID,
+		Name:       response.Name,
+		GradeLevel: response.GradeLevel,
+		TimeLimit:  response.TimeLimit,
+		Questions:  &questions,
+	}
+
+	return exam, nil
+}
+
+// ExamLibraryExam represents the response for the FindOneExamByID query.
+type ExamLibraryExam struct {
+	ExamID     string
+	Name       string
+	GradeLevel int
+	TimeLimit  int64
+	Questions  *[]ExamLibraryExamQuestion
+}
+
+// ExamLibraryExamQuestion represents a question in an exam.
+type ExamLibraryExamQuestion struct {
+	Index           int
+	QuestionText    string
+	QuestionType    string
+	PossiblePoints  int
+	CorrectAnswer   *string
+	ResponseOptions *[]string
 }

@@ -14,7 +14,7 @@ import (
 // Get all Exams
 // (GET /exams)
 func (c *ExamLibraryRestAPIControllerV1) GetFindAllExams(ctx context.Context, request server.GetFindAllExamsRequestObject) (server.GetFindAllExamsResponseObject, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.getfindallexams")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.api.rest.v1.get_find_all_exams")
 	defer span.End()
 
 	spanCtx := trace.SpanContextFromContext(ctx)

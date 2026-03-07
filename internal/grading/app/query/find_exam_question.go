@@ -21,7 +21,7 @@ func NewFindExamQuestionHandler(
 }
 
 func (h FindExamQuestionHandler) Handle(ctx context.Context, examId string, questionIndex int32) (Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "grading.app.query.findexamquestion.handle")
+	ctx, span := telemetree.AddSpan(ctx, "grading.app.query.find_exam_question.handle")
 	defer span.End()
 
 	question, err := h.readModel.FindExamQuestion(ctx, examId, questionIndex)

@@ -94,13 +94,13 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  getAvailableExamsRaw(
+  findAllExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<Exam>>>;
 
   /**
    */
-  getAvailableExams(
+  findAllExams(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>>;
 
@@ -279,7 +279,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
   /**
    */
-  async getAvailableExamsRaw(
+  async findAllExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<Exam>>> {
     const queryParameters: any = {};
@@ -305,10 +305,10 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
 
   /**
    */
-  async getAvailableExams(
+  async findAllExams(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Array<Exam>> {
-    const response = await this.getAvailableExamsRaw(initOverrides);
+    const response = await this.findAllExamsRaw(initOverrides);
     return await response.value();
   }
 

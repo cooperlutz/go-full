@@ -18,25 +18,25 @@ type IamModuleConfig struct {
 }
 
 type IamModule struct {
-	iamRepo     outbound.Querier
 	Service     *service.IamService
 	UserRestApi http.Handler
 	AuthRestApi http.Handler
 }
 
 func NewModule(pgconn *pgxpool.Pool, conf IamModuleConfig) *IamModule {
-	repo := outbound.New(pgconn)
+	iamPostgres := outbound.NewPostgresAdapter(pgconn)
 	iamSvc := service.NewIamService(
-		repo,
+		iamPostgres,
+		iamPostgres,
+		iamPostgres,
 		conf.JwtSecret,
 		conf.AccessTokenTTL,
 		conf.RefreshTokenTTL,
 	)
 
 	return &IamModule{
-		iamRepo:     repo,
 		Service:     iamSvc,
-		UserRestApi: inbound.NewIamUserApiController(repo),
+		UserRestApi: inbound.NewIamUserApiController(iamSvc),
 		AuthRestApi: inbound.NewIamAuthApiController(iamSvc),
 	}
 }

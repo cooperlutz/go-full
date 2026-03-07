@@ -165,16 +165,16 @@ func (_c *MockRepository_GetExam_Call) RunAndReturn(run func(ctx context.Context
 }
 
 // UpdateExam provides a mock function for the type MockRepository
-func (_mock *MockRepository) UpdateExam(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error)) error {
-	ret := _mock.Called(ctx, exam, updateFn)
+func (_mock *MockRepository) UpdateExam(ctx context.Context, examId uuid.UUID, updateFn func(e *examination.Exam) (*examination.Exam, error)) error {
+	ret := _mock.Called(ctx, examId, updateFn)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateExam")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *examination.Exam, func(h *examination.Exam) (*examination.Exam, error)) error); ok {
-		r0 = returnFunc(ctx, exam, updateFn)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, func(e *examination.Exam) (*examination.Exam, error)) error); ok {
+		r0 = returnFunc(ctx, examId, updateFn)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -188,25 +188,25 @@ type MockRepository_UpdateExam_Call struct {
 
 // UpdateExam is a helper method to define mock.On call
 //   - ctx context.Context
-//   - exam *examination.Exam
-//   - updateFn func(h *examination.Exam) (*examination.Exam, error)
-func (_e *MockRepository_Expecter) UpdateExam(ctx interface{}, exam interface{}, updateFn interface{}) *MockRepository_UpdateExam_Call {
-	return &MockRepository_UpdateExam_Call{Call: _e.mock.On("UpdateExam", ctx, exam, updateFn)}
+//   - examId uuid.UUID
+//   - updateFn func(e *examination.Exam) (*examination.Exam, error)
+func (_e *MockRepository_Expecter) UpdateExam(ctx interface{}, examId interface{}, updateFn interface{}) *MockRepository_UpdateExam_Call {
+	return &MockRepository_UpdateExam_Call{Call: _e.mock.On("UpdateExam", ctx, examId, updateFn)}
 }
 
-func (_c *MockRepository_UpdateExam_Call) Run(run func(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error))) *MockRepository_UpdateExam_Call {
+func (_c *MockRepository_UpdateExam_Call) Run(run func(ctx context.Context, examId uuid.UUID, updateFn func(e *examination.Exam) (*examination.Exam, error))) *MockRepository_UpdateExam_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
 			arg0 = args[0].(context.Context)
 		}
-		var arg1 *examination.Exam
+		var arg1 uuid.UUID
 		if args[1] != nil {
-			arg1 = args[1].(*examination.Exam)
+			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 func(h *examination.Exam) (*examination.Exam, error)
+		var arg2 func(e *examination.Exam) (*examination.Exam, error)
 		if args[2] != nil {
-			arg2 = args[2].(func(h *examination.Exam) (*examination.Exam, error))
+			arg2 = args[2].(func(e *examination.Exam) (*examination.Exam, error))
 		}
 		run(
 			arg0,
@@ -222,7 +222,7 @@ func (_c *MockRepository_UpdateExam_Call) Return(err error) *MockRepository_Upda
 	return _c
 }
 
-func (_c *MockRepository_UpdateExam_Call) RunAndReturn(run func(ctx context.Context, exam *examination.Exam, updateFn func(h *examination.Exam) (*examination.Exam, error)) error) *MockRepository_UpdateExam_Call {
+func (_c *MockRepository_UpdateExam_Call) RunAndReturn(run func(ctx context.Context, examId uuid.UUID, updateFn func(e *examination.Exam) (*examination.Exam, error)) error) *MockRepository_UpdateExam_Call {
 	_c.Call.Return(run)
 	return _c
 }

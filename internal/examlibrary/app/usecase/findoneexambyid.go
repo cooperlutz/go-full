@@ -12,7 +12,7 @@ import (
 
 // FindOneExamByID finds one exam by its ID.
 func (uc *examLibraryUseCase) FindOneExamByID(ctx context.Context, qry query.FindOneExamByID) (query.FindOneExamByIDResponse, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.findoneexambyid")
+	ctx, span := telemetree.AddSpan(ctx, "examlibrary.usecase.find_one_exam_by_id")
 	defer span.End()
 
 	entity, err := uc.Persist.FindExamByID(ctx, uuid.MustParse(qry.ExamID))

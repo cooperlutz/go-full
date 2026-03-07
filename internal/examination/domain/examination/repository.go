@@ -16,8 +16,8 @@ type Repository interface {
 
 	UpdateExam(
 		ctx context.Context,
-		exam *Exam,
-		updateFn func(h *Exam) (*Exam, error),
+		examId uuid.UUID,
+		updateFn func(e *Exam) (*Exam, error),
 	) error
 }
 
@@ -33,9 +33,16 @@ func MapToExam(
 	libraryExamId uuid.UUID,
 	startedAt *time.Time,
 	completedAt *time.Time,
-	completed bool,
+	timeLimitSeconds int64,
+	timeOfTimeLimit *time.Time,
+	state string,
 	questions []*Question,
-) *Exam {
+) (*Exam, error) {
+	examState, err := ExamStateFromString(state)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Exam{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
 			id,
@@ -44,13 +51,15 @@ func MapToExam(
 			deleted,
 			deletedAt,
 		),
-		studentId:     studentId,
-		libraryExamId: libraryExamId,
-		startedAt:     startedAt,
-		completedAt:   completedAt,
-		completed:     completed,
-		questions:     questions,
-	}
+		studentId:       studentId,
+		libraryExamId:   libraryExamId,
+		startedAt:       startedAt,
+		completedAt:     completedAt,
+		state:           examState,
+		questions:       questions,
+		timeLimit:       timeLimitSeconds,
+		timeOfTimeLimit: timeOfTimeLimit,
+	}, nil
 }
 
 // MapToQuestion maps raw data to a Question entity.

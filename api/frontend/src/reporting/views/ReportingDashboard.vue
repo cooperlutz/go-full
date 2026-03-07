@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+import MetricsStats from "../components/MetricsStats.vue";
 </script>
 
 <template>
@@ -7,10 +8,7 @@ import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
     <PageHeader title="Reporting Dashboard" :disable-menu="true" />
 
     <div>
-      <h2>Coming Soon</h2>
-      <p>
-        The reporting dashboard is under development. Stay tuned for updates!
-      </p>
+      <MetricsStats />
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
-	"github.com/cooperlutz/go-full/internal/grading/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/grading/adapters"
 	"github.com/cooperlutz/go-full/internal/grading/app/command"
 	"github.com/cooperlutz/go-full/internal/grading/app/event"
 	"github.com/cooperlutz/go-full/internal/grading/app/query"
@@ -21,9 +21,9 @@ type Commands struct {
 }
 
 type Queries struct {
-	FindExam         query.FindExamHandler
-	FindExamQuestion query.FindExamQuestionHandler
-	IncompleteExams  query.IncompleteExamsHandler
+	FindExam            query.FindExamHandler
+	FindExamQuestion    query.FindExamQuestionHandler
+	FindIncompleteExams query.FindIncompleteExamsHandler
 }
 
 type Events struct {
@@ -38,16 +38,16 @@ func NewApplication(
 	pubSub *eeventdriven.BasePgsqlPubSubProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
 ) (Application, error) {
-	gradingRepo := outbound.NewPostgresAdapter(pgconn)
+	gradingRepo := adapters.NewPostgresAdapter(pgconn)
 
 	app := Application{
 		Commands: Commands{
 			GradeQuestion: command.NewGradeQuestionHandler(gradingRepo),
 		},
 		Queries: Queries{
-			FindExam:         query.NewFindExamHandler(gradingRepo),
-			FindExamQuestion: query.NewFindExamQuestionHandler(gradingRepo),
-			IncompleteExams:  query.NewIncompleteExamsHandler(gradingRepo),
+			FindExam:            query.NewFindExamHandler(gradingRepo),
+			FindExamQuestion:    query.NewFindExamQuestionHandler(gradingRepo),
+			FindIncompleteExams: query.NewFindIncompleteExamsHandler(gradingRepo),
 		},
 		Events: Events{
 			ExamSubmitted:    event.NewExamSubmittedHandler(gradingRepo, examLibraryUseCase),

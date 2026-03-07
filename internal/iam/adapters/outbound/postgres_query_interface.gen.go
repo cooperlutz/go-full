@@ -34,36 +34,64 @@ type Querier interface {
 	//      id,
 	//      email,
 	//      password_hash,
+	//      created_at,
 	//      last_login
 	//  ) VALUES (
 	//      $1,
 	//      $2,
 	//      $3,
-	//      $4
+	//      $4,
+	//      $5
 	//  )
 	//  RETURNING id, email, password_hash, created_at, last_login
 	CreateUser(ctx context.Context, arg CreateUserParams) (IamUser, error)
+	//FindUserByEmail
+	//
+	//  SELECT id, email, password_hash, created_at, last_login FROM iam.users
+	//  WHERE email = $1
+	FindUserByEmail(ctx context.Context, arg FindUserByEmailParams) (IamUser, error)
+	//FindUserByID
+	//
+	//  SELECT id, email, password_hash, created_at, last_login FROM iam.users
+	//  WHERE id = $1
+	FindUserByID(ctx context.Context, arg FindUserByIDParams) (IamUser, error)
 	//GetRefreshToken
 	//
 	//  SELECT id, user_id, token, expires_at, created_at, revoked FROM iam.refresh_tokens
 	//  WHERE id = $1
 	GetRefreshToken(ctx context.Context, arg GetRefreshTokenParams) (IamRefreshToken, error)
-	//GetUserByEmail
-	//
-	//  SELECT id, email, password_hash, created_at, last_login FROM iam.users
-	//  WHERE email = $1
-	GetUserByEmail(ctx context.Context, arg GetUserByEmailParams) (IamUser, error)
-	//GetUserByID
+	//GetUser
 	//
 	//  SELECT id, email, password_hash, created_at, last_login FROM iam.users
 	//  WHERE id = $1
-	GetUserByID(ctx context.Context, arg GetUserByIDParams) (IamUser, error)
+	GetUser(ctx context.Context, arg GetUserParams) (IamUser, error)
 	//RevokeRefreshToken
 	//
 	//  UPDATE iam.refresh_tokens
 	//  SET revoked = TRUE
 	//  WHERE id = $1
 	RevokeRefreshToken(ctx context.Context, arg RevokeRefreshTokenParams) error
+	//UpdateRefreshToken
+	//
+	//  UPDATE iam.refresh_tokens
+	//  SET user_id = $2,
+	//      token = $3,
+	//      expires_at = $4,
+	//      created_at = $5,
+	//      revoked = $6
+	//  WHERE id = $1
+	//  RETURNING id, user_id, token, expires_at, created_at, revoked
+	UpdateRefreshToken(ctx context.Context, arg UpdateRefreshTokenParams) (IamRefreshToken, error)
+	//UpdateUser
+	//
+	//  UPDATE iam.users
+	//  SET email = $2,
+	//      password_hash = $3,
+	//      last_login = $4,
+	//      created_at = $5
+	//  WHERE id = $1
+	//  RETURNING id, email, password_hash, created_at, last_login
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (IamUser, error)
 }
 
 var _ Querier = (*Queries)(nil)

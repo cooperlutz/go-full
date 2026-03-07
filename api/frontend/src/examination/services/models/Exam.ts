@@ -59,10 +59,34 @@ export interface Exam {
   answeredQuestions?: number;
   /**
    *
-   * @type {boolean}
+   * @type {string}
    * @memberof Exam
    */
-  completed: boolean;
+  state: string;
+  /**
+   *
+   * @type {Date}
+   * @memberof Exam
+   */
+  startedAt?: Date;
+  /**
+   *
+   * @type {Date}
+   * @memberof Exam
+   */
+  completedAt?: Date;
+  /**
+   *
+   * @type {number}
+   * @memberof Exam
+   */
+  timeLimitSeconds?: number;
+  /**
+   *
+   * @type {Date}
+   * @memberof Exam
+   */
+  timeOfTimeLimit?: Date;
   /**
    *
    * @type {Array<Question>}
@@ -77,7 +101,7 @@ export interface Exam {
 export function instanceOfExam(value: object): value is Exam {
   if (!("examId" in value) || value["examId"] === undefined) return false;
   if (!("studentId" in value) || value["studentId"] === undefined) return false;
-  if (!("completed" in value) || value["completed"] === undefined) return false;
+  if (!("state" in value) || value["state"] === undefined) return false;
   return true;
 }
 
@@ -101,7 +125,17 @@ export function ExamFromJSONTyped(
       json["totalQuestions"] == null ? undefined : json["totalQuestions"],
     answeredQuestions:
       json["answeredQuestions"] == null ? undefined : json["answeredQuestions"],
-    completed: json["completed"],
+    state: json["state"],
+    startedAt:
+      json["startedAt"] == null ? undefined : new Date(json["startedAt"]),
+    completedAt:
+      json["completedAt"] == null ? undefined : new Date(json["completedAt"]),
+    timeLimitSeconds:
+      json["timeLimitSeconds"] == null ? undefined : json["timeLimitSeconds"],
+    timeOfTimeLimit:
+      json["timeOfTimeLimit"] == null
+        ? undefined
+        : new Date(json["timeOfTimeLimit"]),
     questions:
       json["questions"] == null
         ? undefined
@@ -127,7 +161,18 @@ export function ExamToJSONTyped(
     libraryExamId: value["libraryExamId"],
     totalQuestions: value["totalQuestions"],
     answeredQuestions: value["answeredQuestions"],
-    completed: value["completed"],
+    state: value["state"],
+    startedAt:
+      value["startedAt"] == null ? undefined : value["startedAt"].toISOString(),
+    completedAt:
+      value["completedAt"] == null
+        ? undefined
+        : value["completedAt"].toISOString(),
+    timeLimitSeconds: value["timeLimitSeconds"],
+    timeOfTimeLimit:
+      value["timeOfTimeLimit"] == null
+        ? undefined
+        : value["timeOfTimeLimit"].toISOString(),
     questions:
       value["questions"] == null
         ? undefined

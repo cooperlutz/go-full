@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/oapi-codegen/runtime"
 )
@@ -30,11 +31,15 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	AnsweredQuestions *int32      `json:"answeredQuestions,omitempty"`
-	Completed         bool        `json:"completed"`
+	CompletedAt       *time.Time  `json:"completedAt,omitempty"`
 	ExamId            string      `json:"examId"`
 	LibraryExamId     *string     `json:"libraryExamId,omitempty"`
 	Questions         *[]Question `json:"questions,omitempty"`
+	StartedAt         *time.Time  `json:"startedAt,omitempty"`
+	State             string      `json:"state"`
 	StudentId         string      `json:"studentId"`
+	TimeLimitSeconds  *int64      `json:"timeLimitSeconds,omitempty"`
+	TimeOfTimeLimit   *time.Time  `json:"timeOfTimeLimit,omitempty"`
 	TotalQuestions    *int32      `json:"totalQuestions,omitempty"`
 }
 
@@ -141,8 +146,8 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// GetAvailableExams request
-	GetAvailableExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// FindAllExams request
+	FindAllExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// StartNewExamWithBody request with any body
 	StartNewExamWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -167,8 +172,8 @@ type ClientInterface interface {
 	SubmitExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-func (c *Client) GetAvailableExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetAvailableExamsRequest(c.Server)
+func (c *Client) FindAllExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewFindAllExamsRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -275,8 +280,8 @@ func (c *Client) SubmitExam(ctx context.Context, examId string, reqEditors ...Re
 	return c.Client.Do(req)
 }
 
-// NewGetAvailableExamsRequest generates requests for GetAvailableExams
-func NewGetAvailableExamsRequest(server string) (*http.Request, error) {
+// NewFindAllExamsRequest generates requests for FindAllExams
+func NewFindAllExamsRequest(server string) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -582,8 +587,8 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// GetAvailableExamsWithResponse request
-	GetAvailableExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAvailableExamsResponse, error)
+	// FindAllExamsWithResponse request
+	FindAllExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*FindAllExamsResponse, error)
 
 	// StartNewExamWithBodyWithResponse request with any body
 	StartNewExamWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*StartNewExamResponse, error)
@@ -608,7 +613,7 @@ type ClientWithResponsesInterface interface {
 	SubmitExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*SubmitExamResponse, error)
 }
 
-type GetAvailableExamsResponse struct {
+type FindAllExamsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]Exam
@@ -616,7 +621,7 @@ type GetAvailableExamsResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r GetAvailableExamsResponse) Status() string {
+func (r FindAllExamsResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -624,7 +629,7 @@ func (r GetAvailableExamsResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r GetAvailableExamsResponse) StatusCode() int {
+func (r FindAllExamsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -768,13 +773,13 @@ func (r SubmitExamResponse) StatusCode() int {
 	return 0
 }
 
-// GetAvailableExamsWithResponse request returning *GetAvailableExamsResponse
-func (c *ClientWithResponses) GetAvailableExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAvailableExamsResponse, error) {
-	rsp, err := c.GetAvailableExams(ctx, reqEditors...)
+// FindAllExamsWithResponse request returning *FindAllExamsResponse
+func (c *ClientWithResponses) FindAllExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*FindAllExamsResponse, error) {
+	rsp, err := c.FindAllExams(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetAvailableExamsResponse(rsp)
+	return ParseFindAllExamsResponse(rsp)
 }
 
 // StartNewExamWithBodyWithResponse request with arbitrary body returning *StartNewExamResponse
@@ -847,15 +852,15 @@ func (c *ClientWithResponses) SubmitExamWithResponse(ctx context.Context, examId
 	return ParseSubmitExamResponse(rsp)
 }
 
-// ParseGetAvailableExamsResponse parses an HTTP response from a GetAvailableExamsWithResponse call
-func ParseGetAvailableExamsResponse(rsp *http.Response) (*GetAvailableExamsResponse, error) {
+// ParseFindAllExamsResponse parses an HTTP response from a FindAllExamsWithResponse call
+func ParseFindAllExamsResponse(rsp *http.Response) (*FindAllExamsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &GetAvailableExamsResponse{
+	response := &FindAllExamsResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

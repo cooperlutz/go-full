@@ -27,7 +27,7 @@ func (h HttpServer) StrictHandler() ServerInterface {
 
 // (GET /v1/metrics/{metricName}).
 func (h HttpServer) GetMetric(ctx context.Context, request GetMetricRequestObject) (GetMetricResponseObject, error) {
-	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.inbound.http.getmetric")
+	ctx, span := telemetree.AddSpan(ctx, "reporting.adapters.inbound.http.get_metric")
 	defer span.End()
 
 	metric, err := h.app.Queries.FindMetric.Handle(ctx, query.FindMetric{

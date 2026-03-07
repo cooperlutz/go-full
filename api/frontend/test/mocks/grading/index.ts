@@ -8,7 +8,7 @@ const gradingHandlers = [
         examId: "5d9abb80-0706-42ad-8131-33627d3e6b17",
         totalPointsPossible: 100,
         totalPointsEarned: 85,
-        gradingCompleted: false,
+        state: "not-started",
         questions: [
           {
             questionId: "1",
@@ -60,7 +60,7 @@ const gradingHandlers = [
       examId: "5d9abb80-0706-42ad-8131-33627d3e6b17",
       totalPointsPossible: 100,
       totalPointsEarned: 85,
-      gradingCompleted: false,
+      state: "not-started",
       questions: [
         {
           questionId: "1",

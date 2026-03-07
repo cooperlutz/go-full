@@ -19,9 +19,11 @@ type Querier interface {
 	//      deleted,
 	//      student_id,
 	//      library_exam_id,
-	//      completed,
+	//      state,
 	//      completed_at,
-	//      started_at
+	//      started_at,
+	//      time_limit,
+	//      time_of_time_limit
 	//  ) VALUES (
 	//      $1,
 	//      $2,
@@ -32,7 +34,9 @@ type Querier interface {
 	//      $7,
 	//      $8,
 	//      $9,
-	//      $10
+	//      $10,
+	//      $11,
+	//      $12
 	//  )
 	AddExam(ctx context.Context, arg AddExamParams) error
 	//AddQuestion
@@ -67,8 +71,13 @@ type Querier interface {
 	AddQuestion(ctx context.Context, arg AddQuestionParams) error
 	//FindAllExams
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
 	FindAllExams(ctx context.Context) ([]ExaminationExam, error)
+	//FindAllInProgressExams
+	//
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
+	//  WHERE state = 'in-progress'
+	FindAllInProgressExams(ctx context.Context) ([]ExaminationExam, error)
 	//FindQuestionsForExam
 	//
 	//  SELECT question_id, created_at, updated_at, deleted_at, deleted, exam_id, index, answered, question_text, question_type, provided_answer, response_options FROM examination.questions
@@ -76,7 +85,7 @@ type Querier interface {
 	FindQuestionsForExam(ctx context.Context, arg FindQuestionsForExamParams) ([]ExaminationQuestion, error)
 	//GetExam
 	//
-	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, completed, completed_at, started_at FROM examination.exams
+	//  SELECT exam_id, created_at, updated_at, deleted_at, deleted, student_id, library_exam_id, state, completed_at, started_at, time_limit, time_of_time_limit FROM examination.exams
 	//  WHERE exam_id = $1
 	GetExam(ctx context.Context, arg GetExamParams) (ExaminationExam, error)
 	//GetQuestion
@@ -105,9 +114,11 @@ type Querier interface {
 	//      deleted = $5,
 	//      student_id = $6,
 	//      library_exam_id = $7,
-	//      completed = $8,
+	//      state = $8,
 	//      completed_at = $9,
-	//      started_at = $10
+	//      started_at = $10,
+	//      time_limit = $11,
+	//      time_of_time_limit = $12
 	//  WHERE exam_id = $1
 	SaveExam(ctx context.Context, arg SaveExamParams) error
 	//SaveQuestion

@@ -1,5 +1,5 @@
 -- name: FindAllIncompleteExams :many
-SELECT * FROM grading.exams WHERE grading_completed = FALSE;
+SELECT * FROM grading.exams WHERE state != 'completed';
 
 -- name: GetExam :one
 SELECT * FROM grading.exams
@@ -28,7 +28,7 @@ INSERT INTO grading.exams (
     student_id,
     library_exam_id,
     examination_exam_id,
-    grading_completed,
+    state,
     total_points_received,
     total_points_possible
 ) VALUES (
@@ -54,7 +54,7 @@ UPDATE grading.exams SET
     student_id = $6,
     library_exam_id = $7,
     examination_exam_id = $8,
-    grading_completed = $9,
+    state = $9,
     total_points_received = $10,
     total_points_possible = $11
 WHERE exam_id = $1;

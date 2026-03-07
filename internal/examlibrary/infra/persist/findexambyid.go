@@ -14,7 +14,7 @@ import (
 
 // FindExamByID finds an exam by its ID.
 func (r *examLibraryPersistPostgresRepository) FindExamByID(ctx context.Context, examID uuid.UUID) (entity.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.findexambyid")
+	ctx, span := telemetree.AddSpan(ctx, "persist.postgres.find_exam_by_id")
 	defer span.End()
 
 	dbExam, err := r.query.FindExamByID(ctx,

@@ -1,4 +1,4 @@
-package outbound
+package adapters
 
 import (
 	"context"
@@ -26,7 +26,7 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 }
 
 func (p PostgresAdapter) AddExam(ctx context.Context, exam *grading.Exam) error {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.addexam")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.add_exam")
 	defer span.End()
 
 	examToDb := mapEntityExamToDB(exam)
@@ -53,7 +53,7 @@ func (p PostgresAdapter) AddExam(ctx context.Context, exam *grading.Exam) error 
 }
 
 func (p PostgresAdapter) GetExam(ctx context.Context, examId uuid.UUID) (*grading.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.getexam")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.get_exam")
 	defer span.End()
 
 	examFromDb, err := p.postgres.GetExam(ctx, GetExamParams{
@@ -90,7 +90,7 @@ func (p PostgresAdapter) UpdateExam(
 	examId uuid.UUID,
 	updateFn func(e *grading.Exam) (*grading.Exam, error),
 ) error {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.updateexam")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.update_exam")
 	defer span.End()
 
 	tx, err := p.postgres.Begin(ctx)
@@ -162,7 +162,7 @@ func (p PostgresAdapter) finishTransaction(ctx context.Context, err error, tx pg
 }
 
 func (p PostgresAdapter) FindExam(ctx context.Context, examId string) (query.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findexam")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.find_exam")
 	defer span.End()
 
 	examFromDb, err := p.postgres.GetExam(ctx, GetExamParams{
@@ -189,7 +189,7 @@ func (p PostgresAdapter) FindExam(ctx context.Context, examId string) (query.Exa
 }
 
 func (p PostgresAdapter) FindIncompleteExams(ctx context.Context) ([]query.Exam, error) {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findincompleteexams")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.find_incomplete_exams")
 	defer span.End()
 
 	examsFromDb, err := p.postgres.FindAllIncompleteExams(ctx)
@@ -218,7 +218,7 @@ func (p PostgresAdapter) FindIncompleteExams(ctx context.Context) ([]query.Exam,
 }
 
 func (p PostgresAdapter) FindExamQuestion(ctx context.Context, examId string, questionIndex int32) (query.Question, error) {
-	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.findexamquestion")
+	ctx, span := telemetree.AddSpan(ctx, "grading.adapters.outbound.postgres.find_exam_question")
 	defer span.End()
 
 	questionFromDb, err := p.postgres.FindQuestionByExamIdAndQuestionIndex(ctx, FindQuestionByExamIdAndQuestionIndexParams{

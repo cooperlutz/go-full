@@ -12,24 +12,43 @@ type Exam struct {
 	*baseentitee.EntityMetadata
 	studentId     uuid.UUID
 	libraryExamId uuid.UUID
-	startedAt     *time.Time
-	completedAt   *time.Time
-	completed     bool
-	questions     []*Question
+
+	timeLimit       int64
+	timeOfTimeLimit *time.Time
+	startedAt       *time.Time
+	completedAt     *time.Time
+
+	state ExamState
+
+	questions []*Question
 }
 
-func NewExam(studentId, libraryExamId uuid.UUID, questions []*Question) *Exam {
+func NewExam(studentId, libraryExamId uuid.UUID, timeLimit int64, questions []*Question) *Exam {
 	return &Exam{
-		EntityMetadata: baseentitee.NewEntityMetadata(),
-		studentId:      studentId,
-		libraryExamId:  libraryExamId,
-		questions:      questions,
+		EntityMetadata:  baseentitee.NewEntityMetadata(),
+		studentId:       studentId,
+		libraryExamId:   libraryExamId,
+		timeLimit:       timeLimit,
+		timeOfTimeLimit: nil, // timeOfTimeLimit is set when the exam is started
+		startedAt:       nil, // startedAt is set when the exam is started
+		completedAt:     nil, // completedAt is set when the exam is completed
+		state:           StateNotStarted,
+		questions:       questions,
 	}
 }
 
-func (e Exam) GetQuestions() []*Question {
-	return e.questions
-}
+// Getters for Exam fields.
+func (e Exam) GetQuestions() []*Question       { return e.questions }
+func (e Exam) GetLibraryExamIdUUID() uuid.UUID { return e.libraryExamId }
+func (e Exam) GetFirstQuestion() *Question     { return e.GetQuestionByIndex(1) }
+func (e Exam) GetTimeLimitSeconds() int64      { return e.timeLimit }
+func (e Exam) GetTimeOfTimeLimit() *time.Time  { return e.timeOfTimeLimit }
+func (e Exam) GetCompletedAtTime() *time.Time  { return e.completedAt }
+func (e Exam) GetStudentIdUUID() uuid.UUID     { return e.studentId }
+func (e Exam) GetStartedAtTime() *time.Time    { return e.startedAt }
+func (e Exam) GetStudentIdString() string      { return e.studentId.String() }
+func (e Exam) IsCompleted() bool               { return e.state == StateCompleted }
+func (e Exam) GetState() ExamState             { return e.state }
 
 func (e Exam) GetQuestionByIndex(index int32) *Question {
 	if index < 1 || int(index) > len(e.questions) {
@@ -39,73 +58,50 @@ func (e Exam) GetQuestionByIndex(index int32) *Question {
 	return e.questions[index-1]
 }
 
-func (e Exam) GetLibraryExamIdUUID() uuid.UUID {
-	return e.libraryExamId
+type ExamState int
+
+const (
+	StateNotStarted ExamState = iota
+	StateInProgress
+	StateCompleted
+)
+
+var stateName = map[ExamState]string{ //nolint:gochecknoglobals // global is ok here for enum
+	StateNotStarted: "not-started",
+	StateInProgress: "in-progress",
+	StateCompleted:  "completed",
 }
 
-func (e Exam) GetFirstQuestion() *Question {
-	return e.GetQuestionByIndex(1)
+func (es ExamState) String() string {
+	return stateName[es]
 }
 
-func (e Exam) GetCompletedAtTime() *time.Time {
-	return e.completedAt
+type ErrInvalidExamState struct{}
+
+func (e ErrInvalidExamState) Error() string {
+	return "invalid exam state"
 }
 
-func (e Exam) IsCompleted() bool {
-	return e.completed
-}
+func ExamStateFromString(s string) (ExamState, error) {
+	for es, name := range stateName {
+		if name == s {
+			return es, nil
+		}
+	}
 
-func (e Exam) GetStudentIdUUID() uuid.UUID {
-	return e.studentId
-}
-
-func (e Exam) GetStartedAtTime() *time.Time {
-	return e.startedAt
-}
-
-func (e Exam) GetStudentIdString() string {
-	return e.studentId.String()
+	return StateNotStarted, ErrInvalidExamState{}
 }
 
 type Question struct {
 	*baseentitee.EntityMetadata
-	examId          uuid.UUID
-	index           int32
-	answered        bool
+	examId       uuid.UUID
+	questionType QuestionType
+	index        int32
+	answered     bool
+
 	questionText    string
-	questionType    QuestionType
 	providedAnswer  *string
 	responseOptions *[]string
-}
-
-// GetIndex returns the index of the question in the exam.
-func (q Question) GetIndex() int32 {
-	return q.index
-}
-
-// IsAnswered returns whether the question has been answered.
-func (q Question) IsAnswered() bool {
-	return q.answered
-}
-
-// GetQuestionText returns the text of the question.
-func (q Question) GetQuestionText() string {
-	return q.questionText
-}
-
-// GetQuestionType returns the type of the question.
-func (q Question) GetQuestionType() QuestionType {
-	return q.questionType
-}
-
-// GetProvidedAnswer returns the provided answer for the question.
-func (q Question) GetProvidedAnswer() *string {
-	return q.providedAnswer
-}
-
-// GetResponseOptions returns the response options for the question.
-func (q Question) GetResponseOptions() *[]string {
-	return q.responseOptions
 }
 
 // NewQuestion creates a new Question entity.
@@ -123,6 +119,14 @@ func NewQuestion(
 		responseOptions: options,
 	}
 }
+
+func (q Question) GetExamId() uuid.UUID          { return q.examId }
+func (q Question) GetIndex() int32               { return q.index }
+func (q Question) IsAnswered() bool              { return q.answered }
+func (q Question) GetQuestionText() string       { return q.questionText }
+func (q Question) GetQuestionType() QuestionType { return q.questionType }
+func (q Question) GetProvidedAnswer() *string    { return q.providedAnswer }
+func (q Question) GetResponseOptions() *[]string { return q.responseOptions }
 
 type ErrInvalidQuestionType struct{}
 

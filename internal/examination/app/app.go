@@ -17,15 +17,16 @@ type Application struct {
 }
 
 type Commands struct {
-	StartExam      command.StartExamHandler
-	AnswerQuestion command.AnswerQuestionHandler
-	SubmitExam     command.SubmitExamHandler
+	StartExam                  command.StartExamHandler
+	AnswerQuestion             command.AnswerQuestionHandler
+	SubmitExam                 command.SubmitExamHandler
+	CompleteExamsPastTimeLimit command.CompleteExamsPastTimeLimitHandler
 }
 
 type Queries struct {
-	AvailableExams query.AvailableExamsHandler
-	FindQuestion   query.FindQuestionHandler
-	FindExam       query.FindExamHandler
+	FindAllExams query.AllExamsHandler
+	FindQuestion query.FindQuestionHandler
+	FindExam     query.FindExamHandler
 }
 
 type Events struct {
@@ -43,6 +44,15 @@ func NewApplication(
 		pgconn,
 	)
 
+	events := Events{
+		ExamStarted: event.NewExamStartedHandler(
+			pubSub,
+		),
+		ExamSubmitted: event.NewExamSubmittedHandler(
+			pubSub,
+		),
+	}
+
 	app := Application{
 		Commands: Commands{
 			StartExam: command.NewStartExamHandler(
@@ -50,6 +60,7 @@ func NewApplication(
 				outbound.NewExamLibraryAdapter(
 					examLibraryUseCase,
 				),
+				events.ExamStarted,
 			),
 			AnswerQuestion: command.NewAnswerQuestionHandler(
 				examinationRepository,
@@ -62,10 +73,15 @@ func NewApplication(
 				outbound.NewExamLibraryAdapter(
 					examLibraryUseCase,
 				),
+				events.ExamSubmitted,
+			),
+			CompleteExamsPastTimeLimit: command.NewCompleteExamsPastTimeLimitHandler(
+				examinationRepository,
+				examinationRepository,
 			),
 		},
 		Queries: Queries{
-			AvailableExams: query.NewAvailableExamsHandler(
+			FindAllExams: query.NewFindAllExamsHandler(
 				examinationRepository,
 			),
 			FindQuestion: query.NewFindQuestionHandler(
@@ -75,14 +91,7 @@ func NewApplication(
 				examinationRepository,
 			),
 		},
-		Events: Events{
-			ExamStarted: event.NewExamStartedHandler(
-				pubSub,
-			),
-			ExamSubmitted: event.NewExamSubmittedHandler(
-				pubSub,
-			),
-		},
+		Events: events,
 	}
 
 	return app, nil

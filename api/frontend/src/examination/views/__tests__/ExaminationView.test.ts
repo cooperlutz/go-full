@@ -8,6 +8,9 @@ vi.mock("vue-router", () => ({
     path: "/exam/5d9abb80-0706-42ad-8131-33627d3e6b17/question/1",
     params: { id: "5d9abb80-0706-42ad-8131-33627d3e6b17", index: "1" },
   }),
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
 }));
 
 describe("ExaminationView", () => {

@@ -1,6 +1,8 @@
 package examination
 
 import (
+	"time"
+
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
@@ -11,12 +13,15 @@ func (e ErrExamAlreadyStarted) Error() string {
 }
 
 func (e *Exam) StartExam() error {
-	if e.startedAt != nil {
+	if e.state != StateNotStarted {
 		return ErrExamAlreadyStarted{}
 	}
 
 	now := utilitee.RightNow()
+	expirationTime := now.Add(time.Duration(e.timeLimit) * time.Second)
+	e.timeOfTimeLimit = &expirationTime
 	e.startedAt = &now
+	e.state = StateInProgress
 	e.MarkUpdated()
 
 	return nil

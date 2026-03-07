@@ -1,3 +1,9 @@
+/*
+Package grading contains the module associated with the Grading domain.
+The grading module is responsible for managing the lifecycle of exams throughout the test-taking process.
+
+The Grading module adopts a ports and adapters architecture pattern.
+*/
 package grading
 
 import (
@@ -6,8 +12,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
-	"github.com/cooperlutz/go-full/internal/grading/adapters/inbound"
 	"github.com/cooperlutz/go-full/internal/grading/app"
+	"github.com/cooperlutz/go-full/internal/grading/ports"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
@@ -31,14 +37,14 @@ func NewModule(
 		return nil, err
 	}
 
-	apiServer := inbound.NewHttpServer(
+	apiServer := ports.NewHttpServer(
 		application,
 	)
 
-	inbound.RegisterEventHandlers(application.Events, pubSub)
+	ports.RegisterEventHandlers(application.Events, pubSub)
 
 	module := &GradingModule{
-		RestApi: inbound.HandlerFromMux(
+		RestApi: ports.HandlerFromMux(
 			apiServer.StrictHandler(),
 			hteeteepee.NewRouter(
 				"grading",

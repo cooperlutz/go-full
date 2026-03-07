@@ -25,8 +25,8 @@ type Error struct {
 // Exam defines model for Exam.
 type Exam struct {
 	ExamId              string     `json:"examId"`
-	GradingCompleted    bool       `json:"gradingCompleted"`
 	Questions           []Question `json:"questions"`
+	State               string     `json:"state"`
 	TotalPointsEarned   *int32     `json:"totalPointsEarned,omitempty"`
 	TotalPointsPossible int32      `json:"totalPointsPossible"`
 }
@@ -126,8 +126,8 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
-	// GetUngradedExams request
-	GetUngradedExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	// GetFindIncompleteExams request
+	GetFindIncompleteExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetExam request
 	GetExam(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -141,8 +141,8 @@ type ClientInterface interface {
 	GradeExamQuestion(ctx context.Context, examId string, questionIndex int32, body GradeExamQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-func (c *Client) GetUngradedExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetUngradedExamsRequest(c.Server)
+func (c *Client) GetFindIncompleteExams(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetFindIncompleteExamsRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -201,8 +201,8 @@ func (c *Client) GradeExamQuestion(ctx context.Context, examId string, questionI
 	return c.Client.Do(req)
 }
 
-// NewGetUngradedExamsRequest generates requests for GetUngradedExams
-func NewGetUngradedExamsRequest(server string) (*http.Request, error) {
+// NewGetFindIncompleteExamsRequest generates requests for GetFindIncompleteExams
+func NewGetFindIncompleteExamsRequest(server string) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -400,8 +400,8 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
-	// GetUngradedExamsWithResponse request
-	GetUngradedExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUngradedExamsResponse, error)
+	// GetFindIncompleteExamsWithResponse request
+	GetFindIncompleteExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetFindIncompleteExamsResponse, error)
 
 	// GetExamWithResponse request
 	GetExamWithResponse(ctx context.Context, examId string, reqEditors ...RequestEditorFn) (*GetExamResponse, error)
@@ -415,7 +415,7 @@ type ClientWithResponsesInterface interface {
 	GradeExamQuestionWithResponse(ctx context.Context, examId string, questionIndex int32, body GradeExamQuestionJSONRequestBody, reqEditors ...RequestEditorFn) (*GradeExamQuestionResponse, error)
 }
 
-type GetUngradedExamsResponse struct {
+type GetFindIncompleteExamsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	JSON200      *[]Exam
@@ -423,7 +423,7 @@ type GetUngradedExamsResponse struct {
 }
 
 // Status returns HTTPResponse.Status
-func (r GetUngradedExamsResponse) Status() string {
+func (r GetFindIncompleteExamsResponse) Status() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Status
 	}
@@ -431,7 +431,7 @@ func (r GetUngradedExamsResponse) Status() string {
 }
 
 // StatusCode returns HTTPResponse.StatusCode
-func (r GetUngradedExamsResponse) StatusCode() int {
+func (r GetFindIncompleteExamsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -507,13 +507,13 @@ func (r GradeExamQuestionResponse) StatusCode() int {
 	return 0
 }
 
-// GetUngradedExamsWithResponse request returning *GetUngradedExamsResponse
-func (c *ClientWithResponses) GetUngradedExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUngradedExamsResponse, error) {
-	rsp, err := c.GetUngradedExams(ctx, reqEditors...)
+// GetFindIncompleteExamsWithResponse request returning *GetFindIncompleteExamsResponse
+func (c *ClientWithResponses) GetFindIncompleteExamsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetFindIncompleteExamsResponse, error) {
+	rsp, err := c.GetFindIncompleteExams(ctx, reqEditors...)
 	if err != nil {
 		return nil, err
 	}
-	return ParseGetUngradedExamsResponse(rsp)
+	return ParseGetFindIncompleteExamsResponse(rsp)
 }
 
 // GetExamWithResponse request returning *GetExamResponse
@@ -551,15 +551,15 @@ func (c *ClientWithResponses) GradeExamQuestionWithResponse(ctx context.Context,
 	return ParseGradeExamQuestionResponse(rsp)
 }
 
-// ParseGetUngradedExamsResponse parses an HTTP response from a GetUngradedExamsWithResponse call
-func ParseGetUngradedExamsResponse(rsp *http.Response) (*GetUngradedExamsResponse, error) {
+// ParseGetFindIncompleteExamsResponse parses an HTTP response from a GetFindIncompleteExamsWithResponse call
+func ParseGetFindIncompleteExamsResponse(rsp *http.Response) (*GetFindIncompleteExamsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
 	defer func() { _ = rsp.Body.Close() }()
 	if err != nil {
 		return nil, err
 	}
 
-	response := &GetUngradedExamsResponse{
+	response := &GetFindIncompleteExamsResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

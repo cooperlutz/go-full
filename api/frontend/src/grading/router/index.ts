@@ -1,6 +1,6 @@
 import ExamGrading from "../views/ExamGrading.vue";
 import QuestionGrading from "../views/QuestionGrading.vue";
-import ExamsToGrade from "../views/GradingView.vue";
+import GradingView from "../views/GradingView.vue";
 
 const gradingRoutes = [
   {
@@ -13,8 +13,8 @@ const gradingRoutes = [
   },
   {
     path: "/grading",
-    component: ExamsToGrade,
-    name: "ExamsToGrade",
+    component: GradingView,
+    name: "GradingView",
   },
 ];
 
