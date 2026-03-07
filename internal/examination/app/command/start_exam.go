@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/cooperlutz/go-full/internal/examination/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/examination/app/event"
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -18,13 +19,19 @@ type StartExam struct {
 type StartExamHandler struct {
 	examinationRepo    examination.Repository
 	examLibraryAdapter outbound.ExamLibraryAdapter
+	examStartedHandler event.ExamStartedHandler
 }
 
 func NewStartExamHandler(
 	examinationRepo examination.Repository,
 	examLibraryAdapter outbound.ExamLibraryAdapter,
+	examStartedHandler event.ExamStartedHandler,
 ) StartExamHandler {
-	return StartExamHandler{examinationRepo: examinationRepo, examLibraryAdapter: examLibraryAdapter}
+	return StartExamHandler{
+		examinationRepo:    examinationRepo,
+		examLibraryAdapter: examLibraryAdapter,
+		examStartedHandler: examStartedHandler,
+	}
 }
 
 func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, error) { //nolint:funlen // it's fine
@@ -83,6 +90,16 @@ func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, erro
 	}
 
 	err = h.examinationRepo.AddExam(ctx, exam)
+	if err != nil {
+		telemetree.RecordError(ctx, err)
+
+		return Exam{}, err
+	}
+
+	err = h.examStartedHandler.Handle(ctx, event.ExamStarted{
+		ExamID:    exam.GetIdString(),
+		StudentID: exam.GetStudentIdString(),
+	})
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 

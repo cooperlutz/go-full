@@ -1,4 +1,6 @@
-package worker
+// Package workerbee provides a simple worker that executes tasks at regular cron intervals
+// The worker initializes OpenTelemetry tracing and metrics providers based on the provided configuration.
+package workerbee
 
 import (
 	"context"
@@ -25,8 +27,22 @@ func NewWorker(config config.Telemetry, interval time.Duration) *Worker {
 	}
 }
 
+func (w Worker) getTasks() ([]Task, error) {
+	if len(w.fns) == 0 {
+		return nil, &ErrNoTasks{}
+	}
+
+	return w.fns, nil
+}
+
 func (w *Worker) AddTask(fn Task) {
 	w.fns = append(w.fns, fn)
+}
+
+type ErrNoTasks struct{}
+
+func (e *ErrNoTasks) Error() string {
+	return "no tasks to execute"
 }
 
 func (w *Worker) Run() error { //nolint:cyclop,gocyclo,gocognit // worker run function
@@ -57,13 +73,17 @@ func (w *Worker) Run() error { //nolint:cyclop,gocyclo,gocognit // worker run fu
 	for {
 		select {
 		case <-w.cron.C:
-			if w.fns != nil {
-				for _, fn := range w.fns {
-					if err := fn(ctx); err != nil {
-						return fmt.Errorf("worker error: %w", err)
-					}
+			tasks, err := w.getTasks()
+			if err != nil {
+				return err
+			}
+
+			for _, fn := range tasks {
+				if err := fn(ctx); err != nil {
+					return fmt.Errorf("worker error: %w", err)
 				}
 			}
+
 		case <-ctx.Done():
 			return fmt.Errorf("worker stopped: %w", ctx.Err())
 		}

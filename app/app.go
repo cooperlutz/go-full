@@ -20,7 +20,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
-	"github.com/cooperlutz/go-full/pkg/worker"
+	"github.com/cooperlutz/go-full/pkg/workerbee"
 )
 
 // Application represents the main application structure.
@@ -61,7 +61,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		os.Exit(1)
 	}
 
-	backgroundWorker := worker.NewWorker(
+	backgroundWorker := workerbee.NewWorker(
 		a.conf.Telemetry,
 		10*time.Second, //nolint: mnd // want the worker to run every 10 seconds
 	)

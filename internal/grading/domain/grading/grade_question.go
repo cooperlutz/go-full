@@ -14,6 +14,8 @@ func (e *Exam) GradeQuestion(index int32, options GradeQuestionOption) (bool, er
 		return false, err
 	}
 
+	e.startGrading()
+	e.CalculateTotalPointsReceived()
 	e.MarkUpdated()
 	completed := e.checkIfGradingCompletedAndFinalize()
 
