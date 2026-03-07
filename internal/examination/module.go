@@ -17,7 +17,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
-	"github.com/cooperlutz/go-full/pkg/worker"
+	"github.com/cooperlutz/go-full/pkg/workerbee"
 )
 
 type ExaminationModule struct {
@@ -29,7 +29,7 @@ func NewModule(
 	pgconn *pgxpool.Pool,
 	pubSub *eeventdriven.BasePgsqlPubSubProcessor,
 	examLibraryUseCase usecase.IExamLibraryUseCase,
-	backgroundWorker *worker.Worker,
+	backgroundWorker *workerbee.Worker,
 ) (*ExaminationModule, error) {
 	application, err := app.NewApplication(
 		pgconn,
