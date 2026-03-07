@@ -44,6 +44,15 @@ func NewApplication(
 		pgconn,
 	)
 
+	events := Events{
+		ExamStarted: event.NewExamStartedHandler(
+			pubSub,
+		),
+		ExamSubmitted: event.NewExamSubmittedHandler(
+			pubSub,
+		),
+	}
+
 	app := Application{
 		Commands: Commands{
 			StartExam: command.NewStartExamHandler(
@@ -51,6 +60,7 @@ func NewApplication(
 				outbound.NewExamLibraryAdapter(
 					examLibraryUseCase,
 				),
+				events.ExamStarted,
 			),
 			AnswerQuestion: command.NewAnswerQuestionHandler(
 				examinationRepository,
@@ -63,6 +73,7 @@ func NewApplication(
 				outbound.NewExamLibraryAdapter(
 					examLibraryUseCase,
 				),
+				events.ExamSubmitted,
 			),
 			CompleteExamsPastTimeLimit: command.NewCompleteExamsPastTimeLimitHandler(
 				examinationRepository,
@@ -80,14 +91,7 @@ func NewApplication(
 				examinationRepository,
 			),
 		},
-		Events: Events{
-			ExamStarted: event.NewExamStartedHandler(
-				pubSub,
-			),
-			ExamSubmitted: event.NewExamSubmittedHandler(
-				pubSub,
-			),
-		},
+		Events: events,
 	}
 
 	return app, nil
