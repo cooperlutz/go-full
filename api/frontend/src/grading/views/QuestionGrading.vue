@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 
@@ -17,6 +17,7 @@ const graderComments = ref("");
 const { question, loading, error, getExamQuestion } = useGetExamQuestion();
 const { gradeExamQuestion } = useGradeExamQuestion();
 const route = useRoute();
+const router = useRouter();
 const examId = route.params.examId as string;
 const questionIndex = Number(route.params.questionIndex);
 
@@ -29,7 +30,7 @@ function gradeQuestion() {
   );
   emit("question-graded");
   // navigate back to exam grading page after grading question
-  window.location.href = `/grading/exam/${examId}`;
+  router.push(`/grading/exam/${examId}`);
 }
 
 onMounted(() => {
@@ -58,18 +59,35 @@ onMounted(() => {
           <p>{{ question.providedAnswer }}</p>
         </div>
         <div class="col-span-1">
-          <textarea
-            class="textarea"
-            placeholder="Type feedback here"
-            v-model="graderComments"
-          ></textarea>
-          <input
-            type="number"
-            placeholder="Type points here"
-            class="input"
-            v-model="pointsToGive"
-          />
-          <button class="btn btn-primary" @click="gradeQuestion">Send</button>
+          <form class="fieldset">
+            <fieldset class="fieldset">
+              <textarea
+                class="textarea"
+                id="grader-comments"
+                placeholder="Type feedback here"
+                v-model="graderComments"
+              ></textarea>
+            </fieldset>
+            <fieldset class="fieldset">
+              <input
+                type="number"
+                id="points-to-give"
+                placeholder="Type points here"
+                class="input validator"
+                min="0"
+                required
+                :max="question.pointsPossible"
+                v-model="pointsToGive"
+              />
+            </fieldset>
+            <button
+              class="btn btn-primary"
+              @click="gradeQuestion"
+              id="save-feedback-and-points"
+            >
+              Save
+            </button>
+          </form>
         </div>
       </div>
     </div>

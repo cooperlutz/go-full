@@ -5,7 +5,6 @@ import (
 
 	"github.com/cooperlutz/go-full/internal/examination/app"
 	"github.com/cooperlutz/go-full/internal/examination/app/command"
-	"github.com/cooperlutz/go-full/internal/examination/app/event"
 	"github.com/cooperlutz/go-full/internal/examination/app/query"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
@@ -53,14 +52,6 @@ func (h HttpServer) StartNewExam(ctx context.Context, request StartNewExamReques
 	exam, err := h.app.Commands.StartExam.Handle(ctx, command.StartExam{
 		StudentId:     request.Body.StudentId,
 		ExamLibraryID: request.Body.LibraryExamId,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	err = h.app.Events.ExamStarted.Handle(ctx, event.ExamStarted{
-		ExamID:    exam.ExamId,
-		StudentID: exam.StudentId,
 	})
 	if err != nil {
 		return nil, err
@@ -149,46 +140,6 @@ func (h HttpServer) SubmitExam(ctx context.Context, request SubmitExamRequestObj
 
 	err := h.app.Commands.SubmitExam.Handle(ctx, command.SubmitExam{
 		ExamID: request.ExamId,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	exam, err := h.app.Queries.FindExam.Handle(ctx, query.FindExam{
-		ExamID: request.ExamId,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	err = h.app.Events.ExamSubmitted.Handle(ctx, event.ExamSubmitted{
-		ExamId:            exam.ExamId,
-		LibraryExamId:     exam.LibraryExamId,
-		StudentId:         exam.StudentId,
-		ExamState:         exam.State,
-		AnsweredQuestions: exam.AnsweredQuestions,
-		TotalQuestions:    exam.TotalQuestions,
-		TimeLimitSeconds:  exam.TimeLimitSeconds,
-		TimeOfTimeLimit:   *exam.TimeOfTimeLimit,
-		StartedAt:         *exam.StartedAt,
-		CompletedAt:       *exam.CompletedAt,
-		Questions: func() []event.ExamSubmittedQuestion {
-			var questions []event.ExamSubmittedQuestion
-			for _, q := range exam.Questions {
-				questions = append(questions, event.ExamSubmittedQuestion{
-					ExamId:          q.ExamId,
-					Answered:        q.Answered,
-					QuestionID:      q.QuestionID,
-					QuestionIndex:   q.QuestionIndex,
-					QuestionText:    q.QuestionText,
-					QuestionType:    q.QuestionType,
-					ResponseOptions: q.ResponseOptions,
-					ProvidedAnswer:  q.ProvidedAnswer,
-				})
-			}
-
-			return questions
-		}(),
 	})
 	if err != nil {
 		return nil, err

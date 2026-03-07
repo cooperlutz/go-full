@@ -30,8 +30,8 @@ const login = async () => {
           <h1 class="text-xl font-bold leading-tight tracking-tight">
             Login to your account
           </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
-            <div>
+          <form class="fieldset space-y-4 md:space-y-6" action="#">
+            <fieldset class="fieldset">
               <label for="email" class="block mb-2 text-sm">email</label>
               <input
                 class="input validator"
@@ -41,8 +41,8 @@ const login = async () => {
                 placeholder="mail@site.com"
                 id="login-input-email"
               />
-            </div>
-            <div>
+            </fieldset>
+            <fieldset class="fieldset">
               <label for="password" class="block mb-2 text-sm">password</label>
               <input
                 type="password"
@@ -55,7 +55,7 @@ const login = async () => {
                 title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
                 id="login-input-password"
               />
-            </div>
+            </fieldset>
             <div class="flex items-center justify-between">
               <a
                 href="#"
