@@ -16,30 +16,6 @@ func TestRightNow(t *testing.T) {
 	assert.WithinDuration(t, now, otherNow, 10*time.Millisecond)
 }
 
-func TestStrPtr(t *testing.T) {
-	t.Parallel()
-	s := "hello"
-	ptr := new(s)
-	assert.NotNil(t, ptr)
-	assert.Equal(t, &s, ptr)
-}
-
-func TestBoolPtr(t *testing.T) {
-	t.Parallel()
-	b := true
-	ptr := new(b)
-	assert.NotNil(t, ptr)
-	assert.Equal(t, &b, ptr)
-}
-
-func TestTimePtr(t *testing.T) {
-	t.Parallel()
-	timeVal := time.Now()
-	ptr := new(timeVal)
-	assert.NotNil(t, ptr)
-	assert.Equal(t, &timeVal, ptr)
-}
-
 func TestSafeIntToInt32(t *testing.T) {
 	t.Parallel()
 
@@ -65,12 +41,4 @@ func TestSafeIntToInt32(t *testing.T) {
 	smallIntPtr := &smallInt
 	result = utilitee.SafeIntToInt32(smallIntPtr)
 	assert.Equal(t, int32(0), result)
-}
-
-func TestIntPtr(t *testing.T) {
-	t.Parallel()
-	i := 486
-	ptr := new(i)
-	assert.NotNil(t, ptr)
-	assert.Equal(t, &i, ptr)
 }
