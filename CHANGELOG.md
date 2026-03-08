@@ -1,3 +1,9 @@
+## v0.1.62 (2026-03-08)
+
+### Fix
+
+- introduction of modularizer tool (#200)
+
 ## v0.1.61 (2026-03-08)
 
 ### Fix
