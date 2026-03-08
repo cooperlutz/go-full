@@ -1,0 +1,69 @@
+package app
+
+import (
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/adapters/outbound"
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/command"
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/event"
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/query"
+	"github.com/cooperlutz/go-full/pkg/deebee"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
+)
+
+type Application struct {
+	Commands Commands
+	Queries  Queries
+	Events   Events
+}
+
+type Commands struct {
+	{{range .Commands}}
+		{{.Name.Pascal}}	command.{{.Name.Pascal}}Handler
+	{{end}}
+}
+
+type Queries struct {
+	FindAll{{.AggregateRoot.Name.Pascal}}s 				query.FindAll{{.AggregateRoot.Name.Pascal}}sHandler
+	FindOne{{.AggregateRoot.Name.Pascal}}     			query.FindOne{{.AggregateRoot.Name.Pascal}}Handler
+}
+
+type Events struct {
+	{{range .Events}}
+		{{.Name.Pascal}}	event.{{.Name.Pascal}}Handler
+	{{end}}
+}
+
+// NewApplication initializes the {{.Name.Pascal}} application with its dependencies.
+func NewApplication(
+	pgconn deebee.IDatabase,
+	pubSub eeventdriven.IPubSubEventProcessor,
+) (Application, error) {
+	{{.AggregateRoot.Name.Flat}}Repository := outbound.NewPostgresAdapter(
+		pgconn,
+	)
+
+	app := Application{
+		Commands: Commands{
+{{range .Commands}}{{.Name.Pascal}}:	command.New{{.Name.Pascal}}Handler(
+					{{$.AggregateRoot.Name.Flat}}Repository,
+				),
+{{end}}
+		},
+		Queries: Queries{
+			FindAll{{.AggregateRoot.Name.Pascal}}s: query.NewFindAll{{.AggregateRoot.Name.Pascal}}sHandler(
+				{{.AggregateRoot.Name.Flat}}Repository,
+			),
+			FindOne{{.AggregateRoot.Name.Pascal}}: query.NewFindOne{{.AggregateRoot.Name.Pascal}}Handler(
+				{{.AggregateRoot.Name.Flat}}Repository,
+			),
+		},
+		Events: Events{
+			{{range .Events}}
+			{{.Name.Pascal}}:	event.New{{.Name.Pascal}}Handler(
+				pubSub,
+			),
+			{{end}}
+		},
+	}
+
+	return app, nil
+}

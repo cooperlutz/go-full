@@ -1,0 +1,25 @@
+CREATE SCHEMA IF NOT EXISTS {{.Name.Flat}};
+
+CREATE TABLE IF NOT EXISTS {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s (
+    {{.AggregateRoot.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE
+    --{{range .AggregateRoot.Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+);
+
+{{range .NonAggregateEntities}}
+CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.Snake}}s (
+    {{.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE
+    --{{range .Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+);
+{{end}}

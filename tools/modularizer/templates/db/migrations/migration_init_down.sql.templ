@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s;
+{{range .NonAggregateEntities}}
+DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.Snake}}s;
+{{end}}
+DROP SCHEMA IF EXISTS {{.Name.Flat}};

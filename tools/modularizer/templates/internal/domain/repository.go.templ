@@ -1,0 +1,52 @@
+package {{.Name.Flat}}
+
+import (
+	"context"
+	"time"
+
+	"github.com/google/uuid"
+
+	"github.com/cooperlutz/go-full/pkg/baseentitee"
+)
+
+{{range .Entities}}
+type {{.Name.Pascal}}Repository interface {
+	Add{{.Name.Pascal}}(ctx context.Context, {{.Name.Flat}} *{{.Name.Pascal}}) error
+
+	Get{{.Name.Pascal}}(ctx context.Context, id uuid.UUID) (*{{.Name.Pascal}}, error)
+
+	Update{{.Name.Pascal}}(
+		ctx context.Context,
+		{{.Name.Flat}}Id uuid.UUID,
+		updateFn func(e *{{.Name.Pascal}}) (*{{.Name.Pascal}}, error),
+	) error
+}
+
+
+// MapTo{{.Name.Pascal}} creates a {{.Name.Pascal}} domain object from the given parameters.
+// This should ONLY BE USED when reconstructing an {{.Name.Pascal}} from its repository.
+func MapTo{{.Name.Pascal}}(
+	id uuid.UUID,
+	createdAt time.Time,
+	updatedAt time.Time,
+	deleted bool,
+	deletedAt *time.Time,
+    //{{range .Fields}}
+    //{{.Name.Camel}} {{.GoType}},
+    //{{end}}
+) (*{{.Name.Pascal}}, error) {
+	return &{{.Name.Pascal}}{
+		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
+			id,
+			createdAt,
+			updatedAt,
+			deleted,
+			deletedAt,
+		),
+        //{{range .Fields}}
+        //{{.Name.Camel}}: {{.Name.Camel}},
+        //{{end}}
+		// TODO
+	}, nil
+}
+{{end}}

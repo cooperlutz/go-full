@@ -306,3 +306,7 @@ init-env-file: ### initialize .env file from .env.example if it does not exist
 
 init: coverage-directory init-env-file all compose ### initialize project
 .PHONY: init
+
+modularizer: ### run modularizer tool
+	go run tools/modularizer/cmd/modularize/main.go modularize --config tools/modularizer/modularizer.yaml
+.PHONY: modularizer

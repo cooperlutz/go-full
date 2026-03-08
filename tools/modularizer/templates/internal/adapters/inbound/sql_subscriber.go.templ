@@ -1,0 +1,32 @@
+package inbound
+
+import (
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app"
+	"github.com/cooperlutz/go-full/pkg/eeventdriven"
+)
+
+type SqlSubscriberAdapter struct {
+	app    app.Events
+	pubSub *eeventdriven.BasePgsqlPubSubProcessor
+}
+
+func NewSqlSubscriberAdapter(events app.Events, pubSub *eeventdriven.BasePgsqlPubSubProcessor) SqlSubscriberAdapter {
+	return SqlSubscriberAdapter{
+		app:    events,
+		pubSub: pubSub,
+	}
+}
+
+func (s SqlSubscriberAdapter) RegisterEventHandlers() {
+	router := s.pubSub.GetRouter()
+
+	{{range .EmittedEvents}}
+	// noop handler to initialize the topic table
+	router.AddConsumerHandler(
+		"{{$.Name.Flat}}_{{.Name.Snake}}_handler",
+		"{{$.Name.Flat}}.{{.Name.Snake}}",
+		s.pubSub.GetSubscriber(),
+		eeventdriven.NewNoOpEventHandler().Handle(),
+	)
+	{{end}}
+}

@@ -1,0 +1,67 @@
+package inbound
+
+import (
+	"context"
+
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app"
+	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/query"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
+)
+
+// HttpServer represents the HTTP server for the {{.Name.Pascal}} module.
+type HttpServer struct {
+	app app.Application
+}
+
+// NewHttpServer creates a new HttpServer instance with the provided {{.Name.Pascal}} application.
+func NewHttpServer(application app.Application) HttpServer {
+	return HttpServer{
+		app: application,
+	}
+}
+
+// StrictHandler returns a strict HTTP handler for the {{.Name.Pascal}} module.
+func (h HttpServer) StrictHandler() ServerInterface {
+	return NewStrictHandler(h, nil)
+}
+
+
+// (GET /v1/{{.AggregateRoot.Name.Flat}}s).
+func (h HttpServer) FindAll{{.AggregateRoot.Name.Pascal}}s(ctx context.Context, request FindAll{{.AggregateRoot.Name.Pascal}}sRequestObject) (FindAll{{.AggregateRoot.Name.Pascal}}sResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.inbound.http.find_all_{{.AggregateRoot.Name.Flat}}s")
+	defer span.End()
+
+	{{.AggregateRoot.Name.Flat}}, err := h.app.Queries.FindAll{{.AggregateRoot.Name.Pascal}}s.Handle(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var response{{.AggregateRoot.Name.Pascal}}s []{{.AggregateRoot.Name.Pascal}}
+	for _, e := range {{.AggregateRoot.Name.Flat}} {
+		response{{.AggregateRoot.Name.Pascal}}s = append(response{{.AggregateRoot.Name.Pascal}}s, query{{.AggregateRoot.Name.Pascal}}ToHttp{{.AggregateRoot.Name.Pascal}}(e))
+	}
+
+	return FindAll{{.AggregateRoot.Name.Pascal}}s200JSONResponse(response{{.AggregateRoot.Name.Pascal}}s), nil
+}
+
+// (GET /v1/{{.AggregateRoot.Name.Flat}}/{{`{`}}{{.AggregateRoot.Name.Snake}}Id})
+func (h HttpServer) FindOne{{.AggregateRoot.Name.Pascal}}(ctx context.Context, request FindOne{{.AggregateRoot.Name.Pascal}}RequestObject) (FindOne{{.AggregateRoot.Name.Pascal}}ResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "work.adapters.inbound.http.find_one_{{.AggregateRoot.Name.Snake}}")
+	defer span.End()
+
+	{{.AggregateRoot.Name.Flat}}, err := h.app.Queries.FindOne{{.AggregateRoot.Name.Pascal}}.Handle(ctx, query.FindOne{{`{`}}{{.AggregateRoot.Name.Pascal}}ID: request.{{.AggregateRoot.Name.Pascal}}Id})
+	if err != nil {
+		return nil, err
+	}
+
+	return FindOneWorkItem200JSONResponse(queryWorkItemToHttpWorkItem({{.AggregateRoot.Name.Flat}})), nil
+}
+
+func query{{.AggregateRoot.Name.Pascal}}ToHttp{{.AggregateRoot.Name.Pascal}}(e query.{{.AggregateRoot.Name.Pascal}}) {{.AggregateRoot.Name.Pascal}} {
+	return {{.AggregateRoot.Name.Pascal}}{
+		//{{range .AggregateRoot.Fields}}
+		//{{.Name.Pascal}}: Get{{.Name.Pascal}}(),
+		//{{end}}
+        // TODO
+	}
+}

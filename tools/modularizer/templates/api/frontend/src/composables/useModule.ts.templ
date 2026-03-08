@@ -1,0 +1,100 @@
+import { ref } from "vue";
+
+import { BackendConfig } from "../config";
+import { 
+  DefaultApi, 
+  type {{.AggregateRoot.Name.Pascal}}, 
+  type FindOne{{.AggregateRoot.Name.Pascal}}Request 
+} from "../services";
+
+const {{.Name.Flat}}API = new DefaultApi(BackendConfig);
+
+export function useFindAll{{.AggregateRoot.Name.Pascal}}s() {
+  const error = ref<Error | null>(null);
+  const loading = ref(false);
+  const {{.AggregateRoot.Name.Flat}}s = ref<Array<{{.AggregateRoot.Name.Pascal}}> | null>(null);
+
+  const getFindAll = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await {{.Name.Flat}}API.findAll{{.AggregateRoot.Name.Pascal}}s();
+      {{.AggregateRoot.Name.Flat}}s.value = response;
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = err;
+      }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    error,
+    loading,
+    {{.AggregateRoot.Name.Flat}}s,
+    getFindAll,
+  };
+}
+
+
+export function useFindOne{{.AggregateRoot.Name.Pascal}}s() {
+  const error = ref<Error | null>(null);
+  const loading = ref(false);
+  const {{.AggregateRoot.Name.Flat}} = ref<{{.AggregateRoot.Name.Pascal}} | null>(null);
+
+  const getFindOne = async (id: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const req: FindOne{{.AggregateRoot.Name.Pascal}}Request = {
+         {{.AggregateRoot.Name.Camel}}Id: id,
+      };
+      const response = await {{.Name.Flat}}API.findOne{{.AggregateRoot.Name.Pascal}}(req);
+      {{.AggregateRoot.Name.Flat}}.value = response;
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = err;
+      }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  return {
+    error,
+    loading,
+    {{.AggregateRoot.Name.Flat}},
+    getFindOne,
+  };
+}
+
+{{range .Commands}}
+//export function use{{.Name.Pascal}}s() {
+//  const error = ref<Error | null>(null);
+//  const loading = ref(false);
+//
+//  const {{.Name.Camel}} = async () => {
+//    loading.value = true;
+//    error.value = null;
+//    try {
+//      const req: {{.Name.Pascal}}Request = {
+//         Id: id,
+//      };
+//      await {{$.Name.Flat}}API.{{.Name.Camel}}(req);
+//    } catch (err) {
+//      if (err instanceof Error) {
+//        error.value = err;
+//      }
+//    } finally {
+//      loading.value = false;
+//    }
+//  };
+//
+//  return {
+//    error,
+//    loading,
+//    {{.Name.Camel}},
+//  };
+//}
+{{end}}
