@@ -1,3 +1,14 @@
+## v0.1.61 (2026-03-08)
+
+### Fix
+
+- **deps**: bump actions/upload-artifact from 6.0.0 to 7.0.0 (#190)
+- **deps**: bump commitizen-tools/commitizen-action from 0.27.0 to 0.27.1 (#182)
+- **deps**: bump goreleaser/goreleaser-action from 6.4.0 to 7.0.0 (#181)
+- **deps**: bump github.com/playwright-community/playwright-go from 0.5200.1 to 0.5700.1 (#192)
+- **deps**: bump actions/setup-go from 6.2.0 to 6.3.0 (#191)
+- **deps**: bump github.com/oapi-codegen/runtime from 1.1.2 to 1.2.0 (#193)
+
 ## v0.1.60 (2026-03-07)
 
 ### Fix
