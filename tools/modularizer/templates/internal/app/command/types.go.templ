@@ -1,0 +1,10 @@
+package command
+
+{{range .Entities}}
+type {{.Name.Pascal}} struct {
+    //{{range .Fields}}
+    //{{.Name.Camel}}: {{.Name.Camel}},
+    //{{end}}
+    // TODO
+}
+{{end}}

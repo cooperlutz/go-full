@@ -1,0 +1,49 @@
+//nolint:dupl // these handlers are a bit duplicative but we don't want to abstract them further
+package command
+
+import (
+	"context"
+
+	"github.com/google/uuid"
+
+	"github.com/cooperlutz/go-full/internal/{{.Mod.Name.Flat}}/domain/{{.Mod.Name.Flat}}"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
+)
+
+type {{.Cmd.Name.Pascal}} struct {
+	{{.Mod.AggregateRoot.Name.Pascal}}Id string
+	//{{range .Mod.AggregateRoot.Fields}}
+	//{{.Name.Pascal}} {{.GoType}},
+	//{{end}}
+    // TODO
+}
+
+type {{.Cmd.Name.Pascal}}Handler struct {
+	{{.Mod.AggregateRoot.Name.Pascal}}Repo {{.Mod.Name.Flat}}.{{.Mod.AggregateRoot.Name.Pascal}}Repository
+}
+
+func New{{.Cmd.Name.Pascal}}Handler(
+	{{.Mod.AggregateRoot.Name.Flat}}Repo {{.Mod.Name.Flat}}.{{.Mod.AggregateRoot.Name.Pascal}}Repository,
+) {{.Cmd.Name.Pascal}}Handler {
+	return {{.Cmd.Name.Pascal}}Handler{
+		{{.Mod.AggregateRoot.Name.Pascal}}Repo: {{.Mod.AggregateRoot.Name.Flat}}Repo,
+	}
+}
+
+func (h {{.Cmd.Name.Pascal}}Handler) Handle(ctx context.Context, cmd {{.Cmd.Name.Pascal}}) error {
+	ctx, span := telemetree.AddSpan(ctx, "{{.Mod.Name.Flat}}.app.command.{{.Cmd.Name.Snake}}.handle")
+	defer span.End()
+
+	return h.{{.Mod.AggregateRoot.Name.Pascal}}Repo.Update{{.Mod.AggregateRoot.Name.Pascal}}(ctx, uuid.MustParse(cmd.{{.Mod.AggregateRoot.Name.Pascal}}Id), func({{.Mod.AggregateRoot.Name.FirstLetterLower}} *{{$.Mod.Name.Flat}}.{{.Mod.AggregateRoot.Name.Pascal}}) (*{{.Mod.Name.Flat}}.{{.Mod.AggregateRoot.Name.Pascal}}, error) {
+		err := {{.Mod.AggregateRoot.Name.FirstLetterLower}}.{{.Cmd.Name.Pascal}}(
+			// TODO
+			)
+		if err != nil {
+			telemetree.RecordError(ctx, err)
+
+			return nil, err
+		}
+
+		return {{.Mod.AggregateRoot.Name.FirstLetterLower}}, nil
+	})
+}

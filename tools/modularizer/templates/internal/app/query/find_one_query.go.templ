@@ -1,0 +1,40 @@
+//nolint:dupl // these handlers are a bit duplicative but we don't want to abstract them further
+package query
+
+import (
+	"context"
+
+	"github.com/google/uuid"
+
+	"github.com/cooperlutz/go-full/pkg/telemetree"
+)
+
+type FindOne struct {
+	{{.AggregateRoot.Name.Pascal}}ID        string
+}
+
+type FindOne{{.AggregateRoot.Name.Pascal}}ReadModel interface {
+	FindOne(ctx context.Context, {{.AggregateRoot.Name.Flat}}Id uuid.UUID) ({{.AggregateRoot.Name.Pascal}}, error)
+}
+
+type FindOne{{.AggregateRoot.Name.Pascal}}Handler struct {
+	readModel FindOne{{.AggregateRoot.Name.Pascal}}ReadModel
+}
+
+func NewFindOne{{.AggregateRoot.Name.Pascal}}Handler(
+	readModel FindOne{{.AggregateRoot.Name.Pascal}}ReadModel,
+) FindOne{{.AggregateRoot.Name.Pascal}}Handler {
+	return FindOne{{.AggregateRoot.Name.Pascal}}Handler{readModel: readModel}
+}
+
+func (h FindOne{{.AggregateRoot.Name.Pascal}}Handler) Handle(ctx context.Context, qry FindOne) ({{.AggregateRoot.Name.Pascal}}, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.app.query.find_one_{{.AggregateRoot.Name.Snake}}s.handle")
+	defer span.End()
+
+	{{.AggregateRoot.Name.Flat}}, err := h.readModel.FindOne(ctx, uuid.MustParse(qry.{{.AggregateRoot.Name.Pascal}}ID))
+	if err != nil {
+		return {{.AggregateRoot.Name.Pascal}}{}, err
+	}
+
+	return {{.AggregateRoot.Name.Flat}}, nil
+}

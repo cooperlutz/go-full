@@ -1,0 +1,90 @@
+-- name: Get{{.AggregateRoot.Name.Pascal}} :one
+SELECT * FROM {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s
+WHERE {{.AggregateRoot.Name.Snake}}_id = $1;
+
+-- name: Add{{.AggregateRoot.Name.Pascal}} :exec
+INSERT INTO {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s (
+    {{.AggregateRoot.Name.Snake}}_id,
+    created_at,
+    updated_at,
+    deleted_at,
+    deleted
+    --{{range .AggregateRoot.Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+    -- TODO
+) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5
+    -- TODO
+);
+
+-- name: Update{{.AggregateRoot.Name.Pascal}} :exec
+UPDATE {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s
+SET
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5
+    --{{range .AggregateRoot.Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+    -- TODO
+WHERE {{.AggregateRoot.Name.Snake}}_id = $1;
+
+-- name: FindOne{{.AggregateRoot.Name.Pascal}} :one
+SELECT * FROM {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s
+WHERE {{.AggregateRoot.Name.Snake}}_id = $1;
+
+-- name: FindAll{{.AggregateRoot.Name.Pascal}}s :many
+SELECT * FROM {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s;
+
+
+{{range .NonAggregateEntities}}
+-- name: Get{{.Name.Pascal}} :one
+SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+WHERE {{.Name.Snake}}_id = $1;
+
+-- name: Add{{.Name.Pascal}} :exec
+INSERT INTO {{$.Name.Flat}}.{{.Name.Snake}}s (
+    {{.Name.Snake}}_id,
+    created_at,
+    updated_at,
+    deleted_at,
+    deleted
+    --{{range .Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+    -- TODO
+) VALUES (
+    $1,
+    $2,
+    $3,
+    $4,
+    $5
+    -- TODO
+);
+
+-- name: Update{{.Name.Pascal}} :exec
+UPDATE {{$.Name.Flat}}.{{.Name.Snake}}s
+SET
+    created_at = $2,
+    updated_at = $3,
+    deleted_at = $4,
+    deleted = $5
+    --{{range .Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+    -- TODO
+WHERE {{.Name.Snake}}_id = $1;
+
+-- name: FindOne{{.Name.Pascal}} :one
+SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+WHERE {{.Name.Snake}}_id = $1;
+
+-- name: FindAll{{.Name.Pascal}}s :many
+SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s;
+{{end}}

@@ -1,0 +1,113 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: {{.Name.Pascal}} API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /v1/{{.AggregateRoot.Name.Flat}}s:
+    get:
+      operationId: findAll{{.AggregateRoot.Name.Pascal}}s
+      responses:
+        '200':
+          description: A list of {{.AggregateRoot.Name.Pascal}}s
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/{{.AggregateRoot.Name.Pascal}}'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/{{.AggregateRoot.Name.Flat}}s/{{`{`}}{{.AggregateRoot.Name.Camel}}Id}:
+    get:
+      operationId: findOne{{.AggregateRoot.Name.Pascal}}
+      parameters:
+        - name: {{.AggregateRoot.Name.Camel}}Id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: {{.AggregateRoot.Name.Pascal}} details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/{{.AggregateRoot.Name.Pascal}}'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+{{range .Commands}}
+#  /v1/{{$.AggregateRoot.Name.Flat}}s/{{`{`}}{{$.AggregateRoot.Name.Camel}}Id}/{{.Name.Camel}}:
+#    patch:
+#      operationId: {{.Name.Camel}}
+#      parameters:
+#        - name: {{$.AggregateRoot.Name.Camel}}Id
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/{{.Name.Pascal}}'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+{{end}}
+
+components:
+  schemas:
+    {{range .Entities}}
+    {{.Name.Pascal}}:
+      type: object
+      description: {{.Description}}
+      properties:
+        {{range .Fields}}
+        {{.Name}}:
+          type: {{.OpenApiType}}
+        {{end}}
+    {{end}}
+
+{{range .Commands}}
+    {{.Name.Pascal}}:
+      type: object
+      properties:
+        {{range .Params}}
+        {{.Name.Camel}}:
+          type: {{.OpenApiType}}
+        {{end}}
+{{end}}
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

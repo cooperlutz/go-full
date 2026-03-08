@@ -1,0 +1,10 @@
+package query
+
+{{range .Entities}}
+type {{.Name.Pascal}} struct {
+    //{{range .Fields}}
+    //{{.Name.Camel}}: {{.Name.Camel}},
+    //{{end}}
+    // TODO
+}
+{{end}}

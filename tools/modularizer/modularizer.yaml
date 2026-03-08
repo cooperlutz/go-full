@@ -1,0 +1,83 @@
+# values must be in snake_case!
+modules:
+- name: work
+  description: Module for managing work items
+  defaultQueries: true
+  entities:
+    - name: work_item
+      description: Represents a work item in the system
+      isAggregateRoot: true
+      fields:
+        - name: work_item_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+    - name: task
+      description: Represents a task associated with a work item
+      isAggregateRoot: false
+      fields:
+        - name: work_item_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+  commands:
+    - name: assign_to_user
+      description: Assign a work item to a user
+      events_emitted:
+        - work_availeble_for_assignment
+      params:
+        - name: user_id
+          type: string
+          optional: false
+        - name: work_item_id
+          type: string
+          optional: false
+    - name: complete_work
+      description: Complete a work item
+      events_emitted:
+        - work_item_completed
+      params:
+        - name: user_id
+          type: string
+          optional: false
+        - name: work_item_id
+          type: string
+          optional: false
+  events:
+    - name: work_item_created
+      description: Event triggered when a work item is created
+      kind: emitted
+      fields:
+        - name: work_item_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+    - name: work_availeble_for_assignment
+      description: Event triggered when a work item is available for assignment
+      kind: consumed
+      fields:
+        - name: work_item_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+  queries:
