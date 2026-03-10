@@ -428,21 +428,21 @@ func (m *Modularizer) createCommandFiles() error {
 		}
 	}
 
-	for _, command := range m.templateData.Commands {
-		if err := m.getTemplateAndWriteToFileWithTemplateData(
-			"/templates/internal/domain/entity_method.go.templ",
-			"internal/"+m.templateData.Name.Flat()+"/domain/"+m.templateData.Name.Flat()+"/"+command.Name.Snake()+".go",
-			struct {
-				Mod module.Module
-				Cmd module.Command
-			}{
-				Mod: m.templateData,
-				Cmd: command,
-			},
-		); err != nil {
-			return err
-		}
-	}
+	// for _, command := range m.templateData.Commands {
+	// 	if err := m.getTemplateAndWriteToFileWithTemplateData(
+	// 		"/templates/internal/domain/entity_method.go.templ",
+	// 		"internal/"+m.templateData.Name.Flat()+"/domain/"+m.templateData.Name.Flat()+"/"+command.Name.Snake()+".go",
+	// 		struct {
+	// 			Mod module.Module
+	// 			Cmd module.Command
+	// 		}{
+	// 			Mod: m.templateData,
+	// 			Cmd: command,
+	// 		},
+	// 	); err != nil {
+	// 		return err
+	// 	}
+	// }
 	return nil
 }
 
@@ -474,18 +474,35 @@ func (m *Modularizer) createEventFiles() error {
 func (m *Modularizer) createDefaultQueryFiles() error {
 	slog.Info("Backend: creating default query files for the new module")
 
-	if err := m.getTemplateAndWriteToFile(
-		"/templates/internal/app/query/find_all_query.go.templ",
-		"internal/"+m.templateData.Name.Flat()+"/app/query/find_all_"+m.templateData.AggregateRoot().Name.Snake()+".go",
-	); err != nil {
-		return err
-	}
+	for _, aggregate := range m.templateData.Aggregates {
+		if err := m.getTemplateAndWriteToFileWithTemplateData(
+			"/templates/internal/app/query/find_all_query.go.templ",
+			"internal/"+m.templateData.Name.Flat()+"/app/query/find_all_"+aggregate.Name.Snake()+"s.go",
+			struct {
+				Mod module.Module
+				Agg module.Entity
+			}{
+				Mod: m.templateData,
+				Agg: aggregate,
+			},
+		); err != nil {
+			return err
+		}
 
-	if err := m.getTemplateAndWriteToFile(
-		"/templates/internal/app/query/find_one_query.go.templ",
-		"internal/"+m.templateData.Name.Flat()+"/app/query/find_one_"+m.templateData.AggregateRoot().Name.Snake()+".go",
-	); err != nil {
-		return err
+		if err := m.getTemplateAndWriteToFileWithTemplateData(
+			"/templates/internal/app/query/find_one_query.go.templ",
+			"internal/"+m.templateData.Name.Flat()+"/app/query/find_one_"+aggregate.Name.Snake()+".go",
+			struct {
+				Mod module.Module
+				Agg module.Entity
+			}{
+				Mod: m.templateData,
+				Agg: aggregate,
+			},
+		); err != nil {
+			return err
+		}
+
 	}
 
 	return nil
@@ -573,11 +590,20 @@ func (m *Modularizer) createFrontendFiles() error {
 func (m *Modularizer) createEntityFiles() error {
 	slog.Info("Backend: creating entity file for the new module")
 
-	if err := m.getTemplateAndWriteToFile(
-		"/templates/internal/domain/entity.go.templ",
-		"internal/"+m.templateData.Name.Flat()+"/domain/"+m.templateData.Name.Flat()+"/"+m.templateData.AggregateRoot().Name.Snake()+".go",
-	); err != nil {
-		return err
+	for _, aggregate := range m.templateData.Aggregates {
+		if err := m.getTemplateAndWriteToFileWithTemplateData(
+			"/templates/internal/domain/entity.go.templ",
+			"internal/"+m.templateData.Name.Flat()+"/domain/"+m.templateData.Name.Flat()+"/"+aggregate.Name.Snake()+".go",
+			struct {
+				Mod module.Module
+				Agg module.Entity
+			}{
+				Mod: m.templateData,
+				Agg: aggregate,
+			},
+		); err != nil {
+			return err
+		}
 	}
 	return nil
 }

@@ -38,6 +38,11 @@ func (s StringOfVaryingCases) FirstLetterLower() string {
 	return utils.FirstLetter(string(s))
 }
 
+// returns the string in title case (e.g. "Useraccount")
+func (s StringOfVaryingCases) Title() string {
+	return utils.TitleCase(string(s))
+}
+
 type ModuleConfig struct {
 	Modules []Module `yaml:"modules"`
 }
@@ -45,35 +50,13 @@ type ModuleConfig struct {
 // Module encompasses all the information about a module, including its name, description, entities, commands, events, and queries. It also includes helper methods to get the aggregate root entity, non-aggregate entities, emitted events, and consumed events for the module.
 type Module struct {
 	Name           StringOfVaryingCases `yaml:"name"`
+	Metadata       map[string]any       `yaml:"metadata"`
 	Description    string               `yaml:"description"`
 	DefaultQueries bool                 `yaml:"defaultQueries"`
-	Entities       []Entity             `yaml:"entities"`
+	Aggregates     []Entity             `yaml:"aggregates"`
 	Commands       []Command            `yaml:"commands"`
 	Events         []Event              `yaml:"events"`
 	Queries        []Query              `yaml:"queries"`
-}
-
-// AggregateRoot returns the aggregate root entity for the module,
-// which is the entity that has IsAggregateRoot set to true.
-// If no entity is marked as the aggregate root, it returns an empty Entity struct.
-func (m Module) AggregateRoot() Entity {
-	for _, entity := range m.Entities {
-		if entity.IsAggregateRoot {
-			return entity
-		}
-	}
-	return Entity{}
-}
-
-// NonAggregateEntities returns a slice of all the entities in the module that are not marked as the aggregate root (i.e. IsAggregateRoot is false).
-func (m Module) NonAggregateEntities() []Entity {
-	var nonAggregateEntities []Entity
-	for _, entity := range m.Entities {
-		if !entity.IsAggregateRoot {
-			nonAggregateEntities = append(nonAggregateEntities, entity)
-		}
-	}
-	return nonAggregateEntities
 }
 
 // EmittedEvents returns a slice of all the events in the module that are marked as emitted (i.e. Kind is "emitted").
@@ -101,10 +84,9 @@ func (m Module) ConsumedEvents() []Event {
 // Entity represents an entity in the module, which has a name, description, fields,
 // and a boolean indicating whether it is the aggregate root entity for the module.
 type Entity struct {
-	Name            StringOfVaryingCases `yaml:"name"`
-	Description     string               `yaml:"description"`
-	Fields          []Field              `yaml:"fields"`
-	IsAggregateRoot bool                 `yaml:"isAggregateRoot"`
+	Name        StringOfVaryingCases `yaml:"name"`
+	Description string               `yaml:"description"`
+	Fields      []Field              `yaml:"fields"`
 }
 
 // Command represents a command in the module, which has a name, description, fields, and a list of events that it emits when handled.
@@ -215,6 +197,16 @@ func (f Field) GoType() string {
 			return "*time.Time"
 		}
 		return "time.Time"
+	case "date":
+		if f.Optional {
+			return "*time.Time"
+		}
+		return "time.Time"
+	case "uuid":
+		if f.Optional {
+			return "*uuid.UUID"
+		}
+		return "uuid.UUID"
 	default:
 		return f.Type
 	}
@@ -258,6 +250,16 @@ func (f Field) PgSqlType() string {
 			return "TIMESTAMP"
 		}
 		return "TIMESTAMP NOT NULL"
+	case "date":
+		if f.Optional {
+			return "DATE"
+		}
+		return "DATE NOT NULL"
+	case "uuid":
+		if f.Optional {
+			return "UUID"
+		}
+		return "UUID NOT NULL"
 	default:
 		return f.Type
 	}
@@ -269,17 +271,21 @@ func (f Field) OpenApiType() string {
 	case "string":
 		return "string"
 	case "int32":
-		return "integer\nformat: int32"
+		return "integer\n          format: int32"
 	case "int64":
-		return "integer\nformat: int64"
+		return "integer\n          format: int64"
 	case "float32":
-		return "number\nformat: float"
+		return "number\n          format: float"
 	case "float64":
-		return "number\nformat: double"
+		return "number\n          format: double"
 	case "bool":
 		return "boolean"
 	case "time":
-		return "string\nformat: date-time"
+		return "string\n          format: date-time"
+	case "date":
+		return "string\n          format: date"
+	case "uuid":
+		return "string\n          format: uuid"
 	default:
 		return f.Type
 	}

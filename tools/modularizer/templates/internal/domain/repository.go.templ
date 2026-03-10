@@ -9,7 +9,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
-{{range .Entities}}
+{{range .Aggregates}}
 type {{.Name.Pascal}}Repository interface {
 	Add{{.Name.Pascal}}(ctx context.Context, {{.Name.Flat}} *{{.Name.Pascal}}) error
 

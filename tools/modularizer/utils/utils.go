@@ -57,3 +57,8 @@ func GetDirectoryOfCurrentFile() string {
 	}
 	return ""
 }
+
+// TitleCase returns the string in title case (e.g. "user_account" -> "Useraccount")
+func TitleCase(s string) string {
+	return cases.Title(language.English).String(SnakeToFlat(s))
+}

@@ -1,6 +1,6 @@
 package command
 
-{{range .Entities}}
+{{range .Aggregates}}
 type {{.Name.Pascal}} struct {
     //{{range .Fields}}
     //{{.Name.Camel}}: {{.Name.Camel}},

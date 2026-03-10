@@ -22,8 +22,10 @@ type Commands struct {
 }
 
 type Queries struct {
-	FindAll{{.AggregateRoot.Name.Pascal}}s 				query.FindAll{{.AggregateRoot.Name.Pascal}}sHandler
-	FindOne{{.AggregateRoot.Name.Pascal}}     			query.FindOne{{.AggregateRoot.Name.Pascal}}Handler
+	{{range .Aggregates}}
+	FindAll{{.Name.Pascal}}s 				query.FindAll{{.Name.Pascal}}sHandler
+	FindOne{{.Name.Pascal}}     			query.FindOne{{.Name.Pascal}}Handler
+	{{end}}
 }
 
 type Events struct {
@@ -33,28 +35,34 @@ type Events struct {
 }
 
 // NewApplication initializes the {{.Name.Pascal}} application with its dependencies.
-func NewApplication(
+func NewApplication( //nolint:funlen // it's fine
 	pgconn deebee.IDatabase,
 	pubSub eeventdriven.IPubSubEventProcessor,
 ) (Application, error) {
-	{{.AggregateRoot.Name.Flat}}Repository := outbound.NewPostgresAdapter(
+	{{range .Aggregates}}
+	{{.Name.Flat}}Repository := outbound.NewPostgresAdapter(
 		pgconn,
 	)
+	{{end}}
 
 	app := Application{
 		Commands: Commands{
 {{range .Commands}}{{.Name.Pascal}}:	command.New{{.Name.Pascal}}Handler(
-					{{$.AggregateRoot.Name.Flat}}Repository,
+					{{range $.Aggregates}}
+					{{.Name.Flat}}Repository,
+					{{end}}
 				),
 {{end}}
 		},
 		Queries: Queries{
-			FindAll{{.AggregateRoot.Name.Pascal}}s: query.NewFindAll{{.AggregateRoot.Name.Pascal}}sHandler(
-				{{.AggregateRoot.Name.Flat}}Repository,
+			{{range .Aggregates}}
+			FindAll{{.Name.Pascal}}s: query.NewFindAll{{.Name.Pascal}}sHandler(
+				{{.Name.Flat}}Repository,
 			),
-			FindOne{{.AggregateRoot.Name.Pascal}}: query.NewFindOne{{.AggregateRoot.Name.Pascal}}Handler(
-				{{.AggregateRoot.Name.Flat}}Repository,
+			FindOne{{.Name.Pascal}}: query.NewFindOne{{.Name.Pascal}}Handler(
+				{{.Name.Flat}}Repository,
 			),
+			{{end}}
 		},
 		Events: Events{
 			{{range .Events}}
