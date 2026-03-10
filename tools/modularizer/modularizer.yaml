@@ -24,7 +24,7 @@ modules:
           type: string
           optional: true
         - name: age
-          type: number
+          type: float32
           optional: true
     - name: owner
       description: Represents the owner of a pet, including their contact information and association with their pets.
@@ -66,7 +66,7 @@ modules:
           type: string
           optional: true
         - name: age
-          type: number
+          type: float32
           optional: true
         - name: owner_id
           type: string
@@ -89,7 +89,7 @@ modules:
           type: string
           optional: true
         - name: age
-          type: number
+          type: float32
           optional: true
     - name: pet_profile_updated
       description: Event triggered when a pet's profile is updated in the system
@@ -108,7 +108,7 @@ modules:
           type: string
           optional: true
         - name: age
-          type: number
+          type: float32
           optional: true
     - name: owner_linked
       description: Event triggered when a pet is linked to an owner in the system

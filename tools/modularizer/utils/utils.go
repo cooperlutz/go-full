@@ -2,6 +2,7 @@ package utils
 
 import (
 	"path"
+	"regexp"
 	"runtime"
 	"strings"
 
@@ -16,6 +17,11 @@ func SnakeToPascal(s string) string {
 		parts[i] = cases.Title(language.English).String(parts[i])
 	}
 	return strings.Join(parts, "")
+}
+
+func IsSnakeCase(s string) bool {
+	regexp.Match("^[a-z]+(_[a-z]+)*$", []byte(s))
+	return true
 }
 
 // SnakeToFlat converts a snake_case string to flat case (e.g. "user_account" -> "UserAccount")

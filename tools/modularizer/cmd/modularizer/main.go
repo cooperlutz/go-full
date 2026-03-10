@@ -38,7 +38,10 @@ func main() {
 			panic(err)
 		}
 		slog.Info("Loaded modularizer configuration:", "config", mod)
-		mods := modularizer.FromConfig(mod)
+		mods, err := modularizer.FromConfig(mod)
+		if err != nil {
+			panic(err)
+		}
 		for _, m := range mods {
 			if err := m.CreateModule(); err != nil {
 				panic(err)

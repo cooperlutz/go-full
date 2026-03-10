@@ -21,14 +21,25 @@ type Modularizer struct {
 	templateData module.Module
 }
 
-func FromConfig(cfg module.ModuleConfig) []*Modularizer {
+func NewModularizer(mod module.Module) (*Modularizer, error) {
+	if err := mod.Validate(); err != nil {
+		return nil, err
+	}
+	return &Modularizer{
+		templateData: mod,
+	}, nil
+}
+
+func FromConfig(cfg module.ModuleConfig) ([]*Modularizer, error) {
 	var modularizers []*Modularizer
 	for _, mod := range cfg.Modules {
-		modularizers = append(modularizers, &Modularizer{
-			templateData: mod,
-		})
+		modularizer, err := NewModularizer(mod)
+		if err != nil {
+			return nil, err
+		}
+		modularizers = append(modularizers, modularizer)
 	}
-	return modularizers
+	return modularizers, nil
 }
 
 // CreateModule creates a new module based on the modularizer's template data, including the directory structure,

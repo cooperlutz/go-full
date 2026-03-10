@@ -1,11 +1,21 @@
 package module
 
 import (
+	"errors"
+	"slices"
+
 	"github.com/cooperlutz/go-full/tools/modularizer/utils"
 )
 
 // must be in snake_case during initialization
 type StringOfVaryingCases string
+
+func (s StringOfVaryingCases) validate() error {
+	if !utils.IsSnakeCase(string(s)) {
+		return errors.New("string must be in snake_case")
+	}
+	return nil
+}
 
 // Flat returns the string in flat case (e.g. "useraccount")
 func (s StringOfVaryingCases) Flat() string {
@@ -59,6 +69,33 @@ type Module struct {
 	Queries        []Query              `yaml:"queries"`
 }
 
+func (m Module) Validate() error {
+	if err := m.Name.validate(); err != nil {
+		return err
+	}
+	for _, entity := range m.Aggregates {
+		if err := entity.validate(); err != nil {
+			return err
+		}
+	}
+	for _, command := range m.Commands {
+		if err := command.validate(); err != nil {
+			return err
+		}
+	}
+	for _, event := range m.Events {
+		if err := event.validate(); err != nil {
+			return err
+		}
+	}
+	for _, query := range m.Queries {
+		if err := query.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // EmittedEvents returns a slice of all the events in the module that are marked as emitted (i.e. Kind is "emitted").
 func (m Module) EmittedEvents() []Event {
 	var emittedEvents []Event
@@ -89,12 +126,41 @@ type Entity struct {
 	Fields      []Field              `yaml:"fields"`
 }
 
+func (e Entity) validate() error {
+	if err := e.Name.validate(); err != nil {
+		return err
+	}
+	for _, field := range e.Fields {
+		if err := field.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Command represents a command in the module, which has a name, description, fields, and a list of events that it emits when handled.
 type Command struct {
 	Name          StringOfVaryingCases   `yaml:"name"`
 	Description   string                 `yaml:"description"`
 	EventsEmitted []StringOfVaryingCases `yaml:"events_emitted"`
 	Params        []Field                `yaml:"params"`
+}
+
+func (c Command) validate() error {
+	if err := c.Name.validate(); err != nil {
+		return err
+	}
+	for _, param := range c.Params {
+		if err := param.validate(); err != nil {
+			return err
+		}
+	}
+	for _, eventName := range c.EventsEmitted {
+		if err := eventName.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Event represents an event in the module, which has a name, description, fields, and a kind (either "emitted" or "consumed") to indicate whether the event is emitted by the module or consumed by the module.
@@ -105,10 +171,37 @@ type Event struct {
 	Fields      []Field              `yaml:"fields"`
 }
 
+func (e Event) validate() error {
+	if err := e.Name.validate(); err != nil {
+		return err
+	}
+	if e.Kind != "emitted" && e.Kind != "consumed" {
+		return errors.New("event kind must be either 'emitted' or 'consumed'")
+	}
+	for _, field := range e.Fields {
+		if err := field.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Query represents a query in the module, which has a name
 type Query struct {
 	Name   StringOfVaryingCases `yaml:"name"`
 	Params []Field              `yaml:"params"`
+}
+
+func (q Query) validate() error {
+	if err := q.Name.validate(); err != nil {
+		return err
+	}
+	for _, param := range q.Params {
+		if err := param.validate(); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Field represents a field in an entity, command, or event, which has a name, type, and a boolean indicating whether the field is optional. It also includes helper methods to get the Go type, PostgreSQL type, and OpenAPI type for the field based on its type and whether it is optional.
@@ -116,6 +209,19 @@ type Field struct {
 	Name     StringOfVaryingCases `yaml:"name"`
 	Type     string               `yaml:"type"`
 	Optional bool                 `yaml:"optional"`
+}
+
+func (f Field) validate() error {
+	if err := f.Name.validate(); err != nil {
+		return err
+	}
+
+	allowedTypes := []string{"string", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64", "bool", "time", "date", "uuid"}
+	if !slices.Contains(allowedTypes, f.Type) {
+		return errors.New("invalid field type: " + f.Type)
+	}
+
+	return nil
 }
 
 // GoType returns the Go type for the field based on its type and whether it is optional.
