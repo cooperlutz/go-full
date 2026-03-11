@@ -9,9 +9,7 @@ import (
 )
 
 type {{.Evt.Name.Pascal}} struct {
-	ExamId string `json:"examId"`
-	{{.Mod.AggregateRoot.Name.Pascal}}Id string
-	//{{range .Mod.AggregateRoot.Fields}}
+	//{{range .Evt.Fields}}
 	//{{.Name.Pascal}} {{.GoType}},
 	//{{end}}
 	// TODO

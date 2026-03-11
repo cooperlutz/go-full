@@ -1,53 +1,27 @@
-package {{.Name.Flat}}
+package {{.Mod.Name.Flat}}
 
 import (
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
-type {{.AggregateRoot.Name.Pascal}} struct {
+type {{.Agg.Name.Pascal}} struct {
     *baseentitee.EntityMetadata
-    //{{range .AggregateRoot.Fields}}
+    //{{range .Agg.Fields}}
     //{{.Name.Camel}} {{.GoType}}
     //{{end}}
     // TODO
 }
 
 
-func New{{.AggregateRoot.Name.Pascal}}(
-    //{{range .AggregateRoot.Fields}}
+func New{{.Agg.Name.Pascal}}(
+    //{{range .Agg.Fields}}
     //{{.Name.Camel}} {{.GoType}},
     //{{end}}
-) *{{.AggregateRoot.Name.Pascal}} {
-	return &{{.AggregateRoot.Name.Pascal}}{
+) *{{.Agg.Name.Pascal}} {
+	return &{{.Agg.Name.Pascal}}{
 		EntityMetadata:  baseentitee.NewEntityMetadata(),
-        //{{range .AggregateRoot.Fields}}
+        //{{range .Agg.Fields}}
         //{{.Name.Camel}}: {{.Name.Camel}},
         //{{end}}
 	}
 }
-
-{{range .NonAggregateEntities}}
-type {{.Name.Pascal}} struct {
-    *baseentitee.EntityMetadata
-    //{{range .Fields}}
-    //{{.Name.Camel}} {{.GoType}}
-    //{{end}}
-    // TODO
-}
-
-
-func New{{.Name.Pascal}}(
-    //{{range .Fields}}
-    //{{.Name.Camel}} {{.GoType}},
-    //{{end}}
-    // TODO
-) *{{.Name.Pascal}} {
-	return &{{.Name.Pascal}}{
-		EntityMetadata:  baseentitee.NewEntityMetadata(),
-        //{{range .Fields}}
-        //{{.Name.Camel}}: {{.Name.Camel}},
-        //{{end}}
-        // TODO
-	}
-}
-{{end}}

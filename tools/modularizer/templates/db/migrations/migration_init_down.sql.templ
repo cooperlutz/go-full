@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS {{.Name.Flat}}.{{.AggregateRoot.Name.Snake}}s;
-{{range .NonAggregateEntities}}
+{{range .Aggregates}}
 DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.Snake}}s;
+DROP INDEX CONCURRENTLY idx_{{$.Name.Snake}}_{{.Name.Snake}}s_id;
 {{end}}
 DROP SCHEMA IF EXISTS {{.Name.Flat}};
