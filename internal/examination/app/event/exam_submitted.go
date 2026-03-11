@@ -35,13 +35,16 @@ type ExamSubmittedQuestion struct {
 
 type ExamSubmittedHandler struct {
 	publisher eeventdriven.IPubSubEventProcessor
+	topics    []string
 }
 
 func NewExamSubmittedHandler(
 	publisher eeventdriven.IPubSubEventProcessor,
+	topics ...string,
 ) ExamSubmittedHandler {
 	return ExamSubmittedHandler{
 		publisher: publisher,
+		topics:    topics,
 	}
 }
 
@@ -56,25 +59,13 @@ func (h ExamSubmittedHandler) Handle(ctx context.Context, event ExamSubmitted) e
 		return err
 	}
 
-	err = h.publisher.EmitEventMessage("examination.exam_submitted", msg)
-	if err != nil {
-		telemetree.RecordError(ctx, err)
+	for _, topic := range h.topics {
+		err = h.publisher.EmitEventMessage(topic, msg)
+		if err != nil {
+			telemetree.RecordError(ctx, err)
 
-		return err
-	}
-
-	err = h.publisher.EmitEventMessage("reporting.exam_submitted", msg)
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
-	}
-
-	err = h.publisher.EmitEventMessage("grading.exam_submitted", msg)
-	if err != nil {
-		telemetree.RecordError(ctx, err)
-
-		return err
+			return err
+		}
 	}
 
 	return nil

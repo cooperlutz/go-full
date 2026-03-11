@@ -225,7 +225,7 @@ install-tools: ### install tools
 .PHONY: install-tools
 
 install-playwright: ### install playwright browsers
-	go run github.com/playwright-community/playwright-go/cmd/playwright@v0.5200.1 install --with-deps
+	go run github.com/playwright-community/playwright-go/cmd/playwright@v0.5700.1 install --with-deps
 .PHONY: install-playwright
 
 ############################################################################

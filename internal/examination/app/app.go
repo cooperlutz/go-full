@@ -47,9 +47,14 @@ func NewApplication(
 	events := Events{
 		ExamStarted: event.NewExamStartedHandler(
 			pubSub,
+			"examination.exam_started",
+			"reporting.exam_started",
 		),
 		ExamSubmitted: event.NewExamSubmittedHandler(
 			pubSub,
+			"examination.exam_submitted",
+			"reporting.exam_submitted",
+			"grading.exam_submitted",
 		),
 	}
 

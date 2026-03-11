@@ -1,3 +1,9 @@
+## v0.1.63 (2026-03-10)
+
+### Fix
+
+- updates events implementation in examination and bumps otel pkgs (#213)
+
 ## v0.1.62 (2026-03-08)
 
 ### Fix
