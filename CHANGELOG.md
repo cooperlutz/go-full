@@ -1,3 +1,9 @@
+## v0.1.64 (2026-03-11)
+
+### Fix
+
+- dependabot commit messages align to semver (#215)
+
 ## v0.1.63 (2026-03-10)
 
 ### Fix
