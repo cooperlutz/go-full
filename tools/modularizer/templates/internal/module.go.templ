@@ -28,7 +28,7 @@ func NewModule(
 		return nil, err
 	}
 
-	apiServer := inbound.NewHttpServer(application)
+	apiServer := inbound.NewHttpAdapter(application)
 
 	inbound.NewSqlSubscriberAdapter(application.Events, pubSub).RegisterEventHandlers()
 
