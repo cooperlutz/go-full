@@ -1,0 +1,434 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: OwnerManagement API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/owners:
+    get:
+      operationId: findAllOwners
+      responses:
+        '200':
+          description: A list of Owners
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Owner'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/owners/{ownerId}:
+    get:
+      operationId: findOneOwner
+      parameters:
+        - name: ownerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Owner details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Owner'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/loyaltyaccounts:
+    get:
+      operationId: findAllLoyaltyAccounts
+      responses:
+        '200':
+          description: A list of LoyaltyAccounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoyaltyAccount'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/loyaltyaccounts/{loyaltyAccountId}:
+    get:
+      operationId: findOneLoyaltyAccount
+      parameters:
+        - name: loyaltyAccountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: LoyaltyAccount details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoyaltyAccount'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/ownermanagements/{ownerManagementId}/registerOwner:
+#    patch:
+#      operationId: registerOwner
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RegisterOwner'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/ownermanagements/{ownerManagementId}/updateOwnerProfile:
+#    patch:
+#      operationId: updateOwnerProfile
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateOwnerProfile'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/ownermanagements/{ownerManagementId}/enrollInLoyaltyProgram:
+#    patch:
+#      operationId: enrollInLoyaltyProgram
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/EnrollInLoyaltyProgram'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/ownermanagements/{ownerManagementId}/awardLoyaltyPoints:
+#    patch:
+#      operationId: awardLoyaltyPoints
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/AwardLoyaltyPoints'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/ownermanagements/{ownerManagementId}/redeemLoyaltyPoints:
+#    patch:
+#      operationId: redeemLoyaltyPoints
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RedeemLoyaltyPoints'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/ownermanagements/{ownerManagementId}/deactivateOwner:
+#    patch:
+#      operationId: deactivateOwner
+#      parameters:
+#        - name: ownerManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/DeactivateOwner'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Owner:
+      type: object
+      description: Represents a pet owner registered with the clinic
+      properties:
+        
+        owner_id:
+          type: string
+        
+        first_name:
+          type: string
+        
+        last_name:
+          type: string
+        
+        email:
+          type: string
+        
+        phone_number:
+          type: string
+        
+        address:
+          type: string
+        
+        communication_preference:
+          type: string
+        
+        loyalty_member:
+          type: boolean
+        
+        loyalty_points:
+          type: integer
+          format: int32
+        
+        status:
+          type: string
+        
+    
+    LoyaltyAccount:
+      type: object
+      description: Represents a loyalty program account for a pet owner
+      properties:
+        
+        loyalty_account_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        points_balance:
+          type: integer
+          format: int32
+        
+        tier:
+          type: string
+        
+        enrolled_date:
+          type: string
+        
+    
+
+
+    RegisterOwner:
+      type: object
+      properties:
+        
+        firstName:
+          type: string
+        
+        lastName:
+          type: string
+        
+        email:
+          type: string
+        
+        phoneNumber:
+          type: string
+        
+        address:
+          type: string
+        
+        communicationPreference:
+          type: string
+        
+
+    UpdateOwnerProfile:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        email:
+          type: string
+        
+        phoneNumber:
+          type: string
+        
+        address:
+          type: string
+        
+        communicationPreference:
+          type: string
+        
+
+    EnrollInLoyaltyProgram:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+
+    AwardLoyaltyPoints:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        points:
+          type: integer
+          format: int32
+        
+        reason:
+          type: string
+        
+
+    RedeemLoyaltyPoints:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        points:
+          type: integer
+          format: int32
+        
+
+    DeactivateOwner:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        reason:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

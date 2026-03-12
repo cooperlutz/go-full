@@ -1,0 +1,574 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: InventoryAndProducts API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/products:
+    get:
+      operationId: findAllProducts
+      responses:
+        '200':
+          description: A list of Products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/products/{productId}:
+    get:
+      operationId: findOneProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/inventoryitems:
+    get:
+      operationId: findAllInventoryItems
+      responses:
+        '200':
+          description: A list of InventoryItems
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/inventoryitems/{inventoryItemId}:
+    get:
+      operationId: findOneInventoryItem
+      parameters:
+        - name: inventoryItemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: InventoryItem details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/suppliers:
+    get:
+      operationId: findAllSuppliers
+      responses:
+        '200':
+          description: A list of Suppliers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Supplier'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/suppliers/{supplierId}:
+    get:
+      operationId: findOneSupplier
+      parameters:
+        - name: supplierId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Supplier details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/purchaseorders:
+    get:
+      operationId: findAllPurchaseOrders
+      responses:
+        '200':
+          description: A list of PurchaseOrders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseOrder'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/purchaseorders/{purchaseOrderId}:
+    get:
+      operationId: findOnePurchaseOrder
+      parameters:
+        - name: purchaseOrderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PurchaseOrder details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseOrder'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/addProductToCatalog:
+#    patch:
+#      operationId: addProductToCatalog
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/AddProductToCatalog'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/updateProductPrice:
+#    patch:
+#      operationId: updateProductPrice
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateProductPrice'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/restockInventory:
+#    patch:
+#      operationId: restockInventory
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RestockInventory'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/deductInventory:
+#    patch:
+#      operationId: deductInventory
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/DeductInventory'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/placePurchaseOrder:
+#    patch:
+#      operationId: placePurchaseOrder
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/PlacePurchaseOrder'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/inventoryandproductss/{inventoryAndProductsId}/receivePurchaseOrder:
+#    patch:
+#      operationId: receivePurchaseOrder
+#      parameters:
+#        - name: inventoryAndProductsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ReceivePurchaseOrder'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Product:
+      type: object
+      description: Represents a product available for sale or use in the clinic
+      properties:
+        
+        product_id:
+          type: string
+        
+        name:
+          type: string
+        
+        description:
+          type: string
+        
+        category:
+          type: string
+        
+        unit_price:
+          type: number
+          format: float
+        
+        sku:
+          type: string
+        
+        supplier_id:
+          type: string
+        
+        is_active:
+          type: boolean
+        
+    
+    InventoryItem:
+      type: object
+      description: Represents the stock level of a product in the clinic
+      properties:
+        
+        inventory_item_id:
+          type: string
+        
+        product_id:
+          type: string
+        
+        quantity_on_hand:
+          type: integer
+          format: int32
+        
+        reorder_threshold:
+          type: integer
+          format: int32
+        
+        reorder_quantity:
+          type: integer
+          format: int32
+        
+        last_restocked_date:
+          type: string
+        
+    
+    Supplier:
+      type: object
+      description: Represents a supplier providing products or medical supplies to the clinic
+      properties:
+        
+        supplier_id:
+          type: string
+        
+        name:
+          type: string
+        
+        contact_name:
+          type: string
+        
+        email:
+          type: string
+        
+        phone_number:
+          type: string
+        
+        product_categories:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    PurchaseOrder:
+      type: object
+      description: Represents a purchase order placed with a supplier for stock replenishment
+      properties:
+        
+        purchase_order_id:
+          type: string
+        
+        supplier_id:
+          type: string
+        
+        order_date:
+          type: string
+        
+        expected_delivery_date:
+          type: string
+        
+        line_items:
+          type: string
+        
+        total_cost:
+          type: number
+          format: float
+        
+        status:
+          type: string
+        
+    
+
+
+    AddProductToCatalog:
+      type: object
+      properties:
+        
+        name:
+          type: string
+        
+        description:
+          type: string
+        
+        category:
+          type: string
+        
+        unitPrice:
+          type: number
+          format: float
+        
+        sku:
+          type: string
+        
+        supplierId:
+          type: string
+        
+
+    UpdateProductPrice:
+      type: object
+      properties:
+        
+        productId:
+          type: string
+        
+        newUnitPrice:
+          type: number
+          format: float
+        
+
+    RestockInventory:
+      type: object
+      properties:
+        
+        productId:
+          type: string
+        
+        quantityAdded:
+          type: integer
+          format: int32
+        
+        purchaseOrderId:
+          type: string
+        
+
+    DeductInventory:
+      type: object
+      properties:
+        
+        productId:
+          type: string
+        
+        quantityDeducted:
+          type: integer
+          format: int32
+        
+        reason:
+          type: string
+        
+
+    PlacePurchaseOrder:
+      type: object
+      properties:
+        
+        supplierId:
+          type: string
+        
+        lineItems:
+          type: string
+        
+        expectedDeliveryDate:
+          type: string
+        
+
+    ReceivePurchaseOrder:
+      type: object
+      properties:
+        
+        purchaseOrderId:
+          type: string
+        
+        receivedDate:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -1,0 +1,419 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: VeterinaryStaff API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/veterinarians:
+    get:
+      operationId: findAllVeterinarians
+      responses:
+        '200':
+          description: A list of Veterinarians
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Veterinarian'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/veterinarians/{veterinarianId}:
+    get:
+      operationId: findOneVeterinarian
+      parameters:
+        - name: veterinarianId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Veterinarian details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Veterinarian'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/staffmembers:
+    get:
+      operationId: findAllStaffMembers
+      responses:
+        '200':
+          description: A list of StaffMembers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StaffMember'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/staffmembers/{staffMemberId}:
+    get:
+      operationId: findOneStaffMember
+      parameters:
+        - name: staffMemberId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: StaffMember details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaffMember'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/availabilityschedules:
+    get:
+      operationId: findAllAvailabilitySchedules
+      responses:
+        '200':
+          description: A list of AvailabilitySchedules
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailabilitySchedule'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/availabilityschedules/{availabilityScheduleId}:
+    get:
+      operationId: findOneAvailabilitySchedule
+      parameters:
+        - name: availabilityScheduleId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: AvailabilitySchedule details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvailabilitySchedule'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/veterinarystaffs/{veterinaryStaffId}/onboardVeterinarian:
+#    patch:
+#      operationId: onboardVeterinarian
+#      parameters:
+#        - name: veterinaryStaffId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/OnboardVeterinarian'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/veterinarystaffs/{veterinaryStaffId}/updateVeterinarianProfile:
+#    patch:
+#      operationId: updateVeterinarianProfile
+#      parameters:
+#        - name: veterinaryStaffId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateVeterinarianProfile'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/veterinarystaffs/{veterinaryStaffId}/setStaffAvailability:
+#    patch:
+#      operationId: setStaffAvailability
+#      parameters:
+#        - name: veterinaryStaffId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/SetStaffAvailability'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/veterinarystaffs/{veterinaryStaffId}/deactivateStaffMember:
+#    patch:
+#      operationId: deactivateStaffMember
+#      parameters:
+#        - name: veterinaryStaffId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/DeactivateStaffMember'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Veterinarian:
+      type: object
+      description: Represents a veterinarian employed at the clinic
+      properties:
+        
+        veterinarian_id:
+          type: string
+        
+        first_name:
+          type: string
+        
+        last_name:
+          type: string
+        
+        email:
+          type: string
+        
+        phone_number:
+          type: string
+        
+        license_number:
+          type: string
+        
+        specializations:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    StaffMember:
+      type: object
+      description: Represents a support staff member at the clinic
+      properties:
+        
+        staff_id:
+          type: string
+        
+        first_name:
+          type: string
+        
+        last_name:
+          type: string
+        
+        email:
+          type: string
+        
+        role:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    AvailabilitySchedule:
+      type: object
+      description: Represents the availability schedule for a veterinarian or staff member
+      properties:
+        
+        schedule_id:
+          type: string
+        
+        staff_id:
+          type: string
+        
+        day_of_week:
+          type: string
+        
+        start_time:
+          type: string
+        
+        end_time:
+          type: string
+        
+        is_available:
+          type: boolean
+        
+    
+
+
+    OnboardVeterinarian:
+      type: object
+      properties:
+        
+        firstName:
+          type: string
+        
+        lastName:
+          type: string
+        
+        email:
+          type: string
+        
+        phoneNumber:
+          type: string
+        
+        licenseNumber:
+          type: string
+        
+        specializations:
+          type: string
+        
+
+    UpdateVeterinarianProfile:
+      type: object
+      properties:
+        
+        veterinarianId:
+          type: string
+        
+        specializations:
+          type: string
+        
+        phoneNumber:
+          type: string
+        
+        email:
+          type: string
+        
+
+    SetStaffAvailability:
+      type: object
+      properties:
+        
+        staffId:
+          type: string
+        
+        dayOfWeek:
+          type: string
+        
+        startTime:
+          type: string
+        
+        endTime:
+          type: string
+        
+        isAvailable:
+          type: boolean
+        
+
+    DeactivateStaffMember:
+      type: object
+      properties:
+        
+        staffId:
+          type: string
+        
+        reason:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

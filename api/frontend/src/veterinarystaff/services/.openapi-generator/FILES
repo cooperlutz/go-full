@@ -1,0 +1,13 @@
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/AvailabilitySchedule.ts
+models/DeactivateStaffMember.ts
+models/ModelError.ts
+models/OnboardVeterinarian.ts
+models/SetStaffAvailability.ts
+models/StaffMember.ts
+models/UpdateVeterinarianProfile.ts
+models/Veterinarian.ts
+models/index.ts
+runtime.ts

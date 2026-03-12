@@ -1,0 +1,13 @@
+.openapi-generator-ignore
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/ApproveInsuranceClaim.ts
+models/InsuranceClaim.ts
+models/InsuranceProvider.ts
+models/ModelError.ts
+models/RegisterInsuranceProvider.ts
+models/RejectInsuranceClaim.ts
+models/SubmitInsuranceClaim.ts
+models/index.ts
+runtime.ts

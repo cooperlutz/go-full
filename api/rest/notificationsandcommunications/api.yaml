@@ -1,0 +1,362 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: NotificationsAndCommunications API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/notifications:
+    get:
+      operationId: findAllNotifications
+      responses:
+        '200':
+          description: A list of Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/notifications/{notificationId}:
+    get:
+      operationId: findOneNotification
+      parameters:
+        - name: notificationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Notification details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/notificationtemplates:
+    get:
+      operationId: findAllNotificationTemplates
+      responses:
+        '200':
+          description: A list of NotificationTemplates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationTemplate'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/notificationtemplates/{notificationTemplateId}:
+    get:
+      operationId: findOneNotificationTemplate
+      parameters:
+        - name: notificationTemplateId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: NotificationTemplate details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/notificationsandcommunicationss/{notificationsAndCommunicationsId}/sendNotification:
+#    patch:
+#      operationId: sendNotification
+#      parameters:
+#        - name: notificationsAndCommunicationsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/SendNotification'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/notificationsandcommunicationss/{notificationsAndCommunicationsId}/scheduleNotification:
+#    patch:
+#      operationId: scheduleNotification
+#      parameters:
+#        - name: notificationsAndCommunicationsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ScheduleNotification'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/notificationsandcommunicationss/{notificationsAndCommunicationsId}/cancelScheduledNotification:
+#    patch:
+#      operationId: cancelScheduledNotification
+#      parameters:
+#        - name: notificationsAndCommunicationsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CancelScheduledNotification'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/notificationsandcommunicationss/{notificationsAndCommunicationsId}/createNotificationTemplate:
+#    patch:
+#      operationId: createNotificationTemplate
+#      parameters:
+#        - name: notificationsAndCommunicationsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CreateNotificationTemplate'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Notification:
+      type: object
+      description: Represents a notification sent to a pet owner or staff member
+      properties:
+        
+        notification_id:
+          type: string
+        
+        recipient_id:
+          type: string
+        
+        recipient_type:
+          type: string
+        
+        channel:
+          type: string
+        
+        subject:
+          type: string
+        
+        message_body:
+          type: string
+        
+        status:
+          type: string
+        
+        sent_at:
+          type: string
+        
+        notification_type:
+          type: string
+        
+    
+    NotificationTemplate:
+      type: object
+      description: Represents a reusable template for generating notifications
+      properties:
+        
+        template_id:
+          type: string
+        
+        name:
+          type: string
+        
+        notification_type:
+          type: string
+        
+        channel:
+          type: string
+        
+        subject_template:
+          type: string
+        
+        body_template:
+          type: string
+        
+        is_active:
+          type: boolean
+        
+    
+
+
+    SendNotification:
+      type: object
+      properties:
+        
+        recipientId:
+          type: string
+        
+        recipientType:
+          type: string
+        
+        channel:
+          type: string
+        
+        notificationType:
+          type: string
+        
+        templateId:
+          type: string
+        
+        messageBody:
+          type: string
+        
+
+    ScheduleNotification:
+      type: object
+      properties:
+        
+        recipientId:
+          type: string
+        
+        recipientType:
+          type: string
+        
+        channel:
+          type: string
+        
+        notificationType:
+          type: string
+        
+        scheduledSendTime:
+          type: string
+        
+        templateId:
+          type: string
+        
+
+    CancelScheduledNotification:
+      type: object
+      properties:
+        
+        notificationId:
+          type: string
+        
+
+    CreateNotificationTemplate:
+      type: object
+      properties:
+        
+        name:
+          type: string
+        
+        notificationType:
+          type: string
+        
+        channel:
+          type: string
+        
+        subjectTemplate:
+          type: string
+        
+        bodyTemplate:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

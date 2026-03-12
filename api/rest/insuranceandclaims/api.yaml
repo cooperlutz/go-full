@@ -1,0 +1,372 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: InsuranceAndClaims API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/insuranceproviders:
+    get:
+      operationId: findAllInsuranceProviders
+      responses:
+        '200':
+          description: A list of InsuranceProviders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InsuranceProvider'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/insuranceproviders/{insuranceProviderId}:
+    get:
+      operationId: findOneInsuranceProvider
+      parameters:
+        - name: insuranceProviderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: InsuranceProvider details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceProvider'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/insuranceclaims:
+    get:
+      operationId: findAllInsuranceClaims
+      responses:
+        '200':
+          description: A list of InsuranceClaims
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InsuranceClaim'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/insuranceclaims/{insuranceClaimId}:
+    get:
+      operationId: findOneInsuranceClaim
+      parameters:
+        - name: insuranceClaimId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: InsuranceClaim details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceClaim'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/insuranceandclaimss/{insuranceAndClaimsId}/registerInsuranceProvider:
+#    patch:
+#      operationId: registerInsuranceProvider
+#      parameters:
+#        - name: insuranceAndClaimsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RegisterInsuranceProvider'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/insuranceandclaimss/{insuranceAndClaimsId}/submitInsuranceClaim:
+#    patch:
+#      operationId: submitInsuranceClaim
+#      parameters:
+#        - name: insuranceAndClaimsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/SubmitInsuranceClaim'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/insuranceandclaimss/{insuranceAndClaimsId}/approveInsuranceClaim:
+#    patch:
+#      operationId: approveInsuranceClaim
+#      parameters:
+#        - name: insuranceAndClaimsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ApproveInsuranceClaim'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/insuranceandclaimss/{insuranceAndClaimsId}/rejectInsuranceClaim:
+#    patch:
+#      operationId: rejectInsuranceClaim
+#      parameters:
+#        - name: insuranceAndClaimsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RejectInsuranceClaim'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    InsuranceProvider:
+      type: object
+      description: Represents a pet insurance company partnered with the clinic
+      properties:
+        
+        provider_id:
+          type: string
+        
+        name:
+          type: string
+        
+        contact_name:
+          type: string
+        
+        email:
+          type: string
+        
+        phone_number:
+          type: string
+        
+        claim_submission_url:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    InsuranceClaim:
+      type: object
+      description: Represents an insurance claim submitted for a pet's veterinary services
+      properties:
+        
+        claim_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        pet_id:
+          type: string
+        
+        provider_id:
+          type: string
+        
+        invoice_id:
+          type: string
+        
+        policy_number:
+          type: string
+        
+        claim_amount:
+          type: number
+          format: float
+        
+        approved_amount:
+          type: number
+          format: float
+        
+        submission_date:
+          type: string
+        
+        resolution_date:
+          type: string
+        
+        status:
+          type: string
+        
+        notes:
+          type: string
+        
+    
+
+
+    RegisterInsuranceProvider:
+      type: object
+      properties:
+        
+        name:
+          type: string
+        
+        contactName:
+          type: string
+        
+        email:
+          type: string
+        
+        phoneNumber:
+          type: string
+        
+        claimSubmissionUrl:
+          type: string
+        
+
+    SubmitInsuranceClaim:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        petId:
+          type: string
+        
+        providerId:
+          type: string
+        
+        invoiceId:
+          type: string
+        
+        policyNumber:
+          type: string
+        
+        claimAmount:
+          type: number
+          format: float
+        
+
+    ApproveInsuranceClaim:
+      type: object
+      properties:
+        
+        claimId:
+          type: string
+        
+        approvedAmount:
+          type: number
+          format: float
+        
+        resolutionDate:
+          type: string
+        
+
+    RejectInsuranceClaim:
+      type: object
+      properties:
+        
+        claimId:
+          type: string
+        
+        reason:
+          type: string
+        
+        resolutionDate:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -1,0 +1,495 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: PatientManagement API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/pets:
+    get:
+      operationId: findAllPets
+      responses:
+        '200':
+          description: A list of Pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/pets/{petId}:
+    get:
+      operationId: findOnePet
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pet details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/medicalrecords:
+    get:
+      operationId: findAllMedicalRecords
+      responses:
+        '200':
+          description: A list of MedicalRecords
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedicalRecord'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/medicalrecords/{medicalRecordId}:
+    get:
+      operationId: findOneMedicalRecord
+      parameters:
+        - name: medicalRecordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MedicalRecord details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicalRecord'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/vaccinationrecords:
+    get:
+      operationId: findAllVaccinationRecords
+      responses:
+        '200':
+          description: A list of VaccinationRecords
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VaccinationRecord'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/vaccinationrecords/{vaccinationRecordId}:
+    get:
+      operationId: findOneVaccinationRecord
+      parameters:
+        - name: vaccinationRecordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: VaccinationRecord details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaccinationRecord'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/patientmanagements/{patientManagementId}/registerPet:
+#    patch:
+#      operationId: registerPet
+#      parameters:
+#        - name: patientManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RegisterPet'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/patientmanagements/{patientManagementId}/updatePetDetails:
+#    patch:
+#      operationId: updatePetDetails
+#      parameters:
+#        - name: patientManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdatePetDetails'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/patientmanagements/{patientManagementId}/addMedicalRecord:
+#    patch:
+#      operationId: addMedicalRecord
+#      parameters:
+#        - name: patientManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/AddMedicalRecord'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/patientmanagements/{patientManagementId}/recordVaccination:
+#    patch:
+#      operationId: recordVaccination
+#      parameters:
+#        - name: patientManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RecordVaccination'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/patientmanagements/{patientManagementId}/deactivatePet:
+#    patch:
+#      operationId: deactivatePet
+#      parameters:
+#        - name: patientManagementId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/DeactivatePet'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Pet:
+      type: object
+      description: Represents a pet patient registered at the clinic
+      properties:
+        
+        pet_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        name:
+          type: string
+        
+        species:
+          type: string
+        
+        breed:
+          type: string
+        
+        date_of_birth:
+          type: string
+        
+        gender:
+          type: string
+        
+        weight:
+          type: number
+          format: float
+        
+        microchip_number:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    MedicalRecord:
+      type: object
+      description: Represents the medical history and records for a pet
+      properties:
+        
+        medical_record_id:
+          type: string
+        
+        pet_id:
+          type: string
+        
+        veterinarian_id:
+          type: string
+        
+        visit_date:
+          type: string
+        
+        diagnosis:
+          type: string
+        
+        treatment:
+          type: string
+        
+        notes:
+          type: string
+        
+        follow_up_required:
+          type: boolean
+        
+    
+    VaccinationRecord:
+      type: object
+      description: Represents a vaccination record for a pet
+      properties:
+        
+        vaccination_id:
+          type: string
+        
+        pet_id:
+          type: string
+        
+        vaccine_name:
+          type: string
+        
+        administered_date:
+          type: string
+        
+        expiry_date:
+          type: string
+        
+        administered_by:
+          type: string
+        
+    
+
+
+    RegisterPet:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        name:
+          type: string
+        
+        species:
+          type: string
+        
+        breed:
+          type: string
+        
+        dateOfBirth:
+          type: string
+        
+        gender:
+          type: string
+        
+        weight:
+          type: number
+          format: float
+        
+        microchipNumber:
+          type: string
+        
+
+    UpdatePetDetails:
+      type: object
+      properties:
+        
+        petId:
+          type: string
+        
+        name:
+          type: string
+        
+        weight:
+          type: number
+          format: float
+        
+        microchipNumber:
+          type: string
+        
+
+    AddMedicalRecord:
+      type: object
+      properties:
+        
+        petId:
+          type: string
+        
+        veterinarianId:
+          type: string
+        
+        visitDate:
+          type: string
+        
+        diagnosis:
+          type: string
+        
+        treatment:
+          type: string
+        
+        notes:
+          type: string
+        
+        followUpRequired:
+          type: boolean
+        
+
+    RecordVaccination:
+      type: object
+      properties:
+        
+        petId:
+          type: string
+        
+        vaccineName:
+          type: string
+        
+        administeredDate:
+          type: string
+        
+        expiryDate:
+          type: string
+        
+        administeredBy:
+          type: string
+        
+
+    DeactivatePet:
+      type: object
+      properties:
+        
+        petId:
+          type: string
+        
+        reason:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

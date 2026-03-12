@@ -1,0 +1,16 @@
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/AddProductToCatalog.ts
+models/DeductInventory.ts
+models/InventoryItem.ts
+models/ModelError.ts
+models/PlacePurchaseOrder.ts
+models/Product.ts
+models/PurchaseOrder.ts
+models/ReceivePurchaseOrder.ts
+models/RestockInventory.ts
+models/Supplier.ts
+models/UpdateProductPrice.ts
+models/index.ts
+runtime.ts

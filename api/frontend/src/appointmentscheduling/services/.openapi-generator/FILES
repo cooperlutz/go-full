@@ -1,0 +1,15 @@
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/Appointment.ts
+models/CancelAppointment.ts
+models/CompleteAppointment.ts
+models/ConfirmAppointment.ts
+models/EndTelemedicineSession.ts
+models/ModelError.ts
+models/RescheduleAppointment.ts
+models/ScheduleAppointment.ts
+models/StartTelemedicineSession.ts
+models/TelemedicineSession.ts
+models/index.ts
+runtime.ts

@@ -1,0 +1,478 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: AppointmentScheduling API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/appointments:
+    get:
+      operationId: findAllAppointments
+      responses:
+        '200':
+          description: A list of Appointments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/appointments/{appointmentId}:
+    get:
+      operationId: findOneAppointment
+      parameters:
+        - name: appointmentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Appointment details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/telemedicinesessions:
+    get:
+      operationId: findAllTelemedicineSessions
+      responses:
+        '200':
+          description: A list of TelemedicineSessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TelemedicineSession'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/telemedicinesessions/{telemedicineSessionId}:
+    get:
+      operationId: findOneTelemedicineSession
+      parameters:
+        - name: telemedicineSessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TelemedicineSession details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelemedicineSession'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/scheduleAppointment:
+#    patch:
+#      operationId: scheduleAppointment
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ScheduleAppointment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/rescheduleAppointment:
+#    patch:
+#      operationId: rescheduleAppointment
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RescheduleAppointment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/cancelAppointment:
+#    patch:
+#      operationId: cancelAppointment
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CancelAppointment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/confirmAppointment:
+#    patch:
+#      operationId: confirmAppointment
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ConfirmAppointment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/completeAppointment:
+#    patch:
+#      operationId: completeAppointment
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CompleteAppointment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/startTelemedicineSession:
+#    patch:
+#      operationId: startTelemedicineSession
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/StartTelemedicineSession'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/appointmentschedulings/{appointmentSchedulingId}/endTelemedicineSession:
+#    patch:
+#      operationId: endTelemedicineSession
+#      parameters:
+#        - name: appointmentSchedulingId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/EndTelemedicineSession'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Appointment:
+      type: object
+      description: Represents a scheduled appointment at the clinic
+      properties:
+        
+        appointment_id:
+          type: string
+        
+        pet_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        veterinarian_id:
+          type: string
+        
+        appointment_type:
+          type: string
+        
+        scheduled_date:
+          type: string
+        
+        scheduled_time:
+          type: string
+        
+        duration_minutes:
+          type: integer
+          format: int32
+        
+        status:
+          type: string
+        
+        notes:
+          type: string
+        
+        is_telemedicine:
+          type: boolean
+        
+    
+    TelemedicineSession:
+      type: object
+      description: Represents a telemedicine session linked to an appointment
+      properties:
+        
+        session_id:
+          type: string
+        
+        appointment_id:
+          type: string
+        
+        session_url:
+          type: string
+        
+        started_at:
+          type: string
+        
+        ended_at:
+          type: string
+        
+        status:
+          type: string
+        
+    
+
+
+    ScheduleAppointment:
+      type: object
+      properties:
+        
+        petId:
+          type: string
+        
+        ownerId:
+          type: string
+        
+        veterinarianId:
+          type: string
+        
+        appointmentType:
+          type: string
+        
+        scheduledDate:
+          type: string
+        
+        scheduledTime:
+          type: string
+        
+        durationMinutes:
+          type: integer
+          format: int32
+        
+        notes:
+          type: string
+        
+        isTelemedicine:
+          type: boolean
+        
+
+    RescheduleAppointment:
+      type: object
+      properties:
+        
+        appointmentId:
+          type: string
+        
+        newScheduledDate:
+          type: string
+        
+        newScheduledTime:
+          type: string
+        
+        reason:
+          type: string
+        
+
+    CancelAppointment:
+      type: object
+      properties:
+        
+        appointmentId:
+          type: string
+        
+        reason:
+          type: string
+        
+        cancelledBy:
+          type: string
+        
+
+    ConfirmAppointment:
+      type: object
+      properties:
+        
+        appointmentId:
+          type: string
+        
+
+    CompleteAppointment:
+      type: object
+      properties:
+        
+        appointmentId:
+          type: string
+        
+        veterinarianId:
+          type: string
+        
+
+    StartTelemedicineSession:
+      type: object
+      properties:
+        
+        appointmentId:
+          type: string
+        
+
+    EndTelemedicineSession:
+      type: object
+      properties:
+        
+        sessionId:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

@@ -1,57 +1,129 @@
 {
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
-  "spaces": 2,
   "generator-cli": {
-    "version": "7.14.0",
     "generators": {
-      "pingpong": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/pingpong/services",
-        "inputSpec": "../rest/pingpong/v1/api.yaml",
+      "appointmentscheduling": {
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/appointmentscheduling/api.yaml",
+        "output": "#{cwd}/src/appointmentscheduling/services"
       },
-      "examlibrary": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/examlibrary/services",
-        "inputSpec": "../rest/examlibrary/v1/api.yaml",
+      "billingandpayments": {
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/billingandpayments/api.yaml",
+        "output": "#{cwd}/src/billingandpayments/services"
       },
       "examination": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
         "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/examination/services",
         "inputSpec": "../rest/examination/api.yaml",
-        "additionalProperties": {
-          "withInterfaces": true
-        }
+        "output": "#{cwd}/src/examination/services"
       },
-      "iam": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/iam/services",
-        "inputSpec": "../rest/iam/api.yaml",
+      "examlibrary": {
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/examlibrary/v1/api.yaml",
+        "output": "#{cwd}/src/examlibrary/services"
       },
       "grading": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/grading/services",
-        "inputSpec": "../rest/grading/api.yaml",
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/grading/api.yaml",
+        "output": "#{cwd}/src/grading/services"
+      },
+      "iam": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/iam/api.yaml",
+        "output": "#{cwd}/src/iam/services"
+      },
+      "insuranceandclaims": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/insuranceandclaims/api.yaml",
+        "output": "#{cwd}/src/insuranceandclaims/services"
+      },
+      "inventoryandproducts": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/inventoryandproducts/api.yaml",
+        "output": "#{cwd}/src/inventoryandproducts/services"
+      },
+      "notificationsandcommunications": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/notificationsandcommunications/api.yaml",
+        "output": "#{cwd}/src/notificationsandcommunications/services"
+      },
+      "ownermanagement": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/ownermanagement/api.yaml",
+        "output": "#{cwd}/src/ownermanagement/services"
+      },
+      "patientmanagement": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/patientmanagement/api.yaml",
+        "output": "#{cwd}/src/patientmanagement/services"
+      },
+      "pingpong": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/pingpong/v1/api.yaml",
+        "output": "#{cwd}/src/pingpong/services"
       },
       "reporting": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/reporting/services",
-        "inputSpec": "../rest/reporting/api.yaml",
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/reporting/api.yaml",
+        "output": "#{cwd}/src/reporting/services"
+      },
+      "retailsales": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/retailsales/api.yaml",
+        "output": "#{cwd}/src/retailsales/services"
+      },
+      "veterinarystaff": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/veterinarystaff/api.yaml",
+        "output": "#{cwd}/src/veterinarystaff/services"
       }
-    }
-  }
+    },
+    "version": "7.14.0"
+  },
+  "spaces": 2
 }

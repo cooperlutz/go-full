@@ -1,0 +1,8 @@
+
+DROP TABLE IF EXISTS notificationsandcommunications.notifications;
+DROP INDEX CONCURRENTLY idx_notifications_and_communications_notifications_id;
+
+DROP TABLE IF EXISTS notificationsandcommunications.notification_templates;
+DROP INDEX CONCURRENTLY idx_notifications_and_communications_notification_templates_id;
+
+DROP SCHEMA IF EXISTS notificationsandcommunications;

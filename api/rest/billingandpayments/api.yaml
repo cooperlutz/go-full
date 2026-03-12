@@ -1,0 +1,481 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: BillingAndPayments API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/invoices:
+    get:
+      operationId: findAllInvoices
+      responses:
+        '200':
+          description: A list of Invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/invoices/{invoiceId}:
+    get:
+      operationId: findOneInvoice
+      parameters:
+        - name: invoiceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Invoice details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/payments:
+    get:
+      operationId: findAllPayments
+      responses:
+        '200':
+          description: A list of Payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/payments/{paymentId}:
+    get:
+      operationId: findOnePayment
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/refunds:
+    get:
+      operationId: findAllRefunds
+      responses:
+        '200':
+          description: A list of Refunds
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Refund'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/refunds/{refundId}:
+    get:
+      operationId: findOneRefund
+      parameters:
+        - name: refundId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Refund details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/billingandpaymentss/{billingAndPaymentsId}/generateInvoice:
+#    patch:
+#      operationId: generateInvoice
+#      parameters:
+#        - name: billingAndPaymentsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/GenerateInvoice'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/billingandpaymentss/{billingAndPaymentsId}/applyDiscountToInvoice:
+#    patch:
+#      operationId: applyDiscountToInvoice
+#      parameters:
+#        - name: billingAndPaymentsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ApplyDiscountToInvoice'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/billingandpaymentss/{billingAndPaymentsId}/processPayment:
+#    patch:
+#      operationId: processPayment
+#      parameters:
+#        - name: billingAndPaymentsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ProcessPayment'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/billingandpaymentss/{billingAndPaymentsId}/issueRefund:
+#    patch:
+#      operationId: issueRefund
+#      parameters:
+#        - name: billingAndPaymentsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/IssueRefund'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/billingandpaymentss/{billingAndPaymentsId}/voidInvoice:
+#    patch:
+#      operationId: voidInvoice
+#      parameters:
+#        - name: billingAndPaymentsId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/VoidInvoice'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Invoice:
+      type: object
+      description: Represents a billing invoice for services rendered or products sold
+      properties:
+        
+        invoice_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        pet_id:
+          type: string
+        
+        appointment_id:
+          type: string
+        
+        line_items:
+          type: string
+        
+        subtotal:
+          type: number
+          format: float
+        
+        discount_amount:
+          type: number
+          format: float
+        
+        tax_amount:
+          type: number
+          format: float
+        
+        total_amount:
+          type: number
+          format: float
+        
+        status:
+          type: string
+        
+        issued_date:
+          type: string
+        
+        due_date:
+          type: string
+        
+    
+    Payment:
+      type: object
+      description: Represents a payment transaction against an invoice
+      properties:
+        
+        payment_id:
+          type: string
+        
+        invoice_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        amount_paid:
+          type: number
+          format: float
+        
+        payment_method:
+          type: string
+        
+        payment_date:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    Refund:
+      type: object
+      description: Represents a refund issued against a payment
+      properties:
+        
+        refund_id:
+          type: string
+        
+        payment_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        refund_amount:
+          type: number
+          format: float
+        
+        reason:
+          type: string
+        
+        refund_date:
+          type: string
+        
+        status:
+          type: string
+        
+    
+
+
+    GenerateInvoice:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        petId:
+          type: string
+        
+        appointmentId:
+          type: string
+        
+        lineItems:
+          type: string
+        
+        discountAmount:
+          type: number
+          format: float
+        
+
+    ApplyDiscountToInvoice:
+      type: object
+      properties:
+        
+        invoiceId:
+          type: string
+        
+        discountAmount:
+          type: number
+          format: float
+        
+        discountReason:
+          type: string
+        
+
+    ProcessPayment:
+      type: object
+      properties:
+        
+        invoiceId:
+          type: string
+        
+        ownerId:
+          type: string
+        
+        amountPaid:
+          type: number
+          format: float
+        
+        paymentMethod:
+          type: string
+        
+
+    IssueRefund:
+      type: object
+      properties:
+        
+        paymentId:
+          type: string
+        
+        refundAmount:
+          type: number
+          format: float
+        
+        reason:
+          type: string
+        
+
+    VoidInvoice:
+      type: object
+      properties:
+        
+        invoiceId:
+          type: string
+        
+        reason:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

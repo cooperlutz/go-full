@@ -1,0 +1,383 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: RetailSales API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/salesorders:
+    get:
+      operationId: findAllSalesOrders
+      responses:
+        '200':
+          description: A list of SalesOrders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalesOrder'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/salesorders/{salesOrderId}:
+    get:
+      operationId: findOneSalesOrder
+      parameters:
+        - name: salesOrderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: SalesOrder details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesOrder'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/shoppingcarts:
+    get:
+      operationId: findAllShoppingCarts
+      responses:
+        '200':
+          description: A list of ShoppingCarts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShoppingCart'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/shoppingcarts/{shoppingCartId}:
+    get:
+      operationId: findOneShoppingCart
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ShoppingCart details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCart'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/retailsaless/{retailSalesId}/addItemToCart:
+#    patch:
+#      operationId: addItemToCart
+#      parameters:
+#        - name: retailSalesId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/AddItemToCart'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/retailsaless/{retailSalesId}/removeItemFromCart:
+#    patch:
+#      operationId: removeItemFromCart
+#      parameters:
+#        - name: retailSalesId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RemoveItemFromCart'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/retailsaless/{retailSalesId}/placeSalesOrder:
+#    patch:
+#      operationId: placeSalesOrder
+#      parameters:
+#        - name: retailSalesId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/PlaceSalesOrder'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/retailsaless/{retailSalesId}/fulfillSalesOrder:
+#    patch:
+#      operationId: fulfillSalesOrder
+#      parameters:
+#        - name: retailSalesId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/FulfillSalesOrder'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+#  /v1/retailsaless/{retailSalesId}/cancelSalesOrder:
+#    patch:
+#      operationId: cancelSalesOrder
+#      parameters:
+#        - name: retailSalesId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/CancelSalesOrder'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    SalesOrder:
+      type: object
+      description: Represents a retail sales order for pet products
+      properties:
+        
+        order_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        order_date:
+          type: string
+        
+        line_items:
+          type: string
+        
+        subtotal:
+          type: number
+          format: float
+        
+        discount_amount:
+          type: number
+          format: float
+        
+        tax_amount:
+          type: number
+          format: float
+        
+        total_amount:
+          type: number
+          format: float
+        
+        channel:
+          type: string
+        
+        status:
+          type: string
+        
+    
+    ShoppingCart:
+      type: object
+      description: Represents a shopping cart for an owner browsing the online store
+      properties:
+        
+        cart_id:
+          type: string
+        
+        owner_id:
+          type: string
+        
+        items:
+          type: string
+        
+        created_at:
+          type: string
+        
+        updated_at:
+          type: string
+        
+    
+
+
+    AddItemToCart:
+      type: object
+      properties:
+        
+        cartId:
+          type: string
+        
+        ownerId:
+          type: string
+        
+        productId:
+          type: string
+        
+        quantity:
+          type: int
+        
+
+    RemoveItemFromCart:
+      type: object
+      properties:
+        
+        cartId:
+          type: string
+        
+        productId:
+          type: string
+        
+
+    PlaceSalesOrder:
+      type: object
+      properties:
+        
+        ownerId:
+          type: string
+        
+        lineItems:
+          type: string
+        
+        channel:
+          type: string
+        
+        discountAmount:
+          type: number
+          format: float
+        
+
+    FulfillSalesOrder:
+      type: object
+      properties:
+        
+        orderId:
+          type: string
+        
+
+    CancelSalesOrder:
+      type: object
+      properties:
+        
+        orderId:
+          type: string
+        
+        reason:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

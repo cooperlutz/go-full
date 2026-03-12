@@ -1,0 +1,14 @@
+apis/DefaultApi.ts
+apis/index.ts
+index.ts
+models/AddMedicalRecord.ts
+models/DeactivatePet.ts
+models/MedicalRecord.ts
+models/ModelError.ts
+models/Pet.ts
+models/RecordVaccination.ts
+models/RegisterPet.ts
+models/UpdatePetDetails.ts
+models/VaccinationRecord.ts
+models/index.ts
+runtime.ts
