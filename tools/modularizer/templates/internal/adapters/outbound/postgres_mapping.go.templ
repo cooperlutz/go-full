@@ -6,60 +6,60 @@ import (
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 )
 
-
-// toDomain maps the {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}} to the domain entity.
-func (e {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}}) toDomain() (*{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}, error) {
-	return {{.Name.Flat}}.MapTo{{.AggregateRoot.Name.Pascal}}(
-		e.{{.AggregateRoot.Name.Pascal}}ID.Bytes,
+{{range .Aggregates}}
+// toDomain maps the {{.Name.Title}}{{.Name.Pascal}} to the domain entity.
+func (e {{$.Name.Title}}{{.Name.Pascal}}) toDomain() (*{{$.Name.Flat}}.{{.Name.Pascal}}, error) {
+	return {{$.Name.Flat}}.MapTo{{.Name.Pascal}}(
+		e.{{.Name.Pascal}}ID.Bytes,
 		e.CreatedAt.Time,
 		e.UpdatedAt.Time,
 		e.Deleted,
 		pgxutil.TimestampzToTimePtr(e.DeletedAt),
-		//{{range .AggregateRoot.Fields}}
+		//{{range .Fields}}
 		//e.{{.Name.Pascal}},
 		//{{end}}
         // TODO
 	)
 }
 
-// toQuery{{.AggregateRoot.Name.Pascal}} maps the {{.Name.Flat}}{{.AggregateRoot.Name.Pascal}} to the query.{{.AggregateRoot.Name.Pascal}}.
-func (e {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}}) toQuery{{.AggregateRoot.Name.Pascal}}() (query.{{.AggregateRoot.Name.Pascal}}, error) {
-	{{.AggregateRoot.Name.Flat}}, err := e.toDomain()
+// toQuery{{.Name.Pascal}} maps the {{.Name.Flat}}{{.Name.Pascal}} to the query.{{.Name.Pascal}}.
+func (e {{$.Name.Title}}{{.Name.Pascal}}) toQuery{{.Name.Pascal}}() (query.{{.Name.Pascal}}, error) {
+	{{.Name.Flat}}, err := e.toDomain()
 	if err != nil {
-		return query.{{.AggregateRoot.Name.Pascal}}{}, err
+		return query.{{.Name.Pascal}}{}, err
 	}
 
-	return mapEntity{{.AggregateRoot.Name.Pascal}}ToQuery({{.AggregateRoot.Name.Flat}}), nil
+	return mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}}), nil
 }
 
-// {{.Name.Flat}}{{.AggregateRoot.Name.Pascal}}sToQuery maps a slice of {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}} to a slice of query.{{.AggregateRoot.Name.Pascal}} entities.
-func {{.Name.Flat}}{{.AggregateRoot.Name.Pascal}}sToQuery({{.AggregateRoot.Name.Flat}}s []{{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}}) ([]query.{{.AggregateRoot.Name.Pascal}}, error) {
-	var domain{{.AggregateRoot.Name.Pascal}}s []query.{{.AggregateRoot.Name.Pascal}}
+// {{.Name.Flat}}{{.Name.Pascal}}sToQuery maps a slice of {{.Name.Pascal}}{{.Name.Pascal}} to a slice of query.{{.Name.Pascal}} entities.
+func {{$.Name.Flat}}{{.Name.Pascal}}sToQuery({{.Name.Flat}}s []{{$.Name.Title}}{{.Name.Pascal}}) ([]query.{{.Name.Pascal}}, error) {
+	var domain{{.Name.Pascal}}s []query.{{.Name.Pascal}}
 
-	for _, {{.AggregateRoot.Name.Flat}} := range {{.AggregateRoot.Name.Flat}}s {
-		query{{.AggregateRoot.Name.Pascal}}, err := {{.AggregateRoot.Name.Flat}}.toQuery{{.AggregateRoot.Name.Pascal}}()
+	for _, {{.Name.Flat}} := range {{.Name.Flat}}s {
+		query{{.Name.Pascal}}, err := {{.Name.Flat}}.toQuery{{.Name.Pascal}}()
 		if err != nil {
 			return nil, err
 		}
 
-		domain{{.AggregateRoot.Name.Pascal}}s = append(domain{{.AggregateRoot.Name.Pascal}}s, query{{.AggregateRoot.Name.Pascal}})
+		domain{{.Name.Pascal}}s = append(domain{{.Name.Pascal}}s, query{{.Name.Pascal}})
 	}
 
-	return domain{{.AggregateRoot.Name.Pascal}}s, nil
+	return domain{{.Name.Pascal}}s, nil
 }
 
-// mapEntity{{.AggregateRoot.Name.Pascal}}ToDB maps a domain {{.Name.Pascal}} entity to the {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}} database model.
-func mapEntity{{.AggregateRoot.Name.Pascal}}ToDB({{.AggregateRoot.Name.Flat}} *{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}) {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}} {
-	createdAt := {{.AggregateRoot.Name.Flat}}.GetCreatedAtTime()
-	updatedAt := {{.AggregateRoot.Name.Flat}}.GetUpdatedAtTime()
+// mapEntity{{.Name.Pascal}}ToDB maps a domain {{.Name.Pascal}} entity to the {{.Name.Pascal}}{{.Name.Pascal}} database model.
+func mapEntity{{.Name.Pascal}}ToDB({{.Name.Flat}} *{{$.Name.Flat}}.{{.Name.Pascal}}) {{$.Name.Title}}{{.Name.Pascal}} {
+	createdAt := {{.Name.Flat}}.GetCreatedAtTime()
+	updatedAt := {{.Name.Flat}}.GetUpdatedAtTime()
 
-	return {{.Name.Pascal}}{{.AggregateRoot.Name.Pascal}}{
-		{{.AggregateRoot.Name.Pascal}}ID:          pgxutil.UUIDToPgtypeUUID({{.AggregateRoot.Name.Flat}}.GetIdUUID()),
+	return {{$.Name.Title}}{{.Name.Pascal}}{
+		{{.Name.Pascal}}ID:          pgxutil.UUIDToPgtypeUUID({{.Name.Flat}}.GetIdUUID()),
 		CreatedAt:       pgxutil.TimeToTimestampz(&createdAt),
 		UpdatedAt:       pgxutil.TimeToTimestampz(&updatedAt),
-		Deleted:         {{.AggregateRoot.Name.Flat}}.IsDeleted(),
-		DeletedAt:       pgxutil.TimeToTimestampz({{.AggregateRoot.Name.Flat}}.GetDeletedAtTime()),
-		//{{range .AggregateRoot.Fields}}
+		Deleted:         {{.Name.Flat}}.IsDeleted(),
+		DeletedAt:       pgxutil.TimeToTimestampz({{.Name.Flat}}.GetDeletedAtTime()),
+		//{{range .Fields}}
 		//{{.Name.Pascal}}: Get{{.Name.Pascal}}(),
 		//{{end}}
         // TODO
@@ -67,9 +67,10 @@ func mapEntity{{.AggregateRoot.Name.Pascal}}ToDB({{.AggregateRoot.Name.Flat}} *{
 }
 
 
-// mapEntity{{.AggregateRoot.Name.Pascal}}ToQuery maps a domain {{.AggregateRoot.Name.Pascal}} entity to a query.{{.AggregateRoot.Name.Pascal}}.
-func mapEntity{{.AggregateRoot.Name.Pascal}}ToQuery({{.AggregateRoot.Name.Flat}} *{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}) query.{{.AggregateRoot.Name.Pascal}} {
-	return query.{{.AggregateRoot.Name.Pascal}}{
+// mapEntity{{.Name.Pascal}}ToQuery maps a domain {{.Name.Pascal}} entity to a query.{{.Name.Pascal}}.
+func mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}} *{{$.Name.Flat}}.{{.Name.Pascal}}) query.{{.Name.Pascal}} {
+	return query.{{.Name.Pascal}}{
         // TODO
 	}
 }
+{{end}}
