@@ -11,7 +11,8 @@ Modularizer is a tool that helps you to generate modules that fit into Go-Full's
 Artee is a tool that provides the ability to define your higher level business model in a markdown file and then utilizes ai to generate the relevant modularizer yaml files. This allows you to quickly and easily create modules that are tailored to your specific business needs without having to manually write the yaml files yourself.
 
 [Example Business Model](./artee/pet_clinic/business_model.md)
-[Example Generated Modularizer Domain Model](./artee/pet_clinic/domain_model.yaml)
+
+[Example Generated Modularizer Domain Model](./artee/pet_clinic/domain_model_working_example.yaml)
 
 ## Summary
 
@@ -33,6 +34,8 @@ flowchart LR
     C -->|code| E(go-full module)
     C -->|code| F(go-full module)
 ```
+
+[Example Result of the combination](https://github.com/cooperlutz/go-full/commit/0dc05f1125b9aa3f481c256eeced6d752b33c156)
 
 ## Value Proposition
 
