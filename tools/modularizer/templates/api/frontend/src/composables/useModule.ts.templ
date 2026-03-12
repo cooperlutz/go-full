@@ -2,24 +2,27 @@ import { ref } from "vue";
 
 import { BackendConfig } from "../config";
 import { 
-  DefaultApi, 
-  type {{.AggregateRoot.Name.Pascal}}, 
-  type FindOne{{.AggregateRoot.Name.Pascal}}Request 
+  DefaultApi,
+  {{range .Aggregates}}
+  type {{.Name.Pascal}}, 
+  type FindOne{{.Name.Pascal}}Request,
+  {{end}}
 } from "../services";
 
 const {{.Name.Flat}}API = new DefaultApi(BackendConfig);
 
-export function useFindAll{{.AggregateRoot.Name.Pascal}}s() {
+{{range .Aggregates}}
+export function useFindAll{{.Name.Pascal}}s() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.AggregateRoot.Name.Flat}}s = ref<Array<{{.AggregateRoot.Name.Pascal}}> | null>(null);
+  const {{.Name.Flat}}s = ref<Array<{{.Name.Pascal}}> | null>(null);
 
   const getFindAll = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await {{.Name.Flat}}API.findAll{{.AggregateRoot.Name.Pascal}}s();
-      {{.AggregateRoot.Name.Flat}}s.value = response;
+      const response = await {{$.Name.Flat}}API.findAll{{.Name.Pascal}}s();
+      {{.Name.Flat}}s.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -32,26 +35,26 @@ export function useFindAll{{.AggregateRoot.Name.Pascal}}s() {
   return {
     error,
     loading,
-    {{.AggregateRoot.Name.Flat}}s,
+    {{.Name.Flat}}s,
     getFindAll,
   };
 }
 
 
-export function useFindOne{{.AggregateRoot.Name.Pascal}}s() {
+export function useFindOne{{.Name.Pascal}}s() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.AggregateRoot.Name.Flat}} = ref<{{.AggregateRoot.Name.Pascal}} | null>(null);
+  const {{.Name.Flat}} = ref<{{.Name.Pascal}} | null>(null);
 
   const getFindOne = async (id: string) => {
     loading.value = true;
     error.value = null;
     try {
-      const req: FindOne{{.AggregateRoot.Name.Pascal}}Request = {
-         {{.AggregateRoot.Name.Camel}}Id: id,
+      const req: FindOne{{.Name.Pascal}}Request = {
+         {{.Name.Camel}}Id: id,
       };
-      const response = await {{.Name.Flat}}API.findOne{{.AggregateRoot.Name.Pascal}}(req);
-      {{.AggregateRoot.Name.Flat}}.value = response;
+      const response = await {{$.Name.Flat}}API.findOne{{.Name.Pascal}}(req);
+      {{.Name.Flat}}.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -64,10 +67,11 @@ export function useFindOne{{.AggregateRoot.Name.Pascal}}s() {
   return {
     error,
     loading,
-    {{.AggregateRoot.Name.Flat}},
+    {{.Name.Flat}},
     getFindOne,
   };
 }
+{{end}}
 
 {{range .Commands}}
 //export function use{{.Name.Pascal}}s() {

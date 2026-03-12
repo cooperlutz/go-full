@@ -1,83 +1,122 @@
 # values must be in snake_case!
 modules:
-- name: work
-  description: Module for managing work items
+- name: pet_registry
+  metadata:
+    concept: https://github.com/spring-projects/spring-petclinic
+  domain: patient
+  description: Module for managing pet registrations in a veterinary clinic system
   defaultQueries: true
-  entities:
-    - name: work_item
-      description: Represents a work item in the system
-      isAggregateRoot: true
+  boundedContext: The pet registry module is responsible for managing the registration and profile information of pets and their owners within the veterinary clinic system. It encapsulates the business logic related to creating and updating pet profiles, linking pets to their owners, and providing query capabilities for retrieving pet information based on various criteria. This module serves as the core domain for pet management and provides the necessary functionality to support various workflows related to pet registration and profile maintenance.
+  aggregates: 
+    - name: pet
+      description: Represents a pet registered in the veterinary clinic system, including its profile information and association with an owner.
       fields:
-        - name: work_item_id
+        - name: pet_id
           type: string
           optional: false
         - name: name
           type: string
           optional: false
-        - name: description
+        - name: species
+          type: string
+          optional: false
+        - name: breed
           type: string
           optional: true
-    - name: task
-      description: Represents a task associated with a work item
-      isAggregateRoot: false
+        - name: age
+          type: float32
+          optional: true
+    - name: owner
+      description: Represents the owner of a pet, including their contact information and association with their pets.
       fields:
-        - name: work_item_id
+        - name: owner_id
           type: string
           optional: false
         - name: name
           type: string
           optional: false
-        - name: description
+    - name: pet_owner_relationship
+      description: Represents the relationship between a pet and its owner, allowing for linking pets to their respective owners in the system.
+      fields:
+        - name: pet_id
           type: string
-          optional: true
+          optional: false
+        - name: owner_id
+          type: string
+          optional: false
+        - name: relationship_type
+          type: string
+          optional: false
   commands:
-    - name: assign_to_user
-      description: Assign a work item to a user
+    - name: register_pet
+      description: Register a new pet in the system, creating a pet profile and associating it with an owner if provided.
       events_emitted:
-        - work_availeble_for_assignment
+        - pet_registered
       params:
-        - name: user_id
+        - name: pet_id
           type: string
           optional: false
-        - name: work_item_id
+        - name: name
           type: string
           optional: false
-    - name: complete_work
-      description: Complete a work item
-      events_emitted:
-        - work_item_completed
-      params:
-        - name: user_id
+        - name: species
           type: string
           optional: false
-        - name: work_item_id
+        - name: breed
           type: string
-          optional: false
+          optional: true
+        - name: age
+          type: float32
+          optional: true
+        - name: owner_id
+          type: string
+          optional: true
   events:
-    - name: work_item_created
-      description: Event triggered when a work item is created
+    - name: pet_registered
+      description: Event triggered when a new pet is registered in the system
       kind: emitted
       fields:
-        - name: work_item_id
+        - name: pet_id
           type: string
           optional: false
         - name: name
           type: string
           optional: false
-        - name: description
+        - name: species
+          type: string
+          optional: false
+        - name: breed
           type: string
           optional: true
-    - name: work_availeble_for_assignment
-      description: Event triggered when a work item is available for assignment
-      kind: consumed
+        - name: age
+          type: float32
+          optional: true
+    - name: pet_profile_updated
+      description: Event triggered when a pet's profile is updated in the system
+      kind: emitted
       fields:
-        - name: work_item_id
+        - name: pet_id
           type: string
           optional: false
         - name: name
           type: string
-          optional: false
-        - name: description
+          optional: true
+        - name: species
           type: string
           optional: true
-  queries:
+        - name: breed
+          type: string
+          optional: true
+        - name: age
+          type: float32
+          optional: true
+    - name: owner_linked
+      description: Event triggered when a pet is linked to an owner in the system
+      kind: emitted
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: owner_id
+          type: string
+          optional: false

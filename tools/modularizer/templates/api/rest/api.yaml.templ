@@ -8,18 +8,19 @@ servers:
       hostname:
         default: localhost
 paths:
-  /v1/{{.AggregateRoot.Name.Flat}}s:
+  {{range .Aggregates}}
+  /v1/{{.Name.Flat}}s:
     get:
-      operationId: findAll{{.AggregateRoot.Name.Pascal}}s
+      operationId: findAll{{.Name.Pascal}}s
       responses:
         '200':
-          description: A list of {{.AggregateRoot.Name.Pascal}}s
+          description: A list of {{.Name.Pascal}}s
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/{{.AggregateRoot.Name.Pascal}}'
+                  $ref: '#/components/schemas/{{.Name.Pascal}}'
         default:
           description: unexpected error
           content:
@@ -27,34 +28,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /v1/{{.AggregateRoot.Name.Flat}}s/{{`{`}}{{.AggregateRoot.Name.Camel}}Id}:
+  /v1/{{.Name.Flat}}s/{{`{`}}{{.Name.Camel}}Id}:
     get:
-      operationId: findOne{{.AggregateRoot.Name.Pascal}}
+      operationId: findOne{{.Name.Pascal}}
       parameters:
-        - name: {{.AggregateRoot.Name.Camel}}Id
+        - name: {{.Name.Camel}}Id
           in: path
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: {{.AggregateRoot.Name.Pascal}} details retrieved successfully
+          description: {{.Name.Pascal}} details retrieved successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/{{.AggregateRoot.Name.Pascal}}'
+                $ref: '#/components/schemas/{{.Name.Pascal}}'
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  {{end}}
+  
 {{range .Commands}}
-#  /v1/{{$.AggregateRoot.Name.Flat}}s/{{`{`}}{{$.AggregateRoot.Name.Camel}}Id}/{{.Name.Camel}}:
+#  /v1/{{$.Name.Flat}}s/{{`{`}}{{$.Name.Camel}}Id}/{{.Name.Camel}}:
 #    patch:
 #      operationId: {{.Name.Camel}}
 #      parameters:
-#        - name: {{$.AggregateRoot.Name.Camel}}Id
+#        - name: {{$.Name.Camel}}Id
 #          in: path
 #          required: true
 #          schema:
@@ -82,7 +85,7 @@ paths:
 
 components:
   schemas:
-    {{range .Entities}}
+    {{range .Aggregates}}
     {{.Name.Pascal}}:
       type: object
       description: {{.Description}}

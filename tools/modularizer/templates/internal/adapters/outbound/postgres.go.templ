@@ -1,3 +1,4 @@
+//nolint:dupl // these handlers are a bit duplicative but we don't want to abstract them further
 package outbound
 
 import (
@@ -25,43 +26,44 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 	}
 }
 
-func (p PostgresAdapter) FindAll(ctx context.Context) ([]query.{{.AggregateRoot.Name.Pascal}}, error) {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.outbound.postgres.find_all")
+{{range .Aggregates}}
+func (p PostgresAdapter) FindAll{{.Name.Pascal}}s(ctx context.Context) ([]query.{{.Name.Pascal}}, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{$.Name.Flat}}.adapters.outbound.postgres.find_all_{{.Name.Snake}}")
 	defer span.End()
 
-	{{.AggregateRoot.Name.Flat}}s, err := p.Handler.FindAll{{.AggregateRoot.Name.Pascal}}s(ctx)
+	{{.Name.Flat}}s, err := p.Handler.FindAll{{.Name.Pascal}}s(ctx)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return nil, err
 	}
 
-	return {{.Name.Flat}}{{.AggregateRoot.Name.Pascal}}sToQuery({{.AggregateRoot.Name.Flat}}s)
+	return {{$.Name.Flat}}{{.Name.Pascal}}sToQuery({{.Name.Flat}}s)
 }
 
-func (p PostgresAdapter) FindOne(ctx context.Context, id uuid.UUID) (query.{{.AggregateRoot.Name.Pascal}}, error) {
-	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_one_{{.AggregateRoot.Name.Snake}}")
+func (p PostgresAdapter) FindOne{{.Name.Pascal}}(ctx context.Context, id uuid.UUID) (query.{{.Name.Pascal}}, error) {
+	ctx, span := telemetree.AddSpan(ctx, "examination.adapters.outbound.postgres.find_one_{{.Name.Snake}}")
 	defer span.End()
 
-	{{.AggregateRoot.Name.Flat}}, err := p.Get{{.AggregateRoot.Name.Pascal}}(ctx, id)
+	{{.Name.Flat}}, err := p.Get{{.Name.Pascal}}(ctx, id)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
-		return query.{{.AggregateRoot.Name.Pascal}}{}, err
+		return query.{{.Name.Pascal}}{}, err
 	}
 
-	return mapEntity{{.AggregateRoot.Name.Pascal}}ToQuery({{.AggregateRoot.Name.Flat}}), nil
+	return mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}}), nil
 }
 
 
-// Add{{.AggregateRoot.Name.Pascal}} adds a new exam to the database.
-func (p PostgresAdapter) Add{{.AggregateRoot.Name.Pascal}}(ctx context.Context, {{.AggregateRoot.Name.Flat}} *{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}) error {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.outbound.postgres.add_{{.AggregateRoot.Name.Snake}}")
+// Add{{.Name.Pascal}} adds a new exam to the database.
+func (p PostgresAdapter) Add{{.Name.Pascal}}(ctx context.Context, {{.Name.Flat}} *{{$.Name.Flat}}.{{.Name.Pascal}}) error {
+	ctx, span := telemetree.AddSpan(ctx, "{{$.Name.Flat}}.adapters.outbound.postgres.add_{{.Name.Snake}}")
 	defer span.End()
 
-	db{{.AggregateRoot.Name.Pascal}} := mapEntity{{.AggregateRoot.Name.Pascal}}ToDB({{.AggregateRoot.Name.Flat}})
+	db{{.Name.Pascal}} := mapEntity{{.Name.Pascal}}ToDB({{.Name.Flat}})
 
-	err := p.Handler.Add{{.AggregateRoot.Name.Pascal}}(ctx, Add{{.AggregateRoot.Name.Pascal}}Params(db{{.AggregateRoot.Name.Pascal}}))
+	err := p.Handler.Add{{.Name.Pascal}}(ctx, Add{{.Name.Pascal}}Params(db{{.Name.Pascal}}))
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
@@ -71,13 +73,13 @@ func (p PostgresAdapter) Add{{.AggregateRoot.Name.Pascal}}(ctx context.Context, 
 	return nil
 }
 
-func (p PostgresAdapter) Get{{.AggregateRoot.Name.Pascal}}(ctx context.Context, id uuid.UUID) (*{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}, error) {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.outbound.postgres.get_{{.AggregateRoot.Name.Snake}}")
+func (p PostgresAdapter) Get{{.Name.Pascal}}(ctx context.Context, id uuid.UUID) (*{{$.Name.Flat}}.{{.Name.Pascal}}, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{$.Name.Flat}}.adapters.outbound.postgres.get_{{.Name.Snake}}")
 	defer span.End()
 
-	{{.AggregateRoot.Name.Flat}}, err := p.Handler.Get{{.AggregateRoot.Name.Pascal}}(
+	{{.Name.Flat}}, err := p.Handler.Get{{.Name.Pascal}}(
 		ctx,
-		Get{{.AggregateRoot.Name.Pascal}}Params{ {{.AggregateRoot.Name.Pascal}}ID: pgxutil.UUIDToPgtypeUUID(id)},
+		Get{{.Name.Pascal}}Params{ {{.Name.Pascal}}ID: pgxutil.UUIDToPgtypeUUID(id)},
 	)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
@@ -85,16 +87,16 @@ func (p PostgresAdapter) Get{{.AggregateRoot.Name.Pascal}}(ctx context.Context, 
 		return nil, err
 	}
 
-	return {{.AggregateRoot.Name.Flat}}.toDomain()
+	return {{.Name.Flat}}.toDomain()
 }
 
 
-func (p PostgresAdapter) Update{{.AggregateRoot.Name.Pascal}}(
+func (p PostgresAdapter) Update{{.Name.Pascal}}(
 	ctx context.Context,
-	{{.AggregateRoot.Name.Flat}}Id uuid.UUID,
-	updateFn func(e *{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}) (*{{.Name.Flat}}.{{.AggregateRoot.Name.Pascal}}, error),
+	{{.Name.Flat}}Id uuid.UUID,
+	updateFn func(e *{{$.Name.Flat}}.{{.Name.Pascal}}) (*{{$.Name.Flat}}.{{.Name.Pascal}}, error),
 ) error {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.outbound.postgres.update_{{.AggregateRoot.Name.Flat}}")
+	ctx, span := telemetree.AddSpan(ctx, "{{$.Name.Flat}}.adapters.outbound.postgres.update_{{.Name.Flat}}")
 	defer span.End()
 
 	tx, err := p.Handler.Begin(ctx)
@@ -102,7 +104,7 @@ func (p PostgresAdapter) Update{{.AggregateRoot.Name.Pascal}}(
 		return err
 	}
 
-	{{.AggregateRoot.Name.Flat}}, err := p.Get{{.AggregateRoot.Name.Pascal}}(ctx, {{.AggregateRoot.Name.Flat}}Id)
+	{{.Name.Flat}}, err := p.Get{{.Name.Pascal}}(ctx, {{.Name.Flat}}Id)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
@@ -113,15 +115,15 @@ func (p PostgresAdapter) Update{{.AggregateRoot.Name.Pascal}}(
 		err = p.finishTransaction(ctx, err, tx)
 	}()
 
-	updated{{.AggregateRoot.Name.Pascal}}, err := updateFn({{.AggregateRoot.Name.Flat}})
+	updated{{.Name.Pascal}}, err := updateFn({{.Name.Flat}})
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return err
 	}
 
-	db{{.AggregateRoot.Name.Pascal}} := mapEntity{{.AggregateRoot.Name.Pascal}}ToDB(updated{{.AggregateRoot.Name.Pascal}})
-	err = p.Handler.Update{{.AggregateRoot.Name.Pascal}}(ctx, Update{{.AggregateRoot.Name.Pascal}}Params(db{{.AggregateRoot.Name.Pascal}}))
+	db{{.Name.Pascal}} := mapEntity{{.Name.Pascal}}ToDB(updated{{.Name.Pascal}})
+	err = p.Handler.Update{{.Name.Pascal}}(ctx, Update{{.Name.Pascal}}Params(db{{.Name.Pascal}}))
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
@@ -130,6 +132,7 @@ func (p PostgresAdapter) Update{{.AggregateRoot.Name.Pascal}}(
 
 	return nil
 }
+{{end}}
 
 // finishTransaction commits or rolls back the transaction based on the error state.
 func (p PostgresAdapter) finishTransaction(ctx context.Context, err error, tx pgx.Tx) error {
