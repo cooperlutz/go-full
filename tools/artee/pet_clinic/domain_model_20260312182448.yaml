@@ -1,0 +1,3093 @@
+# InputTokens:2505
+# OutputTokens:20979
+# Model:claude-opus-4-6
+
+domain_model:
+- name: veterinary_care
+  subdomains:
+  - name: clinical_services
+    strategic_importance: core
+  - name: appointment_management
+    strategic_importance: core
+  - name: medical_records
+    strategic_importance: core
+  - name: telemedicine
+    strategic_importance: core
+- name: pet_management
+  subdomains:
+  - name: pet_registry
+    strategic_importance: core
+  - name: pet_health_tracking
+    strategic_importance: supporting
+- name: client_management
+  subdomains:
+  - name: client_accounts
+    strategic_importance: generic
+  - name: loyalty_program
+    strategic_importance: supporting
+  - name: client_communication
+    strategic_importance: supporting
+- name: product_sales
+  subdomains:
+  - name: inventory_management
+    strategic_importance: supporting
+  - name: retail_sales
+    strategic_importance: supporting
+  - name: online_store
+    strategic_importance: supporting
+- name: billing_and_payments
+  subdomains:
+  - name: invoicing
+    strategic_importance: supporting
+  - name: insurance_claims
+    strategic_importance: supporting
+- name: staff_management
+  subdomains:
+  - name: staff_scheduling
+    strategic_importance: supporting
+  - name: staff_directory
+    strategic_importance: generic
+- name: community_engagement
+  subdomains:
+  - name: partnerships
+    strategic_importance: supporting
+  - name: events_and_outreach
+    strategic_importance: supporting
+- name: identity_and_access
+  subdomains:
+  - name: user_accounts
+    strategic_importance: generic
+  - name: authorization
+    strategic_importance: generic
+- name: notifications
+  subdomains:
+  - name: notification_delivery
+    strategic_importance: generic
+
+
+modules:
+- name: clinical_services
+  domain: veterinary_care
+  description: Module for managing veterinary clinical services including routine check-ups, vaccinations, surgeries, and emergency care.
+  bounded_context: The core clinical domain responsible for defining, delivering, and tracking veterinary services performed on pets. This module encapsulates the business logic around service types, treatment plans, procedures, prescriptions, and clinical outcomes. It is the primary value-generating capability of the pet clinic.
+  responsibility: Managing the catalog of veterinary services, recording treatments and procedures performed on pets, tracking prescriptions and medications, and managing clinical workflows from examination through treatment completion.
+  defaultQueries: true
+  aggregates:
+    - name: veterinary_service
+      description: Represents a type of veterinary service offered by the clinic
+      fields:
+        - name: service_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: category
+          type: string
+          optional: false
+        - name: base_price
+          type: decimal
+          optional: false
+        - name: duration_minutes
+          type: int32
+          optional: true
+        - name: is_active
+          type: bool
+          optional: false
+    - name: treatment
+      description: Represents a treatment or procedure performed on a pet during a visit
+      fields:
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: false
+        - name: diagnosis
+          type: string
+          optional: true
+        - name: notes
+          type: string
+          optional: true
+        - name: status
+          type: string
+          optional: false
+        - name: performed_at
+          type: datetime
+          optional: false
+        - name: prescriptions
+          type: list
+          optional: true
+    - name: prescription
+      description: Represents a medication prescription issued during a treatment
+      fields:
+        - name: prescription_id
+          type: string
+          optional: false
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: medication_name
+          type: string
+          optional: false
+        - name: dosage
+          type: string
+          optional: false
+        - name: frequency
+          type: string
+          optional: false
+        - name: duration_days
+          type: int32
+          optional: false
+        - name: prescribed_by
+          type: string
+          optional: false
+        - name: prescribed_at
+          type: datetime
+          optional: false
+        - name: notes
+          type: string
+          optional: true
+    - name: visit
+      description: Represents a pet visit to the clinic encompassing one or more treatments
+      fields:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: appointment_id
+          type: string
+          optional: true
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: visit_type
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: check_in_time
+          type: datetime
+          optional: false
+        - name: check_out_time
+          type: datetime
+          optional: true
+        - name: reason_for_visit
+          type: string
+          optional: true
+        - name: treatments
+          type: list
+          optional: true
+  commands:
+    - name: check_in_pet
+      description: Check in a pet for a clinic visit
+      events_emitted:
+        - pet_checked_in
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: appointment_id
+          type: string
+          optional: true
+        - name: visit_type
+          type: string
+          optional: false
+        - name: reason_for_visit
+          type: string
+          optional: true
+    - name: record_treatment
+      description: Record a treatment or procedure performed on a pet
+      events_emitted:
+        - treatment_recorded
+      params:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: false
+        - name: diagnosis
+          type: string
+          optional: true
+        - name: notes
+          type: string
+          optional: true
+    - name: issue_prescription
+      description: Issue a medication prescription for a pet
+      events_emitted:
+        - prescription_issued
+      params:
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: medication_name
+          type: string
+          optional: false
+        - name: dosage
+          type: string
+          optional: false
+        - name: frequency
+          type: string
+          optional: false
+        - name: duration_days
+          type: int32
+          optional: false
+        - name: prescribed_by
+          type: string
+          optional: false
+    - name: complete_visit
+      description: Complete a pet visit and check out
+      events_emitted:
+        - visit_completed
+      params:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: notes
+          type: string
+          optional: true
+    - name: create_veterinary_service
+      description: Create a new veterinary service offering
+      events_emitted:
+        - veterinary_service_created
+      params:
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: category
+          type: string
+          optional: false
+        - name: base_price
+          type: decimal
+          optional: false
+        - name: duration_minutes
+          type: int32
+          optional: true
+    - name: initiate_emergency_visit
+      description: Initiate an emergency visit without a prior appointment
+      events_emitted:
+        - emergency_visit_initiated
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: reason_for_visit
+          type: string
+          optional: false
+  events:
+    - name: pet_checked_in
+      description: Event triggered when a pet is checked in for a visit
+      kind: emitted
+      fields:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: visit_type
+          type: string
+          optional: false
+        - name: check_in_time
+          type: datetime
+          optional: false
+    - name: treatment_recorded
+      description: Event triggered when a treatment is recorded for a pet
+      kind: emitted
+      fields:
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+    - name: prescription_issued
+      description: Event triggered when a prescription is issued for a pet
+      kind: emitted
+      fields:
+        - name: prescription_id
+          type: string
+          optional: false
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: medication_name
+          type: string
+          optional: false
+    - name: visit_completed
+      description: Event triggered when a visit is completed
+      kind: emitted
+      fields:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: check_out_time
+          type: datetime
+          optional: false
+    - name: veterinary_service_created
+      description: Event triggered when a new veterinary service is created
+      kind: emitted
+      fields:
+        - name: service_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: category
+          type: string
+          optional: false
+        - name: base_price
+          type: decimal
+          optional: false
+    - name: emergency_visit_initiated
+      description: Event triggered when an emergency visit is initiated
+      kind: emitted
+      fields:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: reason_for_visit
+          type: string
+          optional: false
+    - name: appointment_confirmed
+      description: Event consumed from appointment module to link appointments to visits
+      kind: consumed
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+  queries:
+    - name: find_visits_by_pet
+      description: Query to find all visits for a specific pet
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+    - name: find_visits_by_veterinarian
+      description: Query to find all visits handled by a specific veterinarian
+      params:
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: date_from
+          type: datetime
+          optional: true
+        - name: date_to
+          type: datetime
+          optional: true
+    - name: find_treatments_by_visit
+      description: Query to find all treatments for a specific visit
+      params:
+        - name: visit_id
+          type: string
+          optional: false
+    - name: find_prescriptions_by_pet
+      description: Query to find all prescriptions for a specific pet
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+    - name: find_active_visits
+      description: Query to find all currently active visits in the clinic
+      params: []
+
+- name: appointment_management
+  domain: veterinary_care
+  description: Module for managing appointment scheduling, rescheduling, and cancellations for veterinary visits.
+  bounded_context: Responsible for the full lifecycle of appointments from scheduling through completion or cancellation. This module handles availability management, time slot allocation, appointment reminders, and coordination between clients and veterinarians. It supports both online and in-person scheduling channels.
+  responsibility: Managing appointment creation, scheduling, rescheduling, cancellation, and reminder workflows. Tracking veterinarian availability and time slot allocation. Providing online scheduling capabilities for clients.
+  defaultQueries: true
+  aggregates:
+    - name: appointment
+      description: Represents a scheduled appointment for a pet at the clinic
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: true
+        - name: scheduled_date
+          type: datetime
+          optional: false
+        - name: duration_minutes
+          type: int32
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+        - name: channel
+          type: string
+          optional: false
+        - name: notes
+          type: string
+          optional: true
+    - name: availability_slot
+      description: Represents an available time slot for a veterinarian
+      fields:
+        - name: slot_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: start_time
+          type: datetime
+          optional: false
+        - name: end_time
+          type: datetime
+          optional: false
+        - name: is_available
+          type: bool
+          optional: false
+  commands:
+    - name: schedule_appointment
+      description: Schedule a new appointment for a pet
+      events_emitted:
+        - appointment_scheduled
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: true
+        - name: scheduled_date
+          type: datetime
+          optional: false
+        - name: duration_minutes
+          type: int32
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+        - name: channel
+          type: string
+          optional: false
+    - name: reschedule_appointment
+      description: Reschedule an existing appointment to a new date/time
+      events_emitted:
+        - appointment_rescheduled
+      params:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: new_scheduled_date
+          type: datetime
+          optional: false
+        - name: new_veterinarian_id
+          type: string
+          optional: true
+    - name: cancel_appointment
+      description: Cancel an existing appointment
+      events_emitted:
+        - appointment_cancelled
+      params:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: cancellation_reason
+          type: string
+          optional: true
+    - name: confirm_appointment
+      description: Confirm an appointment
+      events_emitted:
+        - appointment_confirmed
+      params:
+        - name: appointment_id
+          type: string
+          optional: false
+    - name: set_veterinarian_availability
+      description: Set availability slots for a veterinarian
+      events_emitted:
+        - availability_updated
+      params:
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: start_time
+          type: datetime
+          optional: false
+        - name: end_time
+          type: datetime
+          optional: false
+  events:
+    - name: appointment_scheduled
+      description: Event triggered when a new appointment is scheduled
+      kind: emitted
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: scheduled_date
+          type: datetime
+          optional: false
+    - name: appointment_rescheduled
+      description: Event triggered when an appointment is rescheduled
+      kind: emitted
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: new_scheduled_date
+          type: datetime
+          optional: false
+        - name: previous_scheduled_date
+          type: datetime
+          optional: false
+    - name: appointment_cancelled
+      description: Event triggered when an appointment is cancelled
+      kind: emitted
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: cancellation_reason
+          type: string
+          optional: true
+    - name: appointment_confirmed
+      description: Event triggered when an appointment is confirmed
+      kind: emitted
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: scheduled_date
+          type: datetime
+          optional: false
+    - name: availability_updated
+      description: Event triggered when veterinarian availability is updated
+      kind: emitted
+      fields:
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: start_time
+          type: datetime
+          optional: false
+        - name: end_time
+          type: datetime
+          optional: false
+  queries:
+    - name: find_appointments_by_client
+      description: Query to find all appointments for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: true
+    - name: find_appointments_by_veterinarian
+      description: Query to find all appointments for a specific veterinarian
+      params:
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: date_from
+          type: datetime
+          optional: true
+        - name: date_to
+          type: datetime
+          optional: true
+    - name: find_available_slots
+      description: Query to find available appointment slots
+      params:
+        - name: veterinarian_id
+          type: string
+          optional: true
+        - name: date_from
+          type: datetime
+          optional: false
+        - name: date_to
+          type: datetime
+          optional: false
+    - name: find_upcoming_appointments
+      description: Query to find upcoming appointments that need reminders
+      params:
+        - name: reminder_window_hours
+          type: int32
+          optional: false
+
+- name: medical_records
+  domain: veterinary_care
+  description: Module for managing pet medical records, health history, and vaccination tracking.
+  bounded_context: Responsible for maintaining comprehensive medical records for each pet, including health history, vaccination records, lab results, and medical documents. This module serves as the authoritative source for a pet's medical history and supports clinical decision-making.
+  responsibility: Managing pet medical records, vaccination schedules, lab results, and health history documentation. Providing a complete medical history view for veterinarians during consultations.
+  defaultQueries: true
+  aggregates:
+    - name: medical_record
+      description: Represents the comprehensive medical record for a pet
+      fields:
+        - name: record_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: record_type
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: false
+        - name: recorded_by
+          type: string
+          optional: false
+        - name: recorded_at
+          type: datetime
+          optional: false
+        - name: attachments
+          type: list
+          optional: true
+    - name: vaccination_record
+      description: Represents a vaccination record for a pet
+      fields:
+        - name: vaccination_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: vaccine_name
+          type: string
+          optional: false
+        - name: administered_date
+          type: datetime
+          optional: false
+        - name: next_due_date
+          type: datetime
+          optional: true
+        - name: administered_by
+          type: string
+          optional: false
+        - name: batch_number
+          type: string
+          optional: true
+    - name: lab_result
+      description: Represents a lab test result for a pet
+      fields:
+        - name: lab_result_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: test_name
+          type: string
+          optional: false
+        - name: result_value
+          type: string
+          optional: false
+        - name: reference_range
+          type: string
+          optional: true
+        - name: status
+          type: string
+          optional: false
+        - name: ordered_by
+          type: string
+          optional: false
+        - name: result_date
+          type: datetime
+          optional: false
+  commands:
+    - name: add_medical_record
+      description: Add a new medical record entry for a pet
+      events_emitted:
+        - medical_record_added
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: record_type
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: false
+        - name: recorded_by
+          type: string
+          optional: false
+    - name: record_vaccination
+      description: Record a vaccination administered to a pet
+      events_emitted:
+        - vaccination_recorded
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: vaccine_name
+          type: string
+          optional: false
+        - name: administered_by
+          type: string
+          optional: false
+        - name: next_due_date
+          type: datetime
+          optional: true
+        - name: batch_number
+          type: string
+          optional: true
+    - name: record_lab_result
+      description: Record a lab test result for a pet
+      events_emitted:
+        - lab_result_recorded
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: test_name
+          type: string
+          optional: false
+        - name: result_value
+          type: string
+          optional: false
+        - name: reference_range
+          type: string
+          optional: true
+        - name: ordered_by
+          type: string
+          optional: false
+  events:
+    - name: medical_record_added
+      description: Event triggered when a new medical record is added
+      kind: emitted
+      fields:
+        - name: record_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: record_type
+          type: string
+          optional: false
+    - name: vaccination_recorded
+      description: Event triggered when a vaccination is recorded
+      kind: emitted
+      fields:
+        - name: vaccination_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: vaccine_name
+          type: string
+          optional: false
+        - name: next_due_date
+          type: datetime
+          optional: true
+    - name: lab_result_recorded
+      description: Event triggered when a lab result is recorded
+      kind: emitted
+      fields:
+        - name: lab_result_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: test_name
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+    - name: treatment_recorded
+      description: Event consumed from clinical services to auto-create medical records
+      kind: consumed
+      fields:
+        - name: treatment_id
+          type: string
+          optional: false
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: service_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+  queries:
+    - name: find_medical_history_by_pet
+      description: Query to find the complete medical history for a pet
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+    - name: find_vaccination_records_by_pet
+      description: Query to find all vaccination records for a pet
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+    - name: find_overdue_vaccinations
+      description: Query to find pets with overdue vaccinations
+      params:
+        - name: as_of_date
+          type: datetime
+          optional: false
+    - name: find_lab_results_by_pet
+      description: Query to find all lab results for a pet
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+
+- name: telemedicine
+  domain: veterinary_care
+  description: Module for managing telemedicine consultations and virtual veterinary visits.
+  bounded_context: Responsible for managing virtual consultations between veterinarians and pet owners. This module handles telemedicine session scheduling, video call management, virtual consultation notes, and follow-up recommendations. It extends the clinic's reach beyond physical visits.
+  responsibility: Managing telemedicine sessions, virtual consultation workflows, session recordings and notes, and follow-up actions from virtual visits.
+  defaultQueries: true
+  aggregates:
+    - name: telemedicine_session
+      description: Represents a telemedicine consultation session
+      fields:
+        - name: session_id
+          type: string
+          optional: false
+        - name: appointment_id
+          type: string
+          optional: true
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: scheduled_time
+          type: datetime
+          optional: false
+        - name: start_time
+          type: datetime
+          optional: true
+        - name: end_time
+          type: datetime
+          optional: true
+        - name: status
+          type: string
+          optional: false
+        - name: consultation_notes
+          type: string
+          optional: true
+        - name: follow_up_required
+          type: bool
+          optional: false
+        - name: session_link
+          type: string
+          optional: true
+  commands:
+    - name: create_telemedicine_session
+      description: Create a new telemedicine session
+      events_emitted:
+        - telemedicine_session_created
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: scheduled_time
+          type: datetime
+          optional: false
+        - name: appointment_id
+          type: string
+          optional: true
+    - name: start_telemedicine_session
+      description: Start a telemedicine session
+      events_emitted:
+        - telemedicine_session_started
+      params:
+        - name: session_id
+          type: string
+          optional: false
+    - name: complete_telemedicine_session
+      description: Complete a telemedicine session with notes
+      events_emitted:
+        - telemedicine_session_completed
+      params:
+        - name: session_id
+          type: string
+          optional: false
+        - name: consultation_notes
+          type: string
+          optional: false
+        - name: follow_up_required
+          type: bool
+          optional: false
+  events:
+    - name: telemedicine_session_created
+      description: Event triggered when a telemedicine session is created
+      kind: emitted
+      fields:
+        - name: session_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: scheduled_time
+          type: datetime
+          optional: false
+    - name: telemedicine_session_started
+      description: Event triggered when a telemedicine session starts
+      kind: emitted
+      fields:
+        - name: session_id
+          type: string
+          optional: false
+        - name: start_time
+          type: datetime
+          optional: false
+    - name: telemedicine_session_completed
+      description: Event triggered when a telemedicine session is completed
+      kind: emitted
+      fields:
+        - name: session_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: follow_up_required
+          type: bool
+          optional: false
+  queries:
+    - name: find_sessions_by_client
+      description: Query to find telemedicine sessions for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: find_sessions_by_veterinarian
+      description: Query to find telemedicine sessions for a specific veterinarian
+      params:
+        - name: veterinarian_id
+          type: string
+          optional: false
+        - name: date_from
+          type: datetime
+          optional: true
+        - name: date_to
+          type: datetime
+          optional: true
+
+- name: pet_registry
+  domain: pet_management
+  description: Module for managing pet profiles and registration information.
+  bounded_context: Responsible for maintaining the registry of all pets known to the clinic, including their profiles, species, breed, age, and ownership information. This module serves as the authoritative source for pet identity and basic information used across all other modules.
+  responsibility: Managing pet registration, profile information, ownership associations, and pet identity across the system.
+  defaultQueries: true
+  aggregates:
+    - name: pet
+      description: Represents a pet registered at the clinic
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: species
+          type: string
+          optional: false
+        - name: breed
+          type: string
+          optional: true
+        - name: date_of_birth
+          type: datetime
+          optional: true
+        - name: gender
+          type: string
+          optional: false
+        - name: weight
+          type: decimal
+          optional: true
+        - name: color
+          type: string
+          optional: true
+        - name: microchip_id
+          type: string
+          optional: true
+        - name: owner_id
+          type: string
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+        - name: registered_at
+          type: datetime
+          optional: false
+        - name: notes
+          type: string
+          optional: true
+  commands:
+    - name: register_pet
+      description: Register a new pet at the clinic
+      events_emitted:
+        - pet_registered
+      params:
+        - name: name
+          type: string
+          optional: false
+        - name: species
+          type: string
+          optional: false
+        - name: breed
+          type: string
+          optional: true
+        - name: date_of_birth
+          type: datetime
+          optional: true
+        - name: gender
+          type: string
+          optional: false
+        - name: weight
+          type: decimal
+          optional: true
+        - name: color
+          type: string
+          optional: true
+        - name: microchip_id
+          type: string
+          optional: true
+        - name: owner_id
+          type: string
+          optional: false
+    - name: update_pet_profile
+      description: Update a pet's profile information
+      events_emitted:
+        - pet_profile_updated
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: true
+        - name: weight
+          type: decimal
+          optional: true
+        - name: notes
+          type: string
+          optional: true
+    - name: transfer_pet_ownership
+      description: Transfer pet ownership to a new client
+      events_emitted:
+        - pet_ownership_transferred
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: new_owner_id
+          type: string
+          optional: false
+    - name: deactivate_pet
+      description: Deactivate a pet record (e.g., deceased or transferred away)
+      events_emitted:
+        - pet_deactivated
+      params:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+  events:
+    - name: pet_registered
+      description: Event triggered when a new pet is registered
+      kind: emitted
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: species
+          type: string
+          optional: false
+        - name: owner_id
+          type: string
+          optional: false
+    - name: pet_profile_updated
+      description: Event triggered when a pet profile is updated
+      kind: emitted
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+    - name: pet_ownership_transferred
+      description: Event triggered when pet ownership is transferred
+      kind: emitted
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: previous_owner_id
+          type: string
+          optional: false
+        - name: new_owner_id
+          type: string
+          optional: false
+    - name: pet_deactivated
+      description: Event triggered when a pet record is deactivated
+      kind: emitted
+      fields:
+        - name: pet_id
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+  queries:
+    - name: find_pets_by_owner
+      description: Query to find all pets owned by a specific client
+      params:
+        - name: owner_id
+          type: string
+          optional: false
+    - name: search_pets
+      description: Query to search pets by name, species, or breed
+      params:
+        - name: name
+          type: string
+          optional: true
+        - name: species
+          type: string
+          optional: true
+        - name: breed
+          type: string
+          optional: true
+
+- name: client_accounts
+  domain: client_management
+  description: Module for managing client (pet owner) accounts and profile information.
+  bounded_context: Responsible for managing client registration, profile information, contact details, and preferences. This module serves as the authoritative source for client identity and is referenced by other modules for client-related operations.
+  responsibility: Managing client registration, profile maintenance, contact information, and client preferences.
+  defaultQueries: true
+  aggregates:
+    - name: client
+      description: Represents a client (pet owner) of the clinic
+      fields:
+        - name: client_id
+          type: string
+          optional: false
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: phone
+          type: string
+          optional: false
+        - name: address
+          type: string
+          optional: true
+        - name: city
+          type: string
+          optional: true
+        - name: state
+          type: string
+          optional: true
+        - name: zip_code
+          type: string
+          optional: true
+        - name: preferred_contact_method
+          type: string
+          optional: true
+        - name: registered_at
+          type: datetime
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+  commands:
+    - name: register_client
+      description: Register a new client at the clinic
+      events_emitted:
+        - client_registered
+      params:
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: phone
+          type: string
+          optional: false
+        - name: address
+          type: string
+          optional: true
+        - name: city
+          type: string
+          optional: true
+        - name: state
+          type: string
+          optional: true
+        - name: zip_code
+          type: string
+          optional: true
+    - name: update_client_profile
+      description: Update a client's profile information
+      events_emitted:
+        - client_profile_updated
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: first_name
+          type: string
+          optional: true
+        - name: last_name
+          type: string
+          optional: true
+        - name: email
+          type: string
+          optional: true
+        - name: phone
+          type: string
+          optional: true
+        - name: address
+          type: string
+          optional: true
+    - name: deactivate_client
+      description: Deactivate a client account
+      events_emitted:
+        - client_deactivated
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+  events:
+    - name: client_registered
+      description: Event triggered when a new client is registered
+      kind: emitted
+      fields:
+        - name: client_id
+          type: string
+          optional: false
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+    - name: client_profile_updated
+      description: Event triggered when a client profile is updated
+      kind: emitted
+      fields:
+        - name: client_id
+          type: string
+          optional: false
+    - name: client_deactivated
+      description: Event triggered when a client account is deactivated
+      kind: emitted
+      fields:
+        - name: client_id
+          type: string
+          optional: false
+  queries:
+    - name: search_clients
+      description: Query to search clients by name, email, or phone
+      params:
+        - name: search_term
+          type: string
+          optional: false
+
+- name: loyalty_program
+  domain: client_management
+  description: Module for managing the client loyalty program, rewards, and discounts.
+  bounded_context: Responsible for managing the loyalty program including membership tiers, points accumulation, reward redemption, and discount application. This module incentivizes repeat business and enhances client retention.
+  responsibility: Managing loyalty memberships, points tracking, reward catalog, discount application, and tier progression.
+  defaultQueries: true
+  aggregates:
+    - name: loyalty_membership
+      description: Represents a client's loyalty program membership
+      fields:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: tier
+          type: string
+          optional: false
+        - name: points_balance
+          type: int32
+          optional: false
+        - name: total_points_earned
+          type: int32
+          optional: false
+        - name: enrolled_at
+          type: datetime
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+    - name: loyalty_transaction
+      description: Represents a points transaction in the loyalty program
+      fields:
+        - name: transaction_id
+          type: string
+          optional: false
+        - name: membership_id
+          type: string
+          optional: false
+        - name: transaction_type
+          type: string
+          optional: false
+        - name: points
+          type: int32
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: reference_id
+          type: string
+          optional: true
+        - name: created_at
+          type: datetime
+          optional: false
+  commands:
+    - name: enroll_in_loyalty_program
+      description: Enroll a client in the loyalty program
+      events_emitted:
+        - loyalty_membership_created
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: earn_points
+      description: Add loyalty points for a client
+      events_emitted:
+        - points_earned
+      params:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: points
+          type: int32
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: reference_id
+          type: string
+          optional: true
+    - name: redeem_points
+      description: Redeem loyalty points for a reward or discount
+      events_emitted:
+        - points_redeemed
+      params:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: points
+          type: int32
+          optional: false
+        - name: description
+          type: string
+          optional: true
+  events:
+    - name: loyalty_membership_created
+      description: Event triggered when a client enrolls in the loyalty program
+      kind: emitted
+      fields:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: tier
+          type: string
+          optional: false
+    - name: points_earned
+      description: Event triggered when loyalty points are earned
+      kind: emitted
+      fields:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: points
+          type: int32
+          optional: false
+        - name: new_balance
+          type: int32
+          optional: false
+    - name: points_redeemed
+      description: Event triggered when loyalty points are redeemed
+      kind: emitted
+      fields:
+        - name: membership_id
+          type: string
+          optional: false
+        - name: points
+          type: int32
+          optional: false
+        - name: new_balance
+          type: int32
+          optional: false
+    - name: invoice_paid
+      description: Event consumed from billing to auto-award loyalty points
+      kind: consumed
+      fields:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total_amount
+          type: decimal
+          optional: false
+  queries:
+    - name: find_membership_by_client
+      description: Query to find a loyalty membership for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: find_loyalty_transactions
+      description: Query to find loyalty transactions for a membership
+      params:
+        - name: membership_id
+          type: string
+          optional: false
+
+- name: inventory_management
+  domain: product_sales
+  description: Module for managing pet product inventory, stock levels, and supplier orders.
+  bounded_context: Responsible for tracking product inventory, managing stock levels, handling supplier purchase orders, and triggering reorder alerts. This module ensures products are available for both in-clinic and online sales.
+  responsibility: Managing product catalog, stock tracking, reorder management, supplier purchase orders, and inventory auditing.
+  defaultQueries: true
+  aggregates:
+    - name: product
+      description: Represents a pet product available for sale
+      fields:
+        - name: product_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: category
+          type: string
+          optional: false
+        - name: sku
+          type: string
+          optional: false
+        - name: unit_price
+          type: decimal
+          optional: false
+        - name: cost_price
+          type: decimal
+          optional: false
+        - name: stock_quantity
+          type: int32
+          optional: false
+        - name: reorder_level
+          type: int32
+          optional: false
+        - name: supplier_id
+          type: string
+          optional: true
+        - name: is_active
+          type: bool
+          optional: false
+    - name: purchase_order
+      description: Represents a purchase order to a supplier for restocking
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: supplier_id
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: order_date
+          type: datetime
+          optional: false
+        - name: expected_delivery_date
+          type: datetime
+          optional: true
+        - name: total_amount
+          type: decimal
+          optional: false
+        - name: items
+          type: list
+          optional: false
+  commands:
+    - name: add_product
+      description: Add a new product to the inventory catalog
+      events_emitted:
+        - product_added
+      params:
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: category
+          type: string
+          optional: false
+        - name: sku
+          type: string
+          optional: false
+        - name: unit_price
+          type: decimal
+          optional: false
+        - name: cost_price
+          type: decimal
+          optional: false
+        - name: reorder_level
+          type: int32
+          optional: false
+        - name: supplier_id
+          type: string
+          optional: true
+    - name: update_stock
+      description: Update stock quantity for a product
+      events_emitted:
+        - stock_updated
+      params:
+        - name: product_id
+          type: string
+          optional: false
+        - name: quantity_change
+          type: int32
+          optional: false
+        - name: reason
+          type: string
+          optional: false
+    - name: create_purchase_order
+      description: Create a purchase order to restock products
+      events_emitted:
+        - purchase_order_created
+      params:
+        - name: supplier_id
+          type: string
+          optional: false
+        - name: items
+          type: list
+          optional: false
+        - name: expected_delivery_date
+          type: datetime
+          optional: true
+    - name: receive_purchase_order
+      description: Mark a purchase order as received and update stock
+      events_emitted:
+        - purchase_order_received
+        - stock_updated
+      params:
+        - name: order_id
+          type: string
+          optional: false
+  events:
+    - name: product_added
+      description: Event triggered when a new product is added to inventory
+      kind: emitted
+      fields:
+        - name: product_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: sku
+          type: string
+          optional: false
+        - name: unit_price
+          type: decimal
+          optional: false
+    - name: stock_updated
+      description: Event triggered when stock levels change
+      kind: emitted
+      fields:
+        - name: product_id
+          type: string
+          optional: false
+        - name: new_quantity
+          type: int32
+          optional: false
+        - name: reason
+          type: string
+          optional: false
+    - name: low_stock_alert
+      description: Event triggered when stock falls below reorder level
+      kind: emitted
+      fields:
+        - name: product_id
+          type: string
+          optional: false
+        - name: current_quantity
+          type: int32
+          optional: false
+        - name: reorder_level
+          type: int32
+          optional: false
+    - name: purchase_order_created
+      description: Event triggered when a purchase order is created
+      kind: emitted
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: supplier_id
+          type: string
+          optional: false
+    - name: purchase_order_received
+      description: Event triggered when a purchase order is received
+      kind: emitted
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+    - name: order_fulfilled
+      description: Event consumed from retail sales to decrement stock
+      kind: consumed
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: items
+          type: list
+          optional: false
+  queries:
+    - name: find_low_stock_products
+      description: Query to find products below reorder level
+      params: []
+    - name: find_products_by_category
+      description: Query to find products by category
+      params:
+        - name: category
+          type: string
+          optional: false
+    - name: search_products
+      description: Query to search products by name or SKU
+      params:
+        - name: search_term
+          type: string
+          optional: false
+
+- name: retail_sales
+  domain: product_sales
+  description: Module for managing in-clinic and online product sales, shopping cart, and order fulfillment.
+  bounded_context: Responsible for managing the sales process for pet products including shopping cart management, order placement, order fulfillment, and sales tracking. This module supports both in-clinic point-of-sale and online store transactions.
+  responsibility: Managing product sales orders, shopping cart, checkout process, order fulfillment, and sales reporting.
+  defaultQueries: true
+  aggregates:
+    - name: sales_order
+      description: Represents a product sales order
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: order_date
+          type: datetime
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: items
+          type: list
+          optional: false
+        - name: subtotal
+          type: decimal
+          optional: false
+        - name: tax
+          type: decimal
+          optional: false
+        - name: total
+          type: decimal
+          optional: false
+        - name: discount_amount
+          type: decimal
+          optional: true
+    - name: order_item
+      description: Represents an item in a sales order
+      fields:
+        - name: item_id
+          type: string
+          optional: false
+        - name: order_id
+          type: string
+          optional: false
+        - name: product_id
+          type: string
+          optional: false
+        - name: product_name
+          type: string
+          optional: false
+        - name: quantity
+          type: int32
+          optional: false
+        - name: unit_price
+          type: decimal
+          optional: false
+        - name: line_total
+          type: decimal
+          optional: false
+  commands:
+    - name: place_order
+      description: Place a new product sales order
+      events_emitted:
+        - order_placed
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: items
+          type: list
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: discount_amount
+          type: decimal
+          optional: true
+    - name: fulfill_order
+      description: Mark an order as fulfilled
+      events_emitted:
+        - order_fulfilled
+      params:
+        - name: order_id
+          type: string
+          optional: false
+    - name: cancel_order
+      description: Cancel a sales order
+      events_emitted:
+        - order_cancelled
+      params:
+        - name: order_id
+          type: string
+          optional: false
+        - name: cancellation_reason
+          type: string
+          optional: true
+  events:
+    - name: order_placed
+      description: Event triggered when a new order is placed
+      kind: emitted
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total
+          type: decimal
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+    - name: order_fulfilled
+      description: Event triggered when an order is fulfilled
+      kind: emitted
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: items
+          type: list
+          optional: false
+    - name: order_cancelled
+      description: Event triggered when an order is cancelled
+      kind: emitted
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: cancellation_reason
+          type: string
+          optional: true
+  queries:
+    - name: find_orders_by_client
+      description: Query to find all orders for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: find_orders_by_status
+      description: Query to find orders by status
+      params:
+        - name: status
+          type: string
+          optional: false
+    - name: find_sales_by_date_range
+      description: Query to find sales within a date range for reporting
+      params:
+        - name: date_from
+          type: datetime
+          optional: false
+        - name: date_to
+          type: datetime
+          optional: false
+
+- name: invoicing
+  domain: billing_and_payments
+  description: Module for managing invoices, payments, and billing for veterinary services and product sales.
+  bounded_context: Responsible for generating invoices for veterinary services and product sales, processing payments, managing billing records, and handling refunds. This module consolidates all financial transactions related to client charges.
+  responsibility: Managing invoice generation, payment processing, billing records, refunds, and financial transaction tracking.
+  defaultQueries: true
+  aggregates:
+    - name: invoice
+      description: Represents an invoice for services or products
+      fields:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: visit_id
+          type: string
+          optional: true
+        - name: order_id
+          type: string
+          optional: true
+        - name: invoice_date
+          type: datetime
+          optional: false
+        - name: due_date
+          type: datetime
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: line_items
+          type: list
+          optional: false
+        - name: subtotal
+          type: decimal
+          optional: false
+        - name: tax
+          type: decimal
+          optional: false
+        - name: total_amount
+          type: decimal
+          optional: false
+        - name: amount_paid
+          type: decimal
+          optional: false
+        - name: balance_due
+          type: decimal
+          optional: false
+    - name: payment
+      description: Represents a payment made against an invoice
+      fields:
+        - name: payment_id
+          type: string
+          optional: false
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: amount
+          type: decimal
+          optional: false
+        - name: payment_method
+          type: string
+          optional: false
+        - name: payment_date
+          type: datetime
+          optional: false
+        - name: reference_number
+          type: string
+          optional: true
+        - name: status
+          type: string
+          optional: false
+  commands:
+    - name: create_invoice
+      description: Create a new invoice for a client
+      events_emitted:
+        - invoice_created
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: visit_id
+          type: string
+          optional: true
+        - name: order_id
+          type: string
+          optional: true
+        - name: line_items
+          type: list
+          optional: false
+        - name: due_date
+          type: datetime
+          optional: false
+    - name: record_payment
+      description: Record a payment against an invoice
+      events_emitted:
+        - payment_recorded
+        - invoice_paid
+      params:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: amount
+          type: decimal
+          optional: false
+        - name: payment_method
+          type: string
+          optional: false
+        - name: reference_number
+          type: string
+          optional: true
+    - name: issue_refund
+      description: Issue a refund for a payment
+      events_emitted:
+        - refund_issued
+      params:
+        - name: payment_id
+          type: string
+          optional: false
+        - name: amount
+          type: decimal
+          optional: false
+        - name: reason
+          type: string
+          optional: false
+  events:
+    - name: invoice_created
+      description: Event triggered when a new invoice is created
+      kind: emitted
+      fields:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total_amount
+          type: decimal
+          optional: false
+    - name: payment_recorded
+      description: Event triggered when a payment is recorded
+      kind: emitted
+      fields:
+        - name: payment_id
+          type: string
+          optional: false
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: amount
+          type: decimal
+          optional: false
+    - name: invoice_paid
+      description: Event triggered when an invoice is fully paid
+      kind: emitted
+      fields:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total_amount
+          type: decimal
+          optional: false
+    - name: refund_issued
+      description: Event triggered when a refund is issued
+      kind: emitted
+      fields:
+        - name: payment_id
+          type: string
+          optional: false
+        - name: amount
+          type: decimal
+          optional: false
+        - name: reason
+          type: string
+          optional: false
+    - name: visit_completed
+      description: Event consumed from clinical services to auto-generate invoices
+      kind: consumed
+      fields:
+        - name: visit_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+    - name: order_placed
+      description: Event consumed from retail sales to auto-generate invoices
+      kind: consumed
+      fields:
+        - name: order_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total
+          type: decimal
+          optional: false
+  queries:
+    - name: find_invoices_by_client
+      description: Query to find all invoices for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: find_outstanding_invoices
+      description: Query to find all unpaid or partially paid invoices
+      params:
+        - name: client_id
+          type: string
+          optional: true
+    - name: find_payments_by_invoice
+      description: Query to find all payments for a specific invoice
+      params:
+        - name: invoice_id
+          type: string
+          optional: false
+    - name: find_revenue_by_date_range
+      description: Query to find revenue within a date range for reporting
+      params:
+        - name: date_from
+          type: datetime
+          optional: false
+        - name: date_to
+          type: datetime
+          optional: false
+
+- name: insurance_claims
+  domain: billing_and_payments
+  description: Module for managing pet insurance claim submissions and tracking.
+  bounded_context: Responsible for managing the submission, tracking, and resolution of pet insurance claims on behalf of clients. This module integrates with partner insurance companies and helps clients navigate the claims process.
+  responsibility: Managing insurance claim creation, submission to insurance partners, claim status tracking, and reimbursement recording.
+  defaultQueries: true
+  aggregates:
+    - name: insurance_claim
+      description: Represents a pet insurance claim
+      fields:
+        - name: claim_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: insurance_provider
+          type: string
+          optional: false
+        - name: policy_number
+          type: string
+          optional: false
+        - name: claim_amount
+          type: decimal
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: submitted_at
+          type: datetime
+          optional: true
+        - name: resolved_at
+          type: datetime
+          optional: true
+        - name: reimbursement_amount
+          type: decimal
+          optional: true
+        - name: notes
+          type: string
+          optional: true
+  commands:
+    - name: create_insurance_claim
+      description: Create a new insurance claim
+      events_emitted:
+        - insurance_claim_created
+      params:
+        - name: client_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: insurance_provider
+          type: string
+          optional: false
+        - name: policy_number
+          type: string
+          optional: false
+        - name: claim_amount
+          type: decimal
+          optional: false
+    - name: submit_claim
+      description: Submit an insurance claim to the provider
+      events_emitted:
+        - insurance_claim_submitted
+      params:
+        - name: claim_id
+          type: string
+          optional: false
+    - name: resolve_claim
+      description: Record the resolution of an insurance claim
+      events_emitted:
+        - insurance_claim_resolved
+      params:
+        - name: claim_id
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: reimbursement_amount
+          type: decimal
+          optional: true
+        - name: notes
+          type: string
+          optional: true
+  events:
+    - name: insurance_claim_created
+      description: Event triggered when a new insurance claim is created
+      kind: emitted
+      fields:
+        - name: claim_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+    - name: insurance_claim_submitted
+      description: Event triggered when an insurance claim is submitted
+      kind: emitted
+      fields:
+        - name: claim_id
+          type: string
+          optional: false
+        - name: insurance_provider
+          type: string
+          optional: false
+    - name: insurance_claim_resolved
+      description: Event triggered when an insurance claim is resolved
+      kind: emitted
+      fields:
+        - name: claim_id
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: reimbursement_amount
+          type: decimal
+          optional: true
+  queries:
+    - name: find_claims_by_client
+      description: Query to find all insurance claims for a specific client
+      params:
+        - name: client_id
+          type: string
+          optional: false
+    - name: find_claims_by_status
+      description: Query to find insurance claims by status
+      params:
+        - name: status
+          type: string
+          optional: false
+
+- name: staff_management
+  domain: staff_management
+  description: Module for managing veterinarians, support staff, their schedules, and roles.
+  bounded_context: Responsible for managing staff profiles, roles, qualifications, scheduling, and availability. This module provides staff identity and scheduling information used by appointment and clinical modules.
+  responsibility: Managing staff profiles, roles, qualifications, work schedules, and availability tracking.
+  defaultQueries: true
+  aggregates:
+    - name: staff_member
+      description: Represents a staff member at the clinic
+      fields:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: phone
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+        - name: specializations
+          type: list
+          optional: true
+        - name: license_number
+          type: string
+          optional: true
+        - name: hire_date
+          type: datetime
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+    - name: staff_schedule
+      description: Represents a staff member's work schedule
+      fields:
+        - name: schedule_id
+          type: string
+          optional: false
+        - name: staff_id
+          type: string
+          optional: false
+        - name: day_of_week
+          type: string
+          optional: false
+        - name: start_time
+          type: string
+          optional: false
+        - name: end_time
+          type: string
+          optional: false
+        - name: effective_from
+          type: datetime
+          optional: false
+        - name: effective_to
+          type: datetime
+          optional: true
+  commands:
+    - name: add_staff_member
+      description: Add a new staff member to the clinic
+      events_emitted:
+        - staff_member_added
+      params:
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: phone
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+        - name: specializations
+          type: list
+          optional: true
+        - name: license_number
+          type: string
+          optional: true
+    - name: update_staff_profile
+      description: Update a staff member's profile
+      events_emitted:
+        - staff_profile_updated
+      params:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: true
+        - name: phone
+          type: string
+          optional: true
+        - name: specializations
+          type: list
+          optional: true
+    - name: set_staff_schedule
+      description: Set or update a staff member's work schedule
+      events_emitted:
+        - staff_schedule_updated
+      params:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: day_of_week
+          type: string
+          optional: false
+        - name: start_time
+          type: string
+          optional: false
+        - name: end_time
+          type: string
+          optional: false
+        - name: effective_from
+          type: datetime
+          optional: false
+        - name: effective_to
+          type: datetime
+          optional: true
+    - name: deactivate_staff_member
+      description: Deactivate a staff member
+      events_emitted:
+        - staff_member_deactivated
+      params:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+  events:
+    - name: staff_member_added
+      description: Event triggered when a new staff member is added
+      kind: emitted
+      fields:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: first_name
+          type: string
+          optional: false
+        - name: last_name
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+    - name: staff_profile_updated
+      description: Event triggered when a staff profile is updated
+      kind: emitted
+      fields:
+        - name: staff_id
+          type: string
+          optional: false
+    - name: staff_schedule_updated
+      description: Event triggered when a staff schedule is updated
+      kind: emitted
+      fields:
+        - name: staff_id
+          type: string
+          optional: false
+        - name: day_of_week
+          type: string
+          optional: false
+    - name: staff_member_deactivated
+      description: Event triggered when a staff member is deactivated
+      kind: emitted
+      fields:
+        - name: staff_id
+          type: string
+          optional: false
+  queries:
+    - name: find_staff_by_role
+      description: Query to find staff members by role
+      params:
+        - name: role
+          type: string
+          optional: false
+    - name: find_veterinarians
+      description: Query to find all active veterinarians
+      params: []
+    - name: find_staff_schedule
+      description: Query to find the schedule for a specific staff member
+      params:
+        - name: staff_id
+          type: string
+          optional: false
+
+- name: notifications
+  domain: notifications
+  description: Module for managing notification delivery across multiple channels including email, SMS, and push notifications.
+  bounded_context: Responsible for receiving notification requests from other modules and delivering them through appropriate channels (email, SMS, push notifications). This module handles notification templates, delivery preferences, and delivery tracking.
+  responsibility: Managing notification templates, delivery channel selection, notification sending, and delivery status tracking.
+  defaultQueries: true
+  aggregates:
+    - name: notification
+      description: Represents a notification to be sent to a client
+      fields:
+        - name: notification_id
+          type: string
+          optional: false
+        - name: recipient_id
+          type: string
+          optional: false
+        - name: recipient_type
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: template_name
+          type: string
+          optional: false
+        - name: subject
+          type: string
+          optional: true
+        - name: body
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: sent_at
+          type: datetime
+          optional: true
+        - name: created_at
+          type: datetime
+          optional: false
+    - name: notification_template
+      description: Represents a reusable notification template
+      fields:
+        - name: template_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: subject_template
+          type: string
+          optional: true
+        - name: body_template
+          type: string
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+  commands:
+    - name: send_notification
+      description: Send a notification to a recipient
+      events_emitted:
+        - notification_sent
+      params:
+        - name: recipient_id
+          type: string
+          optional: false
+        - name: recipient_type
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: template_name
+          type: string
+          optional: false
+        - name: template_data
+          type: map
+          optional: true
+    - name: create_notification_template
+      description: Create a new notification template
+      events_emitted:
+        - notification_template_created
+      params:
+        - name: name
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: subject_template
+          type: string
+          optional: true
+        - name: body_template
+          type: string
+          optional: false
+  events:
+    - name: notification_sent
+      description: Event triggered when a notification is sent
+      kind: emitted
+      fields:
+        - name: notification_id
+          type: string
+          optional: false
+        - name: recipient_id
+          type: string
+          optional: false
+        - name: channel
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+    - name: notification_template_created
+      description: Event triggered when a notification template is created
+      kind: emitted
+      fields:
+        - name: template_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+    - name: appointment_scheduled
+      description: Event consumed to send appointment confirmation notifications
+      kind: consumed
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: scheduled_date
+          type: datetime
+          optional: false
+    - name: appointment_cancelled
+      description: Event consumed to send appointment cancellation notifications
+      kind: consumed
+      fields:
+        - name: appointment_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+    - name: vaccination_recorded
+      description: Event consumed to send vaccination reminder notifications
+      kind: consumed
+      fields:
+        - name: vaccination_id
+          type: string
+          optional: false
+        - name: pet_id
+          type: string
+          optional: false
+        - name: next_due_date
+          type: datetime
+          optional: true
+    - name: invoice_created
+      description: Event consumed to send invoice notifications
+      kind: consumed
+      fields:
+        - name: invoice_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+        - name: total_amount
+          type: decimal
+          optional: false
+  queries:
+    - name: find_notifications_by_recipient
+      description: Query to find all notifications for a specific recipient
+      params:
+        - name: recipient_id
+          type: string
+          optional: false
+    - name: find_notifications_by_status
+      description: Query to find notifications by delivery status
+      params:
+        - name: status
+          type: string
+          optional: false
+
+- name: community_engagement
+  domain: community_engagement
+  description: Module for managing community events, partnerships with shelters, and outreach programs.
+  bounded_context: Responsible for managing the clinic's community engagement activities including events, partnerships with animal shelters and rescue organizations, sponsorships, and outreach programs. This module supports the clinic's mission of community involvement.
+  responsibility: Managing community events, shelter partnerships, outreach programs, sponsorships, and community engagement tracking.
+  defaultQueries: true
+  aggregates:
+    - name: community_event
+      description: Represents a community event organized or sponsored by the clinic
+      fields:
+        - name: event_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: event_type
+          type: string
+          optional: false
+        - name: event_date
+          type: datetime
+          optional: false
+        - name: location
+          type: string
+          optional: false
+        - name: status
+          type: string
+          optional: false
+        - name: max_participants
+          type: int32
+          optional: true
+        - name: current_participants
+          type: int32
+          optional: false
+    - name: partnership
+      description: Represents a partnership with a shelter or organization
+      fields:
+        - name: partnership_id
+          type: string
+          optional: false
+        - name: organization_name
+          type: string
+          optional: false
+        - name: organization_type
+          type: string
+          optional: false
+        - name: contact_name
+          type: string
+          optional: true
+        - name: contact_email
+          type: string
+          optional: true
+        - name: contact_phone
+          type: string
+          optional: true
+        - name: partnership_start_date
+          type: datetime
+          optional: false
+        - name: is_active
+          type: bool
+          optional: false
+        - name: notes
+          type: string
+          optional: true
+  commands:
+    - name: create_community_event
+      description: Create a new community event
+      events_emitted:
+        - community_event_created
+      params:
+        - name: name
+          type: string
+          optional: false
+        - name: description
+          type: string
+          optional: true
+        - name: event_type
+          type: string
+          optional: false
+        - name: event_date
+          type: datetime
+          optional: false
+        - name: location
+          type: string
+          optional: false
+        - name: max_participants
+          type: int32
+          optional: true
+    - name: register_for_event
+      description: Register a client for a community event
+      events_emitted:
+        - event_registration_created
+      params:
+        - name: event_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+    - name: create_partnership
+      description: Create a new partnership with an organization
+      events_emitted:
+        - partnership_created
+      params:
+        - name: organization_name
+          type: string
+          optional: false
+        - name: organization_type
+          type: string
+          optional: false
+        - name: contact_name
+          type: string
+          optional: true
+        - name: contact_email
+          type: string
+          optional: true
+        - name: contact_phone
+          type: string
+          optional: true
+  events:
+    - name: community_event_created
+      description: Event triggered when a community event is created
+      kind: emitted
+      fields:
+        - name: event_id
+          type: string
+          optional: false
+        - name: name
+          type: string
+          optional: false
+        - name: event_date
+          type: datetime
+          optional: false
+    - name: event_registration_created
+      description: Event triggered when a client registers for an event
+      kind: emitted
+      fields:
+        - name: event_id
+          type: string
+          optional: false
+        - name: client_id
+          type: string
+          optional: false
+    - name: partnership_created
+      description: Event triggered when a new partnership is created
+      kind: emitted
+      fields:
+        - name: partnership_id
+          type: string
+          optional: false
+        - name: organization_name
+          type: string
+          optional: false
+  queries:
+    - name: find_upcoming_events
+      description: Query to find upcoming community events
+      params:
+        - name: date_from
+          type: datetime
+          optional: false
+    - name: find_active_partnerships
+      description: Query to find all active partnerships
+      params: []
+
+- name: identity_and_access
+  domain: identity_and_access
+  description: Module for managing user authentication, authorization, and access control.
+  bounded_context: Responsible for managing user accounts, authentication, role-based access control, and security. This is a generic module that provides identity services to all other modules in the system.
+  responsibility: Managing user registration, authentication, authorization, role management, and security policies.
+  defaultQueries: true
+  aggregates:
+    - name: user_account
+      description: Represents a user account in the system
+      fields:
+        - name: user_id
+          type: string
+          optional: false
+        - name: username
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: password_hash
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+        - name: associated_entity_id
+          type: string
+          optional: true
+        - name: associated_entity_type
+          type: string
+          optional: true
+        - name: is_active
+          type: bool
+          optional: false
+        - name: last_login
+          type: datetime
+          optional: true
+        - name: created_at
+          type: datetime
+          optional: false
+  commands:
+    - name: register_user
+      description: Register a new user account
+      events_emitted:
+        - user_registered
+      params:
+        - name: username
+          type: string
+          optional: false
+        - name: email
+          type: string
+          optional: false
+        - name: password
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+        - name: associated_entity_id
+          type: string
+          optional: true
+        - name: associated_entity_type
+          type: string
+          optional: true
+    - name: authenticate_user
+      description: Authenticate a user with credentials
+      events_emitted:
+        - user_authenticated
+      params:
+        - name: username
+          type: string
+          optional: false
+        - name: password
+          type: string
+          optional: false
+    - name: change_password
+      description: Change a user's password
+      events_emitted:
+        - password_changed
+      params:
+        - name: user_id
+          type: string
+          optional: false
+        - name: current_password
+          type: string
+          optional: false
+        - name: new_password
+          type: string
+          optional: false
+    - name: deactivate_user
+      description: Deactivate a user account
+      events_emitted:
+        - user_deactivated
+      params:
+        - name: user_id
+          type: string
+          optional: false
+        - name: reason
+          type: string
+          optional: true
+  events:
+    - name: user_registered
+      description: Event triggered when a new user is registered
+      kind: emitted
+      fields:
+        - name: user_id
+          type: string
+          optional: false
+        - name: username
+          type: string
+          optional: false
+        - name: role
+          type: string
+          optional: false
+    - name: user_authenticated
+      description: Event triggered when a user successfully authenticates
+      kind: emitted
+      fields:
+        - name: user_id
+          type: string
+          optional: false
+        - name: login_time
+          type: datetime
+          optional: false
+    - name: password_changed
+      description: Event triggered when a user changes their password
+      kind: emitted
+      fields:
+        - name: user_id
+          type: string
+          optional: false
+    - name: user_deactivated
+      description: Event triggered when a user account is deactivated
+      kind: emitted
+      fields:
+        - name: user_id
+          type: string
+          optional: false
+  queries:
+    - name: find_user_by_username
+      description: Query to find a user by username
+      params:
+        - name: username
+          type: string
+          optional: false
+    - name: find_users_by_role
+      description: Query to find users by role
+      params:
+        - name: role
+          type: string
+          optional: false

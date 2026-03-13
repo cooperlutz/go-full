@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/cooperlutz/go-full/tools/modularizer/utils"
 	"github.com/joho/godotenv"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/anthropic"
@@ -27,126 +28,21 @@ type ModularizerAIGenerator struct {
 	generationInfo             map[string]any
 }
 
-var businessModelPrompt = `
-You are an expert at refactoring codebases into Go code.
-Adhering to the concepts of Domain-Driven Design, you are responsible for reviewing the code base and identifying the aggregate root entities.
-
-When defining the aggregate root entities, commands, events, and queries for your domain, ensure that you are adhering to the principles of Domain-Driven Design and that you are modeling the core concepts and behaviors of your domain in a way that is clear and maintainable.
-
-Business model
-{{.story}}
-
-Step 1: Review the business model and Define the relevant business Domains and bounded contexts which will be broken out into individual microservices. Each Domain should represent a specific area of the business logic and should be designed to be cohesive and loosely coupled with other Domains.
-
-The output must be provided in yaml and conform to the following example structure:
-'''yaml
-# values must be in snake_case!
-modules:
-- name: work
-  description: Module for managing work items
-  bounded_context: The core domain of the system, responsible for managing work items and their associated tasks. This module encapsulates the business logic and rules related to work items, including their creation, assignment, and completion. It serves as the central point of interaction for all operations related to work items within the system.
-  responsibility: This module is responsible for managing work items, including their creation, assignment, and completion. It defines the core business logic and rules associated with work items, and serves as the central point of interaction for all operations related to work items within the system.
-  defaultQueries: true # if true, a default set of queries (get by id, list all) will be generated for each aggregate
-  aggregates:
-    - name: work_item
-      description: Represents a work item in the system
-      fields:
-        - name: work_item_id
-          type: string
-          optional: false
-        - name: name
-          type: string
-          optional: false
-        - name: description
-          type: string
-          optional: true
-		- name: story_points
-		  type: int32
-		  optional: true
-		- name: tasks
-		  optional: true
-    - name: task
-      description: Represents a task associated with a work item
-      fields:
-        - name: work_item_id
-          type: string
-          optional: false
-        - name: name
-          type: string
-          optional: false
-        - name: description
-          type: string
-          optional: true
-  commands:
-    - name: assign_to_user
-      description: Assign a work item to a user
-      events_emitted:
-        - work_availeble_for_assignment
-      params:
-        - name: user_id
-          type: string
-          optional: false
-        - name: work_item_id
-          type: string
-          optional: false
-    - name: complete_work
-      description: Complete a work item
-      events_emitted:
-        - work_item_completed
-      params:
-        - name: user_id
-          type: string
-          optional: false
-        - name: work_item_id
-          type: string
-          optional: false
-  events:
-    - name: work_item_created
-      description: Event triggered when a work item is created
-      kind: emitted
-      fields:
-        - name: work_item_id
-          type: string
-          optional: false
-        - name: name
-          type: string
-          optional: false
-        - name: description
-          type: string
-          optional: true
-    - name: work_availeble_for_assignment
-      description: Event triggered when a work item is available for assignment
-      kind: consumed
-      fields:
-        - name: work_item_id
-          type: string
-          optional: false
-        - name: name
-          type: string
-          optional: false
-        - name: description
-          type: string
-          optional: true
-  queries:
-    - name: find_work_assigned_to_user
-      description: Query to find work items assigned to a specific user
-      params:
-        - name: user_id
-          type: string
-          optional: false
-'''
-`
-
 const aiModel = "claude-opus-4-6"
 
 func NewBusinessModeller(dir, inputFileName string) (*ModularizerAIGenerator, error) {
+
 	llm, err := anthropic.New(anthropic.WithModel(aiModel))
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
+	businessModelTemplate, err := os.ReadFile(utils.GetDirectoryOfCurrentFile() + "/templates/business_model_prompt.md")
+	if err != nil {
+		return nil, fmt.Errorf("reading prompt template: %w", err)
+	}
 
-	dmTemplate := prompts.NewPromptTemplate(businessModelPrompt, []string{"story"})
+	dmTemplate := prompts.NewPromptTemplate(string(businessModelTemplate), []string{"story"})
 
 	return &ModularizerAIGenerator{
 		llm:                        llm,
@@ -181,7 +77,8 @@ func (c *ModularizerAIGenerator) Run(ctx context.Context) error {
 				// Temperature: 0.7,
 				MaxTokens: 32768,
 			},
-		))
+		),
+	)
 	if err != nil {
 		return fmt.Errorf("generating review: %w", err)
 	}
@@ -212,9 +109,9 @@ func (c *ModularizerAIGenerator) saveModularizerConfig() error {
 
 func (c *ModularizerAIGenerator) addContentToOutput() {
 	var outputContent string
-	outputContent += "// InputTokens:" + fmt.Sprint(c.generationInfo["InputTokens"].(int)) + "\n"
-	outputContent += "// OutputTokens:" + fmt.Sprint(c.generationInfo["OutputTokens"].(int)) + "\n"
-	outputContent += "// Model:" + aiModel + "\n"
+	outputContent += "# InputTokens:" + fmt.Sprint(c.generationInfo["InputTokens"].(int)) + "\n"
+	outputContent += "# OutputTokens:" + fmt.Sprint(c.generationInfo["OutputTokens"].(int)) + "\n"
+	outputContent += "# Model:" + aiModel + "\n"
 	outputContent += c.generatedModularizerConfig
 
 	c.generatedModularizerConfig = outputContent
