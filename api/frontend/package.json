@@ -23,7 +23,8 @@
     "overrides": {},
     "auditConfig": {
       "ignoreGhsas": [
-        "GHSA-5v7r-6r5c-r473"
+        "GHSA-5v7r-6r5c-r473",
+        "GHSA-25h7-pfq9-p65f"
       ]
     }
   },

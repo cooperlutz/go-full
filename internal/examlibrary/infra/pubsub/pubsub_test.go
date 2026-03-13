@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cooperlutz/go-full/internal/examlibrary/infra/pubsub"
-	"github.com/cooperlutz/go-full/test/mocks"
+	mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 func TestNew_Success(t *testing.T) {
