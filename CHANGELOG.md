@@ -1,3 +1,9 @@
+## v0.1.66 (2026-03-13)
+
+### Fix
+
+- **deps**: bump go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp from 0.65.0 to 0.67.0 (#204)
+
 ## v0.1.65 (2026-03-11)
 
 ### Fix
