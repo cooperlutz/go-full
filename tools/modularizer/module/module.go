@@ -96,6 +96,18 @@ func (m Module) Validate() error {
 	return nil
 }
 
+func (m Module) NestedObjects() []Field {
+	var nestedObjects []Field
+	for _, entity := range m.Aggregates {
+		for _, field := range entity.Fields {
+			if field.Type == "object" {
+				nestedObjects = append(nestedObjects, field)
+			}
+		}
+	}
+	return nestedObjects
+}
+
 // EmittedEvents returns a slice of all the events in the module that are marked as emitted (i.e. Kind is "emitted").
 func (m Module) EmittedEvents() []Event {
 	var emittedEvents []Event
@@ -209,6 +221,7 @@ type Field struct {
 	Name     StringOfVaryingCases `yaml:"name"`
 	Type     string               `yaml:"type"`
 	Optional bool                 `yaml:"optional"`
+	Fields   []Field              `yaml:"fields,omitempty"` // for nested fields (e.g. in a struct or a list of structs)
 }
 
 func (f Field) validate() error {
@@ -216,12 +229,42 @@ func (f Field) validate() error {
 		return err
 	}
 
-	allowedTypes := []string{"string", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64", "bool", "time", "date", "uuid"}
+	allowedTypes := []string{
+		"string",
+		"int",
+		"int8",
+		"int16",
+		"int32",
+		"int64",
+		"uint",
+		"uint8",
+		"uint16",
+		"uint32",
+		"uint64",
+		"float32",
+		"float64",
+		"bool",
+		"time",
+		"date",
+		"uuid",
+		"object",
+	}
 	if !slices.Contains(allowedTypes, f.Type) {
 		return errors.New("invalid field type: " + f.Type)
 	}
 
 	return nil
+}
+
+func (f Field) FieldsToGoStructFields() string {
+	var structFields string
+	for i, field := range f.Fields {
+		structFields += field.Name.Pascal() + " " + field.GoType()
+		if i < len(f.Fields)-1 {
+			structFields += "; "
+		}
+	}
+	return structFields
 }
 
 // GoType returns the Go type for the field based on its type and whether it is optional.
@@ -313,6 +356,11 @@ func (f Field) GoType() string {
 			return "*uuid.UUID"
 		}
 		return "uuid.UUID"
+	case "object":
+		if f.Optional {
+			return "*struct{" + f.FieldsToGoStructFields() + "}"
+		}
+		return "struct{" + f.FieldsToGoStructFields() + "}"
 	default:
 		return f.Type
 	}
@@ -392,6 +440,8 @@ func (f Field) OpenApiType() string {
 		return "string\n          format: date"
 	case "uuid":
 		return "string\n          format: uuid"
+	case "object":
+		return "object"
 	default:
 		return f.Type
 	}
