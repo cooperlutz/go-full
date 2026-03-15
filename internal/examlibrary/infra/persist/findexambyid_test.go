@@ -9,7 +9,7 @@ import (
 
 	persist_postgres "github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/cooperlutz/go-full/test/mocks"
+	mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 func TestFindOneByID_Success(t *testing.T) {

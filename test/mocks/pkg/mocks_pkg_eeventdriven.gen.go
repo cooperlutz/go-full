@@ -2,7 +2,7 @@
 // github.com/vektra/mockery
 // template: testify
 
-package mocks
+package pkg_mocks
 
 import (
 	"github.com/ThreeDotsLabs/watermill/message"

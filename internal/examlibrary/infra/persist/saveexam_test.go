@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/cooperlutz/go-full/test/mocks"
+	mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 func TestSaveExam_Success(t *testing.T) {

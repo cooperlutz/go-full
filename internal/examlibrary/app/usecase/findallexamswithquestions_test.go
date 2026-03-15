@@ -11,14 +11,15 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/usecase"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/cooperlutz/go-full/test/mocks"
+	examlibrary_mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
+	pkg_mocks "github.com/cooperlutz/go-full/test/mocks/pkg"
 )
 
 func TestFindAllExamsWithQuestions(t *testing.T) {
 	// Arrange
 	ctx := context.Background()
-	mockRepo := mocks.NewMockIExamLibraryRepository(t)
-	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
+	mockRepo := examlibrary_mocks.NewMockIExamLibraryRepository(t)
+	mockPubSub := pkg_mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllExams",
 		mock.Anything,
 	).Return(
@@ -28,6 +29,7 @@ func TestFindAllExamsWithQuestions(t *testing.T) {
 		nil,
 	)
 	defer mockRepo.AssertExpectations(t)
+	defer mockPubSub.AssertExpectations(t)
 
 	useCase := usecase.NewExamLibraryUseCase(
 		mockRepo,
@@ -48,8 +50,8 @@ func TestFindAllExamsWithQuestions(t *testing.T) {
 func TestFindAllExamsWithQuestions_FailurePersist(t *testing.T) {
 	// Arrange
 	ctx := context.Background()
-	mockRepo := mocks.NewMockIExamLibraryRepository(t)
-	mockPubSub := mocks.NewMockIPubSubEventProcessor(t)
+	mockRepo := examlibrary_mocks.NewMockIExamLibraryRepository(t)
+	mockPubSub := pkg_mocks.NewMockIPubSubEventProcessor(t)
 	mockRepo.On("FindAllExams",
 		mock.Anything,
 	).Return(
