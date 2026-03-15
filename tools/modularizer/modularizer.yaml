@@ -22,7 +22,7 @@ modules:
           optional: false
         - name: breeds
           type: string
-          list: true
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32
@@ -73,8 +73,9 @@ modules:
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32
@@ -96,8 +97,9 @@ modules:
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32
