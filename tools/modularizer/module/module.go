@@ -53,6 +53,31 @@ func (s StringOfVaryingCases) Title() string {
 	return utils.TitleCase(string(s))
 }
 
+// PluralSnake returns the plural form of the string in snake_case (e.g. "user_accounts")
+func (s StringOfVaryingCases) PluralSnake() string {
+	return utils.Pluralize(string(s))
+}
+
+// PluralPascal returns the plural form of the string in PascalCase (e.g. "UserAccounts")
+func (s StringOfVaryingCases) PluralPascal() string {
+	return utils.Pluralize(s.Pascal())
+}
+
+// PluralKebab returns the plural form of the string in kebab-case (e.g. "user-accounts")
+func (s StringOfVaryingCases) PluralKebab() string {
+	return utils.Pluralize(s.Kebab())
+}
+
+// PluralCamel returns the plural form of the string in camelCase (e.g. "userAccounts")
+func (s StringOfVaryingCases) PluralCamel() string {
+	return utils.Pluralize(s.Camel())
+}
+
+// PluralFlat returns the plural form of the string in flat case (e.g. "useraccounts")
+func (s StringOfVaryingCases) PluralFlat() string {
+	return utils.Pluralize(s.Flat())
+}
+
 type ModuleConfig struct {
 	Modules []Module `yaml:"modules"`
 }

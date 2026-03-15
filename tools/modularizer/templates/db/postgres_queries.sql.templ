@@ -1,10 +1,10 @@
 {{range .Aggregates}}
 -- name: Get{{.Name.Pascal}} :one
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
 WHERE {{.Name.Snake}}_id = $1;
 
 -- name: Add{{.Name.Pascal}} :exec
-INSERT INTO {{$.Name.Flat}}.{{.Name.Snake}}s (
+INSERT INTO {{$.Name.Flat}}.{{.Name.PluralSnake}} (
     {{.Name.Snake}}_id,
     created_at,
     updated_at,
@@ -24,7 +24,7 @@ INSERT INTO {{$.Name.Flat}}.{{.Name.Snake}}s (
 );
 
 -- name: Update{{.Name.Pascal}} :exec
-UPDATE {{$.Name.Flat}}.{{.Name.Snake}}s
+UPDATE {{$.Name.Flat}}.{{.Name.PluralSnake}}
 SET
     created_at = $2,
     updated_at = $3,
@@ -37,10 +37,10 @@ SET
 WHERE {{.Name.Snake}}_id = $1;
 
 -- name: FindOne{{.Name.Pascal}} :one
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
 WHERE {{.Name.Snake}}_id = $1;
 
--- name: FindAll{{.Name.Pascal}}s :many
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s;
+-- name: FindAll{{.Name.PluralPascal}} :many
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}};
 
 {{end}}

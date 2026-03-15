@@ -23,7 +23,7 @@ type Commands struct {
 
 type Queries struct {
 	{{range .Aggregates}}
-	FindAll{{.Name.Pascal}}s 				query.FindAll{{.Name.Pascal}}sHandler
+	FindAll{{.Name.PluralPascal}} 				query.FindAll{{.Name.PluralPascal}}Handler
 	FindOne{{.Name.Pascal}}     			query.FindOne{{.Name.Pascal}}Handler
 	{{end}}
 }
@@ -56,7 +56,7 @@ func NewApplication( //nolint:funlen // it's fine
 		},
 		Queries: Queries{
 			{{range .Aggregates}}
-			FindAll{{.Name.Pascal}}s: query.NewFindAll{{.Name.Pascal}}sHandler(
+			FindAll{{.Name.PluralPascal}}: query.NewFindAll{{.Name.PluralPascal}}Handler(
 				{{.Name.Flat}}Repository,
 			),
 			FindOne{{.Name.Pascal}}: query.NewFindOne{{.Name.Pascal}}Handler(
