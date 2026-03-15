@@ -16,3 +16,20 @@ CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}} (
 CREATE INDEX IF NOT EXISTS idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id
 ON {{$.Name.Flat}}.{{.Name.PluralSnake}} ({{.Name.Snake}}_id);
 {{end}}
+
+{{range .NestedObjects}}
+CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}} (
+    {{.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ,
+    deleted_at TIMESTAMPTZ,
+    deleted BOOLEAN NOT NULL DEFAULT FALSE
+    --{{range .Fields}},
+    --{{.Name.Snake}}
+    --{{end}}
+);
+
+-- create index to optimize queries searching by {{.Name.Snake}}_id
+CREATE INDEX IF NOT EXISTS idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id
+ON {{$.Name.Flat}}.{{.Name.PluralSnake}} ({{.Name.Snake}}_id);
+{{end}}

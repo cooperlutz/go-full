@@ -20,8 +20,9 @@ modules:
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true
           optional: true
         - name: age
           type: float32
@@ -34,7 +35,7 @@ modules:
               type: string
               optional: false
             - name: nested_field_2
-              type: int
+              type: int32
               optional: true
     - name: owner
       description: Represents the owner of a pet, including their contact information and association with their pets.
