@@ -1,3 +1,9 @@
+## v0.1.68 (2026-03-16)
+
+### Fix
+
+- modularizer structs, lists, nested entities (#220)
+
 ## v0.1.67 (2026-03-15)
 
 ### Fix
