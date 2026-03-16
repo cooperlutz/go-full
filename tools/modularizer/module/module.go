@@ -53,6 +53,31 @@ func (s StringOfVaryingCases) Title() string {
 	return utils.TitleCase(string(s))
 }
 
+// PluralSnake returns the plural form of the string in snake_case (e.g. "user_accounts")
+func (s StringOfVaryingCases) PluralSnake() string {
+	return utils.Pluralize(string(s))
+}
+
+// PluralPascal returns the plural form of the string in PascalCase (e.g. "UserAccounts")
+func (s StringOfVaryingCases) PluralPascal() string {
+	return utils.Pluralize(s.Pascal())
+}
+
+// PluralKebab returns the plural form of the string in kebab-case (e.g. "user-accounts")
+func (s StringOfVaryingCases) PluralKebab() string {
+	return utils.Pluralize(s.Kebab())
+}
+
+// PluralCamel returns the plural form of the string in camelCase (e.g. "userAccounts")
+func (s StringOfVaryingCases) PluralCamel() string {
+	return utils.Pluralize(s.Camel())
+}
+
+// PluralFlat returns the plural form of the string in flat case (e.g. "useraccounts")
+func (s StringOfVaryingCases) PluralFlat() string {
+	return utils.Pluralize(s.Flat())
+}
+
 type ModuleConfig struct {
 	Modules []Module `yaml:"modules"`
 }
@@ -94,6 +119,18 @@ func (m Module) Validate() error {
 		}
 	}
 	return nil
+}
+
+func (m Module) NestedObjects() []Field {
+	var nestedObjects []Field
+	for _, entity := range m.Aggregates {
+		for _, field := range entity.Fields {
+			if field.Type == "object" {
+				nestedObjects = append(nestedObjects, field)
+			}
+		}
+	}
+	return nestedObjects
 }
 
 // EmittedEvents returns a slice of all the events in the module that are marked as emitted (i.e. Kind is "emitted").
@@ -206,9 +243,12 @@ func (q Query) validate() error {
 
 // Field represents a field in an entity, command, or event, which has a name, type, and a boolean indicating whether the field is optional. It also includes helper methods to get the Go type, PostgreSQL type, and OpenAPI type for the field based on its type and whether it is optional.
 type Field struct {
-	Name     StringOfVaryingCases `yaml:"name"`
-	Type     string               `yaml:"type"`
-	Optional bool                 `yaml:"optional"`
+	Name        StringOfVaryingCases `yaml:"name"`
+	Type        string               `yaml:"type"`
+	Description string               `yaml:"description"`
+	List        bool                 `yaml:"list"`
+	Optional    bool                 `yaml:"optional"`
+	Fields      []Field              `yaml:"fields,omitempty"` // for nested fields (e.g. in a struct or a list of structs)
 }
 
 func (f Field) validate() error {
@@ -216,7 +256,25 @@ func (f Field) validate() error {
 		return err
 	}
 
-	allowedTypes := []string{"string", "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64", "bool", "time", "date", "uuid"}
+	allowedTypes := []string{
+		"string",
+		"int8",
+		"int16",
+		"int32",
+		"int64",
+		"uint",
+		"uint8",
+		"uint16",
+		"uint32",
+		"uint64",
+		"float32",
+		"float64",
+		"bool",
+		"time",
+		"date",
+		"uuid",
+		"object",
+	}
 	if !slices.Contains(allowedTypes, f.Type) {
 		return errors.New("invalid field type: " + f.Type)
 	}
@@ -224,95 +282,208 @@ func (f Field) validate() error {
 	return nil
 }
 
+func (f Field) FieldsToGoStructFields() string {
+	var structFields string
+	for i, field := range f.Fields {
+		structFields += field.Name.Pascal() + " " + field.GoType()
+		if i < len(f.Fields)-1 {
+			structFields += "; "
+		}
+	}
+	return structFields
+}
+
 // GoType returns the Go type for the field based on its type and whether it is optional.
 // It supports basic types like string, int32, int64, float32, float64, bool, and time, and returns a pointer to the type if the field is optional. For any other types, it returns the type as-is.
 func (f Field) GoType() string {
 	switch f.Type {
 	case "string":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*string"
 		}
-		return "string"
-	case "int":
-		if f.Optional {
-			return "*int"
+		if f.Optional && f.List {
+			return "[]*string"
 		}
-		return "int"
+		if !f.Optional && f.List {
+			return "[]string"
+		}
+		return "string"
 	case "int8":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*int8"
+		}
+		if f.Optional && f.List {
+			return "[]*int8"
+		}
+		if !f.Optional && f.List {
+			return "[]int8"
 		}
 		return "int8"
 	case "int16":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*int16"
+		}
+		if f.Optional && f.List {
+			return "[]*int16"
+		}
+		if !f.Optional && f.List {
+			return "[]int16"
 		}
 		return "int16"
 	case "int32":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*int32"
+		}
+		if f.Optional && f.List {
+			return "[]*int32"
+		}
+		if !f.Optional && f.List {
+			return "[]int32"
 		}
 		return "int32"
 	case "int64":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*int64"
+		}
+		if f.Optional && f.List {
+			return "[]*int64"
+		}
+		if !f.Optional && f.List {
+			return "[]int64"
 		}
 		return "int64"
 	case "uint":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uint"
+		}
+		if f.Optional && f.List {
+			return "[]*uint"
+		}
+		if !f.Optional && f.List {
+			return "[]uint"
 		}
 		return "uint"
 	case "uint8":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uint8"
+		}
+		if f.Optional && f.List {
+			return "[]*uint8"
+		}
+		if !f.Optional && f.List {
+			return "[]uint8"
 		}
 		return "uint8"
 	case "uint16":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uint16"
+		}
+		if f.Optional && f.List {
+			return "[]*uint16"
+		}
+		if !f.Optional && f.List {
+			return "[]uint16"
 		}
 		return "uint16"
 	case "uint32":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uint32"
+		}
+		if f.Optional && f.List {
+			return "[]*uint32"
+		}
+		if !f.Optional && f.List {
+			return "[]uint32"
 		}
 		return "uint32"
 	case "uint64":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uint64"
+		}
+		if f.Optional && f.List {
+			return "[]*uint64"
+		}
+		if !f.Optional && f.List {
+			return "[]uint64"
 		}
 		return "uint64"
 	case "float32":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*float32"
+		}
+		if f.Optional && f.List {
+			return "[]*float32"
+		}
+		if !f.Optional && f.List {
+			return "[]float32"
 		}
 		return "float32"
 	case "float64":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*float64"
+		}
+		if f.Optional && f.List {
+			return "[]*float64"
+		}
+		if !f.Optional && f.List {
+			return "[]float64"
 		}
 		return "float64"
 	case "bool":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*bool"
+		}
+		if f.Optional && f.List {
+			return "[]*bool"
+		}
+		if !f.Optional && f.List {
+			return "[]bool"
 		}
 		return "bool"
 	case "time":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*time.Time"
+		}
+		if f.Optional && f.List {
+			return "[]*time.Time"
+		}
+		if !f.Optional && f.List {
+			return "[]time.Time"
 		}
 		return "time.Time"
 	case "date":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*time.Time"
+		}
+		if f.Optional && f.List {
+			return "[]*time.Time"
+		}
+		if !f.Optional && f.List {
+			return "[]time.Time"
 		}
 		return "time.Time"
 	case "uuid":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "*uuid.UUID"
 		}
+		if f.Optional && f.List {
+			return "[]*uuid.UUID"
+		}
+		if !f.Optional && f.List {
+			return "[]uuid.UUID"
+		}
 		return "uuid.UUID"
+	case "object":
+		if f.Optional && !f.List {
+			return "*struct{" + f.FieldsToGoStructFields() + "}"
+		}
+		if f.Optional && f.List {
+			return "[]*struct{" + f.FieldsToGoStructFields() + "}"
+		}
+		if !f.Optional && f.List {
+			return "[]struct{" + f.FieldsToGoStructFields() + "}"
+		}
+		return "struct{" + f.FieldsToGoStructFields() + "}"
 	default:
 		return f.Type
 	}
@@ -322,48 +493,102 @@ func (f Field) GoType() string {
 func (f Field) PgSqlType() string {
 	switch f.Type {
 	case "string":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "TEXT"
+		}
+		if f.Optional && f.List {
+			return "TEXT[]"
+		}
+		if !f.Optional && f.List {
+			return "TEXT[] NOT NULL"
 		}
 		return "TEXT NOT NULL"
 	case "int32":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "SMALLINT"
 		}
-		return "INT NOT NULL"
+		if f.Optional && f.List {
+			return "SMALLINT[]"
+		}
+		if !f.Optional && f.List {
+			return "SMALLINT[] NOT NULL"
+		}
+		return "SMALLINT NOT NULL"
 	case "int64":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "BIGINT"
+		}
+		if f.Optional && f.List {
+			return "BIGINT[]"
+		}
+		if !f.Optional && f.List {
+			return "BIGINT[] NOT NULL"
 		}
 		return "BIGINT NOT NULL"
 	case "float32":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "REAL"
+		}
+		if f.Optional && f.List {
+			return "REAL[]"
+		}
+		if !f.Optional && f.List {
+			return "REAL[] NOT NULL"
 		}
 		return "REAL NOT NULL"
 	case "float64":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "DOUBLE PRECISION"
+		}
+		if f.Optional && f.List {
+			return "DOUBLE PRECISION[]"
+		}
+		if !f.Optional && f.List {
+			return "DOUBLE PRECISION[] NOT NULL"
 		}
 		return "DOUBLE PRECISION NOT NULL"
 	case "bool":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "BOOLEAN"
+		}
+		if f.Optional && f.List {
+			return "BOOLEAN[]"
+		}
+		if !f.Optional && f.List {
+			return "BOOLEAN[] NOT NULL"
 		}
 		return "BOOLEAN NOT NULL"
 	case "time":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "TIMESTAMP"
+		}
+		if f.Optional && f.List {
+			return "TIMESTAMP[]"
+		}
+		if !f.Optional && f.List {
+			return "TIMESTAMP[] NOT NULL"
 		}
 		return "TIMESTAMP NOT NULL"
 	case "date":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "DATE"
+		}
+		if f.Optional && f.List {
+			return "DATE[]"
+		}
+		if !f.Optional && f.List {
+			return "DATE[] NOT NULL"
 		}
 		return "DATE NOT NULL"
 	case "uuid":
-		if f.Optional {
+		if f.Optional && !f.List {
 			return "UUID"
+		}
+		if f.Optional && f.List {
+			return "UUID[]"
+		}
+		if !f.Optional && f.List {
+			return "UUID[] NOT NULL"
 		}
 		return "UUID NOT NULL"
 	default:
@@ -375,23 +600,55 @@ func (f Field) PgSqlType() string {
 func (f Field) OpenApiType() string {
 	switch f.Type {
 	case "string":
-		return "string"
+		if f.List {
+			return "type: array\n          items:\n            type: string"
+		}
+		return "type: string"
 	case "int32":
-		return "integer\n          format: int32"
+		if f.List {
+			return "type: array\n          items:\n            type: integer\n            format: int32"
+		}
+		return "type: integer\n          format: int32"
 	case "int64":
-		return "integer\n          format: int64"
+		if f.List {
+			return "type: array\n          items:\n            type: integer\n            format: int64"
+		}
+		return "type: integer\n          format: int64"
 	case "float32":
-		return "number\n          format: float"
+		if f.List {
+			return "type: array\n          items:\n            type: number\n            format: float"
+		}
+		return "type: number\n          format: float"
 	case "float64":
-		return "number\n          format: double"
+		if f.List {
+			return "type: array\n          items:\n            type: number\n            format: double"
+		}
+		return "type: number\n          format: double"
 	case "bool":
-		return "boolean"
+		if f.List {
+			return "type: array\n          items:\n            type: boolean"
+		}
+		return "type: boolean"
 	case "time":
-		return "string\n          format: date-time"
+		if f.List {
+			return "type: array\n          items:\n            type: string\n            format: date-time"
+		}
+		return "type: string\n          format: date-time"
 	case "date":
-		return "string\n          format: date"
+		if f.List {
+			return "type: array\n          items:\n            type: string\n            format: date"
+		}
+		return "type: string\n          format: date"
 	case "uuid":
-		return "string\n          format: uuid"
+		if f.List {
+			return "type: array\n          items:\n            type: string\n            format: uuid"
+		}
+		return "type: string\n          format: uuid"
+	case "object":
+		if f.List {
+			return "type: array\n          items:\n            $ref: '#/components/schemas/" + f.Name.Pascal() + "'"
+		}
+		return "$ref: '#/components/schemas/" + f.Name.Pascal() + "'"
 	default:
 		return f.Type
 	}

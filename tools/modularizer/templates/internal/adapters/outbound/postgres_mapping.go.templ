@@ -32,20 +32,20 @@ func (e {{$.Name.Title}}{{.Name.Pascal}}) toQuery{{.Name.Pascal}}() (query.{{.Na
 	return mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}}), nil
 }
 
-// {{.Name.Flat}}{{.Name.Pascal}}sToQuery maps a slice of {{.Name.Pascal}}{{.Name.Pascal}} to a slice of query.{{.Name.Pascal}} entities.
-func {{$.Name.Flat}}{{.Name.Pascal}}sToQuery({{.Name.Flat}}s []{{$.Name.Title}}{{.Name.Pascal}}) ([]query.{{.Name.Pascal}}, error) {
-	var domain{{.Name.Pascal}}s []query.{{.Name.Pascal}}
+// {{.Name.Flat}}{{.Name.PluralPascal}}ToQuery maps a slice of {{.Name.Pascal}}{{.Name.Pascal}} to a slice of query.{{.Name.Pascal}} entities.
+func {{$.Name.Flat}}{{.Name.PluralPascal}}ToQuery({{.Name.PluralFlat}} []{{$.Name.Title}}{{.Name.Pascal}}) ([]query.{{.Name.Pascal}}, error) {
+	var domain{{.Name.PluralPascal}} []query.{{.Name.Pascal}}
 
-	for _, {{.Name.Flat}} := range {{.Name.Flat}}s {
+	for _, {{.Name.Flat}} := range {{.Name.PluralFlat}} {
 		query{{.Name.Pascal}}, err := {{.Name.Flat}}.toQuery{{.Name.Pascal}}()
 		if err != nil {
 			return nil, err
 		}
 
-		domain{{.Name.Pascal}}s = append(domain{{.Name.Pascal}}s, query{{.Name.Pascal}})
+		domain{{.Name.PluralPascal}} = append(domain{{.Name.PluralPascal}}, query{{.Name.Pascal}})
 	}
 
-	return domain{{.Name.Pascal}}s, nil
+	return domain{{.Name.PluralPascal}}, nil
 }
 
 // mapEntity{{.Name.Pascal}}ToDB maps a domain {{.Name.Pascal}} entity to the {{.Name.Pascal}}{{.Name.Pascal}} database model.

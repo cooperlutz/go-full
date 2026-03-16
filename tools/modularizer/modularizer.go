@@ -488,7 +488,7 @@ func (m *Modularizer) createDefaultQueryFiles() error {
 	for _, aggregate := range m.templateData.Aggregates {
 		if err := m.getTemplateAndWriteToFileWithTemplateData(
 			"/templates/internal/app/query/find_all_query.go.templ",
-			"internal/"+m.templateData.Name.Flat()+"/app/query/find_all_"+aggregate.Name.Snake()+"s.go",
+			"internal/"+m.templateData.Name.Flat()+"/app/query/find_all_"+aggregate.Name.PluralSnake()+".go",
 			struct {
 				Mod module.Module
 				Agg module.Entity

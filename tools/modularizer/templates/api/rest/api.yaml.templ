@@ -9,12 +9,12 @@ servers:
         default: localhost
 paths:
   {{range .Aggregates}}
-  /v1/{{.Name.Flat}}s:
+  /v1/{{.Name.PluralFlat}}:
     get:
-      operationId: findAll{{.Name.Pascal}}s
+      operationId: findAll{{.Name.PluralPascal}}
       responses:
         '200':
-          description: A list of {{.Name.Pascal}}s
+          description: A list of {{.Name.PluralPascal}}
           content:
             application/json:
               schema:
@@ -28,7 +28,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /v1/{{.Name.Flat}}s/{{`{`}}{{.Name.Camel}}Id}:
+  /v1/{{.Name.PluralFlat}}/{{`{`}}{{.Name.Camel}}Id}:
     get:
       operationId: findOne{{.Name.Pascal}}
       parameters:
@@ -53,7 +53,7 @@ paths:
   {{end}}
   
 {{range .Commands}}
-#  /v1/{{$.Name.Flat}}s/{{`{`}}{{$.Name.Camel}}Id}/{{.Name.Camel}}:
+#  /v1/{{$.Name.PluralFlat}}/{{`{`}}{{$.Name.Camel}}Id}/{{.Name.Camel}}:
 #    patch:
 #      operationId: {{.Name.Camel}}
 #      parameters:
@@ -91,8 +91,19 @@ components:
       description: {{.Description}}
       properties:
         {{range .Fields}}
-        {{.Name}}:
-          type: {{.OpenApiType}}
+        {{.Name.Camel}}:
+          {{.OpenApiType}}
+        {{end}}
+    {{end}}
+
+    {{range .NestedObjects}}
+    {{.Name.Pascal}}:
+      type: object
+      description: {{.Description}}
+      properties:
+        {{range .Fields}}
+        {{.Name.Camel}}:
+          {{.OpenApiType}}
         {{end}}
     {{end}}
 
@@ -102,7 +113,7 @@ components:
       properties:
         {{range .Params}}
         {{.Name.Camel}}:
-          type: {{.OpenApiType}}
+          {{.OpenApiType}}
         {{end}}
 {{end}}
 
