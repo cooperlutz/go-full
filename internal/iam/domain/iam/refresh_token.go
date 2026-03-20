@@ -3,9 +3,8 @@ package iam
 import (
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/pkg/utilitee"
+	"github.com/google/uuid"
 )
 
 type RefreshToken struct {

@@ -7,7 +7,6 @@ import (
 	"github.com/ThreeDotsLabs/watermill-sql/v4/pkg/sql"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/message/router/middleware"
-
 	"github.com/cooperlutz/go-full/app/config"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 )

@@ -1,57 +1,73 @@
 {
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
-  "spaces": 2,
   "generator-cli": {
-    "version": "7.14.0",
     "generators": {
-      "pingpong": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/pingpong/services",
-        "inputSpec": "../rest/pingpong/v1/api.yaml",
+      "examination": {
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/examination/api.yaml",
+        "output": "#{cwd}/src/examination/services"
       },
       "examlibrary": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
         "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/examlibrary/services",
         "inputSpec": "../rest/examlibrary/v1/api.yaml",
-        "additionalProperties": {
-          "withInterfaces": true
-        }
+        "output": "#{cwd}/src/examlibrary/services"
       },
-      "examination": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/examination/services",
-        "inputSpec": "../rest/examination/api.yaml",
+      "expensetracker": {
         "additionalProperties": {
           "withInterfaces": true
-        }
-      },
-      "iam": {
+        },
         "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/iam/services",
-        "inputSpec": "../rest/iam/api.yaml",
-        "additionalProperties": {
-          "withInterfaces": true
-        }
+        "inputSpec": "../rest/expensetracker/api.yaml",
+        "output": "#{cwd}/src/expensetracker/services"
       },
       "grading": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/grading/services",
-        "inputSpec": "../rest/grading/api.yaml",
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/grading/api.yaml",
+        "output": "#{cwd}/src/grading/services"
+      },
+      "iam": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/iam/api.yaml",
+        "output": "#{cwd}/src/iam/services"
+      },
+      "pingpong": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/pingpong/v1/api.yaml",
+        "output": "#{cwd}/src/pingpong/services"
       },
       "reporting": {
-        "generatorName": "typescript-fetch",
-        "output": "#{cwd}/src/reporting/services",
-        "inputSpec": "../rest/reporting/api.yaml",
         "additionalProperties": {
           "withInterfaces": true
-        }
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/reporting/api.yaml",
+        "output": "#{cwd}/src/reporting/services"
+      },
+      "startupidearater": {
+        "additionalProperties": {
+          "withInterfaces": true
+        },
+        "generatorName": "typescript-fetch",
+        "inputSpec": "../rest/startupidearater/api.yaml",
+        "output": "#{cwd}/src/startupidearater/services"
       }
-    }
-  }
+    },
+    "version": "7.14.0"
+  },
+  "spaces": 2
 }

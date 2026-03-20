@@ -3,12 +3,11 @@ package entity
 import (
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/event"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/exception"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
+	"github.com/google/uuid"
 )
 
 // Exam represents an exam entity in the exam library.

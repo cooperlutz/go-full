@@ -1,14 +1,13 @@
 package mapper
 
 import (
-	"github.com/google/uuid"
-	"github.com/jackc/pgx/v5/pgtype"
-
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/valueobject"
 	persist_postgres "github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
+	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 // FromDomainExamToDB maps a domain exam entity to a database exam.

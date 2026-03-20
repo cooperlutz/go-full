@@ -25,6 +25,7 @@ require (
 	github.com/pashagolub/pgxmock/v4 v4.9.0
 	github.com/playwright-community/playwright-go v0.5700.1
 	github.com/prometheus/client_golang v1.23.2
+	github.com/sashabaranov/go-openai v1.38.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tsenart/vegeta/v12 v12.13.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.67.0

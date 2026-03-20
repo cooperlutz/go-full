@@ -3,9 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/entity"
+	"github.com/google/uuid"
 )
 
 type IExamLibraryRepository interface {

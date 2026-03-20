@@ -11,10 +11,10 @@ export
 endif
 
 # CONSTANTS
-GO_MODULE_NAME := $(shell go list -m | head -n 1)
+GO_MODULE_NAME := $(shell go list -m)
 GO_VERSION := $(shell go list -f {{.GoVersion}} -m)
 PNPM := pnpm -C ./api/frontend
-APP_VERSION := $(shell cz version -p)
+APP_VERSION := $(shell cz version -p 2>/dev/null || echo 0.0.0-dev)
 APP_NAME := $(GO_MODULE_NAME)
 AZD_CONF := ./deploy/azure
 
@@ -108,13 +108,17 @@ gen-api-fe: ### generate frontend api
 .PHONY: gen-api-fe
 
 queries: ### generate queries
-	sqlc generate -f ./.sqlc.yaml
+	go run github.com/sqlc-dev/sqlc/cmd/sqlc@latest generate -f ./.sqlc.yaml
 .PHONY: queries
 
 # Note: .mockery.yml config file is used for mockery settings
 mock: ### generate mock interfaces
-	mockery
+	go run github.com/vektra/mockery/v3@latest
 .PHONY: mock
+
+generate-poc: ### run ai code generation from a markdown business case
+	go run tools/pocgen/main.go $(prompt)
+.PHONY: generate-poc
 
 pre-commit: deps deps-audit gen lint format ### run pre-commit
 	$(PNPM) pre-commit

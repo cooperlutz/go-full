@@ -3,10 +3,9 @@ package pgxutil
 import (
 	"time"
 
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
-
-	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // TimeToTimestampz converts a time.Time pointer to a pgx Timestamptz type.

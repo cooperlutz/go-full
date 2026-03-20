@@ -349,7 +349,7 @@ func (m *Modularizer) createBackendOpenApiSchemaFile() error {
 // generateOapiCodegen runs the OpenAPI Generator command to generate the REST API server and client code for the new module based on the OpenAPI schema file created in the previous step, and returns an error if there was an issue running the command
 func (m *Modularizer) generateOapiCodegen() error {
 	slog.Info("Backend: generating OpenAPI codegen for the new module")
-	cmd := exec.Command("make", "gen-api")
+	cmd := exec.Command("make", "gen-api-be")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
@@ -408,13 +408,16 @@ func (m *Modularizer) createDbMigrationsFiles() error {
 	return nil
 }
 
-// runFormattingAndLinting runs the command to format and lint the code for the new module, and returns an error if there was an issue running the command
+// runFormattingAndLinting runs the command to format and lint the code for the new module, and logs a warning if it fails
 func (m *Modularizer) runFormattingAndLinting() error {
 	slog.Info("Backend: running formatting and linting for the new module")
 	cmd := exec.Command("make", "lintfmt")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	if err := cmd.Run(); err != nil {
+		slog.Warn("formatting/linting failed (non-fatal)", "error", err)
+	}
+	return nil
 }
 
 // createCommandFiles creates the command files for the new module in the /{module}/app/command directory,

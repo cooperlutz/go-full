@@ -2,7 +2,6 @@ package pubsub
 
 import (
 	"github.com/ThreeDotsLabs/watermill/message"
-
 	"github.com/cooperlutz/go-full/internal/examlibrary/domain/repository"
 	"github.com/cooperlutz/go-full/pkg/deebee"
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"

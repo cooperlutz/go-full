@@ -28,6 +28,52 @@ This project aims to provide a well-formed, "just enough" featured, minimalist b
 - Everything as code
 - not overengineered, but smart and scalable
 
+## AI PoC Factory
+
+The **AI PoC Factory** (`generate-poc`) lets you go from a plain-English business case to a fully scaffolded, API-ready module in a single command.
+
+### How it works
+
+1. You write a short markdown file describing a feature or product idea
+2. The AI generates a module configuration (aggregates, commands, events, field types)
+3. The modularizer scaffolds the full module: domain entities, application layer, REST API, database schema, migrations, frontend components, and generated code (sqlc, oapi-codegen)
+4. The new module is auto-wired into the main application (imports, initialization, route mounting)
+
+### What you get
+
+A single `make generate-poc` command produces:
+
+| Layer | What's generated |
+|-------|-----------------|
+| **REST API** | OpenAPI 3.0 spec, auto-generated Go server + TypeScript client, HTTP adapter with Chi router |
+| **Database** | PostgreSQL schema, sqlc-annotated queries, type-safe Go query code, timestamped up/down migrations |
+| **Domain** | Entity structs with base metadata (ID, timestamps, soft-delete), repository interfaces |
+| **Application** | Command handlers, query handlers, event handlers, application service wiring |
+| **Events** | Pub/sub event definitions (emitted/consumed) via Watermill + PostgreSQL |
+| **Frontend** | Vue.js components, composables, router config, OpenAPI-generated TypeScript client |
+| **Observability** | OpenTelemetry tracing spans baked into every layer |
+| **Config** | `.sqlc.yaml`, `.mockery.yml`, `.openapitools.json` all updated automatically |
+| **App wiring** | Module imported, instantiated, and route-mounted in `app/app.go` |
+
+If the business case involves AI/LLM at runtime (e.g. "rate pitches using AI"), the tool detects this and injects the `pkg/ai` client dependency into the module.
+
+### Quick start
+
+```shell
+# Write a business case
+echo "# Expense Tracker
+We need an API to track business expenses with description, amount, and category." > docs/my_idea.md
+
+# Generate the full module
+make generate-poc prompt="docs/my_idea.md"
+
+# Review, customize entity fields, then run codegen and tests
+make gen
+make test
+```
+
+See [exampleguide.md](exampleguide.md) for a detailed walkthrough.
+
 ## Getting Started
 
 > [!WARNING]
@@ -64,6 +110,10 @@ make # end to end development tools
 make compose # builds, deploys, and runs development environment
 
 make commit # provides a mechanism to simplify conventional commits
+
+make generate-poc prompt="docs/my_idea.md" # scaffold a new module from a business case
+
+make modularizer # scaffold a new module from a modularizer.yaml config
 ```
 
 For further details, please consult our [docs](https://cooperlutz.github.io/go-full/development/)

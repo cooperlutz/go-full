@@ -604,12 +604,12 @@ func (f Field) OpenApiType() string {
 			return "type: array\n          items:\n            type: string"
 		}
 		return "type: string"
-	case "int32":
+	case "int8", "int16", "int32", "uint", "uint8", "uint16", "uint32":
 		if f.List {
 			return "type: array\n          items:\n            type: integer\n            format: int32"
 		}
 		return "type: integer\n          format: int32"
-	case "int64":
+	case "int64", "uint64":
 		if f.List {
 			return "type: array\n          items:\n            type: integer\n            format: int64"
 		}
@@ -650,6 +650,6 @@ func (f Field) OpenApiType() string {
 		}
 		return "$ref: '#/components/schemas/" + f.Name.Pascal() + "'"
 	default:
-		return f.Type
+		return "type: string"
 	}
 }

@@ -1,9 +1,8 @@
 package grading
 
 import (
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
+	"github.com/google/uuid"
 )
 
 type Exam struct {

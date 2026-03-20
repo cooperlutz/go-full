@@ -4,9 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/google/uuid"
-
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
+	"github.com/google/uuid"
 )
 
 type Repository interface {

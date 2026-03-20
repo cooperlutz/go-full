@@ -13,6 +13,10 @@ const appRoutes = [
     path: "dashboard",
     component: HomeView,
   },
+  {
+    path: "ai-chat",
+    component: () => import("../views/AIChatView.vue"),
+  },
 ];
 
 const protectedRoutes = [
