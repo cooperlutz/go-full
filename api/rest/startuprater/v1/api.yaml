@@ -1,0 +1,101 @@
+openapi: 3.0.2
+info:
+  version: '1.0.0'
+  title: Startup Rater
+tags:
+  - name: startuprater
+    description: Startup pitch rating operations
+servers:
+  - url: 'http://localhost:8080/api/startuprater/v1'
+  - url: 'https://localhost:8080/api/startuprater/v1'
+paths:
+  /rate-pitch:
+    post:
+      tags:
+        - startuprater
+      summary: Rate a Startup Pitch
+      description: Submit a startup pitch to be rated by AI, returning a score (1-10) and critique
+      operationId: postRatePitch
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PitchScoreResult'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+      requestBody:
+        required: true
+        description: The startup pitch to rate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatePitchRequest'
+  /pitch-scores:
+    get:
+      tags:
+        - startuprater
+      summary: Get all Pitch Scores
+      description: Retrieve all previously rated pitch scores
+      operationId: getAllPitchScores
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PitchScores'
+          headers:
+            X-Request-Id:
+              $ref: '#/components/headers/X-Request-Id'
+        '400':
+          description: Invalid input
+        default:
+          description: Unexpected error
+components:
+  headers:
+    X-Request-Id:
+      schema:
+        type: string
+        description: The unique identifier for the request.
+  schemas:
+    RatePitchRequest:
+      description: A request to rate a startup pitch
+      type: object
+      required:
+        - pitch
+      properties:
+        pitch:
+          description: The startup pitch text to be rated
+          type: string
+          example: "An AI-powered platform that matches freelance developers with startups based on coding style and culture fit."
+    PitchScoreResult:
+      description: The result of rating a startup pitch
+      type: object
+      properties:
+        id:
+          type: string
+          example: 49a6d644-34d5-4c2d-8abc-8fda8a114bd4
+        pitch:
+          description: The original pitch text
+          type: string
+          example: "An AI-powered platform that matches freelance developers with startups based on coding style and culture fit."
+        score:
+          description: The AI-generated score (1-10)
+          type: integer
+          example: 7
+        critique:
+          description: The AI-generated critique of the pitch
+          type: string
+          example: "Strong concept with clear market need. Consider addressing scalability and monetization strategy."
+    PitchScores:
+      description: A list of pitch score results
+      type: array
+      items:
+        $ref: '#/components/schemas/PitchScoreResult'

@@ -1,0 +1,125 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: StartupIdeaRater API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/startuppitchs:
+    get:
+      operationId: findAllStartupPitchs
+      responses:
+        '200':
+          description: A list of StartupPitchs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StartupPitch'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/startuppitchs/{startupPitchId}:
+    get:
+      operationId: findOneStartupPitch
+      parameters:
+        - name: startupPitchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: StartupPitch details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartupPitch'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/startupidearaters/{startupIdeaRaterId}/rateStartupIdea:
+#    patch:
+#      operationId: rateStartupIdea
+#      parameters:
+#        - name: startupIdeaRaterId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/RateStartupIdea'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    StartupPitch:
+      type: object
+      description: Represents a startup pitch to be rated
+      properties:
+        
+        pitchContent:
+          type: string
+        
+        score:
+          type: integer
+          format: int32
+        
+        critique:
+          type: string
+        
+    
+
+    
+
+
+    RateStartupIdea:
+      type: object
+      properties:
+        
+        pitchContent:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

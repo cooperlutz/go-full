@@ -1,0 +1,51 @@
+modules:
+- name: startup_idea_rater
+  metadata: {}
+  description: Module for rating startup ideas using an LLM
+  defaultQueries: true
+  aggregates:
+  - name: startup_pitch
+    description: Represents a startup pitch to be rated
+    fields:
+    - name: pitch_content
+      type: string
+      description: ""
+      list: false
+      optional: false
+    - name: score
+      type: int32
+      description: ""
+      list: false
+      optional: true
+    - name: critique
+      type: string
+      description: ""
+      list: false
+      optional: true
+  commands:
+  - name: rate_startup_idea
+    description: Rate a startup idea using an LLM
+    events_emitted:
+    - idea_rated
+    params:
+    - name: pitch_content
+      type: string
+      description: ""
+      list: false
+      optional: false
+  events:
+  - name: idea_rated
+    description: Event triggered when a startup idea is rated
+    kind: emitted
+    fields:
+    - name: score
+      type: int32
+      description: ""
+      list: false
+      optional: false
+    - name: critique
+      type: string
+      description: ""
+      list: false
+      optional: false
+  queries: []

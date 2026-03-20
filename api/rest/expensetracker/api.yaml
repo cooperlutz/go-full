@@ -1,0 +1,132 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: ExpenseTracker API
+servers:
+  - url: https://{hostname}/api
+    variables:
+      hostname:
+        default: localhost
+paths:
+  
+  /v1/expenses:
+    get:
+      operationId: findAllExpenses
+      responses:
+        '200':
+          description: A list of Expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /v1/expenses/{expenseId}:
+    get:
+      operationId: findOneExpense
+      parameters:
+        - name: expenseId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expense details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  
+
+#  /v1/expensetrackers/{expenseTrackerId}/submitExpense:
+#    patch:
+#      operationId: submitExpense
+#      parameters:
+#        - name: expenseTrackerId
+#          in: path
+#          required: true
+#          schema:
+#            type: string
+#      requestBody:
+#        required: true
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/SubmitExpense'
+#      responses:
+#        '201':
+#          description:
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/'
+#        default:
+#          description: unexpected error
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    
+    Expense:
+      type: object
+      description: Represents a submitted business expense
+      properties:
+        
+        description:
+          type: string
+        
+        amount:
+          type: number
+          format: double
+        
+        category:
+          type: string
+        
+    
+
+    
+
+
+    SubmitExpense:
+      type: object
+      properties:
+        
+        description:
+          type: string
+        
+        amount:
+          type: number
+          format: double
+        
+        category:
+          type: string
+        
+
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

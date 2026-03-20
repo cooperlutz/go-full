@@ -1,0 +1,25 @@
+paths:
+  /rate-pitch:
+    post:
+      summary: Rate a startup pitch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pitch:
+                  type: string
+      responses:
+        200:
+          description: A successful response containing the score and critique
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  score:
+                    type: integer
+                  critique:
+                    type: string

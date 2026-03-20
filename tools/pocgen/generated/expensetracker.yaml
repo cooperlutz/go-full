@@ -1,0 +1,66 @@
+modules:
+- name: expense_tracker
+  metadata: {}
+  description: Module for tracking business expenses
+  defaultQueries: true
+  aggregates:
+  - name: expense
+    description: Represents a submitted business expense
+    fields:
+    - name: description
+      type: string
+      description: ""
+      list: false
+      optional: false
+    - name: amount
+      type: float64
+      description: ""
+      list: false
+      optional: false
+    - name: category
+      type: string
+      description: ""
+      list: false
+      optional: false
+  commands:
+  - name: submit_expense
+    description: Submit a new business expense
+    events_emitted:
+    - expense_submitted
+    params:
+    - name: description
+      type: string
+      description: ""
+      list: false
+      optional: false
+    - name: amount
+      type: float64
+      description: ""
+      list: false
+      optional: false
+    - name: category
+      type: string
+      description: ""
+      list: false
+      optional: false
+  events:
+  - name: expense_submitted
+    description: Event triggered when a new expense is submitted
+    kind: emitted
+    fields:
+    - name: description
+      type: string
+      description: ""
+      list: false
+      optional: false
+    - name: amount
+      type: float64
+      description: ""
+      list: false
+      optional: false
+    - name: category
+      type: string
+      description: ""
+      list: false
+      optional: false
+  queries: []
