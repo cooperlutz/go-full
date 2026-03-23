@@ -35,8 +35,8 @@ github.com/OpenPeeDeeP/depguard/v2 v2.2.1/go.mod h1:q4DKzC4UcVaAvcfd41CZh0PWpGgz
 github.com/RaveNoX/go-jsoncommentstrip v1.0.0/go.mod h1:78ihd09MekBnJnxpICcwzCMzGrKSKYe4AqU6PDYYpjk=
 github.com/ThreeDotsLabs/watermill v1.5.1 h1:t5xMivyf9tpmU3iozPqyrCZXHvoV1XQDfihas4sV0fY=
 github.com/ThreeDotsLabs/watermill v1.5.1/go.mod h1:Uop10dA3VeJWsSvis9qO3vbVY892LARrKAdki6WtXS4=
-github.com/ThreeDotsLabs/watermill-sql/v4 v4.1.2 h1:2+yY39J9PJoKIAeSGwxJJLxSSu6ZANy1jzOiiLiW26Y=
-github.com/ThreeDotsLabs/watermill-sql/v4 v4.1.2/go.mod h1:Ce2GVZVnyajAh0AkwxSJXwx8ajBBveu1DI/yatan5jc=
+github.com/ThreeDotsLabs/watermill-sql/v4 v4.1.3 h1:d9niNUM3G9nFH2YRdJ7F+qz3IF0bS2IHq6UB2TKWHGE=
+github.com/ThreeDotsLabs/watermill-sql/v4 v4.1.3/go.mod h1:Ce2GVZVnyajAh0AkwxSJXwx8ajBBveu1DI/yatan5jc=
 github.com/alecthomas/assert/v2 v2.11.0 h1:2Q9r3ki8+JYXvGsDyBXwH3LcJ+WK5D0gc5E8vS6K3D0=
 github.com/alecthomas/assert/v2 v2.11.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=
 github.com/alecthomas/chroma/v2 v2.20.0 h1:sfIHpxPyR07/Oylvmcai3X/exDlE8+FA820NTz+9sGw=
