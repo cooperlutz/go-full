@@ -1,9 +1,9 @@
-{{range .Aggregates}}
+{{- range .Aggregates}}
 DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}};
 DROP INDEX CONCURRENTLY idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id;
-{{end}}
-{{range .NestedObjects}}
+{{- end}}
+{{- range .NestedObjects}}
 DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}};
 DROP INDEX CONCURRENTLY idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id;
-{{end}}
+{{- end}}
 DROP SCHEMA IF EXISTS {{.Name.Flat}};

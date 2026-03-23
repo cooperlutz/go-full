@@ -1,47 +1,65 @@
+//nolint:funlen // don't worry about this
 package outbound
 
 import (
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/query"
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/domain/{{.Name.Flat}}"
 	"github.com/cooperlutz/go-full/pkg/deebee/pgxutil"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
-{{range .Aggregates}}
+{{- range .Aggregates}}
 // toDomain maps the {{.Name.Title}}{{.Name.Pascal}} to the domain entity.
 func (e {{$.Name.Title}}{{.Name.Pascal}}) toDomain() (*{{$.Name.Flat}}.{{.Name.Pascal}}, error) {
+	{{$aggregate := .}}
+	{{- range .NestedObjects}}
+	{{.Name.Camel}}, err := {{$.Name.Flat}}.MapTo{{.Name.Pascal}}({{$aggregate.Name.FirstLetterLower}}.{{.Name.Pascal}})
+	if err != nil {
+		return nil, err
+	}
+	{{- end}}
+	
 	return {{$.Name.Flat}}.MapTo{{.Name.Pascal}}(
 		e.{{.Name.Pascal}}ID.Bytes,
 		e.CreatedAt.Time,
 		e.UpdatedAt.Time,
 		e.Deleted,
 		pgxutil.TimestampzToTimePtr(e.DeletedAt),
-		//{{range .Fields}}
-		//e.{{.Name.Pascal}},
-		//{{end}}
-        // TODO
+		{{- $outer := .}}
+		{{- range .Fields}}
+			{{- if ne .Type "object"}}
+			{{- if .MapFnFromPgToDomain}}
+			{{.MapFnFromPgToDomain}}
+			{{- else}}
+			e.{{.Name.PascalCapitalizeID}},
+			{{- end}}
+			{{- end}}
+		{{- end}}
+		{{- range .NestedObjects}}
+		{{if and .Optional (ne .List true) }}&{{end}}{{.Name.Camel}},
+		{{- end}}
 	)
 }
 
-// toQuery{{.Name.Pascal}} maps the {{.Name.Flat}}{{.Name.Pascal}} to the query.{{.Name.Pascal}}.
+// toQuery{{.Name.Pascal}} maps the {{.Name.Flat}}.{{.Name.Pascal}} to the query.{{.Name.Pascal}}.
 func (e {{$.Name.Title}}{{.Name.Pascal}}) toQuery{{.Name.Pascal}}() (query.{{.Name.Pascal}}, error) {
-	{{.Name.Flat}}, err := e.toDomain()
+	{{.Name.Camel}}, err := e.toDomain()
 	if err != nil {
 		return query.{{.Name.Pascal}}{}, err
 	}
 
-	return mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}}), nil
+	return mapEntity{{.Name.Pascal}}ToQuery({{.Name.Camel}}), nil
 }
 
 // {{.Name.Flat}}{{.Name.PluralPascal}}ToQuery maps a slice of {{.Name.Pascal}}{{.Name.Pascal}} to a slice of query.{{.Name.Pascal}} entities.
-func {{$.Name.Flat}}{{.Name.PluralPascal}}ToQuery({{.Name.PluralFlat}} []{{$.Name.Title}}{{.Name.Pascal}}) ([]query.{{.Name.Pascal}}, error) {
+func {{$.Name.Flat}}{{.Name.PluralPascal}}ToQuery({{.Name.PluralCamel}} []{{$.Name.Title}}{{.Name.Pascal}}) ([]query.{{.Name.Pascal}}, error) {
 	var domain{{.Name.PluralPascal}} []query.{{.Name.Pascal}}
 
-	for _, {{.Name.Flat}} := range {{.Name.PluralFlat}} {
-		query{{.Name.Pascal}}, err := {{.Name.Flat}}.toQuery{{.Name.Pascal}}()
+	for _, {{.Name.Camel}} := range {{.Name.PluralCamel}} {
+		query{{.Name.Pascal}}, err := {{.Name.Camel}}.toQuery{{.Name.Pascal}}()
 		if err != nil {
 			return nil, err
 		}
-
 		domain{{.Name.PluralPascal}} = append(domain{{.Name.PluralPascal}}, query{{.Name.Pascal}})
 	}
 
@@ -49,28 +67,64 @@ func {{$.Name.Flat}}{{.Name.PluralPascal}}ToQuery({{.Name.PluralFlat}} []{{$.Nam
 }
 
 // mapEntity{{.Name.Pascal}}ToDB maps a domain {{.Name.Pascal}} entity to the {{.Name.Pascal}}{{.Name.Pascal}} database model.
-func mapEntity{{.Name.Pascal}}ToDB({{.Name.Flat}} *{{$.Name.Flat}}.{{.Name.Pascal}}) {{$.Name.Title}}{{.Name.Pascal}} {
-	createdAt := {{.Name.Flat}}.GetCreatedAtTime()
-	updatedAt := {{.Name.Flat}}.GetUpdatedAtTime()
+func mapEntity{{.Name.Pascal}}ToDB({{.Name.Camel}} *{{$.Name.Flat}}.{{.Name.Pascal}}) {{$.Name.Title}}{{.Name.Pascal}} {
+	createdAt := {{.Name.Camel}}.GetCreatedAtTime()
+	updatedAt := {{.Name.Camel}}.GetUpdatedAtTime()
 
 	return {{$.Name.Title}}{{.Name.Pascal}}{
-		{{.Name.Pascal}}ID:          pgxutil.UUIDToPgtypeUUID({{.Name.Flat}}.GetIdUUID()),
+		{{.Name.Pascal}}ID:          pgxutil.UUIDToPgtypeUUID({{.Name.Camel}}.GetIdUUID()),
 		CreatedAt:       pgxutil.TimeToTimestampz(&createdAt),
 		UpdatedAt:       pgxutil.TimeToTimestampz(&updatedAt),
-		Deleted:         {{.Name.Flat}}.IsDeleted(),
-		DeletedAt:       pgxutil.TimeToTimestampz({{.Name.Flat}}.GetDeletedAtTime()),
-		//{{range .Fields}}
-		//{{.Name.Pascal}}: Get{{.Name.Pascal}}(),
-		//{{end}}
-        // TODO
+		Deleted:         {{.Name.Camel}}.IsDeleted(),
+		DeletedAt:       pgxutil.TimeToTimestampz({{.Name.Camel}}.GetDeletedAtTime()),
+		{{- $outer := .}}
+		{{- range .Fields}}
+		{{- if .MapFnFromDomainToPg}}
+		{{.Name.PascalCapitalizeID}}: {{.MapFnFromDomainToPg}}({{$outer.Name.Camel}}.{{.Name.Pascal}}()),
+		{{- else if eq .Type "object"}}
+		{{.Name.PascalCapitalizeID}}: {{$outer.Name.Camel}}.{{.Name.Pascal}}Marshalled(),
+		{{- else}}
+		{{.Name.PascalCapitalizeID}}: {{$outer.Name.Camel}}.{{.Name.Pascal}}(),
+		{{- end}}
+		{{- end}}
 	}
 }
-
 
 // mapEntity{{.Name.Pascal}}ToQuery maps a domain {{.Name.Pascal}} entity to a query.{{.Name.Pascal}}.
-func mapEntity{{.Name.Pascal}}ToQuery({{.Name.Flat}} *{{$.Name.Flat}}.{{.Name.Pascal}}) query.{{.Name.Pascal}} {
+func mapEntity{{.Name.Pascal}}ToQuery({{.Name.Camel}} *{{$.Name.Flat}}.{{.Name.Pascal}}) query.{{.Name.Pascal}} {
+	{{$aggregate := .}}
+	{{- range .NestedObjects}}
+	{{- if and (eq .Type "object") .List}}
+	var {{.Name.Camel}} []{{if .Optional }}*{{end}}query.{{.Name.Pascal}}
+	for _, item := range {{$aggregate.Name.Camel}}.{{.Name.Pascal}}() {
+		{{.Name.Camel}} = append({{.Name.Camel}}, {{if .Optional }}&{{end}}query.{{.Name.Pascal}}{
+			{{$field := .}}
+			{{- range .Fields}}
+			{{.Name.Pascal}}: item.{{.Name.Pascal}},
+			{{- end}}
+		})
+	}
+	{{- end}}
+	{{- end}}
+	
 	return query.{{.Name.Pascal}}{
-        // TODO
+		{{- $outer := .}}
+		{{- range .Fields}}
+		{{- if ne .Type "object"}}
+		{{.Name.Pascal}}: {{$outer.Name.Camel}}.{{.Name.Pascal}}(),
+		{{- end}}
+		{{- end}}
+		{{- range .NestedObjects}}
+		{{if and (eq .Type "object") .List}}{{.Name.Pascal}}: {{.Name.Camel}},{{end}}
+		{{- if and (eq .Type "object") (ne .List true)}}
+		{{.Name.Pascal}}: {{if .Optional }}&{{end}}query.{{.Name.Pascal}}{
+			{{- $nestedObject := .}}
+			{{- range .Fields}}
+			{{.Name.Pascal}}: {{$outer.Name.Camel}}.{{$nestedObject.Name.Pascal}}().{{.Name.Pascal}},
+			{{- end}}
+		},
+		{{- end}}
+		{{- end}}
 	}
 }
-{{end}}
+{{- end}}
