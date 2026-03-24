@@ -73,7 +73,7 @@ lint: lint-be lint-fe ### run all linters
 .PHONY: lint
 
 lint-be: ### check by golangci linter
-	goimports -w ./internal ./tools ./pkg ./app ./cmd
+	go tool goimports -w ./internal ./tools ./pkg ./app ./cmd
 	go tool golangci-lint run --config ./.golangci.yml --fix
 .PHONY: lint-be
 
