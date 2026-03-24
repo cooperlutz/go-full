@@ -1,3 +1,4 @@
+//nolint:funlen // don't worry about this
 package {{.Name.Flat}}
 
 import (
@@ -9,7 +10,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
-{{range .Aggregates}}
+{{- range .Aggregates}}
 type {{.Name.Pascal}}Repository interface {
 	Add{{.Name.Pascal}}(ctx context.Context, {{.Name.Flat}} *{{.Name.Pascal}}) error
 
@@ -31,9 +32,9 @@ func MapTo{{.Name.Pascal}}(
 	updatedAt time.Time,
 	deleted bool,
 	deletedAt *time.Time,
-    //{{range .Fields}}
-    //{{.Name.Camel}} {{.GoType}},
-    //{{end}}
+    {{- range .Fields}}
+    {{.Name.Camel}} {{.GoType}},
+    {{- end}}
 ) (*{{.Name.Pascal}}, error) {
 	return &{{.Name.Pascal}}{
 		EntityMetadata: baseentitee.MapToEntityMetadataFromCommonTypes(
@@ -43,10 +44,10 @@ func MapTo{{.Name.Pascal}}(
 			deleted,
 			deletedAt,
 		),
-        //{{range .Fields}}
-        //{{.Name.Camel}}: {{.Name.Camel}},
-        //{{end}}
+        {{- range .Fields}}
+        {{.Name.Camel}}: {{.Name.Camel}},
+        {{- end}}
 		// TODO
 	}, nil
 }
-{{end}}
+{{- end}}
