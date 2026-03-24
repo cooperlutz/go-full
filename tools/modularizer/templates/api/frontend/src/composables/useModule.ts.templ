@@ -15,14 +15,14 @@ const {{.Name.Flat}}API = new DefaultApi(BackendConfig);
 export function useFindAll{{.Name.PluralPascal}}() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.Name.PluralFlat}} = ref<Array<{{.Name.Pascal}}> | null>(null);
+  const {{.Name.PluralCamel}} = ref<Array<{{.Name.Pascal}}> | null>(null);
 
   const getFindAll = async () => {
     loading.value = true;
     error.value = null;
     try {
       const response = await {{$.Name.Flat}}API.findAll{{.Name.PluralPascal}}();
-      {{.Name.PluralFlat}}.value = response;
+      {{.Name.PluralCamel}}.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -35,7 +35,7 @@ export function useFindAll{{.Name.PluralPascal}}() {
   return {
     error,
     loading,
-    {{.Name.PluralFlat}},
+    {{.Name.PluralCamel}},
     getFindAll,
   };
 }
@@ -44,7 +44,7 @@ export function useFindAll{{.Name.PluralPascal}}() {
 export function useFindOne{{.Name.PluralPascal}}() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.Name.Flat}} = ref<{{.Name.Pascal}} | null>(null);
+  const {{.Name.Camel}} = ref<{{.Name.Pascal}} | null>(null);
 
   const getFindOne = async (id: string) => {
     loading.value = true;
@@ -54,7 +54,7 @@ export function useFindOne{{.Name.PluralPascal}}() {
          {{.Name.Camel}}Id: id,
       };
       const response = await {{$.Name.Flat}}API.findOne{{.Name.Pascal}}(req);
-      {{.Name.Flat}}.value = response;
+      {{.Name.Camel}}.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -67,7 +67,7 @@ export function useFindOne{{.Name.PluralPascal}}() {
   return {
     error,
     loading,
-    {{.Name.Flat}},
+    {{.Name.Camel}},
     getFindOne,
   };
 }

@@ -7,9 +7,6 @@ const SqlcConfig = `
   engine: postgresql
   analyzer:
     database: false
-  rules:
-  - sqlc/db-prepare
-  - postgresql-query-too-costly
   strict_function_checks: false
   strict_order_by: true
   gen:

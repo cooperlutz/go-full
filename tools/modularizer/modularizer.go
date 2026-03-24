@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -632,9 +633,15 @@ func (m *Modularizer) createCommandTypesFile() error {
 	return nil
 }
 
+var funcMap = template.FuncMap{
+	"add": func(a, b int) int {
+		return a + b
+	},
+}
+
 // getTemplateAndWriteToFile is a helper function that takes in a template path and an output path, parses the template, executes it with the modularizer's template data, and writes the output to the specified file path
 func (m *Modularizer) getTemplateAndWriteToFile(templateRelativePath string, outputPath string) error {
-	tmpl := template.Must(template.ParseFiles(utils.GetDirectoryOfCurrentFile() + templateRelativePath))
+	tmpl := template.Must(template.New(path.Base(templateRelativePath)).Funcs(funcMap).ParseFiles(utils.GetDirectoryOfCurrentFile() + templateRelativePath))
 	f, err := os.Create(outputPath)
 	if err != nil {
 		return err
@@ -648,7 +655,7 @@ func (m *Modularizer) getTemplateAndWriteToFile(templateRelativePath string, out
 
 // getTemplateAndWriteToFileWithTemplateData is a helper function that takes in a template path, an output path, and custom template data, parses the template, executes it with the provided template data, and writes the output to the specified file path
 func (m *Modularizer) getTemplateAndWriteToFileWithTemplateData(templateRelativePath string, outputPath string, templateData any) error {
-	tmpl := template.Must(template.ParseFiles(utils.GetDirectoryOfCurrentFile() + templateRelativePath))
+	tmpl := template.Must(template.New(path.Base(templateRelativePath)).Funcs(funcMap).ParseFiles(utils.GetDirectoryOfCurrentFile() + templateRelativePath))
 	f, err := os.Create(outputPath)
 	if err != nil {
 		return err

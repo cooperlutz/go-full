@@ -8,7 +8,7 @@ servers:
       hostname:
         default: localhost
 paths:
-  {{range .Aggregates}}
+  {{- range .Aggregates}}
   /v1/{{.Name.PluralFlat}}:
     get:
       operationId: findAll{{.Name.PluralPascal}}
@@ -50,7 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  {{end}}
+  {{- end}}
   
 {{range .Commands}}
 #  /v1/{{$.Name.PluralFlat}}/{{`{`}}{{$.Name.Camel}}Id}/{{.Name.Camel}}:
@@ -85,37 +85,49 @@ paths:
 
 components:
   schemas:
-    {{range .Aggregates}}
+    {{- range .Aggregates}}
     {{.Name.Pascal}}:
       type: object
       description: {{.Description}}
+      required:
+        {{- range .RequiredFields}}
+        - {{.Name.Camel}}
+        {{- end}}
       properties:
-        {{range .Fields}}
+        {{- range .Fields}}
         {{.Name.Camel}}:
           {{.OpenApiType}}
-        {{end}}
-    {{end}}
+        {{- end}}
+    {{- end}}
 
-    {{range .NestedObjects}}
+    {{- range .NestedObjects}}
     {{.Name.Pascal}}:
       type: object
       description: {{.Description}}
+      required:
+        {{- range .RequiredFields}}
+        - {{.Name.Camel}}
+        {{- end}}
       properties:
-        {{range .Fields}}
+        {{- range .Fields}}
         {{.Name.Camel}}:
           {{.OpenApiType}}
-        {{end}}
-    {{end}}
+        {{- end}}
+    {{- end}}
 
-{{range .Commands}}
+{{- range .Commands}}
     {{.Name.Pascal}}:
       type: object
+      required:
+        {{- range .Params}}
+        - {{.Name.Camel}}
+        {{- end}}
       properties:
-        {{range .Params}}
+        {{- range .Params}}
         {{.Name.Camel}}:
           {{.OpenApiType}}
-        {{end}}
-{{end}}
+        {{- end}}
+{{- end}}
 
     Error:
       type: object

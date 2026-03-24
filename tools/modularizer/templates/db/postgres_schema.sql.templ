@@ -1,35 +1,40 @@
 CREATE SCHEMA IF NOT EXISTS {{.Name.Flat}};
 
-{{range .Aggregates}}
+{{- range .Aggregates}}
+-- Aggregate Entity {{.Name.Pascal}}
 CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}} (
     {{.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     created_at TIMESTAMPTZ NOT NULL,
     updated_at TIMESTAMPTZ,
     deleted_at TIMESTAMPTZ,
     deleted BOOLEAN NOT NULL DEFAULT FALSE
-    --{{range .Fields}},
-    --{{.Name.Snake}} {{.PgSqlType}}
-    --{{end}}
+    {{- range .Fields}},
+    {{.Name.Snake}} {{.PgSqlType}}
+    {{- end}}
 );
 
 -- create index to optimize queries searching by {{.Name.Snake}}_id
 CREATE INDEX IF NOT EXISTS idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id
 ON {{$.Name.Flat}}.{{.Name.PluralSnake}} ({{.Name.Snake}}_id);
-{{end}}
 
-{{range .NestedObjects}}
-CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}} (
-    {{.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    created_at TIMESTAMPTZ NOT NULL,
-    updated_at TIMESTAMPTZ,
-    deleted_at TIMESTAMPTZ,
-    deleted BOOLEAN NOT NULL DEFAULT FALSE
-    --{{range .Fields}},
-    --{{.Name.Snake}} {{.PgSqlType}}
-    --{{end}}
-);
-
--- create index to optimize queries searching by {{.Name.Snake}}_id
-CREATE INDEX IF NOT EXISTS idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id
-ON {{$.Name.Flat}}.{{.Name.PluralSnake}} ({{.Name.Snake}}_id);
-{{end}}
+{{$outer := .}} 
+{{- range .NestedObjects}}
+-- Nested Entity {{.Name.Pascal}}
+--CREATE TABLE IF NOT EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}} (
+--    {{.Name.Snake}}_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--    created_at TIMESTAMPTZ NOT NULL,
+--    updated_at TIMESTAMPTZ,
+--    deleted_at TIMESTAMPTZ,
+--    deleted BOOLEAN NOT NULL DEFAULT FALSE,
+--    {{$outer.Name.Snake}}_id UUID
+--    {{- range .Fields}},
+--    {{.Name.Snake}} {{.PgSqlType}}
+--    {{- end}}
+--);
+--
+---- create index to optimize queries searching by {{.Name.Snake}}_id
+--CREATE INDEX IF NOT EXISTS idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id
+--ON {{$.Name.Flat}}.{{.Name.PluralSnake}} ({{.Name.Snake}}_id);
+--{{- end}}
+--
+{{- end}}

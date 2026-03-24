@@ -1,10 +1,19 @@
 package query
 
-{{range .Aggregates}}
+{{- range .Aggregates}}
 type {{.Name.Pascal}} struct {
-    //{{range .Fields}}
-    //{{.Name.Camel}}: {{.Name.Camel}},
-    //{{end}}
+    {{- range .Fields}}
+    {{.Name.Pascal}} {{.GoType}}
+    {{- end}}
     // TODO
 }
-{{end}}
+
+{{- range .NestedObjects}}
+type {{.Name.Pascal}} struct {
+    {{- range .Fields}}
+    {{.Name.Pascal}} {{.GoType}}
+    {{- end}}
+    // TODO
+}
+{{- end}}
+{{- end}}

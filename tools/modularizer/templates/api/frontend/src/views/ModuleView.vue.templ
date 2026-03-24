@@ -1,13 +1,30 @@
 <script setup lang="ts">
+import { 
+{{- range .Aggregates}}
+{{.Icon}},
+{{- end}}
+} from "lucide-vue-next";
+
+import DashboardCard from "~/app/components/DashboardCard/DashboardCard.vue";
 import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
 </script>
 
 <template>
   <div id="{{.Name.Kebab}}-dashboard">
-    <PageHeader title="{{.Name.Pascal}} Dashboard" :disable-menu="true" />
+    <PageHeader title="{{.Name.TitleWithSpaces}} Dashboard" :disable-menu="true" />
 
-    <div>
+    <div
+      class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4"
+    >
         <!-- TODO: update components rendered to dashboard -->
+      {{- range .Aggregates}}
+      <DashboardCard
+        title="{{.Name.PluralTitleWithSpaces}}"
+        description="{{.Description}}"
+        href="/{{$.Name.Kebab}}/{{.Name.PluralKebab}}"
+        :icon="{{.Icon}}"
+      />
+      {{- end}}
     </div>
   </div>
 </template>

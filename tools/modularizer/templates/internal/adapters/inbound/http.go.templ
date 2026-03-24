@@ -6,6 +6,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app"
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/query"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // HttpAdapter represents the HTTP server for the {{.Name.Pascal}} module.
@@ -25,7 +26,7 @@ func (h HttpAdapter) StrictHandler() ServerInterface {
 	return NewStrictHandler(h, nil)
 }
 
-{{range .Aggregates}}
+{{- range .Aggregates}}
 // (GET /v1/{{.Name.PluralFlat}}).
 func (h HttpAdapter) FindAll{{.Name.PluralPascal}}(ctx context.Context, request FindAll{{.Name.PluralPascal}}RequestObject) (FindAll{{.Name.PluralPascal}}ResponseObject, error) {
 	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.inbound.http.find_all_{{.Name.PluralFlat}}")
@@ -57,12 +58,42 @@ func (h HttpAdapter) FindOne{{.Name.Pascal}}(ctx context.Context, request FindOn
 	return FindOne{{.Name.Pascal}}200JSONResponse(query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}({{.Name.Flat}})), nil
 }
 
-func query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(e query.{{.Name.Pascal}}) {{.Name.Pascal}} {
+// TODO: Review
+func query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(qry query.{{.Name.Pascal}}) {{.Name.Pascal}} {
+
+	{{- range .NestedObjects}}
+	{{- if and (eq .Type "object") (eq .List true)}}
+	var {{.Name.Camel}} []{{if .Optional }}*{{end}}{{.Name.Pascal}}
+	for _, e := range qry.{{.Name.Pascal}} {
+		{{.Name.Camel}} = append({{.Name.Camel}}, ({{if .Optional }}*{{end}}{{.Name.Pascal}})(e))
+	}
+	{{- end}}
+
+	// var optionalObjectListField []*OptionalObjectListField
+	// for _, e := range qry.OptionalObjectListField {
+	// 	optionalObjectListField = append(optionalObjectListField, (*OptionalObjectListField)(e))
+	// }
+	// 
+	// var requiredObjectListField []RequiredObjectListField
+	// for _, e := range qry.RequiredObjectListField {
+	// 	requiredObjectListField = append(requiredObjectListField, (RequiredObjectListField)(e))
+	// }
+	{{- end}}
+
 	return {{.Name.Pascal}}{
-		//{{range .Fields}}
-		//{{.Name.Pascal}}: Get{{.Name.Pascal}}(),
-		//{{end}}
-        // TODO
+		{{- range .Fields}}
+			{{- if and (eq .Type "object") (ne .List true)}}
+			{{.Name.Pascal}}: ({{.GoType}})(qry.{{.Name.Pascal}}),
+			{{- else if and (eq .Type "object") (ne .Optional true) .List}}
+			{{.Name.Pascal}}: {{.Name.Camel}},
+			{{- else if and (eq .Type "object") (ne .Optional false) .List}}
+			{{.Name.Pascal}}: utilitee.SliceOfPointersToPointerSlice({{.Name.Camel}}),
+			{{- else if and .List .Optional}}
+			{{.Name.Pascal}}: utilitee.SliceOfPointersToPointerSlice(qry.{{.Name.Pascal}}),
+			{{- else}}
+			{{.Name.Pascal}}: qry.{{.Name.Pascal}},
+			{{- end}}
+		{{- end}}
 	}
 }
-{{end}}
+{{- end}}

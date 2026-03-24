@@ -1,3 +1,15 @@
+## v0.1.70 (2026-03-24)
+
+### Fix
+
+- implement groups for dependabot updates to reduce prs (#233)
+
+## v0.1.69 (2026-03-24)
+
+### Fix
+
+- modularizer enhancements (#232)
+
 ## v0.1.68 (2026-03-16)
 
 ### Fix
