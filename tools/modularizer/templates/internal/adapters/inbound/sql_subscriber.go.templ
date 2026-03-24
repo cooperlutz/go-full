@@ -20,7 +20,7 @@ func NewSqlSubscriberAdapter(events app.Events, pubSub *eeventdriven.BasePgsqlPu
 func (s SqlSubscriberAdapter) RegisterEventHandlers() {
 	router := s.pubSub.GetRouter()
 
-	{{range .EmittedEvents}}
+	{{- range .EmittedEvents}}
 	// noop handler to initialize the topic table
 	router.AddConsumerHandler(
 		"{{$.Name.Flat}}_{{.Name.Snake}}_handler",
@@ -28,5 +28,5 @@ func (s SqlSubscriberAdapter) RegisterEventHandlers() {
 		s.pubSub.GetSubscriber(),
 		eeventdriven.NewNoOpEventHandler().Handle(),
 	)
-	{{end}}
+	{{- end}}
 }
