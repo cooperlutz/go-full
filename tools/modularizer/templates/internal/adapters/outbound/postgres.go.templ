@@ -26,19 +26,19 @@ func NewPostgresAdapter(db deebee.IDatabase) PostgresAdapter {
 	}
 }
 
-{{range .Aggregates}}
-func (p PostgresAdapter) FindAll{{.Name.Pascal}}s(ctx context.Context) ([]query.{{.Name.Pascal}}, error) {
+{{- range .Aggregates}}
+func (p PostgresAdapter) FindAll{{.Name.PluralPascal}}(ctx context.Context) ([]query.{{.Name.Pascal}}, error) {
 	ctx, span := telemetree.AddSpan(ctx, "{{$.Name.Flat}}.adapters.outbound.postgres.find_all_{{.Name.Snake}}")
 	defer span.End()
 
-	{{.Name.Flat}}s, err := p.Handler.FindAll{{.Name.Pascal}}s(ctx)
+	{{.Name.PluralFlat}}, err := p.Handler.FindAll{{.Name.PluralPascal}}(ctx)
 	if err != nil {
 		telemetree.RecordError(ctx, err)
 
 		return nil, err
 	}
 
-	return {{$.Name.Flat}}{{.Name.Pascal}}sToQuery({{.Name.Flat}}s)
+	return {{$.Name.Flat}}{{.Name.PluralPascal}}ToQuery({{.Name.PluralFlat}})
 }
 
 func (p PostgresAdapter) FindOne{{.Name.Pascal}}(ctx context.Context, id uuid.UUID) (query.{{.Name.Pascal}}, error) {
@@ -132,7 +132,7 @@ func (p PostgresAdapter) Update{{.Name.Pascal}}(
 
 	return nil
 }
-{{end}}
+{{- end}}
 
 // finishTransaction commits or rolls back the transaction based on the error state.
 func (p PostgresAdapter) finishTransaction(ctx context.Context, err error, tx pgx.Tx) error {

@@ -1,11 +1,11 @@
 all: false
-dir: test/mocks/
+# dir: test/mocks/
 force-file-write: true
 formatter: goimports
 include-auto-generated: false
 log-level: info
 structname: '{{.Mock}}{{.InterfaceName}}'
-pkgname: mocks
+# pkgname: mocks
 recursive: false
 require-template-schema-exists: true
 template: testify
@@ -16,47 +16,68 @@ packages:
     config:
       filename: mocks_pkg_eeventdriven.gen.go
       all: true
+      dir: test/mocks/pkg
+      pkgname: pkg_mocks
 
 # PingPong Module
   github.com/cooperlutz/go-full/internal/pingpong/domain/repository:
     config:
       filename: mocks_pingpong_repo.gen.go
       all: true
+      dir: test/mocks/pingpong
+      pkgname: pingpong_mocks
   github.com/cooperlutz/go-full/internal/pingpong/infra/persist/postgres:
     config:
       filename: mocks_pingpong_postgres_repo.gen.go
       all: true
+      dir: test/mocks/pingpong
+      pkgname: pingpong_mocks
   github.com/cooperlutz/go-full/internal/pingpong/app/usecase:
     config:
       filename: mocks_pingpong_usecase.gen.go
       all: true
+      dir: test/mocks/pingpong
+      pkgname: pingpong_mocks
 
 # Exam Library Module
   github.com/cooperlutz/go-full/internal/examlibrary/domain/repository:
     config:
       filename: mocks_examlibrary_repo.gen.go
       all: true
+      dir: test/mocks/examlibrary
+      pkgname: examlibrary_mocks
   github.com/cooperlutz/go-full/internal/examlibrary/infra/persist/postgres:
     config:
       filename: mocks_examlibrary_postgres_repo.gen.go
       all: true
+      dir: test/mocks/examlibrary
+      pkgname: examlibrary_mocks
   github.com/cooperlutz/go-full/internal/examlibrary/app/usecase:
     config:
       filename: mocks_examlibrary_usecase.gen.go
       all: true
+      dir: test/mocks/examlibrary
+      pkgname: examlibrary_mocks
 
 # Examination Module
   github.com/cooperlutz/go-full/internal/examination/domain/examination:
     config:
       filename: mocks_examination_domain.gen.go
       all: true
+      dir: test/mocks/examination
+      pkgname: examination_mocks
+      include-auto-generated: true
   github.com/cooperlutz/go-full/internal/examination/adapters/outbound:
     config:
       filename: mocks_examination_adapters_outbound.gen.go
       all: true
+      dir: test/mocks/examination
+      pkgname: examination_mocks
       include-auto-generated: true
   github.com/cooperlutz/go-full/internal/examination/adapters/inbound:
     config:
       filename: mocks_examination_adapters_inbound.gen.go
       all: true
+      dir: test/mocks/examination
+      pkgname: examination_mocks
       include-auto-generated: true

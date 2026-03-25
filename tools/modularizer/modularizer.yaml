@@ -7,35 +7,235 @@ modules:
   description: Module for managing pet registrations in a veterinary clinic system
   defaultQueries: true
   boundedContext: The pet registry module is responsible for managing the registration and profile information of pets and their owners within the veterinary clinic system. It encapsulates the business logic related to creating and updating pet profiles, linking pets to their owners, and providing query capabilities for retrieving pet information based on various criteria. This module serves as the core domain for pet management and provides the necessary functionality to support various workflows related to pet registration and profile maintenance.
+  icon: Dog # Use the name of a Lucide icon to represent this module visually in the UI. You can find available icons at https://lucide.dev/icons.
   aggregates: 
     - name: pet
+      icon: Dog # Use the name of a Lucide icon to represent this module visually in the UI. You can find available icons at https://lucide.dev/icons.
       description: Represents a pet registered in the veterinary clinic system, including its profile information and association with an owner.
       fields:
-        - name: pet_id
-          type: string
-          optional: false
         - name: name
           type: string
           optional: false
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32
           optional: true
-    - name: owner
-      description: Represents the owner of a pet, including their contact information and association with their pets.
+    - name: example_aggregate
+      icon: Box # Use the name of a Lucide icon to represent this module visually in the UI. You can find available icons at https://lucide.dev/icons.
+      description: This is an example aggregate that demonstrates the use of various field types, including nested objects and lists, to represent complex data structures within the domain model. It serves as a template for defining aggregates with more intricate relationships and attributes in the future.
       fields:
-        - name: owner_id
+        - name: required_float32_field
+          type: float32
+          optional: false
+        - name: optional_float32_field
+          type: float32
+          optional: true
+        - name: required_float32_list_field
+          type: float32
+          list: true # indicates that this field is a list of float32
+          optional: false
+        - name: optional_float32_list_field
+          type: float32
+          list: true # indicates that this field is a list of float32
+          optional: true
+        - name: required_float64_field
+          type: float64
+          optional: false
+        - name: optional_float64_field
+          type: float64
+          optional: true
+        - name: required_float64_list_field
+          type: float64
+          list: true # indicates that this field is a list of float64
+          optional: false
+        - name: optional_float64_list_field
+          type: float64
+          list: true # indicates that this field is a list of float64
+          optional: true
+
+        - name: required_bool_field
+          type: bool
+          list: false
+          optional: false
+        - name: optional_bool_field
+          type: bool
+          list: false
+          optional: true
+        - name: required_bool_list_field
+          type: bool
+          list: true # indicates that this field is a list of bool
+          optional: false
+        - name: optional_bool_list_field
+          type: bool
+          list: true # indicates that this field is a list of bool
+          optional: true
+
+        - name: required_time_field
+          type: time
+          list: false
+          optional: false
+        - name: optional_time_field
+          type: time
+          list: false
+          optional: true
+        - name: required_time_list_field
+          type: time
+          list: true # indicates that this field is a list of time
+          optional: false
+        - name: optional_time_list_field
+          type: time
+          list: true # indicates that this field is a list of time
+          optional: true
+
+        - name: required_timestamp_field
+          type: timestamp
+          list: false
+          optional: false
+        - name: optional_timestamp_field
+          type: timestamp
+          list: false
+          optional: true
+        - name: required_timestamp_list_field
+          type: timestamp
+          list: true # indicates that this field is a list of timestamp
+          optional: false
+        - name: optional_timestamp_list_field
+          type: timestamp
+          list: true # indicates that this field is a list of time
+          optional: true
+
+        - name: required_uuid_field
+          type: uuid
+          optional: false
+        - name: optional_uuid_field
+          type: uuid
+          optional: true
+        - name: required_uuid_list_field
+          type: uuid
+          list: true # indicates that this field is a list of uuid
+          optional: false
+        - name: optional_uuid_list_field
+          type: uuid
+          list: true # indicates that this field is a list of uuid
+          optional: true
+
+        - name: required_string_field
           type: string
           optional: false
+        - name: optional_string_field
+          type: string
+          optional: true
+        - name: required_string_list_field
+          type: string
+          list: true # indicates that this field is a list of strings
+          optional: false
+        - name: optional_string_list_field
+          type: string
+          list: true # indicates that this field is a list of strings
+          optional: true
+
+        - name: required_int16_field
+          type: int16
+          optional: false
+        - name: optional_int16_field
+          type: int16
+          optional: true
+        - name: required_int16_list_field
+          type: int16
+          list: true # indicates that this field is a list of int16
+          optional: false
+        - name: optional_int16_list_field
+          type: int16
+          list: true # indicates that this field is a list of int16
+          optional: true
+
+        - name: required_int32_field
+          type: int32
+          optional: false
+        - name: optional_int32_field
+          type: int32
+          optional: true
+        - name: required_int32_list_field
+          type: int32
+          list: true # indicates that this field is a list of int32
+          optional: false
+        - name: optional_int32_list_field
+          type: int32
+          list: true # indicates that this field is a list of int32
+          optional: true
+
+        - name: required_int64_field
+          type: int64
+          optional: false
+        - name: optional_int64_field
+          type: int64
+          optional: true
+        - name: required_int64_list_field
+          type: int64
+          list: true # indicates that this field is a list of int64
+          optional: false
+        - name: optional_int64_list_field
+          type: int64
+          list: true # indicates that this field is a list of int64
+          optional: true
+
+        - name: required_object_field
+          type: object
+          optional: false
+          fields:
+            - name: nested_field_x
+              type: string
+              optional: false
+            - name: nested_field_y
+              type: int32
+              optional: true
+        - name: optional_object_field
+          type: object
+          optional: true
+          fields:
+            - name: nested_field_x
+              type: string
+              optional: false
+            - name: nested_field_y
+              type: int32
+              optional: true
+        - name: required_object_list_field
+          type: object
+          list: true # indicates that this field is a list of objects
+          optional: false
+          fields:
+            - name: nested_field_x
+              type: string
+              optional: false
+            - name: nested_field_y
+              type: int32
+              optional: true
+        - name: optional_object_list_field
+          type: object
+          list: true # indicates that this field is a list of objects
+          optional: true
+          fields:
+            - name: nested_field_x
+              type: string
+              optional: false
+            - name: nested_field_y
+              type: int32
+              optional: true
+    - name: owner
+      icon: User # Use the name of a Lucide icon to represent this module visually in the UI. You can find available icons at https://lucide.dev/icons.
+      description: Represents the owner of a pet, including their contact information and association with their pets.
+      fields:
         - name: name
           type: string
           optional: false
     - name: pet_owner_relationship
+      icon: Link # Use the name of a Lucide icon to represent this module visually in the UI. You can find available icons at https://lucide.dev/icons.
       description: Represents the relationship between a pet and its owner, allowing for linking pets to their respective owners in the system.
       fields:
         - name: pet_id
@@ -62,8 +262,9 @@ modules:
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32
@@ -85,8 +286,9 @@ modules:
         - name: species
           type: string
           optional: false
-        - name: breed
+        - name: breeds
           type: string
+          list: true # indicates that this field is a list of strings
           optional: true
         - name: age
           type: float32

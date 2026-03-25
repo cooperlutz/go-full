@@ -1,27 +1,77 @@
+//nolint:funlen // ignoring these for now
 package {{.Mod.Name.Flat}}
 
 import (
+    "time"
+
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
 type {{.Agg.Name.Pascal}} struct {
     *baseentitee.EntityMetadata
-    //{{range .Agg.Fields}}
-    //{{.Name.Camel}} {{.GoType}}
-    //{{end}}
+    {{- range .Agg.Fields}}
+    {{.Name.Camel}} {{.GoType}}
+    {{- end}}
     // TODO
 }
 
-
 func New{{.Agg.Name.Pascal}}(
-    //{{range .Agg.Fields}}
-    //{{.Name.Camel}} {{.GoType}},
-    //{{end}}
+    {{- range .Agg.Fields}}
+    {{.Name.Camel}} {{.GoType}},
+    {{- end}}
 ) *{{.Agg.Name.Pascal}} {
 	return &{{.Agg.Name.Pascal}}{
 		EntityMetadata:  baseentitee.NewEntityMetadata(),
-        //{{range .Agg.Fields}}
-        //{{.Name.Camel}}: {{.Name.Camel}},
-        //{{end}}
+        {{- range .Agg.Fields}}
+        {{.Name.Camel}}: {{.Name.Camel}},
+        {{- end}}
 	}
 }
+
+{{- range .Agg.NestedObjects}}
+type {{.Name.Pascal}} struct {
+    // *baseentitee.EntityMetadata
+    {{- range .Fields}}
+    {{.Name.Pascal}} {{.GoType}}
+    {{- end}}
+}
+
+{{$outer := .}}
+{{- range .Fields}}
+// func ({{$outer.Name.FirstLetterLower}} {{$outer.Name.Pascal}}) {{.Name.Pascal}}() {{.GoType}} { return {{$outer.Name.FirstLetterLower}}.{{.Name.Camel}} }
+{{- end}}
+
+func MapTo{{.Name.Pascal}}(data []byte) ({{if .List}}[]{{if .Optional }}*{{end}}{{end}}{{.Name.Pascal}}, error) {
+	var {{.Name.Camel}} {{if .List}}[]{{if .Optional }}*{{end}}{{end}}{{.Name.Pascal}}
+	err := json.Unmarshal(data, &{{.Name.Camel}})
+	if err != nil {
+		return {{if .List}}nil{{else}}{{.Name.Pascal}}{}{{end}}, err
+	}
+	return {{.Name.Camel}}, nil
+}
+
+{{- end}}
+
+// Getters
+
+{{- range .Agg.Fields}}
+{{- if eq .Type "object"}}
+func ({{$.Agg.Name.FirstLetterLower}} {{$.Agg.Name.Pascal}}) {{.Name.Pascal}}Marshalled() []byte {
+	marshal, err := json.Marshal(e.{{.Name.Camel}})
+	if err != nil {
+		return nil
+	}
+	return marshal
+}
+{{- end}}
+func ({{$.Agg.Name.FirstLetterLower}} {{$.Agg.Name.Pascal}}) {{.Name.Pascal}}() {{.GoType}} { return {{$.Agg.Name.FirstLetterLower}}.{{.Name.Camel}} }
+{{- end}}
+
+// Setters
+
+{{- range .Agg.Fields}}
+func ({{$.Agg.Name.FirstLetterLower}} *{{$.Agg.Name.Pascal}}) Update{{.Name.Pascal}}({{.Name.Flat}} {{.GoType}}) {
+    {{$.Agg.Name.FirstLetterLower}}.{{.Name.Camel}} = {{.Name.Flat}}
+    {{$.Agg.Name.FirstLetterLower}}.MarkUpdated()
+}
+{{- end}}

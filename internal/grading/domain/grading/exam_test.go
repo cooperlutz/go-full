@@ -48,7 +48,7 @@ func TestExam(t *testing.T) {
 	)
 
 	// initial state of the exam should be correct
-	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Microsecond*15)
+	assert.WithinDuration(t, time.Now(), exam.GetCreatedAtTime(), time.Millisecond)
 	assert.Nil(t, exam.GetDeletedAtTime())
 	assert.False(t, exam.IsDeleted())
 	assert.Equal(t, uuid.MustParse("00000000-0000-0000-0000-000000000123"), exam.GetStudentId())

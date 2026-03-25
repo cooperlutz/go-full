@@ -11,7 +11,7 @@ import (
 	v1_server "github.com/cooperlutz/go-full/internal/examlibrary/api/rest/v1/server"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/query"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/cooperlutz/go-full/test/mocks"
+	mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {

@@ -9,27 +9,27 @@ import (
 )
 
 type {{.Cmd.Name.Pascal}} struct {
-	//{{range .Cmd.Params}}
-	//{{.Name.Pascal}} {{.GoType}},
-	//{{end}}
+	{{- range .Cmd.Params}}
+	{{.Name.Pascal}} {{.GoType}}
+	{{- end}}
     // TODO
 }
 
 type {{.Cmd.Name.Pascal}}Handler struct {
-	{{range .Mod.Aggregates}}
+	{{- range .Mod.Aggregates}}
 	{{.Name.Pascal}}Repo {{$.Mod.Name.Flat}}.{{.Name.Pascal}}Repository
-	{{end}}
+	{{- end}}
 }
 
 func New{{.Cmd.Name.Pascal}}Handler(
-	{{range .Mod.Aggregates}}
+	{{- range .Mod.Aggregates}}
 	{{.Name.Flat}}Repo {{$.Mod.Name.Flat}}.{{.Name.Pascal}}Repository,
-	{{end}}
+	{{- end}}
 ) {{.Cmd.Name.Pascal}}Handler {
 	return {{.Cmd.Name.Pascal}}Handler{
-		{{range .Mod.Aggregates}}
+		{{- range .Mod.Aggregates}}
 		{{.Name.Pascal}}Repo: {{.Name.Flat}}Repo,
-		{{end}}
+		{{- end}}
 	}
 }
 
@@ -37,7 +37,7 @@ func (h {{.Cmd.Name.Pascal}}Handler) Handle(ctx context.Context, cmd {{.Cmd.Name
 	//ctx, span := telemetree.AddSpan(ctx, "{{.Mod.Name.Flat}}.app.command.{{.Cmd.Name.Snake}}.handle")
 	//defer span.End()
 	
-	{{range .Mod.Aggregates}}
+	{{- range .Mod.Aggregates}}
 	// TODO
 	//err = h.{{.Name.Pascal}}Repo.Update{{.Name.Pascal}}(ctx, uuid.MustParse(cmd.{{.Name.Pascal}}Id), func({{.Name.FirstLetterLower}} *{{$.Mod.Name.Flat}}.{{.Name.Pascal}}) (*{{$.Mod.Name.Flat}}.{{.Name.Pascal}}, error) {
 	//	
@@ -54,7 +54,7 @@ func (h {{.Cmd.Name.Pascal}}Handler) Handle(ctx context.Context, cmd {{.Cmd.Name
 	//if err != nil {
 	//	return err
 	//}
-	{{end}}
+	{{- end}}
 
 	return nil
 }

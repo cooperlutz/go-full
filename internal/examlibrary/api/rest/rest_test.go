@@ -14,7 +14,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	mocks "github.com/cooperlutz/go-full/test/mocks"
+	examlibrary_mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 // Test that /v1/exams returns 200 and "pong"
@@ -22,7 +22,7 @@ func TestNewExamLibraryAPIRouter(t *testing.T) {
 	t.Parallel()
 
 	// Arrange
-	useCase := mocks.NewMockIExamLibraryUseCase(t)
+	useCase := examlibrary_mocks.NewMockIExamLibraryUseCase(t)
 	router := rest.NewExamLibraryAPIRouter(useCase)
 	useCase.Mock.On(
 		"AddExamToLibrary",
