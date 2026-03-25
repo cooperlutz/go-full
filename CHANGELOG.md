@@ -1,3 +1,9 @@
+## v0.1.72 (2026-03-25)
+
+### Fix
+
+- **deps**: bump the all-go-modules group with 7 updates (#234)
+
 ## v0.1.71 (2026-03-25)
 
 ### Fix
