@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+</script>
+
+<template>
+  <div id="{{.Name.Kebab}}-dashboard">
+    <PageHeader title="{{.Name.TitleWithSpaces}} Dashboard" :disable-menu="true" />
+
+    <div>
+    <!-- TODO: 
+        - creational modal
+        - table of aggregates 
+            - click on one, opens its view
+    -->
+    </div>
+  </div>
+</template>

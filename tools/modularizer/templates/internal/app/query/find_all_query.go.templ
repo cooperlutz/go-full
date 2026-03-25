@@ -7,25 +7,25 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
-type FindAll{{.Agg.Name.Pascal}}sReadModel interface {
-	FindAll{{.Agg.Name.Pascal}}s(ctx context.Context) ([]{{.Agg.Name.Pascal}}, error)
+type FindAll{{.Agg.Name.PluralPascal}}ReadModel interface {
+	FindAll{{.Agg.Name.PluralPascal}}(ctx context.Context) ([]{{.Agg.Name.Pascal}}, error)
 }
 
-type FindAll{{.Agg.Name.Pascal}}sHandler struct {
-	readModel FindAll{{.Agg.Name.Pascal}}sReadModel
+type FindAll{{.Agg.Name.PluralPascal}}Handler struct {
+	readModel FindAll{{.Agg.Name.PluralPascal}}ReadModel
 }
 
-func NewFindAll{{.Agg.Name.Pascal}}sHandler(
-	readModel FindAll{{.Agg.Name.Pascal}}sReadModel,
-) FindAll{{.Agg.Name.Pascal}}sHandler {
-	return FindAll{{.Agg.Name.Pascal}}sHandler{readModel: readModel}
+func NewFindAll{{.Agg.Name.PluralPascal}}Handler(
+	readModel FindAll{{.Agg.Name.PluralPascal}}ReadModel,
+) FindAll{{.Agg.Name.PluralPascal}}Handler {
+	return FindAll{{.Agg.Name.PluralPascal}}Handler{readModel: readModel}
 }
 
-func (h FindAll{{.Agg.Name.Pascal}}sHandler) Handle(ctx context.Context) ([]{{.Agg.Name.Pascal}}, error) {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Mod.Name.Flat}}.app.query.find_all_{{.Agg.Name.Snake}}s.handle")
+func (h FindAll{{.Agg.Name.PluralPascal}}Handler) Handle(ctx context.Context) ([]{{.Agg.Name.Pascal}}, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{.Mod.Name.Flat}}.app.query.find_all_{{.Agg.Name.PluralSnake}}.handle")
 	defer span.End()
 
-	exams, err := h.readModel.FindAll{{.Agg.Name.Pascal}}s(ctx)
+	exams, err := h.readModel.FindAll{{.Agg.Name.PluralPascal}}(ctx)
 	if err != nil {
 		return nil, err
 	}

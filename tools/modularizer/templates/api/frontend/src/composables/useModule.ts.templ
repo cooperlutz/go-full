@@ -12,17 +12,17 @@ import {
 const {{.Name.Flat}}API = new DefaultApi(BackendConfig);
 
 {{range .Aggregates}}
-export function useFindAll{{.Name.Pascal}}s() {
+export function useFindAll{{.Name.PluralPascal}}() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.Name.Flat}}s = ref<Array<{{.Name.Pascal}}> | null>(null);
+  const {{.Name.PluralCamel}} = ref<Array<{{.Name.Pascal}}> | null>(null);
 
   const getFindAll = async () => {
     loading.value = true;
     error.value = null;
     try {
-      const response = await {{$.Name.Flat}}API.findAll{{.Name.Pascal}}s();
-      {{.Name.Flat}}s.value = response;
+      const response = await {{$.Name.Flat}}API.findAll{{.Name.PluralPascal}}();
+      {{.Name.PluralCamel}}.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -35,16 +35,16 @@ export function useFindAll{{.Name.Pascal}}s() {
   return {
     error,
     loading,
-    {{.Name.Flat}}s,
+    {{.Name.PluralCamel}},
     getFindAll,
   };
 }
 
 
-export function useFindOne{{.Name.Pascal}}s() {
+export function useFindOne{{.Name.PluralPascal}}() {
   const error = ref<Error | null>(null);
   const loading = ref(false);
-  const {{.Name.Flat}} = ref<{{.Name.Pascal}} | null>(null);
+  const {{.Name.Camel}} = ref<{{.Name.Pascal}} | null>(null);
 
   const getFindOne = async (id: string) => {
     loading.value = true;
@@ -54,7 +54,7 @@ export function useFindOne{{.Name.Pascal}}s() {
          {{.Name.Camel}}Id: id,
       };
       const response = await {{$.Name.Flat}}API.findOne{{.Name.Pascal}}(req);
-      {{.Name.Flat}}.value = response;
+      {{.Name.Camel}}.value = response;
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -67,14 +67,14 @@ export function useFindOne{{.Name.Pascal}}s() {
   return {
     error,
     loading,
-    {{.Name.Flat}},
+    {{.Name.Camel}},
     getFindOne,
   };
 }
 {{end}}
 
 {{range .Commands}}
-//export function use{{.Name.Pascal}}s() {
+//export function use{{.Name.PluralPascal}}() {
 //  const error = ref<Error | null>(null);
 //  const loading = ref(false);
 //

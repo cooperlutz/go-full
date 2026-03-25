@@ -5,6 +5,12 @@ const {{.Name.Flat}}Routes = [
     path: "/{{.Name.Kebab}}",
     component: {{.Name.Pascal}}View,
   },
+  {{- range .Aggregates}}
+  {
+    path: "/{{$.Name.Kebab}}/{{.Name.PluralKebab}}",
+    component: {{$.Name.Pascal}}View,
+  },
+  {{- end}}
 ];
 
 export default {{.Name.Flat}}Routes;

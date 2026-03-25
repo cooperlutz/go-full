@@ -19,7 +19,7 @@ func help() {
 
 func main() {
 	modularize := flag.NewFlagSet("modularize", flag.ExitOnError)
-	modularizerConfig := modularize.String("config", "tools/modularizer/modularizer.yaml", "Path to the modularizer configuration file")
+	modularizerConfig := modularize.String("config", "", "Path to the modularizer configuration file")
 
 	if len(os.Args) < 2 {
 		help()
@@ -28,23 +28,33 @@ func main() {
 
 	switch os.Args[1] {
 	case "modularize":
+		modularize.Parse(os.Args[2:])
 		mod := module.ModuleConfig{}
-		f, err := os.ReadFile(*modularizerConfig)
+		wd, err := os.Getwd()
 		if err != nil {
-			panic(err)
+			slog.Error("Error getting current working directory:", "error", err)
+			return
+		}
+		f, err := os.ReadFile(wd + "/" + *modularizerConfig)
+		if err != nil {
+			slog.Error("Error reading modularizer configuration file:", "error", err)
+			return
 		}
 		err = yaml.Unmarshal(f, &mod)
 		if err != nil {
-			panic(err)
+			slog.Error("Error unmarshalling modularizer configuration file:", "error", err)
+			return
 		}
 		slog.Info("Loaded modularizer configuration:", "config", mod)
 		mods, err := modularizer.FromConfig(mod)
 		if err != nil {
-			panic(err)
+			slog.Error("Error creating modules from configuration:", "error", err)
+			return
 		}
 		for _, m := range mods {
 			if err := m.CreateModule(); err != nil {
-				panic(err)
+				slog.Error("Error creating module:", "error", err)
+				return
 			}
 		}
 		completionMessage := `
@@ -59,6 +69,6 @@ Next steps:
 	case "help":
 		help()
 	default:
-		println("Unknown command:", os.Args[1])
+		slog.Error("Unknown command:", "command", os.Args[1])
 	}
 }

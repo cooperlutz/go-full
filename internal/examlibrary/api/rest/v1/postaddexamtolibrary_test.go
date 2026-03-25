@@ -12,7 +12,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/command"
 	"github.com/cooperlutz/go-full/internal/examlibrary/app/common"
 	"github.com/cooperlutz/go-full/test/fixtures"
-	"github.com/cooperlutz/go-full/test/mocks"
+	mocks "github.com/cooperlutz/go-full/test/mocks/examlibrary"
 )
 
 func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {

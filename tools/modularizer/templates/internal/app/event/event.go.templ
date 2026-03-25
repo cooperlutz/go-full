@@ -9,9 +9,9 @@ import (
 )
 
 type {{.Evt.Name.Pascal}} struct {
-	//{{range .Evt.Fields}}
-	//{{.Name.Pascal}} {{.GoType}},
-	//{{end}}
+	{{- range .Evt.Fields}}
+	{{.Name.Pascal}} {{.GoType}}
+	{{- end}}
 	// TODO
 }
 

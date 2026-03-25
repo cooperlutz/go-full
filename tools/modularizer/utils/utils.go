@@ -68,3 +68,17 @@ func GetDirectoryOfCurrentFile() string {
 func TitleCase(s string) string {
 	return cases.Title(language.English).String(SnakeToFlat(s))
 }
+
+// Pluralize returns the plural form of the string (e.g. "User" -> "Users")
+func Pluralize(s string) string {
+	if strings.HasSuffix(s, "is") {
+		return s[:len(s)-2] + "es"
+	}
+	if strings.HasSuffix(s, "s") {
+		return s + "es"
+	}
+	if strings.HasSuffix(s, "y") && !strings.HasSuffix(s, "ay") && !strings.HasSuffix(s, "ey") && !strings.HasSuffix(s, "iy") && !strings.HasSuffix(s, "oy") && !strings.HasSuffix(s, "uy") {
+		return s[:len(s)-1] + "ies"
+	}
+	return s + "s"
+}

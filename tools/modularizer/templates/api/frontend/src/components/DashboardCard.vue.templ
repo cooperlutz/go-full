@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Apple } from "lucide-vue-next";
+import { {{.Icon}} } from "lucide-vue-next";
 import DashboardCard from "~/app/components/DashboardCard/DashboardCard.vue";
 </script>
 
@@ -7,8 +7,8 @@ import DashboardCard from "~/app/components/DashboardCard/DashboardCard.vue";
   <!-- TODO: update description and icon -->
   <DashboardCard
     title="{{.Name.Pascal}}"
-    description="Placeholder Value"
+    description="{{.Description}}"
     href="/{{.Name.Kebab}}"
-    :icon="Apple"
+    :icon="{{.Icon}}"
   />
 </template>

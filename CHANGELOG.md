@@ -1,3 +1,39 @@
+## v0.1.71 (2026-03-25)
+
+### Fix
+
+- **deps**: bump the all-github-actions group with 4 updates (#235)
+
+## v0.1.70 (2026-03-24)
+
+### Fix
+
+- implement groups for dependabot updates to reduce prs (#233)
+
+## v0.1.69 (2026-03-24)
+
+### Fix
+
+- modularizer enhancements (#232)
+
+## v0.1.68 (2026-03-16)
+
+### Fix
+
+- modularizer structs, lists, nested entities (#220)
+
+## v0.1.67 (2026-03-15)
+
+### Fix
+
+- mock updates (#219)
+
+## v0.1.66 (2026-03-13)
+
+### Fix
+
+- **deps**: bump go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp from 0.65.0 to 0.67.0 (#204)
+
 ## v0.1.65 (2026-03-11)
 
 ### Fix

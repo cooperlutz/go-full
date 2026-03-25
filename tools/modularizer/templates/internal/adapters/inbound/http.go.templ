@@ -6,6 +6,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app"
 	"github.com/cooperlutz/go-full/internal/{{.Name.Flat}}/app/query"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 // HttpAdapter represents the HTTP server for the {{.Name.Pascal}} module.
@@ -25,23 +26,23 @@ func (h HttpAdapter) StrictHandler() ServerInterface {
 	return NewStrictHandler(h, nil)
 }
 
-{{range .Aggregates}}
-// (GET /v1/{{.Name.Flat}}s).
-func (h HttpAdapter) FindAll{{.Name.Pascal}}s(ctx context.Context, request FindAll{{.Name.Pascal}}sRequestObject) (FindAll{{.Name.Pascal}}sResponseObject, error) {
-	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.inbound.http.find_all_{{.Name.Flat}}s")
+{{- range .Aggregates}}
+// (GET /v1/{{.Name.PluralFlat}}).
+func (h HttpAdapter) FindAll{{.Name.PluralPascal}}(ctx context.Context, request FindAll{{.Name.PluralPascal}}RequestObject) (FindAll{{.Name.PluralPascal}}ResponseObject, error) {
+	ctx, span := telemetree.AddSpan(ctx, "{{.Name.Flat}}.adapters.inbound.http.find_all_{{.Name.PluralFlat}}")
 	defer span.End()
 
-	{{.Name.Flat}}, err := h.app.Queries.FindAll{{.Name.Pascal}}s.Handle(ctx)
+	{{.Name.Flat}}, err := h.app.Queries.FindAll{{.Name.PluralPascal}}.Handle(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var response{{.Name.Pascal}}s []{{.Name.Pascal}}
+	var response{{.Name.PluralPascal}} []{{.Name.Pascal}}
 	for _, e := range {{.Name.Flat}} {
-		response{{.Name.Pascal}}s = append(response{{.Name.Pascal}}s, query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(e))
+		response{{.Name.PluralPascal}} = append(response{{.Name.PluralPascal}}, query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(e))
 	}
 
-	return FindAll{{.Name.Pascal}}s200JSONResponse(response{{.Name.Pascal}}s), nil
+	return FindAll{{.Name.PluralPascal}}200JSONResponse(response{{.Name.PluralPascal}}), nil
 }
 
 // (GET /v1/{{.Name.Flat}}/{{`{`}}{{.Name.Snake}}Id})
@@ -57,12 +58,42 @@ func (h HttpAdapter) FindOne{{.Name.Pascal}}(ctx context.Context, request FindOn
 	return FindOne{{.Name.Pascal}}200JSONResponse(query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}({{.Name.Flat}})), nil
 }
 
-func query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(e query.{{.Name.Pascal}}) {{.Name.Pascal}} {
+// TODO: Review
+func query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(qry query.{{.Name.Pascal}}) {{.Name.Pascal}} {
+
+	{{- range .NestedObjects}}
+	{{- if and (eq .Type "object") (eq .List true)}}
+	var {{.Name.Camel}} []{{if .Optional }}*{{end}}{{.Name.Pascal}}
+	for _, e := range qry.{{.Name.Pascal}} {
+		{{.Name.Camel}} = append({{.Name.Camel}}, ({{if .Optional }}*{{end}}{{.Name.Pascal}})(e))
+	}
+	{{- end}}
+
+	// var optionalObjectListField []*OptionalObjectListField
+	// for _, e := range qry.OptionalObjectListField {
+	// 	optionalObjectListField = append(optionalObjectListField, (*OptionalObjectListField)(e))
+	// }
+	// 
+	// var requiredObjectListField []RequiredObjectListField
+	// for _, e := range qry.RequiredObjectListField {
+	// 	requiredObjectListField = append(requiredObjectListField, (RequiredObjectListField)(e))
+	// }
+	{{- end}}
+
 	return {{.Name.Pascal}}{
-		//{{range .Fields}}
-		//{{.Name.Pascal}}: Get{{.Name.Pascal}}(),
-		//{{end}}
-        // TODO
+		{{- range .Fields}}
+			{{- if and (eq .Type "object") (ne .List true)}}
+			{{.Name.Pascal}}: ({{.GoType}})(qry.{{.Name.Pascal}}),
+			{{- else if and (eq .Type "object") (ne .Optional true) .List}}
+			{{.Name.Pascal}}: {{.Name.Camel}},
+			{{- else if and (eq .Type "object") (ne .Optional false) .List}}
+			{{.Name.Pascal}}: utilitee.SliceOfPointersToPointerSlice({{.Name.Camel}}),
+			{{- else if and .List .Optional}}
+			{{.Name.Pascal}}: utilitee.SliceOfPointersToPointerSlice(qry.{{.Name.Pascal}}),
+			{{- else}}
+			{{.Name.Pascal}}: qry.{{.Name.Pascal}},
+			{{- end}}
+		{{- end}}
 	}
 }
-{{end}}
+{{- end}}

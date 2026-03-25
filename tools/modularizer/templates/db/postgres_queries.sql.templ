@@ -1,18 +1,18 @@
-{{range .Aggregates}}
+{{- range .Aggregates}}
 -- name: Get{{.Name.Pascal}} :one
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
 WHERE {{.Name.Snake}}_id = $1;
 
 -- name: Add{{.Name.Pascal}} :exec
-INSERT INTO {{$.Name.Flat}}.{{.Name.Snake}}s (
+INSERT INTO {{$.Name.Flat}}.{{.Name.PluralSnake}} (
     {{.Name.Snake}}_id,
     created_at,
     updated_at,
     deleted_at,
     deleted
-    --{{range .Fields}},
-    --{{.Name.Snake}}
-    --{{end}}
+    {{- range .Fields}},
+    {{.Name.Snake}}
+    {{- end}}
     -- TODO
 ) VALUES (
     $1,
@@ -20,27 +20,83 @@ INSERT INTO {{$.Name.Flat}}.{{.Name.Snake}}s (
     $3,
     $4,
     $5
+    {{- range $i, $field := .Fields}},
+    ${{add $i 6}}
+    {{- end}}
     -- TODO
 );
 
 -- name: Update{{.Name.Pascal}} :exec
-UPDATE {{$.Name.Flat}}.{{.Name.Snake}}s
+UPDATE {{$.Name.Flat}}.{{.Name.PluralSnake}}
 SET
     created_at = $2,
     updated_at = $3,
     deleted_at = $4,
     deleted = $5
-    --{{range .Fields}},
-    --{{.Name.Snake}}
-    --{{end}}
+    {{- range $i, $field := .Fields}},
+    {{$field.Name.Snake}} = ${{add $i 6}}
+    {{- end}}
     -- TODO
 WHERE {{.Name.Snake}}_id = $1;
 
 -- name: FindOne{{.Name.Pascal}} :one
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
 WHERE {{.Name.Snake}}_id = $1;
 
--- name: FindAll{{.Name.Pascal}}s :many
-SELECT * FROM {{$.Name.Flat}}.{{.Name.Snake}}s;
+-- name: FindAll{{.Name.PluralPascal}} :many
+SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}};
 
-{{end}}
+--{{$outer := .}}
+--{{- range .NestedObjects}}
+---- name: Get{{.Name.Pascal}} :one
+--SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
+--WHERE {{.Name.Snake}}_id = $1;
+--
+---- name: Add{{.Name.Pascal}} :exec
+--INSERT INTO {{$.Name.Flat}}.{{.Name.PluralSnake}} (
+--    {{.Name.Snake}}_id,
+--    created_at,
+--    updated_at,
+--    deleted_at,
+--    deleted,
+--    {{$outer.Name.Snake}}_id
+--    {{- range .Fields}},
+--    {{.Name.Snake}}
+--    {{- end}}
+--    -- TODO
+--) VALUES (
+--    $1,
+--    $2,
+--    $3,
+--    $4,
+--    $5,
+--    $6
+--    {{- range $i, $field := .Fields}},
+--    ${{add $i 7}}
+--    {{- end}}
+--    -- TODO
+--);
+--
+---- name: Update{{.Name.Pascal}} :exec
+--UPDATE {{$.Name.Flat}}.{{.Name.PluralSnake}}
+--SET
+--    created_at = $2,
+--    updated_at = $3,
+--    deleted_at = $4,
+--    deleted = $5,
+--    {{$outer.Name.Snake}}_id = $6
+--    {{- range $i, $field := .Fields}},
+--    {{$field.Name.Snake}} = ${{add $i 7}}
+--    {{- end}}
+--    -- TODO
+--WHERE {{.Name.Snake}}_id = $1;
+--
+---- name: FindOne{{.Name.Pascal}} :one
+--SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}}
+--WHERE {{.Name.Snake}}_id = $1;
+--
+---- name: FindAll{{.Name.PluralPascal}} :many
+--SELECT * FROM {{$.Name.Flat}}.{{.Name.PluralSnake}};
+--{{- end}}
+--
+--{{- end}}
