@@ -1,19 +1,19 @@
 package command
 
 {{range .Aggregates}}
+// TODO: Review
 type {{.Name.Pascal}} struct {
     {{- range .Fields}}
     {{.Name.Pascal}} {{.GoType}}
     {{- end}}
-    // TODO
-}
-
-{{range .NestedObjects}}
-type {{.Name.Pascal}} struct {
-    {{- range .Fields}}
-    {{.Name.Pascal}} {{.GoType}}
-    {{- end}}
-    // TODO
 }
 {{end}}
+
+{{range .CommandTypes}}
+// TODO: Review
+type {{.Name.Pascal}} struct {
+    {{- range .Fields}}
+    {{.Name.Pascal}} {{.GoType}}
+    {{- end}}
+}
 {{end}}
