@@ -1,19 +1,19 @@
 package query
 
 {{- range .Aggregates}}
+// TODO: Review
 type {{.Name.Pascal}} struct {
     {{- range .Fields}}
     {{.Name.Pascal}} {{.GoType}}
     {{- end}}
-    // TODO
 }
 
 {{- range .NestedObjects}}
+// TODO: Review
 type {{.Name.Pascal}} struct {
-    {{- range .Fields}}
+    {{- range .FieldsAlphabetized}}
     {{.Name.Pascal}} {{.GoType}}
     {{- end}}
-    // TODO
 }
 {{- end}}
 {{- end}}
