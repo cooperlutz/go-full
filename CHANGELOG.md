@@ -1,3 +1,9 @@
+## v0.1.73 (2026-04-01)
+
+### Fix
+
+- various updates to modularizer templates (#240)
+
 ## v0.1.72 (2026-03-25)
 
 ### Fix
