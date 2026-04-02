@@ -2,8 +2,4 @@
 DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}};
 DROP INDEX CONCURRENTLY idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id;
 {{- end}}
-{{- range .NestedObjects}}
-DROP TABLE IF EXISTS {{$.Name.Flat}}.{{.Name.PluralSnake}};
-DROP INDEX CONCURRENTLY idx_{{$.Name.Snake}}_{{.Name.PluralSnake}}_id;
-{{- end}}
 DROP SCHEMA IF EXISTS {{.Name.Flat}};

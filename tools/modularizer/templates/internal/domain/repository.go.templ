@@ -23,7 +23,7 @@ type {{.Name.Pascal}}Repository interface {
 	) error
 }
 
-
+// TODO: Review
 // MapTo{{.Name.Pascal}} creates a {{.Name.Pascal}} domain object from the given parameters.
 // This should ONLY BE USED when reconstructing an {{.Name.Pascal}} from its repository.
 func MapTo{{.Name.Pascal}}(
@@ -47,7 +47,6 @@ func MapTo{{.Name.Pascal}}(
         {{- range .Fields}}
         {{.Name.Camel}}: {{.Name.Camel}},
         {{- end}}
-		// TODO
 	}, nil
 }
 {{- end}}
