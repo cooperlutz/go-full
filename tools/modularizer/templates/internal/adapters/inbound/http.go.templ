@@ -68,16 +68,6 @@ func query{{.Name.Pascal}}ToHttp{{.Name.Pascal}}(qry query.{{.Name.Pascal}}) {{.
 		{{.Name.Camel}} = append({{.Name.Camel}}, ({{if .Optional }}*{{end}}{{.Name.Pascal}})(e))
 	}
 	{{- end}}
-
-	// var optionalObjectListField []*OptionalObjectListField
-	// for _, e := range qry.OptionalObjectListField {
-	// 	optionalObjectListField = append(optionalObjectListField, (*OptionalObjectListField)(e))
-	// }
-	// 
-	// var requiredObjectListField []RequiredObjectListField
-	// for _, e := range qry.RequiredObjectListField {
-	// 	requiredObjectListField = append(requiredObjectListField, (RequiredObjectListField)(e))
-	// }
 	{{- end}}
 
 	return {{.Name.Pascal}}{
