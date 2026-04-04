@@ -3,6 +3,7 @@ package module
 import (
 	"errors"
 	"slices"
+	"sort"
 	"strings"
 
 	"github.com/cooperlutz/go-full/tools/modularizer/utils"
@@ -31,6 +32,9 @@ func (s StringOfVaryingCases) Pascal() string {
 // PascalCapitalizeID returns the string in PascalCase with "ID" capitalized (e.g. "UserID")
 func (s StringOfVaryingCases) PascalCapitalizeID() string {
 	pascal := s.Pascal()
+	if strings.HasSuffix(pascal, "Ids") {
+		return pascal
+	}
 	return strings.ReplaceAll(pascal, "Id", "ID")
 }
 
@@ -138,6 +142,110 @@ func (m Module) Validate() error {
 		}
 	}
 	return nil
+}
+
+type OpenApiComponent struct {
+	Name        StringOfVaryingCases `yaml:"name"`
+	Description string               `yaml:"description"`
+	Fields      []Field              `yaml:"fields"`
+}
+
+// OpenApiComponents returns all relevant openapi components for the module
+// commands, nestedobjects, and aggregates
+func (m Module) OpenApiComponents() []OpenApiComponent {
+	var components []OpenApiComponent
+	// for _, command := range m.Commands {
+	// 	components = append(components, OpenApiComponent{
+	// 		Name:        command.Name,
+	// 		Description: command.Description,
+	// 		Fields:      command.Params,
+	// 	})
+	// }
+	// nested objects in commands
+	// for _, command := range m.Commands {
+	// 	for _, param := range command.Params {
+	// 		if param.Type == "object" {
+	// 			components = append(components, OpenApiComponent{
+	// 				Name:        StringOfVaryingCases(command.Name.Pascal() + param.Name.Pascal()),
+	// 				Description: param.Description,
+	// 				Fields:      param.Fields,
+	// 			})
+	// 		}
+	// 	}
+	// }
+	for _, entity := range m.Aggregates {
+		components = append(components, OpenApiComponent{
+			Name:        entity.Name,
+			Description: entity.Description,
+			Fields:      entity.Fields,
+		})
+	}
+	for _, nestedObject := range m.NestedObjects() {
+		components = append(components, OpenApiComponent{
+			Name:        nestedObject.Name,
+			Description: nestedObject.Description,
+			Fields:      nestedObject.Fields,
+		})
+	}
+	// remove any duplicate components (e.g. if a nested object is also an aggregate)
+	// seen := make(map[string]bool)
+	// var uniqueComponents []OpenApiComponent
+	// for _, component := range components {
+	// 	if !seen[component.Name.Snake()] {
+	// 		uniqueComponents = append(uniqueComponents, component)
+	// 		seen[component.Name.Snake()] = true
+	// 	}
+	// }
+	return components
+}
+
+func (oc OpenApiComponent) RequiredFields() []Field {
+	var requiredFields []Field
+	for _, field := range oc.Fields {
+		if !field.Optional {
+			requiredFields = append(requiredFields, field)
+		}
+	}
+	return requiredFields
+}
+
+type GoStruct struct {
+	Name   StringOfVaryingCases
+	Fields []Field
+}
+
+func (m Module) CommandTypes() []GoStruct {
+	var commandTypes []GoStruct
+	for _, command := range m.Commands {
+		for _, param := range command.Params {
+			if param.Type == "object" {
+				commandTypes = append(commandTypes, GoStruct{
+					Name:   param.Name,
+					Fields: param.Fields,
+				})
+			}
+		}
+	}
+	for _, entity := range m.Aggregates {
+		for _, field := range entity.Fields {
+			if field.Type == "object" {
+				commandTypes = append(commandTypes, GoStruct{
+					Name:   field.Name,
+					Fields: field.Fields,
+				})
+			}
+		}
+	}
+	// remove duplicates
+	seen := make(map[string]bool)
+	var uniqueCommandTypes []GoStruct
+	for _, commandType := range commandTypes {
+		if !seen[commandType.Name.Snake()] {
+			uniqueCommandTypes = append(uniqueCommandTypes, commandType)
+			seen[commandType.Name.Snake()] = true
+		}
+	}
+	return uniqueCommandTypes
 }
 
 func (m Module) NestedObjects() []Field {
@@ -289,6 +397,14 @@ type Field struct {
 	List        bool                 `yaml:"list"`
 	Optional    bool                 `yaml:"optional"`
 	Fields      []Field              `yaml:"fields,omitempty"` // for nested fields (e.g. in a struct or a list of structs)
+}
+
+func (f Field) FieldsAlphabetized() []Field {
+	fields := f.Fields
+	sort.Slice(fields, func(i, j int) bool {
+		return fields[i].Name.Pascal() < fields[j].Name.Pascal()
+	})
+	return fields
 }
 
 func (f Field) RequiredFields() []Field {

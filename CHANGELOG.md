@@ -1,3 +1,15 @@
+## v0.1.74 (2026-04-04)
+
+### Fix
+
+- **deps**: bump pnpm/action-setup from 4 to 5 (#230)
+
+## v0.1.73 (2026-04-01)
+
+### Fix
+
+- various updates to modularizer templates (#240)
+
 ## v0.1.72 (2026-03-25)
 
 ### Fix

@@ -7,12 +7,12 @@ import (
 	"github.com/cooperlutz/go-full/pkg/baseentitee"
 )
 
+// TODO: Review
 type {{.Agg.Name.Pascal}} struct {
     *baseentitee.EntityMetadata
     {{- range .Agg.Fields}}
     {{.Name.Camel}} {{.GoType}}
     {{- end}}
-    // TODO
 }
 
 func New{{.Agg.Name.Pascal}}(
@@ -57,7 +57,7 @@ func MapTo{{.Name.Pascal}}(data []byte) ({{if .List}}[]{{if .Optional }}*{{end}}
 {{- range .Agg.Fields}}
 {{- if eq .Type "object"}}
 func ({{$.Agg.Name.FirstLetterLower}} {{$.Agg.Name.Pascal}}) {{.Name.Pascal}}Marshalled() []byte {
-	marshal, err := json.Marshal(e.{{.Name.Camel}})
+	marshal, err := json.Marshal({{$.Agg.Name.FirstLetterLower}}.{{.Name.Camel}})
 	if err != nil {
 		return nil
 	}
