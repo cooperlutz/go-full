@@ -13,7 +13,7 @@ import (
 func (e {{$.Name.Title}}{{.Name.Pascal}}) toDomain() (*{{$.Name.Flat}}.{{.Name.Pascal}}, error) {
 	{{$aggregate := .}}
 	{{- range .NestedObjects}}
-	{{.Name.Camel}}, err := {{$.Name.Flat}}.MapTo{{.Name.Pascal}}({{$aggregate.Name.FirstLetterLower}}.{{.Name.Pascal}})
+	{{.Name.Camel}}, err := {{$.Name.Flat}}.MapTo{{.Name.Pascal}}(e.{{.Name.Pascal}})
 	if err != nil {
 		return nil, err
 	}
@@ -27,16 +27,15 @@ func (e {{$.Name.Title}}{{.Name.Pascal}}) toDomain() (*{{$.Name.Flat}}.{{.Name.P
 		pgxutil.TimestampzToTimePtr(e.DeletedAt),
 		{{- $outer := .}}
 		{{- range .Fields}}
-			{{- if ne .Type "object"}}
+			{{- if eq .Type "object"}}
+			{{if and .Optional (ne .List true) }}&{{end}}{{.Name.Camel}},
+			{{- else if ne .Type "object"}}
 			{{- if .MapFnFromPgToDomain}}
 			{{.MapFnFromPgToDomain}}
 			{{- else}}
 			e.{{.Name.PascalCapitalizeID}},
 			{{- end}}
 			{{- end}}
-		{{- end}}
-		{{- range .NestedObjects}}
-		{{if and .Optional (ne .List true) }}&{{end}}{{.Name.Camel}},
 		{{- end}}
 	)
 }

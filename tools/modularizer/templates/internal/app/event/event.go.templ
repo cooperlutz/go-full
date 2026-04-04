@@ -8,11 +8,11 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+// TODO: Review
 type {{.Evt.Name.Pascal}} struct {
 	{{- range .Evt.Fields}}
 	{{.Name.Pascal}} {{.GoType}}
 	{{- end}}
-	// TODO
 }
 
 type {{.Evt.Name.Pascal}}Handler struct {

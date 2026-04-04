@@ -38,7 +38,7 @@ func (h {{.Cmd.Name.Pascal}}Handler) Handle(ctx context.Context, cmd {{.Cmd.Name
 	//defer span.End()
 	
 	{{- range .Mod.Aggregates}}
-	// TODO
+	// TODO: implement
 	//err = h.{{.Name.Pascal}}Repo.Update{{.Name.Pascal}}(ctx, uuid.MustParse(cmd.{{.Name.Pascal}}Id), func({{.Name.FirstLetterLower}} *{{$.Mod.Name.Flat}}.{{.Name.Pascal}}) (*{{$.Mod.Name.Flat}}.{{.Name.Pascal}}, error) {
 	//	
 	//	 err := {{.Name.FirstLetterLower}}.{{$.Cmd.Name.Pascal}}(
