@@ -22,7 +22,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.19.1
 	github.com/google/uuid v1.6.0
 	github.com/jackc/pgx/v5 v5.9.1
-	github.com/oapi-codegen/runtime v1.3.0
+	github.com/oapi-codegen/runtime v1.3.1
 	github.com/pashagolub/pgxmock/v4 v4.9.0
 	github.com/playwright-community/playwright-go v0.5700.1
 	github.com/prometheus/client_golang v1.23.2
