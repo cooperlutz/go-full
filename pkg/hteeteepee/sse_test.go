@@ -1,12 +1,14 @@
 package hteeteepee_test
 
 import (
+	"context"
 	"net/http/httptest"
 	"testing"
 	"time"
 
-	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
 func TestNewSSEBroker(t *testing.T) {
@@ -14,33 +16,39 @@ func TestNewSSEBroker(t *testing.T) {
 	assert.NotNil(t, sseBroker, "Expected NewSSEBroker to return a non-nil broker")
 	sseBroker.Start()
 	assert.NotNil(t, sseBroker, "Expected SSEBroker to be running after Start()")
-
 }
 
-func TestSSEBroker_ServerHTTP(t *testing.T) {
+func TestSSEBroker_ServeHTTP(t *testing.T) {
 	// arrange
 	sseBroker := hteeteepee.NewSSEBroker()
 	sseBroker.Start()
 	rr := httptest.NewRecorder()
-	req := httptest.NewRequest("GET", "/events", nil)
+	ctx, cancel := context.WithCancel(context.Background())
+	req := httptest.NewRequest("GET", "/events", nil).WithContext(ctx)
 
-	// Notify the broker in a separate goroutine so that the ServeHTTP call can receive the event
-	done := make(chan struct{})
+	// Call ServeHTTP in a separate goroutine so that it can block waiting for events while the broker is notified
+	serveHTTPDone := make(chan struct{})
 	go func() {
+		defer close(serveHTTPDone)
+		sseBroker.ServeHTTP(rr, req)
+	}()
+
+	// Notify the broker, then cancel the context to unblock ServeHTTP
+	select {
+	case <-time.After(5 * time.Second):
+		t.Fatal("Test timeout waiting to notify")
+	default:
 		time.Sleep(100 * time.Millisecond)
 		sseBroker.NotifyString("Hello, SSE!")
 		time.Sleep(100 * time.Millisecond)
-		close(done)
-	}()
+		cancel()
+	}
 
-	// Call ServeHTTP in a separate goroutine so that it can block waiting for events while the broker is notified
-	go sseBroker.ServeHTTP(rr, req)
-
-	// Wait for the notification goroutine to finish so that the SSE message has been sent
+	// Wait for ServeHTTP to finish before reading rr to avoid a data race
 	select {
-	case <-done:
+	case <-serveHTTPDone:
 	case <-time.After(5 * time.Second):
-		t.Fatal("Test timeout")
+		t.Fatal("Test timeout waiting for ServeHTTP to finish")
 	}
 
 	// assert

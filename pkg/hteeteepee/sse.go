@@ -62,6 +62,7 @@ func (b *SSEBroker) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	flusher, ok := w.(http.Flusher)
 	if !ok {
 		http.Error(w, "Streaming unsupported!", http.StatusInternalServerError)
+
 		return
 	}
 
@@ -80,10 +81,14 @@ func (b *SSEBroker) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 
 	for {
-		// Write to the ResponseWriter. Server Sent Events requires a specific format, we add "data: " before each message.
-		fmt.Fprintf(w, "data: %s\n\n", <-messageChan)
-
-		// Flush the data immediately instead of buffering it for later.
-		flusher.Flush()
+		select {
+		case <-r.Context().Done():
+			return
+		case msg := <-messageChan:
+			// Write to the ResponseWriter. Server Sent Events requires a specific format, we add "data: " before each message.
+			fmt.Fprintf(w, "data: %s\n\n", msg)
+			// Flush the data immediately instead of buffering it for later.
+			flusher.Flush()
+		}
 	}
 }
