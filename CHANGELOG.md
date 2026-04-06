@@ -1,3 +1,9 @@
+## v0.1.76 (2026-04-06)
+
+### Fix
+
+- **deps**: bump the all-npm-dependencies group in /api/frontend with 7 updates (#244)
+
 ## v0.1.75 (2026-04-05)
 
 ### Fix
