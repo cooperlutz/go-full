@@ -20,6 +20,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/pkg/workerbee"
 )
 
@@ -99,11 +100,10 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		os.Exit(1)
 	}
 
-	// Identity & Access Management
 	iamModule := iam.NewModule(
 		conn,
 		iam.IamModuleConfig{
-			JwtSecret:       a.conf.Security.JWTSecret,
+			PrivateKey:      utilitee.MustParseRSAKey(a.conf.Security.Base64EncodedJWTPrivateKeyPEM),
 			AccessTokenTTL:  a.conf.Security.AccessTokenTTL,
 			RefreshTokenTTL: a.conf.Security.RefreshTokenTTL,
 		},

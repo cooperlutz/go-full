@@ -313,3 +313,7 @@ init: coverage-directory init-env-file all compose ### initialize project
 modularizer: ### run modularizer tool
 	go run tools/modularizer/cmd/modularizer/main.go modularize --config tools/modularizer/modularizer.yaml
 .PHONY: modularizer
+
+generate-and-set-rsa-private-key: ### generate a 2048-bit RSA private key, base64 encode it, and set it as a GitHub secret
+	gh secret set SEC_JWT_PRIVATE_KEY --body "$$(openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -outform PEM 2>/dev/null | base64)"
+.PHONY: generate-and-set-rsa-private-key

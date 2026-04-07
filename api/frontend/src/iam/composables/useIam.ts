@@ -1,16 +1,15 @@
 import { ref } from "vue";
 
-import { useLocalTokenStore } from "../stores/useToken";
 import { BackendConfig } from "../config";
 import {
   DefaultApi,
   type LoginUserRequest,
-  type RefreshTokenRequest,
   type RegisterUserRequest,
 } from "../services";
+import { useAuthState } from "../stores/useAuthState";
 
 const iamAPI = new DefaultApi(BackendConfig);
-const tokenStore = useLocalTokenStore();
+const { setAuthenticated, clearAuthenticated } = useAuthState();
 
 export function useLoginUser() {
   const error = ref<Error | null>(null);
@@ -26,10 +25,8 @@ export function useLoginUser() {
           password,
         },
       };
-      const loggedInUser = await iamAPI.loginUser(loginReq);
-      tokenStore.setAccessToken(loggedInUser.accessToken);
-      tokenStore.setRefreshToken(loggedInUser.refreshToken);
-      return loggedInUser;
+      await iamAPI.loginUser(loginReq);
+      setAuthenticated();
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -51,18 +48,11 @@ export function useRefreshToken() {
   const loading = ref(false);
 
   const refreshToken = async () => {
-    const refreshToken = tokenStore.getRefreshToken();
     loading.value = true;
     error.value = null;
 
     try {
-      const refreshReq: RefreshTokenRequest = {
-        refreshRequest: {
-          refreshToken,
-        },
-      };
-      const refreshedToken = await iamAPI.refreshToken(refreshReq);
-      tokenStore.setAccessToken(refreshedToken.token);
+      await iamAPI.refreshToken();
     } catch (err) {
       if (err instanceof Error) {
         error.value = err;
@@ -112,8 +102,9 @@ export function useRegister() {
 }
 
 export function useLogout() {
-  const logout = () => {
-    tokenStore.clear();
+  const logout = async () => {
+    await iamAPI.logoutUser();
+    clearAuthenticated();
   };
 
   return {

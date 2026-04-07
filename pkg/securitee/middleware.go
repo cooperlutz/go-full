@@ -3,7 +3,6 @@ package securitee
 import (
 	"context"
 	"net/http"
-	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -27,23 +26,15 @@ type tokenValidator interface {
 func AuthMiddleware(validator tokenValidator) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Extract token from Authorization header
-			authHeader := r.Header.Get("Authorization")
-			if authHeader == "" {
-				http.Error(w, "Authorization header required", http.StatusUnauthorized)
+			// Extract token from httpOnly cookie
+			cookie, err := r.Cookie("access_token")
+			if err != nil {
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 
 				return
 			}
 
-			// Check Bearer token format
-			parts := strings.Split(authHeader, " ")
-			if len(parts) != 2 || parts[0] != "Bearer" {
-				http.Error(w, "Invalid authorization format", http.StatusUnauthorized)
-
-				return
-			}
-
-			tokenString := parts[1]
+			tokenString := cookie.Value
 
 			// Validate the token
 			claims, err := validator.ValidateToken(tokenString)

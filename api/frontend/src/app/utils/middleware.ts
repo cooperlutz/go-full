@@ -1,8 +1,5 @@
-import { useRefreshToken } from "~/iam/composables/useIam";
-import { useLocalTokenStore } from "~/iam/stores/useToken";
-
-const { refreshToken } = useRefreshToken();
-const tokenStore = useLocalTokenStore();
+import { BackendConfig } from "~/iam/config";
+import { DefaultApi } from "~/iam/services";
 
 type FetchAPI = WindowOrWorkerGlobalScope["fetch"];
 
@@ -42,27 +39,14 @@ export const authRefreshMiddleware: Middleware = {
   post: async (context: ResponseContext) => {
     if (context.response.status === 401) {
       try {
-        await refreshToken();
-        // retry the original request after refreshing the token
-        const newInit = { ...context.init };
-        newInit.headers = {
-          ...newInit.headers,
-          Authorization: `Bearer ${tokenStore.getAccessToken()}`,
-        };
-        console.log("Retrying request with new access token...");
-        try {
-          const newResponse = await context.fetch(context.url, newInit);
-          return newResponse;
-        } catch (error) {
-          console.error(
-            "Failed to retry request after refreshing token:",
-            error,
-          );
-          tokenStore.clear();
-        }
-      } catch (error) {
-        console.error("Failed to refresh token:", error);
-        tokenStore.clear();
+        const api = new DefaultApi(BackendConfig);
+        await api.refreshToken();
+        // Retry the original request — cookies are sent automatically
+        const newResponse = await context.fetch(context.url, context.init);
+        return newResponse;
+      } catch {
+        // Refresh failed; redirect to login
+        window.location.href = "/login";
       }
     }
   },

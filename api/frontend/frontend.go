@@ -32,6 +32,19 @@ func spaHandler() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Security-Policy",
+			"default-src 'self'; "+ // Allow content only from self
+				"script-src 'self' 'unsafe-inline'; "+ // Allow scripts from self and inline scripts
+				"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "+ // Allow inline styles and loading from external stylesheets
+				"img-src 'self' data:; "+ // Allow images from self and data URLs
+				"connect-src 'self'; "+ // Allow connections to self
+				"font-src 'self' https://fonts.gstatic.com; "+ // Allow fonts from self and Google Fonts
+				"object-src 'none'; "+ // Disallow all object embeddings
+				"frame-ancestors 'none';", // Disallow framing of the content
+		)
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+
 		f, err := spaFS.Open(strings.TrimPrefix(path.Clean(r.URL.Path), "/"))
 		if err == nil {
 			defer f.Close()

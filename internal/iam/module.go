@@ -1,6 +1,7 @@
 package iam
 
 import (
+	"crypto/rsa"
 	"net/http"
 	"time"
 
@@ -12,7 +13,7 @@ import (
 )
 
 type IamModuleConfig struct {
-	JwtSecret       string
+	PrivateKey      *rsa.PrivateKey
 	AccessTokenTTL  time.Duration
 	RefreshTokenTTL time.Duration
 }
@@ -29,7 +30,7 @@ func NewModule(pgconn *pgxpool.Pool, conf IamModuleConfig) *IamModule {
 		iamPostgres,
 		iamPostgres,
 		iamPostgres,
-		conf.JwtSecret,
+		conf.PrivateKey,
 		conf.AccessTokenTTL,
 		conf.RefreshTokenTTL,
 	)
