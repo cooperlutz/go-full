@@ -180,11 +180,11 @@ build-fe: ### build frontend
 #                            WORKFLOWS                                    #
 ############################################################################
 
-pre-wflow: build-fe  ### prehook for ci tasks
+pre-wflow:  ### prehook for ci tasks
 	if [ ! -d .coverage ]; then mkdir .coverage; else echo ".coverage directory already exists, skipping creation."; fi
 .PHONY: pre-wflow
 
-ci: pre-wflow deps deps-audit lint format test cover-filter ### run all ci tasks
+ci: pre-wflow deps install-tools deps-audit gen build-fe lintfmt test cover-filter ### run all ci tasks
 .PHONY: ci
 
 ############################################################################
