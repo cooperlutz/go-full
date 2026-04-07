@@ -1,3 +1,9 @@
+## v0.1.77 (2026-04-07)
+
+### Fix
+
+- deps issues with oapicodegen (#245)
+
 ## v0.1.76 (2026-04-06)
 
 ### Fix
