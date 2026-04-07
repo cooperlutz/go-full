@@ -182,6 +182,7 @@ build-fe: ### build frontend
 
 pre-wflow:  ### prehook for ci tasks
 	if [ ! -d .coverage ]; then mkdir .coverage; else echo ".coverage directory already exists, skipping creation."; fi
+	go install github.com/vektra/mockery/v3@v3.7.0
 .PHONY: pre-wflow
 
 ci: pre-wflow deps install-tools deps-audit gen build-fe lintfmt test cover-filter ### run all ci tasks
