@@ -89,7 +89,7 @@ jobs:
           DB_NAME: ${{ vars.DB_NAME }}
           DB_SSLMODE: ${{ vars.DB_SSLMODE }}
           HTTP_PORT: ${{ vars.HTTP_PORT }}
-          SEC_JWT_SECRET: ${{ secrets.SEC_JWT_SECRET }}
+          SEC_JWT_PRIVATE_KEY: ${{ secrets.SEC_JWT_PRIVATE_KEY }}
           # CONTAINER_IMAGE: set in previous step after fetching digest for latest image
 
       - name: Output AZD Info
