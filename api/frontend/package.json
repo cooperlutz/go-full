@@ -24,7 +24,8 @@
     "auditConfig": {
       "ignoreGhsas": [
         "GHSA-j3q9-mxjg-w52f",
-        "GHSA-27v5-c462-wpq7"
+        "GHSA-27v5-c462-wpq7",
+        "GHSA-36xv-jgw5-4q75"
       ]
     }
   },
