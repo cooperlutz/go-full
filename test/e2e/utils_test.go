@@ -11,10 +11,16 @@ import (
 	"github.com/cooperlutz/go-full/app/config"
 )
 
-func addLocalStorageToContext(context playwright.BrowserContext, token string) error {
-	script := `window.localStorage.setItem("access_token", "` + token + `");`
-	return context.AddInitScript(playwright.Script{
-		Content: &script,
+func addAuthCookieToContext(browserCtx playwright.BrowserContext, token string) error {
+	return browserCtx.AddCookies([]playwright.OptionalCookie{
+		{
+			Name:     "access_token",
+			Value:    token,
+			Domain:   new("app.lvh.me"),
+			Path:     new("/"),
+			HttpOnly: new(true),
+			Secure:   new(false), // http in local dev
+		},
 	})
 }
 
@@ -24,9 +30,15 @@ func newBrowserContextAndPage(t *testing.T, options playwright.BrowserNewContext
 	if err != nil {
 		t.Fatalf("could not create new context: %v", err)
 	}
-	err = addLocalStorageToContext(context, bearerToken)
+	err = addAuthCookieToContext(context, bearerToken)
 	if err != nil {
-		t.Fatalf("could not add local storage to context: %v", err)
+		t.Fatalf("could not add auth cookie to context: %v", err)
+	}
+	// Set the sessionStorage auth flag that the Vue router guard checks.
+	authScript := `sessionStorage.setItem("auth", "1");`
+	err = context.AddInitScript(playwright.Script{Content: &authScript})
+	if err != nil {
+		t.Fatalf("could not add auth init script to context: %v", err)
 	}
 	t.Cleanup(func() {
 		if err := context.Close(); err != nil {
@@ -117,11 +129,13 @@ func countOfQuery(schema string, table string) (int64, error) {
 	return count, nil
 }
 
-// type RequestEditorFn
-
-func ReqWithBearerToken(token string) func(ctx context.Context, req *http.Request) error {
+// ReqWithAuthCookie injects the access_token as a cookie for direct HTTP client calls in E2E tests.
+func ReqWithAuthCookie(token string) func(ctx context.Context, req *http.Request) error {
 	return func(ctx context.Context, req *http.Request) error {
-		req.Header.Set("Authorization", "Bearer "+token)
+		req.AddCookie(&http.Cookie{
+			Name:  "access_token",
+			Value: token,
+		})
 		return nil
 	}
 }

@@ -8,6 +8,7 @@ import (
 
 	"github.com/cooperlutz/go-full/app"
 	"github.com/cooperlutz/go-full/app/config"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 func TestNewApplication(t *testing.T) {
@@ -50,6 +51,7 @@ func TestApplication(t *testing.T) {
 			"DB_DBNAME":              "db",
 			"DB_SSLMODE":             "disable",
 			"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
+			"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
 		}
 		config.ApplicationName = "my-app"
 		config.ApplicationVersion = "1.0.0"
