@@ -2,6 +2,10 @@
 package utilitee
 
 import (
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
 	"math"
 	"time"
 )
@@ -55,4 +59,36 @@ func SliceOfValuesToSliceOfPointers[T any](slice []T) []*T {
 	}
 
 	return result
+}
+
+type ErrPrivateKeyIssue struct{}
+
+func (e ErrPrivateKeyIssue) Error() string {
+	return "invalid JWT private key"
+}
+
+// MustParseRSAKey parses a base64-encoded RSA private key in PEM format.
+// It panics if the key cannot be parsed.
+func MustParseRSAKey(b64 string) *rsa.PrivateKey {
+	decoded, err := base64.StdEncoding.DecodeString(b64)
+	if err != nil {
+		panic(err)
+	}
+
+	block, _ := pem.Decode(decoded)
+	if block == nil {
+		panic("failed to decode PEM block")
+	}
+
+	parsed, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		panic(err)
+	}
+
+	key, ok := parsed.(*rsa.PrivateKey)
+	if !ok {
+		panic(ErrPrivateKeyIssue{})
+	}
+
+	return key
 }

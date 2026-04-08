@@ -15,9 +15,6 @@
 import * as runtime from "../runtime";
 import type {
   LoginRequest,
-  LoginResponse,
-  RefreshRequest,
-  RefreshResponse,
   RegisterRequest,
   RegisterResponse,
   UserProfile,
@@ -25,12 +22,6 @@ import type {
 import {
   LoginRequestFromJSON,
   LoginRequestToJSON,
-  LoginResponseFromJSON,
-  LoginResponseToJSON,
-  RefreshRequestFromJSON,
-  RefreshRequestToJSON,
-  RefreshResponseFromJSON,
-  RefreshResponseToJSON,
   RegisterRequestFromJSON,
   RegisterRequestToJSON,
   RegisterResponseFromJSON,
@@ -41,10 +32,6 @@ import {
 
 export interface LoginUserRequest {
   loginRequest: LoginRequest;
-}
-
-export interface RefreshTokenRequest {
-  refreshRequest: RefreshRequest;
 }
 
 export interface RegisterUserRequest {
@@ -84,33 +71,46 @@ export interface DefaultApiInterface {
   loginUserRaw(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<LoginResponse>>;
+  ): Promise<runtime.ApiResponse<void>>;
 
   /**
    */
   loginUser(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<LoginResponse>;
+  ): Promise<void>;
 
   /**
    *
-   * @param {RefreshRequest} refreshRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  logoutUserRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<void>>;
+
+  /**
+   */
+  logoutUser(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void>;
+
+  /**
+   *
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
   refreshTokenRaw(
-    requestParameters: RefreshTokenRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<RefreshResponse>>;
+  ): Promise<runtime.ApiResponse<void>>;
 
   /**
    */
   refreshToken(
-    requestParameters: RefreshTokenRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<RefreshResponse>;
+  ): Promise<void>;
 
   /**
    *
@@ -176,7 +176,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
   async loginUserRaw(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<LoginResponse>> {
+  ): Promise<runtime.ApiResponse<void>> {
     if (requestParameters["loginRequest"] == null) {
       throw new runtime.RequiredError(
         "loginRequest",
@@ -203,9 +203,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
       initOverrides,
     );
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      LoginResponseFromJSON(jsonValue),
-    );
+    return new runtime.VoidApiResponse(response);
   }
 
   /**
@@ -213,29 +211,50 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
   async loginUser(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<LoginResponse> {
-    const response = await this.loginUserRaw(requestParameters, initOverrides);
-    return await response.value();
+  ): Promise<void> {
+    await this.loginUserRaw(requestParameters, initOverrides);
+  }
+
+  /**
+   */
+  async logoutUserRaw(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<runtime.ApiResponse<void>> {
+    const queryParameters: any = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    let urlPath = `/auth/logout`;
+
+    const response = await this.request(
+      {
+        path: urlPath,
+        method: "POST",
+        headers: headerParameters,
+        query: queryParameters,
+      },
+      initOverrides,
+    );
+
+    return new runtime.VoidApiResponse(response);
+  }
+
+  /**
+   */
+  async logoutUser(
+    initOverrides?: RequestInit | runtime.InitOverrideFunction,
+  ): Promise<void> {
+    await this.logoutUserRaw(initOverrides);
   }
 
   /**
    */
   async refreshTokenRaw(
-    requestParameters: RefreshTokenRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<RefreshResponse>> {
-    if (requestParameters["refreshRequest"] == null) {
-      throw new runtime.RequiredError(
-        "refreshRequest",
-        'Required parameter "refreshRequest" was null or undefined when calling refreshToken().',
-      );
-    }
-
+  ): Promise<runtime.ApiResponse<void>> {
     const queryParameters: any = {};
 
     const headerParameters: runtime.HTTPHeaders = {};
-
-    headerParameters["Content-Type"] = "application/json";
 
     let urlPath = `/auth/refresh`;
 
@@ -245,27 +264,19 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
         method: "POST",
         headers: headerParameters,
         query: queryParameters,
-        body: RefreshRequestToJSON(requestParameters["refreshRequest"]),
       },
       initOverrides,
     );
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      RefreshResponseFromJSON(jsonValue),
-    );
+    return new runtime.VoidApiResponse(response);
   }
 
   /**
    */
   async refreshToken(
-    requestParameters: RefreshTokenRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<RefreshResponse> {
-    const response = await this.refreshTokenRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+  ): Promise<void> {
+    await this.refreshTokenRaw(initOverrides);
   }
 
   /**

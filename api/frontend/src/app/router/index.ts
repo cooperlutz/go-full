@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { useLocalTokenStore } from "../../iam/stores/useToken";
+import { useAuthState } from "../../iam/stores/useAuthState";
 // Layout imports
 import ShellComponent from "../layouts/ApplicationShell/ApplicationShell.vue";
 // View imports
@@ -47,15 +47,14 @@ const router = createRouter({
 
 // Navigation guard to check authentication
 // This will redirect users to the login page if they try to access a route that requires authentication
-router.beforeEach((to, from, next) => {
-  const tokenStore = useLocalTokenStore();
-  const token = tokenStore.getAccessToken();
-  if (token && token !== "") {
-    next(); // Allow navigation if token exists
+router.beforeEach((to, _from, next) => {
+  const { isAuthenticated } = useAuthState();
+  if (isAuthenticated()) {
+    next();
   } else if (to.meta.requiresAuth) {
-    next("/login"); // Redirect to login if not authenticated
+    next("/login");
   } else {
-    next(); // Allow navigation
+    next();
   }
 });
 

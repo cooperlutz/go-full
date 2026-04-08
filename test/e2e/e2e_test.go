@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 
 	// Create a new client instance
 	pingpongApiClient, err = pingpong_api_client_v1.NewClientWithResponses(serverAddr+"/api/pingpong/v1", pingpong_api_client_v1.WithRequestEditorFn(
-		ReqWithBearerToken(bearerToken)),
+		ReqWithAuthCookie(bearerToken)),
 	)
 	if err != nil {
 		slog.Error("Error creating pingpong api client:", slog.String("error", err.Error()))
@@ -47,7 +47,7 @@ func TestMain(m *testing.M) {
 
 	examLibraryApiClient, err = examLibrary_api_client_v1.NewClientWithResponses(serverAddr+"/api/examlibrary/v1",
 		examLibrary_api_client_v1.WithRequestEditorFn(
-			ReqWithBearerToken(bearerToken)),
+			ReqWithAuthCookie(bearerToken)),
 	)
 	if err != nil {
 		slog.Error("Error creating examLibrary api client:", slog.String("error", err.Error()))
@@ -55,7 +55,7 @@ func TestMain(m *testing.M) {
 
 	examinationApiClient, err = examination_api_client.NewClientWithResponses(serverAddr+"/api/examination",
 		examination_api_client.WithRequestEditorFn(
-			ReqWithBearerToken(bearerToken)),
+			ReqWithAuthCookie(bearerToken)),
 	)
 	if err != nil {
 		slog.Error("Error creating examination api client:", slog.String("error", err.Error()))
@@ -63,7 +63,7 @@ func TestMain(m *testing.M) {
 
 	gradingApiClient, err = grading_api_client.NewClientWithResponses(serverAddr+"/api/grading",
 		grading_api_client.WithRequestEditorFn(
-			ReqWithBearerToken(bearerToken)),
+			ReqWithAuthCookie(bearerToken)),
 	)
 	if err != nil {
 		slog.Error("Error creating grading api client:", slog.String("error", err.Error()))
@@ -71,7 +71,7 @@ func TestMain(m *testing.M) {
 
 	reportingApiClient, err = reporting_api_client.NewClientWithResponses(serverAddr+"/api/reporting",
 		reporting_api_client.WithRequestEditorFn(
-			ReqWithBearerToken(bearerToken)),
+			ReqWithAuthCookie(bearerToken)),
 	)
 	if err != nil {
 		slog.Error("Error creating reporting api client:", slog.String("error", err.Error()))
@@ -150,5 +150,16 @@ func authentication() {
 	if err != nil {
 		slog.Error("Error logging in test user:", slog.String("error", err.Error()))
 	}
-	bearerToken = resp.JSON200.AccessToken
+
+	// Login now returns 204 and sets tokens as httpOnly cookies.
+	// Extract the access_token cookie value for use in direct API calls.
+	for _, cookie := range resp.HTTPResponse.Cookies() {
+		if cookie.Name == "access_token" {
+			bearerToken = cookie.Value
+			break
+		}
+	}
+	if bearerToken == "" {
+		slog.Error("access_token cookie not found in login response")
+	}
 }

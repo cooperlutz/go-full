@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"crypto/rsa"
 	"database/sql"
 	"errors"
 	"time"
@@ -52,7 +53,8 @@ type IIamQueries interface {
 
 // IamService provides authentication functionality.
 type IamService struct {
-	jwtSecret       []byte
+	privateKey      *rsa.PrivateKey
+	publicKey       *rsa.PublicKey
 	accessTokenTTL  time.Duration
 	refreshTokenTTL time.Duration
 
@@ -66,18 +68,25 @@ func NewIamService(
 	iamRepository iam.UserRepository,
 	refreshTokenRepository iam.RefreshTokenRepository,
 	iamQueryInterface IIamQueries,
-	jwtSecret string,
+	privateKey *rsa.PrivateKey,
 	accessTokenTTL, refreshTokenTTL time.Duration,
 ) *IamService {
 	return &IamService{
 		iamRepository:          iamRepository,
 		refreshTokenRepository: refreshTokenRepository,
 		Queries:                iamQueryInterface,
-		jwtSecret:              []byte(jwtSecret),
+		privateKey:             privateKey,
+		publicKey:              &privateKey.PublicKey,
 		accessTokenTTL:         accessTokenTTL,
 		refreshTokenTTL:        refreshTokenTTL,
 	}
 }
+
+// AccessTokenTTL returns the configured access token lifetime.
+func (s *IamService) AccessTokenTTL() time.Duration { return s.accessTokenTTL }
+
+// RefreshTokenTTL returns the configured refresh token lifetime.
+func (s *IamService) RefreshTokenTTL() time.Duration { return s.refreshTokenTTL }
 
 // Register creates a new user with the provided credentials.
 func (s *IamService) Register(ctx context.Context, email, password string) (outbound.IamUser, error) {
@@ -129,12 +138,11 @@ func (s *IamService) Register(ctx context.Context, email, password string) (outb
 // ValidateToken verifies a JWT token and returns the claims.
 func (s *IamService) ValidateToken(tokenString string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
-		// Validate the signing method
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {
 			return nil, ErrInvalidToken{}
 		}
 
-		return s.jwtSecret, nil
+		return s.publicKey, nil
 	})
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
@@ -179,7 +187,7 @@ func (s *IamService) Login(ctx context.Context, email, password string) (accessT
 	}
 
 	// Generate an access token
-	accessToken, err = user.NewAccessToken(s.jwtSecret, s.accessTokenTTL)
+	accessToken, err = user.NewAccessToken(s.privateKey, s.accessTokenTTL)
 	if err != nil {
 		telemetree.RecordError(ctx, err, "failed to generate access token during login")
 
@@ -232,7 +240,7 @@ func (s *IamService) RefreshAccessToken(ctx context.Context, refreshTokenString 
 	}
 
 	// Generate a new access token
-	accessToken, err := user.NewAccessToken(s.jwtSecret, s.accessTokenTTL)
+	accessToken, err := user.NewAccessToken(s.privateKey, s.accessTokenTTL)
 	if err != nil {
 		telemetree.RecordError(ctx, err, "failed to generate access token")
 

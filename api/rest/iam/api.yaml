@@ -40,12 +40,8 @@ paths:
             schema:
               $ref: '#/components/schemas/LoginRequest'
       responses:
-        '200':
-          description: User logged in successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
+        '204':
+          description: User logged in successfully. Access and refresh tokens set as httpOnly cookies.
         default:
           description: unexpected error
           content:
@@ -55,19 +51,21 @@ paths:
   /auth/refresh:
     post:
       operationId: refreshToken
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshRequest'
       responses:
-        '200':
-          description: Token refreshed successfully
+        '204':
+          description: Access token refreshed. New access token set as httpOnly cookie.
+        default:
+          description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefreshResponse'
+                $ref: '#/components/schemas/Error'
+  /auth/logout:
+    post:
+      operationId: logoutUser
+      responses:
+        '204':
+          description: Logged out. Auth cookies cleared.
         default:
           description: unexpected error
           content:
@@ -138,30 +136,6 @@ components:
       required:
         - email
         - password
-    LoginResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-        refreshToken:
-          type: string
-      required:
-        - accessToken
-        - refreshToken
-    RefreshRequest:
-      type: object
-      properties:
-        refreshToken:
-          type: string
-      required:
-        - refreshToken
-    RefreshResponse:
-      type: object
-      properties:
-        token:
-          type: string
-      required:
-        - token
     Error:
       type: object
       properties:
