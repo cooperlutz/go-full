@@ -1,3 +1,9 @@
+## v0.1.81 (2026-04-09)
+
+### Fix
+
+- **deps**: bump github.com/ThreeDotsLabs/watermill-sql/v4 from 4.1.2 to 4.1.3 (#231)
+
 ## v0.1.80 (2026-04-09)
 
 ### Fix
