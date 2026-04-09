@@ -42,8 +42,8 @@ param databaseSSLMode string
 param httpPort string
 
 @secure()
-@description('Secret key used for signing JWT tokens')
-param jwtSecret string
+@description('Private key used for signing JWT tokens')
+param jwtPrivateKey string
 
 /* VARIABLES */
 
@@ -172,6 +172,6 @@ module app 'app/app.bicep' = {
     targetPort: httpPort
     dbSSLMode: databaseSSLMode
     dbType: databaseType
-    jwtSecret: jwtSecret
+    jwtPrivateKey: jwtPrivateKey
   }
 }
