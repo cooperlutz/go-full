@@ -180,11 +180,13 @@ build-fe: ### build frontend
 #                            WORKFLOWS                                    #
 ############################################################################
 
-pre-wflow: build-fe  ### prehook for ci tasks
+pre-wflow:  ### prehook for ci tasks
 	if [ ! -d .coverage ]; then mkdir .coverage; else echo ".coverage directory already exists, skipping creation."; fi
+	go install github.com/vektra/mockery/v3@v3.7.0
+	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 .PHONY: pre-wflow
 
-ci: pre-wflow deps deps-audit lint format test cover-filter ### run all ci tasks
+ci: pre-wflow deps install-tools deps-audit gen build-fe lintfmt test cover-filter ### run all ci tasks
 .PHONY: ci
 
 ############################################################################
@@ -311,3 +313,7 @@ init: coverage-directory init-env-file all compose ### initialize project
 modularizer: ### run modularizer tool
 	go run tools/modularizer/cmd/modularizer/main.go modularize --config tools/modularizer/modularizer.yaml
 .PHONY: modularizer
+
+generate-and-set-rsa-private-key: ### generate a 2048-bit RSA private key, base64 encode it, and set it as a GitHub secret
+	gh secret set SEC_JWT_PRIVATE_KEY --body "$$(openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -outform PEM 2>/dev/null | base64)"
+.PHONY: generate-and-set-rsa-private-key

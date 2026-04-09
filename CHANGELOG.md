@@ -1,3 +1,33 @@
+## v0.1.80 (2026-04-09)
+
+### Fix
+
+- update jwt secret in deploy conf (#249)
+
+## v0.1.79 (2026-04-09)
+
+### Fix
+
+- bump js deps (#248)
+
+## v0.1.78 (2026-04-08)
+
+### Fix
+
+- auth and web security (#247)
+
+## v0.1.77 (2026-04-07)
+
+### Fix
+
+- deps issues with oapicodegen (#245)
+
+## v0.1.76 (2026-04-06)
+
+### Fix
+
+- **deps**: bump the all-npm-dependencies group in /api/frontend with 7 updates (#244)
+
 ## v0.1.75 (2026-04-05)
 
 ### Fix

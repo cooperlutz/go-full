@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cooperlutz/go-full/app/config"
+	"github.com/cooperlutz/go-full/test/fixtures"
 )
 
 // TestLoadConfigFromEnvVars tests the LoadConfigFromEnvVars function.
@@ -29,7 +30,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
+				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -52,9 +53,9 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					TraceEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
-					JWTSecret:       "THIS_IS_NOT_A_REAL_PASSWORD",
-					AccessTokenTTL:  time.Duration(15) * time.Minute,
-					RefreshTokenTTL: time.Hour * 24 * 7,
+					Base64EncodedJWTPrivateKeyPEM: fixtures.ValidUnusedBase64EncodedPrivateKey,
+					AccessTokenTTL:                time.Duration(15) * time.Minute,
+					RefreshTokenTTL:               time.Hour * 24 * 7,
 				},
 			},
 		},
@@ -70,7 +71,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
+				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -93,9 +94,9 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					TraceEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
-					JWTSecret:       "THIS_IS_NOT_A_REAL_PASSWORD",
-					AccessTokenTTL:  time.Duration(15) * time.Minute,
-					RefreshTokenTTL: time.Hour * 24 * 7,
+					Base64EncodedJWTPrivateKeyPEM: fixtures.ValidUnusedBase64EncodedPrivateKey,
+					AccessTokenTTL:                time.Duration(15) * time.Minute,
+					RefreshTokenTTL:               time.Hour * 24 * 7,
 				},
 			},
 		},
@@ -137,7 +138,7 @@ func TestLoadConfigFromEnvVars_MissingVars(t *testing.T) {
 				"DB_DBNAME":              "db",
 				"DB_SSLMODE":             "disable",
 				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_SECRET":         "THIS_IS_NOT_A_REAL_PASSWORD",
+				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{},
 			expectedErr: config.ErrEnvVarValueMissing{VarName: "HTTP_PORT"},

@@ -43,9 +43,9 @@ type Telemetry struct {
 }
 
 type Security struct {
-	JWTSecret       string
-	AccessTokenTTL  time.Duration
-	RefreshTokenTTL time.Duration
+	Base64EncodedJWTPrivateKeyPEM string
+	AccessTokenTTL                time.Duration
+	RefreshTokenTTL               time.Duration
 }
 
 // Config holds the application configuration settings.
@@ -62,8 +62,8 @@ type Config struct {
 }
 
 func (c Config) String() string {
-	c.DB.Password = obscuredValue        // hide password
-	c.Security.JWTSecret = obscuredValue // hide JWT secret
+	c.DB.Password = obscuredValue                            // hide password
+	c.Security.Base64EncodedJWTPrivateKeyPEM = obscuredValue // hide JWT private key
 
 	jsonData, _ := json.MarshalIndent(c, "", "  ") //nolint:errcheck // ignoring error
 

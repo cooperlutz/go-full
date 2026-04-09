@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/cooperlutz/go-full/internal/iam/service"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
@@ -15,6 +16,7 @@ func NewIamAuthApiController(iamSvc *service.IamService) http.Handler {
 	iamRouter.HandleFunc("/register", authHandler.Register)
 	iamRouter.HandleFunc("/login", authHandler.Login)
 	iamRouter.HandleFunc("/refresh", authHandler.RefreshToken)
+	iamRouter.HandleFunc("/logout", authHandler.Logout)
 
 	return iamRouter
 }
@@ -45,7 +47,6 @@ type RegisterResponse struct {
 
 // Register handles user registration.
 func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body
 	var req RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
@@ -53,14 +54,12 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate input
 	if req.Email == "" || req.Password == "" {
 		http.Error(w, "Email and password are required", http.StatusBadRequest)
 
 		return
 	}
 
-	// Call the auth service to register the user
 	user, err := h.authService.Register(r.Context(), req.Email, req.Password)
 	if err != nil {
 		if errors.Is(err, service.ErrEmailInUse{}) {
@@ -74,7 +73,6 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return the created user (without sensitive data)
 	response := RegisterResponse{
 		ID:    user.ID.String(),
 		Email: user.Email,
@@ -97,16 +95,8 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-// Update the LoginResponse to include refresh token
-// LoginResponse contains the JWT token and refresh token after successful login.
-type LoginResponse struct {
-	AccessToken  string `json:"accessToken"`
-	RefreshToken string `json:"refreshToken"`
-}
-
-// Update the Login function.
+// Login handles user login by setting httpOnly cookies for access and refresh tokens.
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body
 	var req LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
@@ -114,7 +104,6 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Attempt to login with refresh token generation
 	accessToken, refreshToken, err := h.authService.Login(
 		r.Context(),
 		req.Email,
@@ -130,46 +119,24 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return the tokens
-	response := LoginResponse{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-	}
+	setTokenCookies(w, accessToken, refreshToken, h.authService.AccessTokenTTL(), h.authService.RefreshTokenTTL())
 
-	w.Header().Set("Content-Type", "application/json")
-
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-
-		return
-	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
-// RefreshRequest represents the refresh token payload.
-type RefreshRequest struct {
-	RefreshToken string `json:"refreshToken"`
-}
-
-// RefreshResponse contains the new access token.
-type RefreshResponse struct {
-	Token string `json:"token"`
-}
-
-// RefreshToken handles access token refresh.
+// RefreshToken handles access token refresh using the refresh_token cookie.
 func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
-	// Parse the request body
-	var req RefreshRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+	refreshCookie, err := r.Cookie("refresh_token")
+	if err != nil {
+		http.Error(w, "Missing refresh token", http.StatusUnauthorized)
 
 		return
 	}
 
-	// Attempt to refresh the token
-	token, err := h.authService.RefreshAccessToken(r.Context(), req.RefreshToken)
+	accessToken, err := h.authService.RefreshAccessToken(r.Context(), refreshCookie.Value)
 	if err != nil {
 		if errors.Is(err, service.ErrInvalidToken{}) || errors.Is(err, service.ErrExpiredToken{}) {
+			clearTokenCookies(w)
 			http.Error(w, "Invalid or expired refresh token", http.StatusUnauthorized)
 		} else {
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -178,15 +145,67 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return the new access token
-	response := RefreshResponse{Token: token}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   int(h.authService.AccessTokenTTL().Seconds()),
+	})
 
-	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNoContent)
+}
 
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+// Logout clears authentication cookies.
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	clearTokenCookies(w)
+	w.WriteHeader(http.StatusNoContent)
+}
 
-		return
-	}
+// setTokenCookies sets the access and refresh token cookies.
+func setTokenCookies(w http.ResponseWriter, accessToken, refreshToken string, accessTTL, refreshTTL time.Duration) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    accessToken,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   int(accessTTL.Seconds()),
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/auth",
+		MaxAge:   int(refreshTTL.Seconds()),
+	})
+}
+
+// clearTokenCookies clears the access and refresh token cookies.
+func clearTokenCookies(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "access_token",
+		Value:    "",
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/",
+		MaxAge:   -1,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    "",
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+		Path:     "/auth",
+		MaxAge:   -1,
+	})
 }

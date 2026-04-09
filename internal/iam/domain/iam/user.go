@@ -1,6 +1,7 @@
 package iam
 
 import (
+	"crypto/rsa"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -27,11 +28,10 @@ func NewUser(email, passwordHash string) *User {
 	}
 }
 
-// NewAccessToken creates a new JWT access token.
-func (u *User) NewAccessToken(jwtSecret []byte, accessTokenTTL time.Duration) (string, error) {
+// NewAccessToken creates a new JWT access token signed with an RSA private key (RS256).
+func (u *User) NewAccessToken(privateKey *rsa.PrivateKey, accessTokenTTL time.Duration) (string, error) {
 	expirationTime := utilitee.RightNow().Add(accessTokenTTL)
 
-	// Create the JWT claims
 	claims := jwt.MapClaims{
 		"sub":   u.ID.String(),              // subject (user ID)
 		"email": u.Email,                    // custom claim
@@ -39,11 +39,9 @@ func (u *User) NewAccessToken(jwtSecret []byte, accessTokenTTL time.Duration) (s
 		"iat":   utilitee.RightNow().Unix(), // issued at time
 	}
 
-	// Create the token with claims
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 
-	// Sign the token with our secret key
-	tokenString, err := token.SignedString(jwtSecret)
+	tokenString, err := token.SignedString(privateKey)
 	if err != nil {
 		return "", err
 	}

@@ -32,7 +32,7 @@ func LoadEnvironmentVariables() (map[string]string, error) {
 		"DB_DBNAME":   os.Getenv("DB_DBNAME"),
 		"DB_SSLMODE":  os.Getenv("DB_SSLMODE"),
 		// Security
-		"SEC_JWT_SECRET": os.Getenv("SEC_JWT_SECRET"), // SENSITIVE
+		"SEC_JWT_PRIVATE_KEY": os.Getenv("SEC_JWT_PRIVATE_KEY"), // SENSITIVE
 	}
 
 	for k, v := range keyVals {
@@ -72,9 +72,9 @@ func LoadConfigFromEnvVars() (Config, error) {
 			SSLMode:  loadedEnvVars["DB_SSLMODE"],
 		},
 		Security: Security{
-			JWTSecret:       loadedEnvVars["SEC_JWT_SECRET"],
-			AccessTokenTTL:  time.Duration(15) * time.Minute, //nolint:mnd // default 15 minutes
-			RefreshTokenTTL: time.Hour * 24 * 7,              //nolint:mnd // 7 days
+			Base64EncodedJWTPrivateKeyPEM: loadedEnvVars["SEC_JWT_PRIVATE_KEY"],
+			AccessTokenTTL:                time.Duration(15) * time.Minute, //nolint:mnd // default 15 minutes
+			RefreshTokenTTL:               time.Hour * 24 * 7,              //nolint:mnd // 7 days
 		},
 	}
 	log.Printf("Loaded config: %+v\n", loadedCfg.String())
