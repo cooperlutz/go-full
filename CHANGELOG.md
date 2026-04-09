@@ -1,3 +1,9 @@
+## v0.1.80 (2026-04-09)
+
+### Fix
+
+- update jwt secret in deploy conf (#249)
+
 ## v0.1.79 (2026-04-09)
 
 ### Fix
