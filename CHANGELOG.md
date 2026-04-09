@@ -1,3 +1,9 @@
+## v0.1.82 (2026-04-09)
+
+### Fix
+
+- **deps**: bump docker/login-action from 4.0.0 to 4.1.0 in the all-github-actions group (#242)
+
 ## v0.1.81 (2026-04-09)
 
 ### Fix
