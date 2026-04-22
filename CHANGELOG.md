@@ -1,3 +1,9 @@
+## v0.1.84 (2026-04-22)
+
+### Fix
+
+- **deps**: bump the all-npm-dependencies group across 1 directory with 19 updates (#257)
+
 ## v0.1.83 (2026-04-10)
 
 ### Fix
