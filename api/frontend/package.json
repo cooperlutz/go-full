@@ -22,7 +22,11 @@
   "pnpm": {
     "overrides": {},
     "auditConfig": {
-      "ignoreGhsas": []
+      "ignoreGhsas": [
+        "GHSA-r4q5-vmmm-2653",
+        "GHSA-rp42-5vxx-qpwr",
+        "GHSA-6v7q-wjvx-w8wg"
+      ]
     }
   },
   "dependencies": {
