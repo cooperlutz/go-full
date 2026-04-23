@@ -30,7 +30,7 @@ func (c *ExamLibraryRestAPIControllerV1) GetFindAllExams(ctx context.Context, re
 
 	response := server.GetFindAllExams200JSONResponse{
 		Body:    exams,
-		Headers: server.GetFindAllExams200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
+		Headers: server.GetFindAllExams200ResponseHeaders{XRequestId: new(spanCtx.TraceID().String())},
 	}
 	return response, nil
 }

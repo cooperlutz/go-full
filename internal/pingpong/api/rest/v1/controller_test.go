@@ -52,7 +52,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 					Message: pongResponseMessage,
 				},
 				Headers: v1_server.PingPong200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			200,
@@ -70,7 +70,7 @@ func TestPingPongRestAPIController_PingPong(t *testing.T) {
 					Message: pingResponseMessage,
 				},
 				Headers: v1_server.PingPong200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			200,
@@ -185,7 +185,7 @@ func TestPingPongRestAPIController_GetFindAllPingPongs(t *testing.T) {
 					},
 				},
 				Headers: v1_server.GetFindAllPingPongs200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -278,7 +278,7 @@ func TestPingPongRestAPIController_GetFindOneByID_Success(t *testing.T) {
 					Id:        new("00000000-0000-0000-0000-000000000000"),
 				},
 				Headers: v1_server.GetFindOneByID200ResponseHeaders{
-					XRequestId: "0000000000000000",
+					XRequestId: new("0000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -471,7 +471,7 @@ func TestPingPongRestAPIController_GetPings(t *testing.T) {
 					},
 				},
 				Headers: v1_server.GetPings200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -608,7 +608,7 @@ func TestPingPongRestAPIController_GetPongs(t *testing.T) {
 					},
 				},
 				Headers: v1_server.GetPongs200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -744,7 +744,7 @@ func TestPingPongRestAPIController_GetDailyDistribution(t *testing.T) {
 					},
 				},
 				Headers: v1_server.GetDailyDistribution200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -870,7 +870,7 @@ func TestPingPongRestAPIController_GetTotalPingPongs(t *testing.T) {
 			expectedResponse: v1_server.GetTotalPingPongs200JSONResponse{
 				Body: int(12345),
 				Headers: v1_server.GetTotalPingPongs200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -989,7 +989,7 @@ func TestPingPongRestAPIController_GetTotalPings(t *testing.T) {
 			expectedResponse: v1_server.GetTotalPings200JSONResponse{
 				Body: int(12345),
 				Headers: v1_server.GetTotalPings200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,
@@ -1109,7 +1109,7 @@ func TestPingPongRestAPIController_GetTotalPongs(t *testing.T) {
 			expectedResponse: v1_server.GetTotalPongs200JSONResponse{
 				Body: int(12345),
 				Headers: v1_server.GetTotalPongs200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			expectedResponseCode: 200,

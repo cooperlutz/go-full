@@ -105,9 +105,6 @@ paths:
       summary: Get an Exam by ID
       description: Retrieve a single Exam by its ID
       operationId: getFindOneByID # the operationId corelates to the function name withihn the Go server, Go Client, and TS Client implemented within the module's frontend services
-      security:
-        - api_key: []
-        - basic_auth: []
       parameters:
         - name: examID
           in: path
