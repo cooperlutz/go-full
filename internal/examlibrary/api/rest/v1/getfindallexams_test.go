@@ -43,7 +43,7 @@ func TestExamLibraryRestAPIControllerV1_GetFindAllExams(t *testing.T) {
 					},
 				},
 				Headers: v1_server.GetFindAllExams200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			200,

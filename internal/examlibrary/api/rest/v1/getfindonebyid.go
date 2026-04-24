@@ -32,7 +32,7 @@ func (c *ExamLibraryRestAPIControllerV1) GetFindOneByID(ctx context.Context, req
 
 	response := server.GetFindOneByID200JSONResponse{
 		Body:    exam,
-		Headers: server.GetFindOneByID200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
+		Headers: server.GetFindOneByID200ResponseHeaders{XRequestId: new(spanCtx.TraceID().String())},
 	}
 
 	return response, nil

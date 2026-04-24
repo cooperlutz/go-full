@@ -31,7 +31,7 @@ func (c *ExamLibraryRestAPIControllerV1) PostAddExamToLibrary(ctx context.Contex
 
 	response := server.PostAddExamToLibrary200JSONResponse{
 		Body:    exam,
-		Headers: server.PostAddExamToLibrary200ResponseHeaders{XRequestId: spanCtx.TraceID().String()},
+		Headers: server.PostAddExamToLibrary200ResponseHeaders{XRequestId: new(spanCtx.TraceID().String())},
 	}
 	return response, nil
 }

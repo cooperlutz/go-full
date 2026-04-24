@@ -81,7 +81,7 @@ func TestExamLibraryRestAPIControllerV1_PostAddExamToLibrary(t *testing.T) {
 					},
 				},
 				Headers: v1_server.PostAddExamToLibrary200ResponseHeaders{
-					XRequestId: "00000000000000000000000000000000",
+					XRequestId: new("00000000000000000000000000000000"),
 				},
 			},
 			200,
