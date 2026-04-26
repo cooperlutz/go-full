@@ -2,7 +2,7 @@ package app
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"os"
 	"time"
 
@@ -20,6 +20,7 @@ import (
 	"github.com/cooperlutz/go-full/pkg/eeventdriven"
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 	"github.com/cooperlutz/go-full/pkg/securitee"
+	"github.com/cooperlutz/go-full/pkg/telemetree"
 	"github.com/cooperlutz/go-full/pkg/utilitee"
 	"github.com/cooperlutz/go-full/pkg/workerbee"
 )
@@ -41,6 +42,17 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 	/* -----------------------------------------------------------------------------------
 	System Initializations:
 	----------------------------------------------------------------------------------- */
+	slog.Info("Starting application initializations...")
+
+	ctx := context.Background()
+
+	err := telemetree.InitLogger(ctx, a.conf.Telemetry)
+	if err != nil {
+		os.Exit(1)
+	}
+
+	slog.Info("Logger initialization complete.")
+
 	pgCfg, err := pgxpool.ParseConfig(a.conf.DB.GetDSN())
 	if err != nil {
 		os.Exit(1)
@@ -48,7 +60,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 
 	pgCfg.ConnConfig.Tracer = otelpgx.NewTracer()
 
-	conn, err := pgxpool.NewWithConfig(context.Background(), pgCfg)
+	conn, err := pgxpool.NewWithConfig(ctx, pgCfg)
 	if err != nil {
 		os.Exit(1)
 	}
@@ -67,17 +79,19 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		10*time.Second, //nolint: mnd // want the worker to run every 10 seconds
 	)
 
+	slog.Info("System initializations complete. Starting service initializations...")
+
 	/* -----------------------------------------------------------------------------------
 	Modular Service Initializations:
 
 	Create a new instance of each module, injecting the necessary dependencies.
 	----------------------------------------------------------------------------------- */
-
 	// PingPong
 	pingPongModule, err := pingpong.NewModule(
 		conn,
 	)
 	if err != nil {
+		slog.Error("Error initializing ping pong module: " + err.Error())
 		os.Exit(1)
 	}
 
@@ -86,6 +100,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		conn,
 	)
 	if err != nil {
+		slog.Error("Error initializing exam library module: " + err.Error())
 		os.Exit(1)
 	}
 
@@ -97,6 +112,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		backgroundWorker,
 	)
 	if err != nil {
+		slog.Error("Error initializing examination module: " + err.Error())
 		os.Exit(1)
 	}
 
@@ -116,6 +132,7 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		examLibraryModule.UseCase,
 	)
 	if err != nil {
+		slog.Error("Error initializing grading module: " + err.Error())
 		os.Exit(1)
 	}
 
@@ -125,8 +142,11 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 		pubSub,
 	)
 	if err != nil {
+		slog.Error("Error initializing reporting module: " + err.Error())
 		os.Exit(1)
 	}
+
+	slog.Info("Service initializations complete. Starting server setup...")
 
 	/* -----------------------------------------------------------------------------------
 	Protected REST API Controller Initialization:
@@ -194,43 +214,53 @@ func (a *Application) Run() { //nolint:funlen,cyclop,gocyclo,gocognit // main ap
 
 	// the HTTP server
 	go func() {
-		err = httpServer.Run()
+		err = httpServer.Run(ctx)
 		if err != nil {
+			slog.Error("Error running HTTP server: " + err.Error())
+
 			errChannel <- err
 		}
 	}()
 
 	// the Pub/Sub processors
 	go func() {
-		err = pingPongModule.PubSub.Run()
+		err = pingPongModule.PubSub.Run(ctx)
 		if err != nil {
+			slog.Error("Error running ping pong pub/sub processor: " + err.Error())
+
 			errChannel <- err
 		}
 	}()
 	go func() {
-		err = examLibraryModule.PubSub.Run()
+		err = examLibraryModule.PubSub.Run(ctx)
 		if err != nil {
+			slog.Error("Error running exam library pub/sub processor: " + err.Error())
+
 			errChannel <- err
 		}
 	}()
 	go func() {
-		err = pubSub.Run()
+		err = pubSub.Run(ctx)
 		if err != nil {
+			slog.Error("Error running pub/sub processor: " + err.Error())
+
 			errChannel <- err
 		}
 	}()
 
 	// the Background Worker
 	go func() {
-		err = backgroundWorker.Run()
+		err = backgroundWorker.Run(ctx)
 		if err != nil {
+			slog.Error("Error running background worker: " + err.Error())
+
 			errChannel <- err
 		}
 	}()
 
 	// Wait for any server to return an error
 	if err := <-errChannel; err != nil {
+		slog.Error(err.Error())
 		os.Exit(1)
-		log.Fatal(err)
 	}
 }

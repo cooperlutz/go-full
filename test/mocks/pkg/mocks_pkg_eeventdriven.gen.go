@@ -5,6 +5,8 @@
 package pkg_mocks
 
 import (
+	"context"
+
 	"github.com/ThreeDotsLabs/watermill/message"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -195,16 +197,16 @@ func (_c *MockIPubSubEventProcessor_RegisterSubscriberHandlers_Call) RunAndRetur
 }
 
 // Run provides a mock function for the type MockIPubSubEventProcessor
-func (_mock *MockIPubSubEventProcessor) Run() error {
-	ret := _mock.Called()
+func (_mock *MockIPubSubEventProcessor) Run(ctx context.Context) error {
+	ret := _mock.Called(ctx)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Run")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func() error); ok {
-		r0 = returnFunc()
+	if returnFunc, ok := ret.Get(0).(func(context.Context) error); ok {
+		r0 = returnFunc(ctx)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -217,13 +219,20 @@ type MockIPubSubEventProcessor_Run_Call struct {
 }
 
 // Run is a helper method to define mock.On call
-func (_e *MockIPubSubEventProcessor_Expecter) Run() *MockIPubSubEventProcessor_Run_Call {
-	return &MockIPubSubEventProcessor_Run_Call{Call: _e.mock.On("Run")}
+//   - ctx context.Context
+func (_e *MockIPubSubEventProcessor_Expecter) Run(ctx interface{}) *MockIPubSubEventProcessor_Run_Call {
+	return &MockIPubSubEventProcessor_Run_Call{Call: _e.mock.On("Run", ctx)}
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) Run(run func()) *MockIPubSubEventProcessor_Run_Call {
+func (_c *MockIPubSubEventProcessor_Run_Call) Run(run func(ctx context.Context)) *MockIPubSubEventProcessor_Run_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run()
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		run(
+			arg0,
+		)
 	})
 	return _c
 }
@@ -233,7 +242,7 @@ func (_c *MockIPubSubEventProcessor_Run_Call) Return(err error) *MockIPubSubEven
 	return _c
 }
 
-func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func() error) *MockIPubSubEventProcessor_Run_Call {
+func (_c *MockIPubSubEventProcessor_Run_Call) RunAndReturn(run func(ctx context.Context) error) *MockIPubSubEventProcessor_Run_Call {
 	_c.Call.Return(run)
 	return _c
 }

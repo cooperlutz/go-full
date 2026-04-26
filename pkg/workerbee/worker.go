@@ -5,7 +5,7 @@ package workerbee
 import (
 	"context"
 	"fmt"
-	"log"
+	"log/slog"
 	"time"
 
 	"github.com/cooperlutz/go-full/app/config"
@@ -45,28 +45,26 @@ func (e *ErrNoTasks) Error() string {
 	return "no tasks to execute"
 }
 
-func (w *Worker) Run() error { //nolint:cyclop,gocyclo,gocognit // worker run function
-	ctx := context.Background()
-
+func (w *Worker) Run(ctx context.Context) error { //nolint:cyclop,gocyclo,gocognit // worker run function
 	tp, err := telemetree.InitTracer(ctx, w.conf)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
 	}
 
 	defer func() {
 		if err := tp.Shutdown(ctx); err != nil {
-			log.Printf("Error shutting down tracer provider: %v", err)
+			slog.Error("Error shutting down tracer provider: " + err.Error())
 		}
 	}()
 
 	mp, err := telemetree.InitMeter(ctx)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
 	}
 
 	defer func() {
 		if err := mp.Shutdown(ctx); err != nil {
-			log.Printf("Error shutting down meter provider: %v", err)
+			slog.Error("Error shutting down meter provider: " + err.Error())
 		}
 	}()
 

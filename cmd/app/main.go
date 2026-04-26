@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"log/slog"
 	"os"
 
 	"github.com/cooperlutz/go-full/app"
@@ -19,13 +19,13 @@ func main() {
 	// Load configuration
 	conf, err := config.LoadConfigFromEnvVars()
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
 		os.Exit(1)
 	}
 
 	// Run migrations if the flag is set
 	if *flagMigrate {
-		log.Print("Running migrations before starting the app...\n")
+		slog.Info("Running migrations before starting the app...")
 		migration.Migrate(conf.DB.Type, conf.DB.GetURL())
 	}
 

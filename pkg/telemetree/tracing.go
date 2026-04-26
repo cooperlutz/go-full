@@ -26,10 +26,10 @@ func InitTracer(ctx context.Context, cfg config.Telemetry) (*sdktrace.TracerProv
 
 	httpExporter, err := otlptracehttp.New(ctx,
 		otlptracehttp.WithInsecure(),
-		otlptracehttp.WithEndpoint(cfg.TraceEndpoint),
+		otlptracehttp.WithEndpoint(cfg.OTLPHttpEndpoint),
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	rd, err := ResourceDefinition(ctx)
@@ -52,7 +52,7 @@ func InitTracer(ctx context.Context, cfg config.Telemetry) (*sdktrace.TracerProv
 		propagation.Baggage{},
 	))
 
-	return tp, err
+	return tp, nil
 }
 
 // AddSpan adds an otel span to the existing trace.

@@ -39,7 +39,7 @@ type HTTP struct {
 }
 
 type Telemetry struct {
-	TraceEndpoint string
+	OTLPHttpEndpoint string
 }
 
 type Security struct {
