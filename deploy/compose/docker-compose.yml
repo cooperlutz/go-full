@@ -10,8 +10,7 @@ include:
   - ./docs/docker-compose.docs.yml
   
   # Observability
-  - ./observability/docker-compose.prometheus.yml
-  - ./observability/docker-compose.jaeger.yml
+  - ./observability/docker-compose.otel-lgtm.yml
 
   # Network Layer
   - ./network/docker-compose.nginx.yml

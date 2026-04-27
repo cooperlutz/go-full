@@ -23,10 +23,10 @@ func sampleFunctionReturningAnError(ctx context.Context) error {
 
 func TestNewWorker(t *testing.T) {
 	t.Parallel()
-	worker := NewWorker(config.Telemetry{TraceEndpoint: ""}, 2*time.Second)
+	worker := NewWorker(config.Telemetry{OTLPHttpEndpoint: ""}, 2*time.Second)
 	worker.AddTask(sampleFunction)
 	go func() {
-		if err := worker.Run(); err != nil {
+		if err := worker.Run(context.Background()); err != nil {
 			fmt.Printf("Worker stopped with error: %v\n", err)
 		}
 	}()
@@ -34,18 +34,18 @@ func TestNewWorker(t *testing.T) {
 
 func TestWorker_NoTasks(t *testing.T) {
 	t.Parallel()
-	worker := NewWorker(config.Telemetry{TraceEndpoint: ""}, 2*time.Second)
-	err := worker.Run()
+	worker := NewWorker(config.Telemetry{OTLPHttpEndpoint: ""}, 2*time.Second)
+	err := worker.Run(context.Background())
 	assert.Error(t, err)
 	assert.Len(t, worker.cron.C, 0)
 }
 
 func TestWorker_TaskReturnsError(t *testing.T) {
 	t.Parallel()
-	worker := NewWorker(config.Telemetry{TraceEndpoint: ""}, 2*time.Second)
+	worker := NewWorker(config.Telemetry{OTLPHttpEndpoint: ""}, 2*time.Second)
 	worker.AddTask(sampleFunctionReturningAnError)
 	go func() {
-		if err := worker.Run(); err != nil {
+		if err := worker.Run(context.Background()); err != nil {
 			fmt.Printf("Worker stopped with error: %v\n", err)
 			assert.Error(t, err)
 		}

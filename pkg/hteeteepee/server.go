@@ -3,7 +3,7 @@ package hteeteepee
 import (
 	"context"
 	"errors"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -53,36 +53,34 @@ func (s *HTTPServer) RegisterController(serviceEndpoint string, handler http.Han
 	s.Router.Mount(serviceEndpoint, handler)
 }
 
-func (s *HTTPServer) Run() error {
+func (s *HTTPServer) Run(ctx context.Context) error {
 	// Set the server handler
 	s.Server.Handler = s.Router
 
-	ctx := context.Background()
-
 	tp, err := telemetree.InitTracer(ctx, s.Config.Telemetry)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
 	}
 
 	defer func() {
 		if err := tp.Shutdown(ctx); err != nil {
-			log.Printf("Error shutting down tracer provider: %v", err)
+			slog.Error("Error shutting down tracer provider: " + err.Error())
 		}
 	}()
 
 	mp, err := telemetree.InitMeter(ctx)
 	if err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
 	}
 
 	defer func() {
 		if err := mp.Shutdown(ctx); err != nil {
-			log.Printf("Error shutting down meter provider: %v", err)
+			slog.Error("Error shutting down meter provider: " + err.Error())
 		}
 	}()
 
 	// Server run context
-	serverCtx, serverStopCtx := context.WithCancel(context.Background())
+	serverCtx, serverStopCtx := context.WithCancel(ctx)
 
 	// Listen for syscall signals for process to interrupt/quit
 	sig := make(chan os.Signal, 1)
@@ -101,14 +99,14 @@ func (s *HTTPServer) Run() error {
 			<-shutdownCtx.Done()
 
 			if errors.Is(shutdownCtx.Err(), context.DeadlineExceeded) {
-				log.Fatal("graceful shutdown timed out.. forcing exit.")
+				slog.Error("graceful shutdown timed out.. forcing exit.")
 			}
 		}()
 
 		// Trigger graceful shutdown
 		err := s.Server.Shutdown(shutdownCtx)
 		if err != nil {
-			log.Fatal(err)
+			slog.Error(err.Error())
 		}
 
 		serverStopCtx()
@@ -118,7 +116,7 @@ func (s *HTTPServer) Run() error {
 	err = s.Server.ListenAndServe()
 
 	if !errors.Is(err, http.ErrServerClosed) {
-		log.Fatal(err)
+		slog.Error(err.Error())
 
 		return err
 	}

@@ -58,7 +58,7 @@ module app '../containers/container-app-upsert.bicep' = {
         value: 5432
       }
       {
-        name: 'OBSERVE_TRACE_ENDPOINT'
+        name: 'OBSERVE_OTLP_HTTP_ENDPOINT'
         value: 'localhost:4317'
       }
       {

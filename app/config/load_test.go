@@ -21,16 +21,16 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 		{
 			name: "success",
 			envVars: map[string]string{
-				"HTTP_PORT":              "8080",
-				"DB_TYPE":                "postgres",
-				"DB_USER":                "user",
-				"DB_PASSWORD":            "THIS_IS_NOT_A_REAL_PASSWORD",
-				"DB_HOST":                "db",
-				"DB_PORT":                "5432",
-				"DB_DBNAME":              "db",
-				"DB_SSLMODE":             "disable",
-				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
+				"HTTP_PORT":                  "8080",
+				"DB_TYPE":                    "postgres",
+				"DB_USER":                    "user",
+				"DB_PASSWORD":                "THIS_IS_NOT_A_REAL_PASSWORD",
+				"DB_HOST":                    "db",
+				"DB_PORT":                    "5432",
+				"DB_DBNAME":                  "db",
+				"DB_SSLMODE":                 "disable",
+				"OBSERVE_OTLP_HTTP_ENDPOINT": "localhost:4317",
+				"SEC_JWT_PRIVATE_KEY":        fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -50,7 +50,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					SSLMode:  "disable",
 				},
 				Telemetry: config.Telemetry{
-					TraceEndpoint: "localhost:4317",
+					OTLPHttpEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
 					Base64EncodedJWTPrivateKeyPEM: fixtures.ValidUnusedBase64EncodedPrivateKey,
@@ -62,16 +62,16 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 		{
 			name: "test type conversion default values: invalid DB_PORT & METRICS_ENABLED is overriden with default",
 			envVars: map[string]string{
-				"HTTP_PORT":              "8080",
-				"DB_TYPE":                "postgres",
-				"DB_USER":                "user",
-				"DB_PASSWORD":            "THIS_IS_NOT_A_REAL_PASSWORD",
-				"DB_HOST":                "db",
-				"DB_PORT":                "this-is-not-an-int",
-				"DB_DBNAME":              "db",
-				"DB_SSLMODE":             "disable",
-				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
+				"HTTP_PORT":                  "8080",
+				"DB_TYPE":                    "postgres",
+				"DB_USER":                    "user",
+				"DB_PASSWORD":                "THIS_IS_NOT_A_REAL_PASSWORD",
+				"DB_HOST":                    "db",
+				"DB_PORT":                    "this-is-not-an-int",
+				"DB_DBNAME":                  "db",
+				"DB_SSLMODE":                 "disable",
+				"OBSERVE_OTLP_HTTP_ENDPOINT": "localhost:4317",
+				"SEC_JWT_PRIVATE_KEY":        fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{
 				App: config.App{
@@ -91,7 +91,7 @@ func TestLoadConfigFromEnvVars(t *testing.T) {
 					SSLMode:  "disable",
 				},
 				Telemetry: config.Telemetry{
-					TraceEndpoint: "localhost:4317",
+					OTLPHttpEndpoint: "localhost:4317",
 				},
 				Security: config.Security{
 					Base64EncodedJWTPrivateKeyPEM: fixtures.ValidUnusedBase64EncodedPrivateKey,
@@ -129,16 +129,16 @@ func TestLoadConfigFromEnvVars_MissingVars(t *testing.T) {
 		{
 			name: "success",
 			envVars: map[string]string{
-				"HTTP_PORT":              "",
-				"DB_TYPE":                "postgres",
-				"DB_USER":                "user",
-				"DB_PASSWORD":            "THIS_IS_NOT_A_REAL_PASSWORD",
-				"DB_HOST":                "db",
-				"DB_PORT":                "5432",
-				"DB_DBNAME":              "db",
-				"DB_SSLMODE":             "disable",
-				"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-				"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
+				"HTTP_PORT":                  "",
+				"DB_TYPE":                    "postgres",
+				"DB_USER":                    "user",
+				"DB_PASSWORD":                "THIS_IS_NOT_A_REAL_PASSWORD",
+				"DB_HOST":                    "db",
+				"DB_PORT":                    "5432",
+				"DB_DBNAME":                  "db",
+				"DB_SSLMODE":                 "disable",
+				"OBSERVE_OTLP_HTTP_ENDPOINT": "localhost:4317",
+				"SEC_JWT_PRIVATE_KEY":        fixtures.ValidUnusedBase64EncodedPrivateKey,
 			},
 			expectedCfg: config.Config{},
 			expectedErr: config.ErrEnvVarValueMissing{VarName: "HTTP_PORT"},

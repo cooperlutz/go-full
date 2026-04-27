@@ -8,6 +8,7 @@ linters:
     - bodyclose
     - copyloopvar
     - cyclop
+    - depguard
     - dogsled
     - dupl
     - durationcheck
@@ -51,6 +52,15 @@ linters:
       allow-first-in-block: true
       allow-whole-block: false
       branch-max-lines: 2
+    depguard:
+      rules:
+        main:
+          list-mode: lax
+          allow:
+            - "log/slog" # Allow slog for structured logging
+          deny:
+            - pkg: "log" # Deny standard library log package to enforce structured logging
+              desc: "Use slog"
     dupl:
       threshold: 100
     errcheck:

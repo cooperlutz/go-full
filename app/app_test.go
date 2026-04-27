@@ -42,16 +42,16 @@ func TestApplication(t *testing.T) {
 	// Run the application in a separate goroutine to prevent race condition issues with loading env vars
 	go func() {
 		envVars := map[string]string{
-			"HTTP_PORT":              ":0", // :80 will fail in github actions
-			"DB_TYPE":                "postgres",
-			"DB_USER":                "user",
-			"DB_PASSWORD":            "THIS_IS_NOT_A_REAL_PASSWORD",
-			"DB_HOST":                "db",
-			"DB_PORT":                "5432",
-			"DB_DBNAME":              "db",
-			"DB_SSLMODE":             "disable",
-			"OBSERVE_TRACE_ENDPOINT": "localhost:4317",
-			"SEC_JWT_PRIVATE_KEY":    fixtures.ValidUnusedBase64EncodedPrivateKey,
+			"HTTP_PORT":                  ":0", // :80 will fail in github actions
+			"DB_TYPE":                    "postgres",
+			"DB_USER":                    "user",
+			"DB_PASSWORD":                "THIS_IS_NOT_A_REAL_PASSWORD",
+			"DB_HOST":                    "db",
+			"DB_PORT":                    "5432",
+			"DB_DBNAME":                  "db",
+			"DB_SSLMODE":                 "disable",
+			"OBSERVE_OTLP_HTTP_ENDPOINT": "localhost:4317",
+			"SEC_JWT_PRIVATE_KEY":        fixtures.ValidUnusedBase64EncodedPrivateKey,
 		}
 		config.ApplicationName = "my-app"
 		config.ApplicationVersion = "1.0.0"

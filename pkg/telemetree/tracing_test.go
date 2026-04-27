@@ -16,7 +16,7 @@ func TestInitTracer_Success(t *testing.T) {
 
 	// Arrange
 	cfg := config.Telemetry{
-		TraceEndpoint: "localhost:4318",
+		OTLPHttpEndpoint: "localhost:4318",
 	}
 	ctx := context.Background()
 

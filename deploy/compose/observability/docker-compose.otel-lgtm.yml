@@ -1,0 +1,21 @@
+services:
+  # OpenTelemetry LGTM Stack
+  # Prometheus: Metrics collection and storage
+  # Grafana: Visualization and dashboarding
+  # Loki: Log aggregation and querying
+  # Tempo: Trace collection and storage
+  lgtm:
+    container_name: go-full_lgtm
+    image: 'grafana/otel-lgtm:0.26.0'
+    ports:
+      - '3000:3000' # Grafana UI
+      - '4318' # OTLP HTTP
+      # - '4317' # OTLP gRPC
+    environment:
+      - ENABLE_LOGS_ALL=true
+    volumes:
+      - "../../../configs/prometheus/prometheus.yml:/otel-lgtm/prometheus.yaml"
+    networks:
+      app_network:
+        aliases:
+          - lgtm.lvh.me

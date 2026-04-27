@@ -1,6 +1,7 @@
 package hteeteepee_test
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -121,5 +122,5 @@ func TestHTTPServer_Run(t *testing.T) {
 		},
 	}, chi.NewRouter())
 
-	go server.Run()
+	go server.Run(context.Background())
 }

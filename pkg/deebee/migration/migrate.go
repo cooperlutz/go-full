@@ -2,7 +2,8 @@ package migration
 
 import (
 	"errors"
-	"log"
+	"fmt"
+	"log/slog"
 	"slices"
 	"time"
 
@@ -19,19 +20,19 @@ const (
 
 // Migrate runs the database migrations.
 func Migrate(databaseDriver, databaseURL string) {
-	log.Printf("Migrate: starting migrations")
+	slog.Info("Migrate: starting migrations")
 
 	supportedDatabaseDrivers := []string{
 		"postgres",
 	}
 
 	if !slices.Contains(supportedDatabaseDrivers, databaseDriver) {
-		log.Fatalf("Migrate: unsupported database driver %s, supported drivers are: %v", databaseDriver, supportedDatabaseDrivers)
+		slog.Error("Migrate: unsupported database driver " + databaseDriver + ", supported drivers are: " + fmt.Sprint(supportedDatabaseDrivers))
 	}
 
 	m, err := NewPostgresMigration(databaseURL)
 	if err != nil {
-		log.Fatalf("Migrate: postgres connect error: %s", err)
+		slog.Error("Migrate: postgres connect error: " + err.Error())
 	}
 
 	// Execute the migrations.
@@ -39,14 +40,14 @@ func Migrate(databaseDriver, databaseURL string) {
 	defer m.Close()
 
 	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		log.Fatalf("Migrate: up error: %s", err)
+		slog.Error("Migrate: up error: " + err.Error())
 	}
 
 	if !errors.Is(err, migrate.ErrNoChange) {
-		log.Printf("Migrate: migrations applied successfully for driver %s", databaseDriver)
+		slog.Info("Migrate: migrations applied successfully for driver " + databaseDriver)
 	}
 
-	log.Printf("Migrate: migrations applied successfully for driver %s", databaseDriver)
+	slog.Info("Migrate: migrations applied successfully for driver " + databaseDriver)
 }
 
 func NewPostgresMigration(databaseURL string) (*migrate.Migrate, error) {
@@ -62,7 +63,7 @@ func NewPostgresMigration(databaseURL string) (*migrate.Migrate, error) {
 			break
 		}
 
-		log.Printf("Migrate: postgres is trying to connect, attempts left: %d", attempts)
+		slog.Info("Migrate: postgres is trying to connect, attempts left: " + fmt.Sprint(attempts))
 
 		time.Sleep(DefaultMigrationTimeout)
 

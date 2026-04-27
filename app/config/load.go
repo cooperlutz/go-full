@@ -1,7 +1,7 @@
 package config
 
 import (
-	"log"
+	"log/slog"
 	"os"
 	"strconv"
 	"time"
@@ -20,7 +20,7 @@ func (e ErrEnvVarValueMissing) Error() string {
 func LoadEnvironmentVariables() (map[string]string, error) {
 	keyVals := map[string]string{
 		// Observability
-		"OBSERVE_TRACE_ENDPOINT": os.Getenv("OBSERVE_TRACE_ENDPOINT"),
+		"OBSERVE_OTLP_HTTP_ENDPOINT": os.Getenv("OBSERVE_OTLP_HTTP_ENDPOINT"),
 		// HTTP Server
 		"HTTP_PORT": os.Getenv("HTTP_PORT"),
 		// Database
@@ -60,7 +60,7 @@ func LoadConfigFromEnvVars() (Config, error) {
 			Port: loadedEnvVars["HTTP_PORT"],
 		},
 		Telemetry: Telemetry{
-			TraceEndpoint: loadedEnvVars["OBSERVE_TRACE_ENDPOINT"],
+			OTLPHttpEndpoint: loadedEnvVars["OBSERVE_OTLP_HTTP_ENDPOINT"],
 		},
 		DB: DB{
 			Type:     loadedEnvVars["DB_TYPE"],
@@ -77,7 +77,7 @@ func LoadConfigFromEnvVars() (Config, error) {
 			RefreshTokenTTL:               time.Hour * 24 * 7,              //nolint:mnd // 7 days
 		},
 	}
-	log.Printf("Loaded config: %+v\n", loadedCfg.String())
+	slog.Info("Loaded config: " + loadedCfg.String())
 
 	return loadedCfg, nil
 }
