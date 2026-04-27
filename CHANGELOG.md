@@ -1,3 +1,9 @@
+## v0.1.88 (2026-04-27)
+
+### Fix
+
+- **deps**: bump goreleaser/goreleaser-action from 7.1.0 to 7.2.1 in the all-github-actions group (#261)
+
 ## v0.1.87 (2026-04-27)
 
 ### Fix
