@@ -1,25 +1,25 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse } from 'msw'
 
 const authHandlers = [
-  http.post("/auth/register", () => {
+  http.post('/auth/register', () => {
     return HttpResponse.json({
-      id: "1f23abc456def7890ghi",
-      email: "email@example.com",
-    });
+      id: '1f23abc456def7890ghi',
+      email: 'email@example.com',
+    })
   }),
 
-  http.post("/auth/login", () => {
+  http.post('/auth/login', () => {
     return HttpResponse.json({
-      accessToken: "mocked-access-token",
-      refreshToken: "mocked-refresh-token",
-    });
+      accessToken: 'mocked-access-token',
+      refreshToken: 'mocked-refresh-token',
+    })
   }),
 
-  http.post("/auth/refresh", () => {
+  http.post('/auth/refresh', () => {
     return HttpResponse.json({
-      accessToken: "mocked-access-token",
-    });
+      accessToken: 'mocked-access-token',
+    })
   }),
-];
+]
 
-export default authHandlers;
+export default authHandlers

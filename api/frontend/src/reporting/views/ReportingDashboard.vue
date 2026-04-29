@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
-import MetricsStats from "../components/MetricsStats.vue";
+import PageHeader from '~/app/layouts/PageLayouts/PageHeader.vue'
+import MetricsStats from '../components/MetricsStats.vue'
 </script>
 
 <template>

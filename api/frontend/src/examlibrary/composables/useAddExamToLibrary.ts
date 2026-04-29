@@ -1,42 +1,38 @@
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import { BackendConfig } from "../config";
-import {
-  ExamlibraryApi,
-  type PostAddExamToLibraryRequest,
-  type Exam,
-} from "../services";
+import { BackendConfig } from '../config'
+import { ExamlibraryApi, type PostAddExamToLibraryRequest, type Exam } from '../services'
 
-const examLibraryAPI = new ExamlibraryApi(BackendConfig);
+const examLibraryAPI = new ExamlibraryApi(BackendConfig)
 
 /**
  * Composable for adding a single exam to the library
  **/
 export function useAddExamToLibrary() {
-  const error = ref<Error | null>(null);
-  const loading = ref(false);
+  const error = ref<Error | null>(null)
+  const loading = ref(false)
 
   const addExam = async (exam: Exam) => {
-    loading.value = true;
-    error.value = null;
+    loading.value = true
+    error.value = null
     try {
       const req: PostAddExamToLibraryRequest = {
         exam,
-      };
-      const addedExam = await examLibraryAPI.postAddExamToLibrary(req);
-      return addedExam;
+      }
+      const addedExam = await examLibraryAPI.postAddExamToLibrary(req)
+      return addedExam
     } catch (err) {
       if (err instanceof Error) {
-        error.value = err;
+        error.value = err
       }
     } finally {
-      loading.value = false;
+      loading.value = false
     }
-  };
+  }
 
   return {
     addExam,
     error,
     loading,
-  };
+  }
 }

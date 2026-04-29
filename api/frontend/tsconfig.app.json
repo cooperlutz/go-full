@@ -1,13 +1,6 @@
 {
   "extends": ["@vue/tsconfig/tsconfig.dom.json"],
-  "include": [
-    "env.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "tests/*.ts",
-    "document-load.ts",
-    "test/mocks/**/*.ts"
-  ],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tests/*.ts", "document-load.ts", "test/mocks/**/*.ts"],
   "exclude": ["public/*", "dist", "node_modules"],
   "compilerOptions": {
     "composite": true,

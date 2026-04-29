@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,47 +24,40 @@ export interface Answer {
    * @type {string}
    * @memberof Answer
    */
-  providedAnswer: string;
+  providedAnswer: string
 }
 
 /**
  * Check if a given object implements the Answer interface.
  */
 export function instanceOfAnswer(value: object): value is Answer {
-  if (!("providedAnswer" in value) || value["providedAnswer"] === undefined)
-    return false;
-  return true;
+  if (!('providedAnswer' in value) || value['providedAnswer'] === undefined) return false
+  return true
 }
 
 export function AnswerFromJSON(json: any): Answer {
-  return AnswerFromJSONTyped(json, false);
+  return AnswerFromJSONTyped(json, false)
 }
 
-export function AnswerFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Answer {
+export function AnswerFromJSONTyped(json: any, ignoreDiscriminator: boolean): Answer {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    providedAnswer: json["providedAnswer"],
-  };
+    providedAnswer: json['providedAnswer'],
+  }
 }
 
 export function AnswerToJSON(json: any): Answer {
-  return AnswerToJSONTyped(json, false);
+  return AnswerToJSONTyped(json, false)
 }
 
-export function AnswerToJSONTyped(
-  value?: Answer | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function AnswerToJSONTyped(value?: Answer | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    providedAnswer: value["providedAnswer"],
-  };
+    providedAnswer: value['providedAnswer'],
+  }
 }

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,55 +24,48 @@ export interface Metric {
    * @type {string}
    * @memberof Metric
    */
-  metricName: string;
+  metricName: string
   /**
    *
    * @type {number}
    * @memberof Metric
    */
-  metricValue?: number;
+  metricValue?: number
 }
 
 /**
  * Check if a given object implements the Metric interface.
  */
 export function instanceOfMetric(value: object): value is Metric {
-  if (!("metricName" in value) || value["metricName"] === undefined)
-    return false;
-  return true;
+  if (!('metricName' in value) || value['metricName'] === undefined) return false
+  return true
 }
 
 export function MetricFromJSON(json: any): Metric {
-  return MetricFromJSONTyped(json, false);
+  return MetricFromJSONTyped(json, false)
 }
 
-export function MetricFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Metric {
+export function MetricFromJSONTyped(json: any, ignoreDiscriminator: boolean): Metric {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    metricName: json["metricName"],
-    metricValue: json["metricValue"] == null ? undefined : json["metricValue"],
-  };
+    metricName: json['metricName'],
+    metricValue: json['metricValue'] == null ? undefined : json['metricValue'],
+  }
 }
 
 export function MetricToJSON(json: any): Metric {
-  return MetricToJSONTyped(json, false);
+  return MetricToJSONTyped(json, false)
 }
 
-export function MetricToJSONTyped(
-  value?: Metric | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function MetricToJSONTyped(value?: Metric | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    metricName: value["metricName"],
-    metricValue: value["metricValue"],
-  };
+    metricName: value['metricName'],
+    metricValue: value['metricValue'],
+  }
 }

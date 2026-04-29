@@ -4,9 +4,9 @@
  * If tampered with, API calls will return 401 and the middleware will redirect to /login.
  */
 export function useAuthState() {
-  const isAuthenticated = () => sessionStorage.getItem("auth") === "1";
-  const setAuthenticated = () => sessionStorage.setItem("auth", "1");
-  const clearAuthenticated = () => sessionStorage.removeItem("auth");
+  const isAuthenticated = () => sessionStorage.getItem('auth') === '1'
+  const setAuthenticated = () => sessionStorage.setItem('auth', '1')
+  const clearAuthenticated = () => sessionStorage.removeItem('auth')
 
-  return { isAuthenticated, setAuthenticated, clearAuthenticated };
+  return { isAuthenticated, setAuthenticated, clearAuthenticated }
 }

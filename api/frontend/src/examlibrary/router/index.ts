@@ -1,22 +1,22 @@
-import ExamLibrary from "../views/ExamLibrary.vue";
-import ExamOverview from "../views/ExamOverview.vue";
-import ExamCreator from "../views/ExamCreator.vue";
+import ExamLibrary from '../views/ExamLibrary.vue'
+import ExamOverview from '../views/ExamOverview.vue'
+import ExamCreator from '../views/ExamCreator.vue'
 
 const examLibraryRoutes = [
   {
-    path: "/exam-library",
+    path: '/exam-library',
     component: ExamLibrary,
   },
   {
-    path: "/exam-library/:id",
+    path: '/exam-library/:id',
     component: ExamOverview,
-    name: "ExamOverview",
+    name: 'ExamOverview',
   },
   {
-    path: "/exam-library/creator",
+    path: '/exam-library/creator',
     component: ExamCreator,
-    name: "ExamCreator",
+    name: 'ExamCreator',
   },
-];
+]
 
-export default examLibraryRoutes;
+export default examLibraryRoutes

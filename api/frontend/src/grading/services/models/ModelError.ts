@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,53 +24,47 @@ export interface ModelError {
    * @type {number}
    * @memberof ModelError
    */
-  code?: number;
+  code?: number
   /**
    *
    * @type {string}
    * @memberof ModelError
    */
-  message?: string;
+  message?: string
 }
 
 /**
  * Check if a given object implements the ModelError interface.
  */
 export function instanceOfModelError(value: object): value is ModelError {
-  return true;
+  return true
 }
 
 export function ModelErrorFromJSON(json: any): ModelError {
-  return ModelErrorFromJSONTyped(json, false);
+  return ModelErrorFromJSONTyped(json, false)
 }
 
-export function ModelErrorFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): ModelError {
+export function ModelErrorFromJSONTyped(json: any, ignoreDiscriminator: boolean): ModelError {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    code: json["code"] == null ? undefined : json["code"],
-    message: json["message"] == null ? undefined : json["message"],
-  };
+    code: json['code'] == null ? undefined : json['code'],
+    message: json['message'] == null ? undefined : json['message'],
+  }
 }
 
 export function ModelErrorToJSON(json: any): ModelError {
-  return ModelErrorToJSONTyped(json, false);
+  return ModelErrorToJSONTyped(json, false)
 }
 
-export function ModelErrorToJSONTyped(
-  value?: ModelError | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ModelErrorToJSONTyped(value?: ModelError | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    code: value["code"],
-    message: value["message"],
-  };
+    code: value['code'],
+    message: value['message'],
+  }
 }

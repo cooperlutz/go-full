@@ -12,14 +12,9 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
-import type { Question } from "./Question";
-import {
-  QuestionFromJSON,
-  QuestionFromJSONTyped,
-  QuestionToJSON,
-  QuestionToJSONTyped,
-} from "./Question";
+import { mapValues } from '../runtime'
+import type { Question } from './Question'
+import { QuestionFromJSON, QuestionFromJSONTyped, QuestionToJSON, QuestionToJSONTyped } from './Question'
 
 /**
  *
@@ -32,150 +27,122 @@ export interface Exam {
    * @type {string}
    * @memberof Exam
    */
-  examId: string;
+  examId: string
   /**
    *
    * @type {string}
    * @memberof Exam
    */
-  studentId: string;
+  studentId: string
   /**
    *
    * @type {string}
    * @memberof Exam
    */
-  libraryExamId?: string;
+  libraryExamId?: string
   /**
    *
    * @type {number}
    * @memberof Exam
    */
-  totalQuestions?: number;
+  totalQuestions?: number
   /**
    *
    * @type {number}
    * @memberof Exam
    */
-  answeredQuestions?: number;
+  answeredQuestions?: number
   /**
    *
    * @type {string}
    * @memberof Exam
    */
-  state: string;
+  state: string
   /**
    *
    * @type {Date}
    * @memberof Exam
    */
-  startedAt?: Date;
+  startedAt?: Date
   /**
    *
    * @type {Date}
    * @memberof Exam
    */
-  completedAt?: Date;
+  completedAt?: Date
   /**
    *
    * @type {number}
    * @memberof Exam
    */
-  timeLimitSeconds?: number;
+  timeLimitSeconds?: number
   /**
    *
    * @type {Date}
    * @memberof Exam
    */
-  timeOfTimeLimit?: Date;
+  timeOfTimeLimit?: Date
   /**
    *
    * @type {Array<Question>}
    * @memberof Exam
    */
-  questions?: Array<Question>;
+  questions?: Array<Question>
 }
 
 /**
  * Check if a given object implements the Exam interface.
  */
 export function instanceOfExam(value: object): value is Exam {
-  if (!("examId" in value) || value["examId"] === undefined) return false;
-  if (!("studentId" in value) || value["studentId"] === undefined) return false;
-  if (!("state" in value) || value["state"] === undefined) return false;
-  return true;
+  if (!('examId' in value) || value['examId'] === undefined) return false
+  if (!('studentId' in value) || value['studentId'] === undefined) return false
+  if (!('state' in value) || value['state'] === undefined) return false
+  return true
 }
 
 export function ExamFromJSON(json: any): Exam {
-  return ExamFromJSONTyped(json, false);
+  return ExamFromJSONTyped(json, false)
 }
 
-export function ExamFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Exam {
+export function ExamFromJSONTyped(json: any, ignoreDiscriminator: boolean): Exam {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    examId: json["examId"],
-    studentId: json["studentId"],
-    libraryExamId:
-      json["libraryExamId"] == null ? undefined : json["libraryExamId"],
-    totalQuestions:
-      json["totalQuestions"] == null ? undefined : json["totalQuestions"],
-    answeredQuestions:
-      json["answeredQuestions"] == null ? undefined : json["answeredQuestions"],
-    state: json["state"],
-    startedAt:
-      json["startedAt"] == null ? undefined : new Date(json["startedAt"]),
-    completedAt:
-      json["completedAt"] == null ? undefined : new Date(json["completedAt"]),
-    timeLimitSeconds:
-      json["timeLimitSeconds"] == null ? undefined : json["timeLimitSeconds"],
-    timeOfTimeLimit:
-      json["timeOfTimeLimit"] == null
-        ? undefined
-        : new Date(json["timeOfTimeLimit"]),
-    questions:
-      json["questions"] == null
-        ? undefined
-        : (json["questions"] as Array<any>).map(QuestionFromJSON),
-  };
+    examId: json['examId'],
+    studentId: json['studentId'],
+    libraryExamId: json['libraryExamId'] == null ? undefined : json['libraryExamId'],
+    totalQuestions: json['totalQuestions'] == null ? undefined : json['totalQuestions'],
+    answeredQuestions: json['answeredQuestions'] == null ? undefined : json['answeredQuestions'],
+    state: json['state'],
+    startedAt: json['startedAt'] == null ? undefined : new Date(json['startedAt']),
+    completedAt: json['completedAt'] == null ? undefined : new Date(json['completedAt']),
+    timeLimitSeconds: json['timeLimitSeconds'] == null ? undefined : json['timeLimitSeconds'],
+    timeOfTimeLimit: json['timeOfTimeLimit'] == null ? undefined : new Date(json['timeOfTimeLimit']),
+    questions: json['questions'] == null ? undefined : (json['questions'] as Array<any>).map(QuestionFromJSON),
+  }
 }
 
 export function ExamToJSON(json: any): Exam {
-  return ExamToJSONTyped(json, false);
+  return ExamToJSONTyped(json, false)
 }
 
-export function ExamToJSONTyped(
-  value?: Exam | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ExamToJSONTyped(value?: Exam | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    examId: value["examId"],
-    studentId: value["studentId"],
-    libraryExamId: value["libraryExamId"],
-    totalQuestions: value["totalQuestions"],
-    answeredQuestions: value["answeredQuestions"],
-    state: value["state"],
-    startedAt:
-      value["startedAt"] == null ? undefined : value["startedAt"].toISOString(),
-    completedAt:
-      value["completedAt"] == null
-        ? undefined
-        : value["completedAt"].toISOString(),
-    timeLimitSeconds: value["timeLimitSeconds"],
-    timeOfTimeLimit:
-      value["timeOfTimeLimit"] == null
-        ? undefined
-        : value["timeOfTimeLimit"].toISOString(),
-    questions:
-      value["questions"] == null
-        ? undefined
-        : (value["questions"] as Array<any>).map(QuestionToJSON),
-  };
+    examId: value['examId'],
+    studentId: value['studentId'],
+    libraryExamId: value['libraryExamId'],
+    totalQuestions: value['totalQuestions'],
+    answeredQuestions: value['answeredQuestions'],
+    state: value['state'],
+    startedAt: value['startedAt'] == null ? undefined : value['startedAt'].toISOString(),
+    completedAt: value['completedAt'] == null ? undefined : value['completedAt'].toISOString(),
+    timeLimitSeconds: value['timeLimitSeconds'],
+    timeOfTimeLimit: value['timeOfTimeLimit'] == null ? undefined : value['timeOfTimeLimit'].toISOString(),
+    questions: value['questions'] == null ? undefined : (value['questions'] as Array<any>).map(QuestionToJSON),
+  }
 }

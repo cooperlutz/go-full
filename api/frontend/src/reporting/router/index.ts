@@ -1,11 +1,11 @@
-import ReportingDashboard from "../views/ReportingDashboard.vue";
+import ReportingDashboard from '../views/ReportingDashboard.vue'
 
 const reportingRoutes = [
   {
-    path: "/reporting",
+    path: '/reporting',
     component: ReportingDashboard,
-    name: "ReportingDashboard",
+    name: 'ReportingDashboard',
   },
-];
+]
 
-export default reportingRoutes;
+export default reportingRoutes

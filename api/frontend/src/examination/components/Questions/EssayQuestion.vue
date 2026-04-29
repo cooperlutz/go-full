@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import RecordAnswerButton from "./RecordAnswerButton.vue";
-import { type Question } from "../../services";
+import RecordAnswerButton from './RecordAnswerButton.vue'
+import { type Question } from '../../services'
 
 const props = defineProps<{
-  question: Question;
-}>();
-const emit = defineEmits(["question-answered"]);
+  question: Question
+}>()
+const emit = defineEmits(['question-answered'])
 
-const providedAnswer = ref<string>("");
-providedAnswer.value = props.question.providedAnswer || "";
+const providedAnswer = ref<string>('')
+providedAnswer.value = props.question.providedAnswer || ''
 </script>
 
 <template>
@@ -21,11 +21,7 @@ providedAnswer.value = props.question.providedAnswer || "";
 
     <ul class="mt-6 space-y-4">
       <label class="cursor-pointer flex items-center space-x-2">
-        <textarea
-          class="textarea w-full my-2"
-          v-model="providedAnswer"
-          id="essay-question-input"
-        />
+        <textarea class="textarea w-full my-2" v-model="providedAnswer" id="essay-question-input" />
       </label>
     </ul>
     <RecordAnswerButton

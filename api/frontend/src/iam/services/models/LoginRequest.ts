@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,55 +24,49 @@ export interface LoginRequest {
    * @type {string}
    * @memberof LoginRequest
    */
-  email: string;
+  email: string
   /**
    *
    * @type {string}
    * @memberof LoginRequest
    */
-  password: string;
+  password: string
 }
 
 /**
  * Check if a given object implements the LoginRequest interface.
  */
 export function instanceOfLoginRequest(value: object): value is LoginRequest {
-  if (!("email" in value) || value["email"] === undefined) return false;
-  if (!("password" in value) || value["password"] === undefined) return false;
-  return true;
+  if (!('email' in value) || value['email'] === undefined) return false
+  if (!('password' in value) || value['password'] === undefined) return false
+  return true
 }
 
 export function LoginRequestFromJSON(json: any): LoginRequest {
-  return LoginRequestFromJSONTyped(json, false);
+  return LoginRequestFromJSONTyped(json, false)
 }
 
-export function LoginRequestFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): LoginRequest {
+export function LoginRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): LoginRequest {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    email: json["email"],
-    password: json["password"],
-  };
+    email: json['email'],
+    password: json['password'],
+  }
 }
 
 export function LoginRequestToJSON(json: any): LoginRequest {
-  return LoginRequestToJSONTyped(json, false);
+  return LoginRequestToJSONTyped(json, false)
 }
 
-export function LoginRequestToJSONTyped(
-  value?: LoginRequest | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function LoginRequestToJSONTyped(value?: LoginRequest | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    email: value["email"],
-    password: value["password"],
-  };
+    email: value['email'],
+    password: value['password'],
+  }
 }

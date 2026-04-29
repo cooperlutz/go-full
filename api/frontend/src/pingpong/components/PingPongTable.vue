@@ -1,30 +1,28 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted } from 'vue'
 
-import { type PingPongRaw } from "~/pingpong/services";
-import { useFindAllPingPongs } from "~/pingpong/composables/usePingPong";
+import { type PingPongRaw } from '~/pingpong/services'
+import { useFindAllPingPongs } from '~/pingpong/composables/usePingPong'
 
-const { error, loading, allPingPongs, fetchData } = useFindAllPingPongs();
+const { error, loading, allPingPongs, fetchData } = useFindAllPingPongs()
 
 // Define table headers explicitly
 const pingPongTableHeaders: Record<keyof PingPongRaw, string> = {
-  id: "Ping Pong ID",
-  message: "Message",
-  createdAt: "Created At",
-  updatedAt: "Updated At",
-  deletedAt: "Deleted At",
-  deleted: "Deleted",
-};
+  id: 'Ping Pong ID',
+  message: 'Message',
+  createdAt: 'Created At',
+  updatedAt: 'Updated At',
+  deletedAt: 'Deleted At',
+  deleted: 'Deleted',
+}
 
 onMounted(async () => {
-  await fetchData();
-});
+  await fetchData()
+})
 </script>
 
 <template>
-  <div
-    class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid"
-  >
+  <div class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid">
     <div class="card-body">
       <h2 class="card-title">Ping Pongs</h2>
       <p>All Ping Pongs</p>
@@ -49,8 +47,6 @@ onMounted(async () => {
       </tbody>
     </table>
     <div v-else-if="loading">Loading ping pongs...</div>
-    <div v-else-if="error" id="pingpong-table-error">
-      Error loading ping pongs: {{ error }}
-    </div>
+    <div v-else-if="error" id="pingpong-table-error">Error loading ping pongs: {{ error }}</div>
   </div>
 </template>

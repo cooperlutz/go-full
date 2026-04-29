@@ -1,9 +1,9 @@
-import { authRefreshMiddleware } from "~/app/utils/middleware";
+import { authRefreshMiddleware } from '~/app/utils/middleware'
 
-import { Configuration } from "../services/runtime";
+import { Configuration } from '../services/runtime'
 
 export const BackendConfig = new Configuration({
-  basePath: "/api/examlibrary/v1",
-  credentials: "include",
+  basePath: '/api/examlibrary/v1',
+  credentials: 'include',
   middleware: [authRefreshMiddleware],
-});
+})

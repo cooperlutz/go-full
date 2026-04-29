@@ -1,33 +1,31 @@
-import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
-import DashboardCard from "../DashboardCard.vue";
+import { describe, it, expect } from 'vitest'
+import { mount } from '@vue/test-utils'
+import DashboardCard from '../DashboardCard.vue'
 
-describe("DashboardCard.vue", () => {
-  it("renders the card title", () => {
+describe('DashboardCard.vue', () => {
+  it('renders the card title', () => {
     // Arrange & Act
-    const wrapper = mount(DashboardCard);
+    const wrapper = mount(DashboardCard)
 
     // Assert
-    expect(wrapper.find(".card-title").text()).toBe("Ping Pong");
-  });
+    expect(wrapper.find('.card-title').text()).toBe('Ping Pong')
+  })
 
-  it("contains the correct link", () => {
+  it('contains the correct link', () => {
     // Arrange & Act
-    const wrapper = mount(DashboardCard);
+    const wrapper = mount(DashboardCard)
 
     // Assert
-    const link = wrapper.find("a");
-    expect(link.exists()).toBe(true);
-    expect(link.attributes("href")).toBe("/ping-pong");
-  });
+    const link = wrapper.find('a')
+    expect(link.exists()).toBe(true)
+    expect(link.attributes('href')).toBe('/ping-pong')
+  })
 
-  it("renders the description paragraph", () => {
+  it('renders the description paragraph', () => {
     // Arrange & Act
-    const wrapper = mount(DashboardCard);
+    const wrapper = mount(DashboardCard)
 
     // Assert
-    expect(wrapper.find("p").text()).toContain(
-      "Application of the Ping Pong Module",
-    );
-  });
-});
+    expect(wrapper.find('p').text()).toContain('Application of the Ping Pong Module')
+  })
+})

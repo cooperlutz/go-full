@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,55 +24,49 @@ export interface UserProfile {
    * @type {string}
    * @memberof UserProfile
    */
-  email: string;
+  email: string
   /**
    *
    * @type {string}
    * @memberof UserProfile
    */
-  id: string;
+  id: string
 }
 
 /**
  * Check if a given object implements the UserProfile interface.
  */
 export function instanceOfUserProfile(value: object): value is UserProfile {
-  if (!("email" in value) || value["email"] === undefined) return false;
-  if (!("id" in value) || value["id"] === undefined) return false;
-  return true;
+  if (!('email' in value) || value['email'] === undefined) return false
+  if (!('id' in value) || value['id'] === undefined) return false
+  return true
 }
 
 export function UserProfileFromJSON(json: any): UserProfile {
-  return UserProfileFromJSONTyped(json, false);
+  return UserProfileFromJSONTyped(json, false)
 }
 
-export function UserProfileFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): UserProfile {
+export function UserProfileFromJSONTyped(json: any, ignoreDiscriminator: boolean): UserProfile {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    email: json["email"],
-    id: json["id"],
-  };
+    email: json['email'],
+    id: json['id'],
+  }
 }
 
 export function UserProfileToJSON(json: any): UserProfile {
-  return UserProfileToJSONTyped(json, false);
+  return UserProfileToJSONTyped(json, false)
 }
 
-export function UserProfileToJSONTyped(
-  value?: UserProfile | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function UserProfileToJSONTyped(value?: UserProfile | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    email: value["email"],
-    id: value["id"],
-  };
+    email: value['email'],
+    id: value['id'],
+  }
 }

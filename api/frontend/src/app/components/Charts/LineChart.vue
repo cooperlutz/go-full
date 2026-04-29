@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, type PropType } from "vue";
+import { defineComponent, type PropType } from 'vue'
 import {
   LineElement,
   PointElement,
@@ -9,23 +9,15 @@ import {
   LinearScale,
   Title,
   Tooltip,
-} from "chart.js";
-import { Line as LineChart } from "vue-chartjs";
+} from 'chart.js'
+import { Line as LineChart } from 'vue-chartjs'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-ChartJS.defaults.font.family = "JetBrains Mono";
+ChartJS.defaults.font.family = 'JetBrains Mono'
 
 export default defineComponent({
-  name: "LineChartComponent",
+  name: 'LineChartComponent',
   components: {
     // cast to a neutral type to avoid leaking vue-chartjs types into the SFC export
     LineChart: LineChart as unknown as Record<string, unknown>,
@@ -46,7 +38,7 @@ export default defineComponent({
       }),
     },
   },
-});
+})
 </script>
 
 <template>

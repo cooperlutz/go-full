@@ -1,4 +1,4 @@
 /* tslint:disable */
 
-export * from "./Metric";
-export * from "./ModelError";
+export * from './Metric'
+export * from './ModelError'

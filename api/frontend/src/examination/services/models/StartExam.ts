@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,56 +24,49 @@ export interface StartExam {
    * @type {string}
    * @memberof StartExam
    */
-  studentId: string;
+  studentId: string
   /**
    *
    * @type {string}
    * @memberof StartExam
    */
-  libraryExamId: string;
+  libraryExamId: string
 }
 
 /**
  * Check if a given object implements the StartExam interface.
  */
 export function instanceOfStartExam(value: object): value is StartExam {
-  if (!("studentId" in value) || value["studentId"] === undefined) return false;
-  if (!("libraryExamId" in value) || value["libraryExamId"] === undefined)
-    return false;
-  return true;
+  if (!('studentId' in value) || value['studentId'] === undefined) return false
+  if (!('libraryExamId' in value) || value['libraryExamId'] === undefined) return false
+  return true
 }
 
 export function StartExamFromJSON(json: any): StartExam {
-  return StartExamFromJSONTyped(json, false);
+  return StartExamFromJSONTyped(json, false)
 }
 
-export function StartExamFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): StartExam {
+export function StartExamFromJSONTyped(json: any, ignoreDiscriminator: boolean): StartExam {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    studentId: json["studentId"],
-    libraryExamId: json["libraryExamId"],
-  };
+    studentId: json['studentId'],
+    libraryExamId: json['libraryExamId'],
+  }
 }
 
 export function StartExamToJSON(json: any): StartExam {
-  return StartExamToJSONTyped(json, false);
+  return StartExamToJSONTyped(json, false)
 }
 
-export function StartExamToJSONTyped(
-  value?: StartExam | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function StartExamToJSONTyped(value?: StartExam | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    studentId: value["studentId"],
-    libraryExamId: value["libraryExamId"],
-  };
+    studentId: value['studentId'],
+    libraryExamId: value['libraryExamId'],
+  }
 }

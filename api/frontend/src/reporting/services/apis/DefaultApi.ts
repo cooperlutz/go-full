@@ -12,12 +12,12 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type { Metric } from "../models/index";
-import { MetricFromJSON, MetricToJSON } from "../models/index";
+import * as runtime from '../runtime'
+import type { Metric } from '../models/index'
+import { MetricFromJSON, MetricToJSON } from '../models/index'
 
 export interface GetMetricRequest {
-  metricName: string;
+  metricName: string
 }
 
 /**
@@ -37,14 +37,14 @@ export interface DefaultApiInterface {
   getMetricRaw(
     requestParameters: GetMetricRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Metric>>;
+  ): Promise<runtime.ApiResponse<Metric>>
 
   /**
    */
   getMetric(
     requestParameters: GetMetricRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Metric>;
+  ): Promise<Metric>
 }
 
 /**
@@ -57,36 +57,31 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetMetricRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Metric>> {
-    if (requestParameters["metricName"] == null) {
+    if (requestParameters['metricName'] == null) {
       throw new runtime.RequiredError(
-        "metricName",
+        'metricName',
         'Required parameter "metricName" was null or undefined when calling getMetric().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/v1/metrics/{metricName}`;
-    urlPath = urlPath.replace(
-      `{${"metricName"}}`,
-      encodeURIComponent(String(requestParameters["metricName"])),
-    );
+    let urlPath = `/v1/metrics/{metricName}`
+    urlPath = urlPath.replace(`{${'metricName'}}`, encodeURIComponent(String(requestParameters['metricName'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      MetricFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => MetricFromJSON(jsonValue))
   }
 
   /**
@@ -95,7 +90,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetMetricRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Metric> {
-    const response = await this.getMetricRaw(requestParameters, initOverrides);
-    return await response.value();
+    const response = await this.getMetricRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 }

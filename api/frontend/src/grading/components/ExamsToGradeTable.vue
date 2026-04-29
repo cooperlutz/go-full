@@ -1,26 +1,24 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-import { type Exam } from "../services";
+import { type Exam } from '../services'
 
 const props = defineProps<{
-  exams: Array<Exam>;
-}>();
+  exams: Array<Exam>
+}>()
 
-const router = useRouter();
+const router = useRouter()
 
-const examTableHeaders: Record<keyof Omit<Exam, "questions">, string> = {
-  examId: "Exam ID",
-  totalPointsEarned: "Total Points Earned",
-  totalPointsPossible: "Total Points Possible",
-  state: "Grading State",
-};
+const examTableHeaders: Record<keyof Omit<Exam, 'questions'>, string> = {
+  examId: 'Exam ID',
+  totalPointsEarned: 'Total Points Earned',
+  totalPointsPossible: 'Total Points Possible',
+  state: 'Grading State',
+}
 </script>
 
 <template>
-  <div
-    class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid"
-  >
+  <div class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid">
     <div class="card-body">
       <h2 class="card-title">Exams to Grade</h2>
     </div>
@@ -33,11 +31,7 @@ const examTableHeaders: Record<keyof Omit<Exam, "questions">, string> = {
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(exam, index) in props.exams"
-          :key="exam.examId"
-          class="hover:bg-base-300"
-        >
+        <tr v-for="(exam, index) in props.exams" :key="exam.examId" class="hover:bg-base-300">
           <td>{{ exam.examId }}</td>
           <td>{{ exam.totalPointsEarned }}</td>
           <td>{{ exam.totalPointsPossible }}</td>

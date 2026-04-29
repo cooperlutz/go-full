@@ -1,21 +1,21 @@
-import ExamGrading from "../views/ExamGrading.vue";
-import QuestionGrading from "../views/QuestionGrading.vue";
-import GradingView from "../views/GradingView.vue";
+import ExamGrading from '../views/ExamGrading.vue'
+import QuestionGrading from '../views/QuestionGrading.vue'
+import GradingView from '../views/GradingView.vue'
 
 const gradingRoutes = [
   {
-    path: "/grading/exam/:examId/question/:questionIndex",
+    path: '/grading/exam/:examId/question/:questionIndex',
     component: QuestionGrading,
   },
   {
-    path: "/grading/exam/:examId",
+    path: '/grading/exam/:examId',
     component: ExamGrading,
   },
   {
-    path: "/grading",
+    path: '/grading',
     component: GradingView,
-    name: "GradingView",
+    name: 'GradingView',
   },
-];
+]
 
-export default gradingRoutes;
+export default gradingRoutes

@@ -1,27 +1,24 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-import { type Question } from "../services";
+import { type Question } from '../services'
 
 const props = defineProps<{
-  questions: Array<Question>;
-}>();
+  questions: Array<Question>
+}>()
 
-const router = useRouter();
+const router = useRouter()
 
 const questionTableHeaders: Record<
-  keyof Omit<
-    Question,
-    "feedback" | "examId" | "providedAnswer" | "questionIndex"
-  >,
+  keyof Omit<Question, 'feedback' | 'examId' | 'providedAnswer' | 'questionIndex'>,
   string
 > = {
-  questionId: "Question ID",
-  questionType: "Question Type",
-  graded: "Graded",
-  pointsEarned: "Points Earned",
-  pointsPossible: "Points Possible",
-};
+  questionId: 'Question ID',
+  questionType: 'Question Type',
+  graded: 'Graded',
+  pointsEarned: 'Points Earned',
+  pointsPossible: 'Points Possible',
+}
 </script>
 
 <template>
@@ -38,11 +35,7 @@ const questionTableHeaders: Record<
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="(question, index) in props.questions"
-          :key="question.questionId"
-          class="hover:bg-base-300"
-        >
+        <tr v-for="(question, index) in props.questions" :key="question.questionId" class="hover:bg-base-300">
           <td>{{ question.questionId }}</td>
           <td>{{ question.questionType }}</td>
           <td>{{ question.graded }}</td>
@@ -51,12 +44,7 @@ const questionTableHeaders: Record<
           <td>
             <button
               class="btn btn-sm btn-primary"
-              @click="
-                () =>
-                  router.push(
-                    `/grading/exam/${question.examId}/question/${question.questionIndex}`,
-                  )
-              "
+              @click="() => router.push(`/grading/exam/${question.examId}/question/${question.questionIndex}`)"
               :id="`grading-grade-question-button-${index}`"
             >
               Grade

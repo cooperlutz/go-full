@@ -12,8 +12,8 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type { Exam, GradeQuestion, Question } from "../models/index";
+import * as runtime from '../runtime'
+import type { Exam, GradeQuestion, Question } from '../models/index'
 import {
   ExamFromJSON,
   ExamToJSON,
@@ -21,21 +21,21 @@ import {
   GradeQuestionToJSON,
   QuestionFromJSON,
   QuestionToJSON,
-} from "../models/index";
+} from '../models/index'
 
 export interface GetExamRequest {
-  examId: string;
+  examId: string
 }
 
 export interface GetExamQuestionRequest {
-  examId: string;
-  questionIndex: number;
+  examId: string
+  questionIndex: number
 }
 
 export interface GradeExamQuestionRequest {
-  examId: string;
-  questionIndex: number;
-  gradeQuestion: GradeQuestion;
+  examId: string
+  questionIndex: number
+  gradeQuestion: GradeQuestion
 }
 
 /**
@@ -55,14 +55,11 @@ export interface DefaultApiInterface {
   getExamRaw(
     requestParameters: GetExamRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Exam>>;
+  ): Promise<runtime.ApiResponse<Exam>>
 
   /**
    */
-  getExam(
-    requestParameters: GetExamRequest,
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Exam>;
+  getExam(requestParameters: GetExamRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Exam>
 
   /**
    *
@@ -75,14 +72,14 @@ export interface DefaultApiInterface {
   getExamQuestionRaw(
     requestParameters: GetExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Question>>;
+  ): Promise<runtime.ApiResponse<Question>>
 
   /**
    */
   getExamQuestion(
     requestParameters: GetExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Question>;
+  ): Promise<Question>
 
   /**
    *
@@ -92,13 +89,11 @@ export interface DefaultApiInterface {
    */
   getFindIncompleteExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Array<Exam>>>;
+  ): Promise<runtime.ApiResponse<Array<Exam>>>
 
   /**
    */
-  getFindIncompleteExams(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Array<Exam>>;
+  getFindIncompleteExams(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Exam>>
 
   /**
    *
@@ -112,14 +107,14 @@ export interface DefaultApiInterface {
   gradeExamQuestionRaw(
     requestParameters: GradeExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Exam>>;
+  ): Promise<runtime.ApiResponse<Exam>>
 
   /**
    */
   gradeExamQuestion(
     requestParameters: GradeExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Exam>;
+  ): Promise<Exam>
 }
 
 /**
@@ -132,36 +127,31 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetExamRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Exam>> {
-    if (requestParameters["examId"] == null) {
+    if (requestParameters['examId'] == null) {
       throw new runtime.RequiredError(
-        "examId",
+        'examId',
         'Required parameter "examId" was null or undefined when calling getExam().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/v1/exams/{examId}`;
-    urlPath = urlPath.replace(
-      `{${"examId"}}`,
-      encodeURIComponent(String(requestParameters["examId"])),
-    );
+    let urlPath = `/v1/exams/{examId}`
+    urlPath = urlPath.replace(`{${'examId'}}`, encodeURIComponent(String(requestParameters['examId'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      ExamFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => ExamFromJSON(jsonValue))
   }
 
   /**
@@ -170,8 +160,8 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetExamRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Exam> {
-    const response = await this.getExamRaw(requestParameters, initOverrides);
-    return await response.value();
+    const response = await this.getExamRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 
   /**
@@ -180,47 +170,39 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Question>> {
-    if (requestParameters["examId"] == null) {
+    if (requestParameters['examId'] == null) {
       throw new runtime.RequiredError(
-        "examId",
+        'examId',
         'Required parameter "examId" was null or undefined when calling getExamQuestion().',
-      );
+      )
     }
 
-    if (requestParameters["questionIndex"] == null) {
+    if (requestParameters['questionIndex'] == null) {
       throw new runtime.RequiredError(
-        "questionIndex",
+        'questionIndex',
         'Required parameter "questionIndex" was null or undefined when calling getExamQuestion().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}`;
-    urlPath = urlPath.replace(
-      `{${"examId"}}`,
-      encodeURIComponent(String(requestParameters["examId"])),
-    );
-    urlPath = urlPath.replace(
-      `{${"questionIndex"}}`,
-      encodeURIComponent(String(requestParameters["questionIndex"])),
-    );
+    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}`
+    urlPath = urlPath.replace(`{${'examId'}}`, encodeURIComponent(String(requestParameters['examId'])))
+    urlPath = urlPath.replace(`{${'questionIndex'}}`, encodeURIComponent(String(requestParameters['questionIndex'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      QuestionFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => QuestionFromJSON(jsonValue))
   }
 
   /**
@@ -229,11 +211,8 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GetExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Question> {
-    const response = await this.getExamQuestionRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.getExamQuestionRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 
   /**
@@ -241,34 +220,30 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
   async getFindIncompleteExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<Exam>>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/v1/exams/ungraded`;
+    let urlPath = `/v1/exams/ungraded`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      jsonValue.map(ExamFromJSON),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ExamFromJSON))
   }
 
   /**
    */
-  async getFindIncompleteExams(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Array<Exam>> {
-    const response = await this.getFindIncompleteExamsRaw(initOverrides);
-    return await response.value();
+  async getFindIncompleteExams(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Exam>> {
+    const response = await this.getFindIncompleteExamsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -277,57 +252,49 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GradeExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Exam>> {
-    if (requestParameters["examId"] == null) {
+    if (requestParameters['examId'] == null) {
       throw new runtime.RequiredError(
-        "examId",
+        'examId',
         'Required parameter "examId" was null or undefined when calling gradeExamQuestion().',
-      );
+      )
     }
 
-    if (requestParameters["questionIndex"] == null) {
+    if (requestParameters['questionIndex'] == null) {
       throw new runtime.RequiredError(
-        "questionIndex",
+        'questionIndex',
         'Required parameter "questionIndex" was null or undefined when calling gradeExamQuestion().',
-      );
+      )
     }
 
-    if (requestParameters["gradeQuestion"] == null) {
+    if (requestParameters['gradeQuestion'] == null) {
       throw new runtime.RequiredError(
-        "gradeQuestion",
+        'gradeQuestion',
         'Required parameter "gradeQuestion" was null or undefined when calling gradeExamQuestion().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json";
+    headerParameters['Content-Type'] = 'application/json'
 
-    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}/grade`;
-    urlPath = urlPath.replace(
-      `{${"examId"}}`,
-      encodeURIComponent(String(requestParameters["examId"])),
-    );
-    urlPath = urlPath.replace(
-      `{${"questionIndex"}}`,
-      encodeURIComponent(String(requestParameters["questionIndex"])),
-    );
+    let urlPath = `/v1/exams/{examId}/questions/{questionIndex}/grade`
+    urlPath = urlPath.replace(`{${'examId'}}`, encodeURIComponent(String(requestParameters['examId'])))
+    urlPath = urlPath.replace(`{${'questionIndex'}}`, encodeURIComponent(String(requestParameters['questionIndex'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "PATCH",
+        method: 'PATCH',
         headers: headerParameters,
         query: queryParameters,
-        body: GradeQuestionToJSON(requestParameters["gradeQuestion"]),
+        body: GradeQuestionToJSON(requestParameters['gradeQuestion']),
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      ExamFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => ExamFromJSON(jsonValue))
   }
 
   /**
@@ -336,10 +303,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: GradeExamQuestionRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Exam> {
-    const response = await this.gradeExamQuestionRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.gradeExamQuestionRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 }

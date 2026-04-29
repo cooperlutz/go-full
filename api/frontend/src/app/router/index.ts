@@ -1,14 +1,14 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
 
-import { useAuthState } from "../../iam/stores/useAuthState";
+import { useAuthState } from '../../iam/stores/useAuthState'
 // Layout imports
-import ShellComponent from "../layouts/ApplicationShell/ApplicationShell.vue";
+import ShellComponent from '../layouts/ApplicationShell/ApplicationShell.vue'
 // View imports
-import ComingSoon from "../views/ComingSoon.vue";
-import Error404View from "../views/Error404View.vue";
+import ComingSoon from '../views/ComingSoon.vue'
+import Error404View from '../views/Error404View.vue'
 // Route imports
-import INSECURE_ROUTES from "./insecure";
-import protectedRoutes from "./protected";
+import INSECURE_ROUTES from './insecure'
+import protectedRoutes from './protected'
 
 /**
  * @constant {Array} routes - The complete set of routes for the application.
@@ -16,24 +16,24 @@ import protectedRoutes from "./protected";
  */
 const routes = [
   {
-    path: "/",
+    path: '/',
     component: ShellComponent,
-    redirect: "/dashboard",
+    redirect: '/dashboard',
     meta: { requiresAuth: true },
     children: [...protectedRoutes],
   },
   {
-    path: "/coming-soon",
+    path: '/coming-soon',
     component: ComingSoon,
   },
   {
-    path: "/:pathMatch(.*)",
-    name: "not-found",
+    path: '/:pathMatch(.*)',
+    name: 'not-found',
     component: Error404View,
     meta: { requiresAuth: true },
   },
   ...INSECURE_ROUTES,
-];
+]
 
 /**
  * @module router
@@ -43,19 +43,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});
+})
 
 // Navigation guard to check authentication
 // This will redirect users to the login page if they try to access a route that requires authentication
 router.beforeEach((to, _from, next) => {
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated } = useAuthState()
   if (isAuthenticated()) {
-    next();
+    next()
   } else if (to.meta.requiresAuth) {
-    next("/login");
+    next('/login')
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

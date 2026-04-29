@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  * A Ping or Pong
  * @export
@@ -24,93 +24,79 @@ export interface PingPongRaw {
    * @type {string}
    * @memberof PingPongRaw
    */
-  id?: string;
+  id?: string
   /**
    * The message of the Ping or Pong
    * @type {string}
    * @memberof PingPongRaw
    */
-  message?: string;
+  message?: string
   /**
    * The creation timestamp of the entity
    * @type {Date}
    * @memberof PingPongRaw
    */
-  createdAt?: Date;
+  createdAt?: Date
   /**
    * The last update timestamp of the entity
    * @type {Date}
    * @memberof PingPongRaw
    */
-  updatedAt?: Date;
+  updatedAt?: Date
   /**
    * Indicates if the entity is deleted
    * @type {boolean}
    * @memberof PingPongRaw
    */
-  deleted?: boolean;
+  deleted?: boolean
   /**
    * The deletion timestamp of the entity, if applicable
    * @type {Date}
    * @memberof PingPongRaw
    */
-  deletedAt?: Date | null;
+  deletedAt?: Date | null
 }
 
 /**
  * Check if a given object implements the PingPongRaw interface.
  */
 export function instanceOfPingPongRaw(value: object): value is PingPongRaw {
-  return true;
+  return true
 }
 
 export function PingPongRawFromJSON(json: any): PingPongRaw {
-  return PingPongRawFromJSONTyped(json, false);
+  return PingPongRawFromJSONTyped(json, false)
 }
 
-export function PingPongRawFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): PingPongRaw {
+export function PingPongRawFromJSONTyped(json: any, ignoreDiscriminator: boolean): PingPongRaw {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    id: json["id"] == null ? undefined : json["id"],
-    message: json["message"] == null ? undefined : json["message"],
-    createdAt:
-      json["createdAt"] == null ? undefined : new Date(json["createdAt"]),
-    updatedAt:
-      json["updatedAt"] == null ? undefined : new Date(json["updatedAt"]),
-    deleted: json["deleted"] == null ? undefined : json["deleted"],
-    deletedAt:
-      json["deletedAt"] == null ? undefined : new Date(json["deletedAt"]),
-  };
+    id: json['id'] == null ? undefined : json['id'],
+    message: json['message'] == null ? undefined : json['message'],
+    createdAt: json['createdAt'] == null ? undefined : new Date(json['createdAt']),
+    updatedAt: json['updatedAt'] == null ? undefined : new Date(json['updatedAt']),
+    deleted: json['deleted'] == null ? undefined : json['deleted'],
+    deletedAt: json['deletedAt'] == null ? undefined : new Date(json['deletedAt']),
+  }
 }
 
 export function PingPongRawToJSON(json: any): PingPongRaw {
-  return PingPongRawToJSONTyped(json, false);
+  return PingPongRawToJSONTyped(json, false)
 }
 
-export function PingPongRawToJSONTyped(
-  value?: PingPongRaw | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function PingPongRawToJSONTyped(value?: PingPongRaw | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    id: value["id"],
-    message: value["message"],
-    createdAt:
-      value["createdAt"] == null ? undefined : value["createdAt"].toISOString(),
-    updatedAt:
-      value["updatedAt"] == null ? undefined : value["updatedAt"].toISOString(),
-    deleted: value["deleted"],
-    deletedAt:
-      value["deletedAt"] === null
-        ? null
-        : (value["deletedAt"] as any)?.toISOString(),
-  };
+    id: value['id'],
+    message: value['message'],
+    createdAt: value['createdAt'] == null ? undefined : value['createdAt'].toISOString(),
+    updatedAt: value['updatedAt'] == null ? undefined : value['updatedAt'].toISOString(),
+    deleted: value['deleted'],
+    deletedAt: value['deletedAt'] === null ? null : (value['deletedAt'] as any)?.toISOString(),
+  }
 }

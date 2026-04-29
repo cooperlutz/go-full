@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted } from 'vue'
 
-import SectionDivider from "~/app/components/SectionDivider/SectionDivider.vue";
+import SectionDivider from '~/app/components/SectionDivider/SectionDivider.vue'
 
-import { useGetMetrics } from "../composables/useReporting";
+import { useGetMetrics } from '../composables/useReporting'
 
 const {
   error,
@@ -13,11 +13,11 @@ const {
   numberOfExamsCompleted,
   numberOfExamsBeingGraded,
   numberOfExamsGradingCompleted,
-} = useGetMetrics();
+} = useGetMetrics()
 
 onMounted(async () => {
-  await getMetrics();
-});
+  await getMetrics()
+})
 </script>
 
 <template>
@@ -50,10 +50,7 @@ onMounted(async () => {
       </div>
     </div>
     <div class="stats shadow border border-secondary">
-      <div
-        id="metrics-num-exams-grading-completed"
-        class="stat place-items-center"
-      >
+      <div id="metrics-num-exams-grading-completed" class="stat place-items-center">
         <div class="stat-title">Number of Exams Grading Completed</div>
         <div class="stat-value">
           {{ numberOfExamsGradingCompleted?.metricValue || 0 }}
@@ -64,9 +61,7 @@ onMounted(async () => {
 
   <div v-else-if="loading">Loading metrics...</div>
 
-  <div v-else-if="error" id="metrics-error">
-    Error loading metrics: {{ error }}
-  </div>
+  <div v-else-if="error" id="metrics-error">Error loading metrics: {{ error }}</div>
 
   <SectionDivider />
 </template>

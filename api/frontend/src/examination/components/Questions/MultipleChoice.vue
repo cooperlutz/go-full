@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
 
-import RecordAnswerButton from "./RecordAnswerButton.vue";
-import { type Question } from "../../services";
+import RecordAnswerButton from './RecordAnswerButton.vue'
+import { type Question } from '../../services'
 
 const props = defineProps<{
-  question: Question;
-}>();
-const emit = defineEmits(["question-answered"]);
+  question: Question
+}>()
+const emit = defineEmits(['question-answered'])
 
-const selectedAnswer = ref<string>("");
-selectedAnswer.value = props.question.providedAnswer || "";
+const selectedAnswer = ref<string>('')
+selectedAnswer.value = props.question.providedAnswer || ''
 </script>
 
 <template>

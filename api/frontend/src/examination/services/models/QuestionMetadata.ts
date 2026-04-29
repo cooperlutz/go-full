@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,46 +24,40 @@ export interface QuestionMetadata {
    * @type {number}
    * @memberof QuestionMetadata
    */
-  questionIndex: number;
+  questionIndex: number
   /**
    *
    * @type {boolean}
    * @memberof QuestionMetadata
    */
-  answered: boolean;
+  answered: boolean
 }
 
 /**
  * Check if a given object implements the QuestionMetadata interface.
  */
-export function instanceOfQuestionMetadata(
-  value: object,
-): value is QuestionMetadata {
-  if (!("questionIndex" in value) || value["questionIndex"] === undefined)
-    return false;
-  if (!("answered" in value) || value["answered"] === undefined) return false;
-  return true;
+export function instanceOfQuestionMetadata(value: object): value is QuestionMetadata {
+  if (!('questionIndex' in value) || value['questionIndex'] === undefined) return false
+  if (!('answered' in value) || value['answered'] === undefined) return false
+  return true
 }
 
 export function QuestionMetadataFromJSON(json: any): QuestionMetadata {
-  return QuestionMetadataFromJSONTyped(json, false);
+  return QuestionMetadataFromJSONTyped(json, false)
 }
 
-export function QuestionMetadataFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): QuestionMetadata {
+export function QuestionMetadataFromJSONTyped(json: any, ignoreDiscriminator: boolean): QuestionMetadata {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    questionIndex: json["questionIndex"],
-    answered: json["answered"],
-  };
+    questionIndex: json['questionIndex'],
+    answered: json['answered'],
+  }
 }
 
 export function QuestionMetadataToJSON(json: any): QuestionMetadata {
-  return QuestionMetadataToJSONTyped(json, false);
+  return QuestionMetadataToJSONTyped(json, false)
 }
 
 export function QuestionMetadataToJSONTyped(
@@ -71,11 +65,11 @@ export function QuestionMetadataToJSONTyped(
   ignoreDiscriminator: boolean = false,
 ): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    questionIndex: value["questionIndex"],
-    answered: value["answered"],
-  };
+    questionIndex: value['questionIndex'],
+    answered: value['answered'],
+  }
 }

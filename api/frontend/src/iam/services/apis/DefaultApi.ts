@@ -12,13 +12,8 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type {
-  LoginRequest,
-  RegisterRequest,
-  RegisterResponse,
-  UserProfile,
-} from "../models/index";
+import * as runtime from '../runtime'
+import type { LoginRequest, RegisterRequest, RegisterResponse, UserProfile } from '../models/index'
 import {
   LoginRequestFromJSON,
   LoginRequestToJSON,
@@ -28,14 +23,14 @@ import {
   RegisterResponseToJSON,
   UserProfileFromJSON,
   UserProfileToJSON,
-} from "../models/index";
+} from '../models/index'
 
 export interface LoginUserRequest {
-  loginRequest: LoginRequest;
+  loginRequest: LoginRequest
 }
 
 export interface RegisterUserRequest {
-  registerRequest: RegisterRequest;
+  registerRequest: RegisterRequest
 }
 
 /**
@@ -53,13 +48,11 @@ export interface DefaultApiInterface {
    */
   getUserProfileRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<UserProfile>>;
+  ): Promise<runtime.ApiResponse<UserProfile>>
 
   /**
    */
-  getUserProfile(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<UserProfile>;
+  getUserProfile(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile>
 
   /**
    *
@@ -71,14 +64,14 @@ export interface DefaultApiInterface {
   loginUserRaw(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<void>>;
+  ): Promise<runtime.ApiResponse<void>>
 
   /**
    */
   loginUser(
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<void>;
+  ): Promise<void>
 
   /**
    *
@@ -86,15 +79,11 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  logoutUserRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<void>>;
+  logoutUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>
 
   /**
    */
-  logoutUser(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<void>;
+  logoutUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>
 
   /**
    *
@@ -102,15 +91,11 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  refreshTokenRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<void>>;
+  refreshTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>
 
   /**
    */
-  refreshToken(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<void>;
+  refreshToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>
 
   /**
    *
@@ -122,14 +107,14 @@ export interface DefaultApiInterface {
   registerUserRaw(
     requestParameters: RegisterUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<RegisterResponse>>;
+  ): Promise<runtime.ApiResponse<RegisterResponse>>
 
   /**
    */
   registerUser(
     requestParameters: RegisterUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<RegisterResponse>;
+  ): Promise<RegisterResponse>
 }
 
 /**
@@ -141,34 +126,30 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
   async getUserProfileRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<UserProfile>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/api/iam/profile`;
+    let urlPath = `/api/iam/profile`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserProfileFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => UserProfileFromJSON(jsonValue))
   }
 
   /**
    */
-  async getUserProfile(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<UserProfile> {
-    const response = await this.getUserProfileRaw(initOverrides);
-    return await response.value();
+  async getUserProfile(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserProfile> {
+    const response = await this.getUserProfileRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -177,33 +158,33 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    if (requestParameters["loginRequest"] == null) {
+    if (requestParameters['loginRequest'] == null) {
       throw new runtime.RequiredError(
-        "loginRequest",
+        'loginRequest',
         'Required parameter "loginRequest" was null or undefined when calling loginUser().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json";
+    headerParameters['Content-Type'] = 'application/json'
 
-    let urlPath = `/auth/login`;
+    let urlPath = `/auth/login`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: LoginRequestToJSON(requestParameters["loginRequest"]),
+        body: LoginRequestToJSON(requestParameters['loginRequest']),
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.VoidApiResponse(response);
+    return new runtime.VoidApiResponse(response)
   }
 
   /**
@@ -212,39 +193,35 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: LoginUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<void> {
-    await this.loginUserRaw(requestParameters, initOverrides);
+    await this.loginUserRaw(requestParameters, initOverrides)
   }
 
   /**
    */
-  async logoutUserRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<void>> {
-    const queryParameters: any = {};
+  async logoutUserRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/auth/logout`;
+    let urlPath = `/auth/logout`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.VoidApiResponse(response);
+    return new runtime.VoidApiResponse(response)
   }
 
   /**
    */
-  async logoutUser(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<void> {
-    await this.logoutUserRaw(initOverrides);
+  async logoutUser(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    await this.logoutUserRaw(initOverrides)
   }
 
   /**
@@ -252,31 +229,29 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
   async refreshTokenRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<void>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/auth/refresh`;
+    let urlPath = `/auth/refresh`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.VoidApiResponse(response);
+    return new runtime.VoidApiResponse(response)
   }
 
   /**
    */
-  async refreshToken(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<void> {
-    await this.refreshTokenRaw(initOverrides);
+  async refreshToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    await this.refreshTokenRaw(initOverrides)
   }
 
   /**
@@ -285,35 +260,33 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: RegisterUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<RegisterResponse>> {
-    if (requestParameters["registerRequest"] == null) {
+    if (requestParameters['registerRequest'] == null) {
       throw new runtime.RequiredError(
-        "registerRequest",
+        'registerRequest',
         'Required parameter "registerRequest" was null or undefined when calling registerUser().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json";
+    headerParameters['Content-Type'] = 'application/json'
 
-    let urlPath = `/auth/register`;
+    let urlPath = `/auth/register`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: RegisterRequestToJSON(requestParameters["registerRequest"]),
+        body: RegisterRequestToJSON(requestParameters['registerRequest']),
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      RegisterResponseFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => RegisterResponseFromJSON(jsonValue))
   }
 
   /**
@@ -322,10 +295,7 @@ export class DefaultApi extends runtime.BaseAPI implements DefaultApiInterface {
     requestParameters: RegisterUserRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<RegisterResponse> {
-    const response = await this.registerUserRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.registerUserRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 }

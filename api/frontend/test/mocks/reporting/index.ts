@@ -1,3 +1,3 @@
-import metricsHandlers from "./metrics";
+import metricsHandlers from './metrics'
 
-export const reportingMockHandlers = [...metricsHandlers];
+export const reportingMockHandlers = [...metricsHandlers]

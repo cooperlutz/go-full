@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  * A PingPong data trend
  * @export
@@ -24,55 +24,47 @@ export interface Trend {
    * @type {Array<string>}
    * @memberof Trend
    */
-  dimensionKeys?: Array<string>;
+  dimensionKeys?: Array<string>
   /**
    * values associated with the trend
    * @type {Array<number>}
    * @memberof Trend
    */
-  dimensionValues?: Array<number>;
+  dimensionValues?: Array<number>
 }
 
 /**
  * Check if a given object implements the Trend interface.
  */
 export function instanceOfTrend(value: object): value is Trend {
-  return true;
+  return true
 }
 
 export function TrendFromJSON(json: any): Trend {
-  return TrendFromJSONTyped(json, false);
+  return TrendFromJSONTyped(json, false)
 }
 
-export function TrendFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Trend {
+export function TrendFromJSONTyped(json: any, ignoreDiscriminator: boolean): Trend {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    dimensionKeys:
-      json["dimensionKeys"] == null ? undefined : json["dimensionKeys"],
-    dimensionValues:
-      json["dimensionValues"] == null ? undefined : json["dimensionValues"],
-  };
+    dimensionKeys: json['dimensionKeys'] == null ? undefined : json['dimensionKeys'],
+    dimensionValues: json['dimensionValues'] == null ? undefined : json['dimensionValues'],
+  }
 }
 
 export function TrendToJSON(json: any): Trend {
-  return TrendToJSONTyped(json, false);
+  return TrendToJSONTyped(json, false)
 }
 
-export function TrendToJSONTyped(
-  value?: Trend | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function TrendToJSONTyped(value?: Trend | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    dimensionKeys: value["dimensionKeys"],
-    dimensionValues: value["dimensionValues"],
-  };
+    dimensionKeys: value['dimensionKeys'],
+    dimensionValues: value['dimensionValues'],
+  }
 }

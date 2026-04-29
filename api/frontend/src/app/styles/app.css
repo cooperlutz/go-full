@@ -1,6 +1,6 @@
 /* imports */
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import 'tailwindcss';
 
 @plugin "daisyui" {
   themes:
@@ -11,15 +11,15 @@
 /* font customization */
 @layer base {
   body {
-    font-family: "JetBrains Mono", sans-serif;
+    font-family: 'JetBrains Mono', sans-serif;
   }
 }
 
 @plugin "daisyui/theme" {
-  name: "pastel";
+  name: 'pastel';
   default: true;
   prefersdark: false;
-  color-scheme: "light";
+  color-scheme: 'light';
   --color-base-100: oklch(100% 0 0);
   --color-base-200: oklch(97% 0 0);
   --color-base-300: oklch(94% 0 0);
