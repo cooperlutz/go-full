@@ -1,3 +1,3 @@
 /* tslint:disable */
 
-export * from "./ExamlibraryApi";
+export * from './ExamlibraryApi'

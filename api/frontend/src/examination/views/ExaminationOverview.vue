@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute } from 'vue-router'
 
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+import PageHeader from '~/app/layouts/PageLayouts/PageHeader.vue'
 
-const route = useRoute();
-const examId = route.params.id as string;
+const route = useRoute()
+const examId = route.params.id as string
 </script>
 
 <template>

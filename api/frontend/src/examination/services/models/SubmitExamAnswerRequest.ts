@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,41 +24,31 @@ export interface SubmitExamAnswerRequest {
    * @type {string}
    * @memberof SubmitExamAnswerRequest
    */
-  providedAnswer?: string;
+  providedAnswer?: string
 }
 
 /**
  * Check if a given object implements the SubmitExamAnswerRequest interface.
  */
-export function instanceOfSubmitExamAnswerRequest(
-  value: object,
-): value is SubmitExamAnswerRequest {
-  return true;
+export function instanceOfSubmitExamAnswerRequest(value: object): value is SubmitExamAnswerRequest {
+  return true
 }
 
-export function SubmitExamAnswerRequestFromJSON(
-  json: any,
-): SubmitExamAnswerRequest {
-  return SubmitExamAnswerRequestFromJSONTyped(json, false);
+export function SubmitExamAnswerRequestFromJSON(json: any): SubmitExamAnswerRequest {
+  return SubmitExamAnswerRequestFromJSONTyped(json, false)
 }
 
-export function SubmitExamAnswerRequestFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): SubmitExamAnswerRequest {
+export function SubmitExamAnswerRequestFromJSONTyped(json: any, ignoreDiscriminator: boolean): SubmitExamAnswerRequest {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    providedAnswer:
-      json["providedAnswer"] == null ? undefined : json["providedAnswer"],
-  };
+    providedAnswer: json['providedAnswer'] == null ? undefined : json['providedAnswer'],
+  }
 }
 
-export function SubmitExamAnswerRequestToJSON(
-  json: any,
-): SubmitExamAnswerRequest {
-  return SubmitExamAnswerRequestToJSONTyped(json, false);
+export function SubmitExamAnswerRequestToJSON(json: any): SubmitExamAnswerRequest {
+  return SubmitExamAnswerRequestToJSONTyped(json, false)
 }
 
 export function SubmitExamAnswerRequestToJSONTyped(
@@ -66,10 +56,10 @@ export function SubmitExamAnswerRequestToJSONTyped(
   ignoreDiscriminator: boolean = false,
 ): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    providedAnswer: value["providedAnswer"],
-  };
+    providedAnswer: value['providedAnswer'],
+  }
 }

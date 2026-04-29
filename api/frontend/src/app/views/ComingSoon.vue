@@ -1,40 +1,23 @@
 <template>
   <!-- this part not done by copilot -->
   <div>
-    if you're questioning what the deal with this page is and why it is the way
-    it is... gh copilot was prompted to build out the entire coming soon page,
-    so here it is...
+    if you're questioning what the deal with this page is and why it is the way it is... gh copilot was prompted to
+    build out the entire coming soon page, so here it is...
   </div>
   <!-- end -->
 
   <div class="coming-soon-container">
     <div class="pingpong-logo">
       <svg width="80" height="80" viewBox="0 0 80 80">
-        <circle
-          cx="40"
-          cy="40"
-          r="38"
-          fill="#00C896"
-          stroke="#222"
-          stroke-width="4"
-        />
+        <circle cx="40" cy="40" r="38" fill="#00C896" stroke="#222" stroke-width="4" />
         <rect x="30" y="60" width="20" height="10" rx="5" fill="#222" />
-        <circle
-          cx="55"
-          cy="35"
-          r="10"
-          fill="#fff"
-          stroke="#222"
-          stroke-width="2"
-        />
+        <circle cx="55" cy="35" r="10" fill="#fff" stroke="#222" stroke-width="2" />
       </svg>
     </div>
     <h1>Coming Soon</h1>
     <p class="subtitle">
       This page is still warming up its paddle.<br />
-      <span class="pingpong-joke"
-        >Our devs are busy perfecting their backhand.</span
-      >
+      <span class="pingpong-joke">Our devs are busy perfecting their backhand.</span>
     </p>
     <div class="pingpong-animation">
       <div class="ball"></div>
@@ -55,7 +38,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #00c896 0%, #00796b 100%);
   color: #222;
-  font-family: "Montserrat", "Arial", sans-serif;
+  font-family: 'Montserrat', 'Arial', sans-serif;
   text-align: center;
   position: relative;
 }

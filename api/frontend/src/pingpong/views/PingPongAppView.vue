@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
-import PingPongButtons from "../components/PingPongButtons/PingPongButtons.vue";
-import PingPongInput from "../components/PingPongInput.vue";
-import PingPongLookup from "../components/PingPongLookup.vue";
+import PageHeader from '~/app/layouts/PageLayouts/PageHeader.vue'
+import PingPongButtons from '../components/PingPongButtons/PingPongButtons.vue'
+import PingPongInput from '../components/PingPongInput.vue'
+import PingPongLookup from '../components/PingPongLookup.vue'
 </script>
 
 <template>

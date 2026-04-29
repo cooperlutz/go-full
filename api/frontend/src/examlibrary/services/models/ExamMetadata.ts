@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  * An Exam entity containing exam metadata
  * @export
@@ -24,69 +24,63 @@ export interface ExamMetadata {
    * @type {string}
    * @memberof ExamMetadata
    */
-  id?: string;
+  id?: string
   /**
    * The name of the Exam
    * @type {string}
    * @memberof ExamMetadata
    */
-  name?: string;
+  name?: string
   /**
    * The grade level for which the exam is intended
    * @type {number}
    * @memberof ExamMetadata
    */
-  gradeLevel?: number;
+  gradeLevel?: number
   /**
    * The time limit for the exam in seconds
    * @type {number}
    * @memberof ExamMetadata
    */
-  timeLimit?: number;
+  timeLimit?: number
 }
 
 /**
  * Check if a given object implements the ExamMetadata interface.
  */
 export function instanceOfExamMetadata(value: object): value is ExamMetadata {
-  return true;
+  return true
 }
 
 export function ExamMetadataFromJSON(json: any): ExamMetadata {
-  return ExamMetadataFromJSONTyped(json, false);
+  return ExamMetadataFromJSONTyped(json, false)
 }
 
-export function ExamMetadataFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): ExamMetadata {
+export function ExamMetadataFromJSONTyped(json: any, ignoreDiscriminator: boolean): ExamMetadata {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    id: json["id"] == null ? undefined : json["id"],
-    name: json["name"] == null ? undefined : json["name"],
-    gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
-    timeLimit: json["timeLimit"] == null ? undefined : json["timeLimit"],
-  };
+    id: json['id'] == null ? undefined : json['id'],
+    name: json['name'] == null ? undefined : json['name'],
+    gradeLevel: json['gradeLevel'] == null ? undefined : json['gradeLevel'],
+    timeLimit: json['timeLimit'] == null ? undefined : json['timeLimit'],
+  }
 }
 
 export function ExamMetadataToJSON(json: any): ExamMetadata {
-  return ExamMetadataToJSONTyped(json, false);
+  return ExamMetadataToJSONTyped(json, false)
 }
 
-export function ExamMetadataToJSONTyped(
-  value?: ExamMetadata | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ExamMetadataToJSONTyped(value?: ExamMetadata | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    id: value["id"],
-    name: value["name"],
-    gradeLevel: value["gradeLevel"],
-    timeLimit: value["timeLimit"],
-  };
+    id: value['id'],
+    name: value['name'],
+    gradeLevel: value['gradeLevel'],
+    timeLimit: value['timeLimit'],
+  }
 }

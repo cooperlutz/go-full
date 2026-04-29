@@ -17,41 +17,35 @@
  * @export
  */
 export const QuestionType = {
-  MultipleChoice: "multiple-choice",
-  ShortAnswer: "short-answer",
-  Essay: "essay",
-} as const;
-export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType];
+  MultipleChoice: 'multiple-choice',
+  ShortAnswer: 'short-answer',
+  Essay: 'essay',
+} as const
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
 
 export function instanceOfQuestionType(value: any): boolean {
   for (const key in QuestionType) {
     if (Object.prototype.hasOwnProperty.call(QuestionType, key)) {
       if (QuestionType[key as keyof typeof QuestionType] === value) {
-        return true;
+        return true
       }
     }
   }
-  return false;
+  return false
 }
 
 export function QuestionTypeFromJSON(json: any): QuestionType {
-  return QuestionTypeFromJSONTyped(json, false);
+  return QuestionTypeFromJSONTyped(json, false)
 }
 
-export function QuestionTypeFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): QuestionType {
-  return json as QuestionType;
+export function QuestionTypeFromJSONTyped(json: any, ignoreDiscriminator: boolean): QuestionType {
+  return json as QuestionType
 }
 
 export function QuestionTypeToJSON(value?: QuestionType | null): any {
-  return value as any;
+  return value as any
 }
 
-export function QuestionTypeToJSONTyped(
-  value: any,
-  ignoreDiscriminator: boolean,
-): QuestionType {
-  return value as QuestionType;
+export function QuestionTypeToJSONTyped(value: any, ignoreDiscriminator: boolean): QuestionType {
+  return value as QuestionType
 }

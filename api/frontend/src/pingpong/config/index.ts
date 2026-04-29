@@ -1,9 +1,9 @@
-import { authRefreshMiddleware } from "~/app/utils/middleware";
+import { authRefreshMiddleware } from '~/app/utils/middleware'
 
-import { Configuration } from "~/pingpong/services/runtime";
+import { Configuration } from '~/pingpong/services/runtime'
 
 export const BackendConfig = new Configuration({
-  basePath: "/api/pingpong/v1",
-  credentials: "include",
+  basePath: '/api/pingpong/v1',
+  credentials: 'include',
   middleware: [authRefreshMiddleware],
-});
+})

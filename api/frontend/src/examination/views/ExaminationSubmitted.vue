@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+import PageHeader from '~/app/layouts/PageLayouts/PageHeader.vue'
 </script>
 
 <template>

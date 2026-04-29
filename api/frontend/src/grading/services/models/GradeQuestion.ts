@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,55 +24,49 @@ export interface GradeQuestion {
    * @type {number}
    * @memberof GradeQuestion
    */
-  points: number;
+  points: number
   /**
    *
    * @type {string}
    * @memberof GradeQuestion
    */
-  feedback: string;
+  feedback: string
 }
 
 /**
  * Check if a given object implements the GradeQuestion interface.
  */
 export function instanceOfGradeQuestion(value: object): value is GradeQuestion {
-  if (!("points" in value) || value["points"] === undefined) return false;
-  if (!("feedback" in value) || value["feedback"] === undefined) return false;
-  return true;
+  if (!('points' in value) || value['points'] === undefined) return false
+  if (!('feedback' in value) || value['feedback'] === undefined) return false
+  return true
 }
 
 export function GradeQuestionFromJSON(json: any): GradeQuestion {
-  return GradeQuestionFromJSONTyped(json, false);
+  return GradeQuestionFromJSONTyped(json, false)
 }
 
-export function GradeQuestionFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): GradeQuestion {
+export function GradeQuestionFromJSONTyped(json: any, ignoreDiscriminator: boolean): GradeQuestion {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    points: json["points"],
-    feedback: json["feedback"],
-  };
+    points: json['points'],
+    feedback: json['feedback'],
+  }
 }
 
 export function GradeQuestionToJSON(json: any): GradeQuestion {
-  return GradeQuestionToJSONTyped(json, false);
+  return GradeQuestionToJSONTyped(json, false)
 }
 
-export function GradeQuestionToJSONTyped(
-  value?: GradeQuestion | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function GradeQuestionToJSONTyped(value?: GradeQuestion | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    points: value["points"],
-    feedback: value["feedback"],
-  };
+    points: value['points'],
+    feedback: value['feedback'],
+  }
 }

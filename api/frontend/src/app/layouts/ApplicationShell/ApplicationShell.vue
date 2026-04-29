@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, h } from "vue";
+import { ref, h } from 'vue'
 import {
   Icon,
   LayoutDashboard,
@@ -10,33 +10,33 @@ import {
   User,
   Apple,
   ChartBarStacked,
-} from "lucide-vue-next";
-import { batBall } from "@lucide/lab";
+} from 'lucide-vue-next'
+import { batBall } from '@lucide/lab'
 
-import Footer from "./Footer/FooterPrimary.vue";
-import LogoName from "./NavBar/NavBarLogo.vue";
-import CONFIG from "../../config";
+import Footer from './Footer/FooterPrimary.vue'
+import LogoName from './NavBar/NavBarLogo.vue'
+import CONFIG from '../../config'
 
 // Create a functional component for the custom icon
-const PingPongIcon = () => h(Icon, { name: "ping-pong", iconNode: batBall });
+const PingPongIcon = () => h(Icon, { name: 'ping-pong', iconNode: batBall })
 
 type SidebarItem = {
-  name: string;
-  url?: string;
-  icon?: LucideIcon;
-};
+  name: string
+  url?: string
+  icon?: LucideIcon
+}
 
 const topSidebarItems = ref<SidebarItem[]>([
-  { name: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { name: "Ping Pong", url: "/ping-pong", icon: PingPongIcon },
-  { name: "Exam Library", url: "/exam-library", icon: LibraryBig },
-  { name: "Grading", url: "/grading", icon: Apple },
-  { name: "Reporting", url: "/reporting", icon: ChartBarStacked },
-]);
+  { name: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+  { name: 'Ping Pong', url: '/ping-pong', icon: PingPongIcon },
+  { name: 'Exam Library', url: '/exam-library', icon: LibraryBig },
+  { name: 'Grading', url: '/grading', icon: Apple },
+  { name: 'Reporting', url: '/reporting', icon: ChartBarStacked },
+])
 const bottomSidebarItems = ref<SidebarItem[]>([
-  { name: "Docs", url: CONFIG.DOCS_URL, icon: File },
-  { name: "Profile", url: "/profile", icon: User },
-]);
+  { name: 'Docs', url: CONFIG.DOCS_URL, icon: File },
+  { name: 'Profile', url: '/profile', icon: User },
+])
 </script>
 
 <template>
@@ -46,11 +46,7 @@ const bottomSidebarItems = ref<SidebarItem[]>([
       <div id="main-content" class="drawer-content">
         <!-- Navbar -->
         <nav class="navbar w-full bg-info fixed top-0 z-50">
-          <label
-            for="my-drawer-4"
-            aria-label="open sidebar"
-            class="btn btn-square btn-ghost"
-          >
+          <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
             <!-- Sidebar toggle icon -->
             <PanelLeftClose />
           </label>
@@ -71,24 +67,14 @@ const bottomSidebarItems = ref<SidebarItem[]>([
       </div>
 
       <div class="drawer-side is-drawer-close:overflow-visible">
-        <label
-          for="my-drawer-4"
-          aria-label="close sidebar"
-          class="drawer-overlay"
-        ></label>
-        <div
-          class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-64"
-        >
+        <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-64">
           <!-- Sidebar content here -->
           <ul id="sidebar-top" class="menu w-full grow">
             <li v-for="item in topSidebarItems" :key="item.name">
               <a :href="item.url" class="hover:link">
                 <button>
-                  <component
-                    :is="item.icon"
-                    :size="16"
-                    class="h-6 w-6"
-                  ></component>
+                  <component :is="item.icon" :size="16" class="h-6 w-6"></component>
                 </button>
                 <span class="is-drawer-close:hidden">
                   {{ item.name }}
@@ -101,11 +87,7 @@ const bottomSidebarItems = ref<SidebarItem[]>([
             <li v-for="item in bottomSidebarItems" :key="item.name">
               <a :href="item.url" class="hover:link">
                 <button>
-                  <component
-                    :is="item.icon"
-                    :size="16"
-                    class="h-6 w-6"
-                  ></component>
+                  <component :is="item.icon" :size="16" class="h-6 w-6"></component>
                 </button>
                 <span class="is-drawer-close:hidden">
                   {{ item.name }}

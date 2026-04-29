@@ -12,21 +12,16 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type { Exam, ExamMetadata } from "../models/index";
-import {
-  ExamFromJSON,
-  ExamToJSON,
-  ExamMetadataFromJSON,
-  ExamMetadataToJSON,
-} from "../models/index";
+import * as runtime from '../runtime'
+import type { Exam, ExamMetadata } from '../models/index'
+import { ExamFromJSON, ExamToJSON, ExamMetadataFromJSON, ExamMetadataToJSON } from '../models/index'
 
 export interface GetFindOneByIDRequest {
-  examID: string;
+  examID: string
 }
 
 export interface PostAddExamToLibraryRequest {
-  exam: Exam;
+  exam: Exam
 }
 
 /**
@@ -45,15 +40,13 @@ export interface ExamlibraryApiInterface {
    */
   getFindAllExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Array<ExamMetadata>>>;
+  ): Promise<runtime.ApiResponse<Array<ExamMetadata>>>
 
   /**
    * Retrieve all Exams
    * Get all Exams
    */
-  getFindAllExams(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Array<ExamMetadata>>;
+  getFindAllExams(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ExamMetadata>>
 
   /**
    * Retrieve a single Exam by its ID
@@ -66,7 +59,7 @@ export interface ExamlibraryApiInterface {
   getFindOneByIDRaw(
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Exam>>;
+  ): Promise<runtime.ApiResponse<Exam>>
 
   /**
    * Retrieve a single Exam by its ID
@@ -75,7 +68,7 @@ export interface ExamlibraryApiInterface {
   getFindOneByID(
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Exam>;
+  ): Promise<Exam>
 
   /**
    * Create a new Exam with the provided details
@@ -88,7 +81,7 @@ export interface ExamlibraryApiInterface {
   postAddExamToLibraryRaw(
     requestParameters: PostAddExamToLibraryRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Exam>>;
+  ): Promise<runtime.ApiResponse<Exam>>
 
   /**
    * Create a new Exam with the provided details
@@ -97,16 +90,13 @@ export interface ExamlibraryApiInterface {
   postAddExamToLibrary(
     requestParameters: PostAddExamToLibraryRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Exam>;
+  ): Promise<Exam>
 }
 
 /**
  *
  */
-export class ExamlibraryApi
-  extends runtime.BaseAPI
-  implements ExamlibraryApiInterface
-{
+export class ExamlibraryApi extends runtime.BaseAPI implements ExamlibraryApiInterface {
   /**
    * Retrieve all Exams
    * Get all Exams
@@ -114,36 +104,32 @@ export class ExamlibraryApi
   async getFindAllExamsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Array<ExamMetadata>>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/exams`;
+    let urlPath = `/exams`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      jsonValue.map(ExamMetadataFromJSON),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ExamMetadataFromJSON))
   }
 
   /**
    * Retrieve all Exams
    * Get all Exams
    */
-  async getFindAllExams(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Array<ExamMetadata>> {
-    const response = await this.getFindAllExamsRaw(initOverrides);
-    return await response.value();
+  async getFindAllExams(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ExamMetadata>> {
+    const response = await this.getFindAllExamsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -154,36 +140,31 @@ export class ExamlibraryApi
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Exam>> {
-    if (requestParameters["examID"] == null) {
+    if (requestParameters['examID'] == null) {
       throw new runtime.RequiredError(
-        "examID",
+        'examID',
         'Required parameter "examID" was null or undefined when calling getFindOneByID().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/exams/{examID}`;
-    urlPath = urlPath.replace(
-      `{${"examID"}}`,
-      encodeURIComponent(String(requestParameters["examID"])),
-    );
+    let urlPath = `/exams/{examID}`
+    urlPath = urlPath.replace(`{${'examID'}}`, encodeURIComponent(String(requestParameters['examID'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      ExamFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => ExamFromJSON(jsonValue))
   }
 
   /**
@@ -194,11 +175,8 @@ export class ExamlibraryApi
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Exam> {
-    const response = await this.getFindOneByIDRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.getFindOneByIDRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 
   /**
@@ -209,35 +187,33 @@ export class ExamlibraryApi
     requestParameters: PostAddExamToLibraryRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Exam>> {
-    if (requestParameters["exam"] == null) {
+    if (requestParameters['exam'] == null) {
       throw new runtime.RequiredError(
-        "exam",
+        'exam',
         'Required parameter "exam" was null or undefined when calling postAddExamToLibrary().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json";
+    headerParameters['Content-Type'] = 'application/json'
 
-    let urlPath = `/exams`;
+    let urlPath = `/exams`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: ExamToJSON(requestParameters["exam"]),
+        body: ExamToJSON(requestParameters['exam']),
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      ExamFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => ExamFromJSON(jsonValue))
   }
 
   /**
@@ -248,10 +224,7 @@ export class ExamlibraryApi
     requestParameters: PostAddExamToLibraryRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<Exam> {
-    const response = await this.postAddExamToLibraryRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.postAddExamToLibraryRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 }

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,60 +24,49 @@ export interface Progress {
    * @type {number}
    * @memberof Progress
    */
-  totalQuestions: number;
+  totalQuestions: number
   /**
    *
    * @type {number}
    * @memberof Progress
    */
-  answeredQuestions: number;
+  answeredQuestions: number
 }
 
 /**
  * Check if a given object implements the Progress interface.
  */
 export function instanceOfProgress(value: object): value is Progress {
-  if (!("totalQuestions" in value) || value["totalQuestions"] === undefined)
-    return false;
-  if (
-    !("answeredQuestions" in value) ||
-    value["answeredQuestions"] === undefined
-  )
-    return false;
-  return true;
+  if (!('totalQuestions' in value) || value['totalQuestions'] === undefined) return false
+  if (!('answeredQuestions' in value) || value['answeredQuestions'] === undefined) return false
+  return true
 }
 
 export function ProgressFromJSON(json: any): Progress {
-  return ProgressFromJSONTyped(json, false);
+  return ProgressFromJSONTyped(json, false)
 }
 
-export function ProgressFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Progress {
+export function ProgressFromJSONTyped(json: any, ignoreDiscriminator: boolean): Progress {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    totalQuestions: json["totalQuestions"],
-    answeredQuestions: json["answeredQuestions"],
-  };
+    totalQuestions: json['totalQuestions'],
+    answeredQuestions: json['answeredQuestions'],
+  }
 }
 
 export function ProgressToJSON(json: any): Progress {
-  return ProgressToJSONTyped(json, false);
+  return ProgressToJSONTyped(json, false)
 }
 
-export function ProgressToJSONTyped(
-  value?: Progress | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ProgressToJSONTyped(value?: Progress | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    totalQuestions: value["totalQuestions"],
-    answeredQuestions: value["answeredQuestions"],
-  };
+    totalQuestions: value['totalQuestions'],
+    answeredQuestions: value['answeredQuestions'],
+  }
 }

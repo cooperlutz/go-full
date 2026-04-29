@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DashboardCard from "~/app/components/DashboardCard/DashboardCard.vue";
-import { ChartBarStacked } from "lucide-vue-next";
+import DashboardCard from '~/app/components/DashboardCard/DashboardCard.vue'
+import { ChartBarStacked } from 'lucide-vue-next'
 </script>
 <template>
   <DashboardCard

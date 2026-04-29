@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { AppWindow, ChartColumnStacked } from "lucide-vue-next";
-import { useRoute } from "vue-router";
+import { AppWindow, ChartColumnStacked } from 'lucide-vue-next'
+import { useRoute } from 'vue-router'
 
-const route = useRoute();
-const currentPathRoot = route.path.split("/")[1];
+const route = useRoute()
+const currentPathRoot = route.path.split('/')[1]
 </script>
 
 <template>

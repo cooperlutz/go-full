@@ -1,4 +1,4 @@
-import authHandlers from "./auth";
-import iamHandlers from "./iam";
+import authHandlers from './auth'
+import iamHandlers from './iam'
 
-export const iamMockHandlers = [...authHandlers, ...iamHandlers];
+export const iamMockHandlers = [...authHandlers, ...iamHandlers]

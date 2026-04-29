@@ -12,13 +12,8 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type {
-  PingPong,
-  PingPongRaw,
-  PingPongs,
-  PingPongsRaw,
-} from "../models/index";
+import * as runtime from '../runtime'
+import type { PingPong, PingPongRaw, PingPongs, PingPongsRaw } from '../models/index'
 import {
   PingPongFromJSON,
   PingPongToJSON,
@@ -28,14 +23,14 @@ import {
   PingPongsToJSON,
   PingPongsRawFromJSON,
   PingPongsRawToJSON,
-} from "../models/index";
+} from '../models/index'
 
 export interface GetFindOneByIDRequest {
-  pingPongID: string;
+  pingPongID: string
 }
 
 export interface PingPongRequest {
-  pingPong: PingPong;
+  pingPong: PingPong
 }
 
 /**
@@ -54,15 +49,13 @@ export interface PingpongApiInterface {
    */
   getFindAllPingPongsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<PingPongsRaw>>;
+  ): Promise<runtime.ApiResponse<PingPongsRaw>>
 
   /**
    * Retrieve all PingPongs
    * Get all Pingpongs
    */
-  getFindAllPingPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongsRaw>;
+  getFindAllPingPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongsRaw>
 
   /**
    * Retrieve a single PingPong by its ID
@@ -75,7 +68,7 @@ export interface PingpongApiInterface {
   getFindOneByIDRaw(
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<PingPongRaw>>;
+  ): Promise<runtime.ApiResponse<PingPongRaw>>
 
   /**
    * Retrieve a single PingPong by its ID
@@ -84,7 +77,7 @@ export interface PingpongApiInterface {
   getFindOneByID(
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongRaw>;
+  ): Promise<PingPongRaw>
 
   /**
    * Retrieve all PingPong Pings
@@ -93,17 +86,13 @@ export interface PingpongApiInterface {
    * @throws {RequiredError}
    * @memberof PingpongApiInterface
    */
-  getPingsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<PingPongs>>;
+  getPingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingPongs>>
 
   /**
    * Retrieve all PingPong Pings
    * Get all Pings
    */
-  getPings(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongs>;
+  getPings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongs>
 
   /**
    * Retrieve all PingPong Pongs
@@ -112,17 +101,13 @@ export interface PingpongApiInterface {
    * @throws {RequiredError}
    * @memberof PingpongApiInterface
    */
-  getPongsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<PingPongs>>;
+  getPongsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PingPongs>>
 
   /**
    * Retrieve all PingPong Pongs
    * Get all Pongs
    */
-  getPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongs>;
+  getPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongs>
 
   /**
    * Post a PingPong message
@@ -135,7 +120,7 @@ export interface PingpongApiInterface {
   pingPongRaw(
     requestParameters: PingPongRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<PingPong>>;
+  ): Promise<runtime.ApiResponse<PingPong>>
 
   /**
    * Post a PingPong message
@@ -144,16 +129,13 @@ export interface PingpongApiInterface {
   pingPong(
     requestParameters: PingPongRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPong>;
+  ): Promise<PingPong>
 }
 
 /**
  *
  */
-export class PingpongApi
-  extends runtime.BaseAPI
-  implements PingpongApiInterface
-{
+export class PingpongApi extends runtime.BaseAPI implements PingpongApiInterface {
   /**
    * Retrieve all PingPongs
    * Get all Pingpongs
@@ -161,36 +143,32 @@ export class PingpongApi
   async getFindAllPingPongsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<PingPongsRaw>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/ping-pongs`;
+    let urlPath = `/ping-pongs`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      PingPongsRawFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => PingPongsRawFromJSON(jsonValue))
   }
 
   /**
    * Retrieve all PingPongs
    * Get all Pingpongs
    */
-  async getFindAllPingPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongsRaw> {
-    const response = await this.getFindAllPingPongsRaw(initOverrides);
-    return await response.value();
+  async getFindAllPingPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongsRaw> {
+    const response = await this.getFindAllPingPongsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -201,36 +179,31 @@ export class PingpongApi
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<PingPongRaw>> {
-    if (requestParameters["pingPongID"] == null) {
+    if (requestParameters['pingPongID'] == null) {
       throw new runtime.RequiredError(
-        "pingPongID",
+        'pingPongID',
         'Required parameter "pingPongID" was null or undefined when calling getFindOneByID().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/ping-pongs/{pingPongID}`;
-    urlPath = urlPath.replace(
-      `{${"pingPongID"}}`,
-      encodeURIComponent(String(requestParameters["pingPongID"])),
-    );
+    let urlPath = `/ping-pongs/{pingPongID}`
+    urlPath = urlPath.replace(`{${'pingPongID'}}`, encodeURIComponent(String(requestParameters['pingPongID'])))
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      PingPongRawFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => PingPongRawFromJSON(jsonValue))
   }
 
   /**
@@ -241,11 +214,8 @@ export class PingpongApi
     requestParameters: GetFindOneByIDRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<PingPongRaw> {
-    const response = await this.getFindOneByIDRaw(
-      requestParameters,
-      initOverrides,
-    );
-    return await response.value();
+    const response = await this.getFindOneByIDRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 
   /**
@@ -255,36 +225,32 @@ export class PingpongApi
   async getPingsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<PingPongs>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/ping-pong/pings`;
+    let urlPath = `/ping-pong/pings`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      PingPongsFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => PingPongsFromJSON(jsonValue))
   }
 
   /**
    * Retrieve all PingPong Pings
    * Get all Pings
    */
-  async getPings(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongs> {
-    const response = await this.getPingsRaw(initOverrides);
-    return await response.value();
+  async getPings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongs> {
+    const response = await this.getPingsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -294,36 +260,32 @@ export class PingpongApi
   async getPongsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<PingPongs>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/ping-pong/pongs`;
+    let urlPath = `/ping-pong/pongs`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      PingPongsFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => PingPongsFromJSON(jsonValue))
   }
 
   /**
    * Retrieve all PingPong Pongs
    * Get all Pongs
    */
-  async getPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<PingPongs> {
-    const response = await this.getPongsRaw(initOverrides);
-    return await response.value();
+  async getPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PingPongs> {
+    const response = await this.getPongsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -334,35 +296,33 @@ export class PingpongApi
     requestParameters: PingPongRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<PingPong>> {
-    if (requestParameters["pingPong"] == null) {
+    if (requestParameters['pingPong'] == null) {
       throw new runtime.RequiredError(
-        "pingPong",
+        'pingPong',
         'Required parameter "pingPong" was null or undefined when calling pingPong().',
-      );
+      )
     }
 
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    headerParameters["Content-Type"] = "application/json";
+    headerParameters['Content-Type'] = 'application/json'
 
-    let urlPath = `/ping-pongs`;
+    let urlPath = `/ping-pongs`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "POST",
+        method: 'POST',
         headers: headerParameters,
         query: queryParameters,
-        body: PingPongToJSON(requestParameters["pingPong"]),
+        body: PingPongToJSON(requestParameters['pingPong']),
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      PingPongFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => PingPongFromJSON(jsonValue))
   }
 
   /**
@@ -373,7 +333,7 @@ export class PingpongApi
     requestParameters: PingPongRequest,
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<PingPong> {
-    const response = await this.pingPongRaw(requestParameters, initOverrides);
-    return await response.value();
+    const response = await this.pingPongRaw(requestParameters, initOverrides)
+    return await response.value()
   }
 }

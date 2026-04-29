@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-import PageHeader from "~/app/layouts/PageLayouts/PageHeader.vue";
+import PageHeader from '~/app/layouts/PageLayouts/PageHeader.vue'
 
-import QuestionsToGradeTable from "../components/QuestionsToGradeTable.vue";
-import { useGetExam } from "../composables/useGrading";
+import QuestionsToGradeTable from '../components/QuestionsToGradeTable.vue'
+import { useGetExam } from '../composables/useGrading'
 
-const { exam, loading, error, getExam } = useGetExam();
-const route = useRoute();
-const examId = route.params.examId as string;
+const { exam, loading, error, getExam } = useGetExam()
+const route = useRoute()
+const examId = route.params.examId as string
 
 onMounted(() => {
-  getExam(examId);
-});
+  getExam(examId)
+})
 </script>
 <template>
   <div>

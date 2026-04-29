@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { Mail, School } from "lucide-vue-next";
+import { onMounted, ref } from 'vue'
+import { Mail, School } from 'lucide-vue-next'
 
-import { type UserProfile } from "../services";
-import { useProfile, useLogout } from "../composables/useIam";
+import { type UserProfile } from '../services'
+import { useProfile, useLogout } from '../composables/useIam'
 
-const userProfile = ref<UserProfile | null>(null);
-const { logout } = useLogout();
+const userProfile = ref<UserProfile | null>(null)
+const { logout } = useLogout()
 
 function logoutAndRedirect() {
-  logout();
-  window.location.href = "/login";
+  logout()
+  window.location.href = '/login'
 }
 
 onMounted(async () => {
-  const { getProfile } = useProfile();
-  const profile = await getProfile();
+  const { getProfile } = useProfile()
+  const profile = await getProfile()
   if (profile) {
-    userProfile.value = profile;
+    userProfile.value = profile
   }
-});
+})
 </script>
 
 <template>
@@ -31,15 +31,10 @@ onMounted(async () => {
             <div class="flex space-x-4">
               <div class="skeleton h-16 w-16"></div>
               <div>
-                <span
-                  class="mb-2 inline-block rounded px-2.5 py-0.5 text-xs"
-                  id="user-id"
-                >
+                <span class="mb-2 inline-block rounded px-2.5 py-0.5 text-xs" id="user-id">
                   {{ userProfile?.id }}
                 </span>
-                <h2 class="flex items-center text-xl font-bold leading-none">
-                  TODO: Name
-                </h2>
+                <h2 class="flex items-center text-xl font-bold leading-none">TODO: Name</h2>
               </div>
             </div>
             <dl class="space-y-2">
@@ -69,9 +64,7 @@ onMounted(async () => {
         <button class="btn" @click="logoutAndRedirect">Logout</button>
         <button class="btn">Edit your profile</button>
       </div>
-      <div class="skeleton h-32 w-full justify-center flex items-center">
-        TODO: Prior exams list goes here
-      </div>
+      <div class="skeleton h-32 w-full justify-center flex items-center">TODO: Prior exams list goes here</div>
     </div>
   </section>
 </template>

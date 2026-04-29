@@ -1,19 +1,19 @@
 // View imports
-import HomeView from "../views/HomeView.vue";
+import HomeView from '../views/HomeView.vue'
 // Route imports
-import pingpongRoutes from "~/pingpong/router";
-import examLibraryRoutes from "~/examlibrary/router";
-import examinationRoutes from "~/examination/router";
-import gradingRoutes from "~/grading/router";
-import { protectedAuthRoutes } from "~/iam/router";
-import reportingRoutes from "~/reporting/router";
+import pingpongRoutes from '~/pingpong/router'
+import examLibraryRoutes from '~/examlibrary/router'
+import examinationRoutes from '~/examination/router'
+import gradingRoutes from '~/grading/router'
+import { protectedAuthRoutes } from '~/iam/router'
+import reportingRoutes from '~/reporting/router'
 
 const appRoutes = [
   {
-    path: "dashboard",
+    path: 'dashboard',
     component: HomeView,
   },
-];
+]
 
 const protectedRoutes = [
   ...appRoutes,
@@ -23,6 +23,6 @@ const protectedRoutes = [
   ...protectedAuthRoutes,
   ...gradingRoutes,
   ...reportingRoutes,
-];
+]
 
-export default protectedRoutes;
+export default protectedRoutes

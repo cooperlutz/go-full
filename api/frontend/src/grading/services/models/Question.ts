@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,120 +24,108 @@ export interface Question {
    * @type {string}
    * @memberof Question
    */
-  questionId: string;
+  questionId: string
   /**
    *
    * @type {string}
    * @memberof Question
    */
-  examId: string;
+  examId: string
   /**
    *
    * @type {number}
    * @memberof Question
    */
-  questionIndex: number;
+  questionIndex: number
   /**
    *
    * @type {string}
    * @memberof Question
    */
-  questionType: string;
+  questionType: string
   /**
    *
    * @type {boolean}
    * @memberof Question
    */
-  graded: boolean;
+  graded: boolean
   /**
    *
    * @type {string}
    * @memberof Question
    */
-  feedback?: string;
+  feedback?: string
   /**
    *
    * @type {string}
    * @memberof Question
    */
-  providedAnswer?: string;
+  providedAnswer?: string
   /**
    *
    * @type {number}
    * @memberof Question
    */
-  pointsEarned?: number;
+  pointsEarned?: number
   /**
    *
    * @type {number}
    * @memberof Question
    */
-  pointsPossible?: number;
+  pointsPossible?: number
 }
 
 /**
  * Check if a given object implements the Question interface.
  */
 export function instanceOfQuestion(value: object): value is Question {
-  if (!("questionId" in value) || value["questionId"] === undefined)
-    return false;
-  if (!("examId" in value) || value["examId"] === undefined) return false;
-  if (!("questionIndex" in value) || value["questionIndex"] === undefined)
-    return false;
-  if (!("questionType" in value) || value["questionType"] === undefined)
-    return false;
-  if (!("graded" in value) || value["graded"] === undefined) return false;
-  return true;
+  if (!('questionId' in value) || value['questionId'] === undefined) return false
+  if (!('examId' in value) || value['examId'] === undefined) return false
+  if (!('questionIndex' in value) || value['questionIndex'] === undefined) return false
+  if (!('questionType' in value) || value['questionType'] === undefined) return false
+  if (!('graded' in value) || value['graded'] === undefined) return false
+  return true
 }
 
 export function QuestionFromJSON(json: any): Question {
-  return QuestionFromJSONTyped(json, false);
+  return QuestionFromJSONTyped(json, false)
 }
 
-export function QuestionFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Question {
+export function QuestionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Question {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    questionId: json["questionId"],
-    examId: json["examId"],
-    questionIndex: json["questionIndex"],
-    questionType: json["questionType"],
-    graded: json["graded"],
-    feedback: json["feedback"] == null ? undefined : json["feedback"],
-    providedAnswer:
-      json["providedAnswer"] == null ? undefined : json["providedAnswer"],
-    pointsEarned:
-      json["pointsEarned"] == null ? undefined : json["pointsEarned"],
-    pointsPossible:
-      json["pointsPossible"] == null ? undefined : json["pointsPossible"],
-  };
+    questionId: json['questionId'],
+    examId: json['examId'],
+    questionIndex: json['questionIndex'],
+    questionType: json['questionType'],
+    graded: json['graded'],
+    feedback: json['feedback'] == null ? undefined : json['feedback'],
+    providedAnswer: json['providedAnswer'] == null ? undefined : json['providedAnswer'],
+    pointsEarned: json['pointsEarned'] == null ? undefined : json['pointsEarned'],
+    pointsPossible: json['pointsPossible'] == null ? undefined : json['pointsPossible'],
+  }
 }
 
 export function QuestionToJSON(json: any): Question {
-  return QuestionToJSONTyped(json, false);
+  return QuestionToJSONTyped(json, false)
 }
 
-export function QuestionToJSONTyped(
-  value?: Question | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function QuestionToJSONTyped(value?: Question | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    questionId: value["questionId"],
-    examId: value["examId"],
-    questionIndex: value["questionIndex"],
-    questionType: value["questionType"],
-    graded: value["graded"],
-    feedback: value["feedback"],
-    providedAnswer: value["providedAnswer"],
-    pointsEarned: value["pointsEarned"],
-    pointsPossible: value["pointsPossible"],
-  };
+    questionId: value['questionId'],
+    examId: value['examId'],
+    questionIndex: value['questionIndex'],
+    questionType: value['questionType'],
+    graded: value['graded'],
+    feedback: value['feedback'],
+    providedAnswer: value['providedAnswer'],
+    pointsEarned: value['pointsEarned'],
+    pointsPossible: value['pointsPossible'],
+  }
 }

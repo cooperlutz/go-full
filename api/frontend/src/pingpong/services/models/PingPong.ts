@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  * A Ping or Pong
  * @export
@@ -24,45 +24,39 @@ export interface PingPong {
    * @type {string}
    * @memberof PingPong
    */
-  message?: string;
+  message?: string
 }
 
 /**
  * Check if a given object implements the PingPong interface.
  */
 export function instanceOfPingPong(value: object): value is PingPong {
-  return true;
+  return true
 }
 
 export function PingPongFromJSON(json: any): PingPong {
-  return PingPongFromJSONTyped(json, false);
+  return PingPongFromJSONTyped(json, false)
 }
 
-export function PingPongFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): PingPong {
+export function PingPongFromJSONTyped(json: any, ignoreDiscriminator: boolean): PingPong {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    message: json["message"] == null ? undefined : json["message"],
-  };
+    message: json['message'] == null ? undefined : json['message'],
+  }
 }
 
 export function PingPongToJSON(json: any): PingPong {
-  return PingPongToJSONTyped(json, false);
+  return PingPongToJSONTyped(json, false)
 }
 
-export function PingPongToJSONTyped(
-  value?: PingPong | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function PingPongToJSONTyped(value?: PingPong | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    message: value["message"],
-  };
+    message: value['message'],
+  }
 }

@@ -12,14 +12,9 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
-import type { Question } from "./Question";
-import {
-  QuestionFromJSON,
-  QuestionFromJSONTyped,
-  QuestionToJSON,
-  QuestionToJSONTyped,
-} from "./Question";
+import { mapValues } from '../runtime'
+import type { Question } from './Question'
+import { QuestionFromJSON, QuestionFromJSONTyped, QuestionToJSON, QuestionToJSONTyped } from './Question'
 
 /**
  *
@@ -32,86 +27,75 @@ export interface Exam {
    * @type {string}
    * @memberof Exam
    */
-  examId: string;
+  examId: string
   /**
    *
    * @type {number}
    * @memberof Exam
    */
-  totalPointsPossible: number;
+  totalPointsPossible: number
   /**
    *
    * @type {number}
    * @memberof Exam
    */
-  totalPointsEarned?: number;
+  totalPointsEarned?: number
   /**
    *
    * @type {string}
    * @memberof Exam
    */
-  state: string;
+  state: string
   /**
    *
    * @type {Array<Question>}
    * @memberof Exam
    */
-  questions: Array<Question>;
+  questions: Array<Question>
 }
 
 /**
  * Check if a given object implements the Exam interface.
  */
 export function instanceOfExam(value: object): value is Exam {
-  if (!("examId" in value) || value["examId"] === undefined) return false;
-  if (
-    !("totalPointsPossible" in value) ||
-    value["totalPointsPossible"] === undefined
-  )
-    return false;
-  if (!("state" in value) || value["state"] === undefined) return false;
-  if (!("questions" in value) || value["questions"] === undefined) return false;
-  return true;
+  if (!('examId' in value) || value['examId'] === undefined) return false
+  if (!('totalPointsPossible' in value) || value['totalPointsPossible'] === undefined) return false
+  if (!('state' in value) || value['state'] === undefined) return false
+  if (!('questions' in value) || value['questions'] === undefined) return false
+  return true
 }
 
 export function ExamFromJSON(json: any): Exam {
-  return ExamFromJSONTyped(json, false);
+  return ExamFromJSONTyped(json, false)
 }
 
-export function ExamFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Exam {
+export function ExamFromJSONTyped(json: any, ignoreDiscriminator: boolean): Exam {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    examId: json["examId"],
-    totalPointsPossible: json["totalPointsPossible"],
-    totalPointsEarned:
-      json["totalPointsEarned"] == null ? undefined : json["totalPointsEarned"],
-    state: json["state"],
-    questions: (json["questions"] as Array<any>).map(QuestionFromJSON),
-  };
+    examId: json['examId'],
+    totalPointsPossible: json['totalPointsPossible'],
+    totalPointsEarned: json['totalPointsEarned'] == null ? undefined : json['totalPointsEarned'],
+    state: json['state'],
+    questions: (json['questions'] as Array<any>).map(QuestionFromJSON),
+  }
 }
 
 export function ExamToJSON(json: any): Exam {
-  return ExamToJSONTyped(json, false);
+  return ExamToJSONTyped(json, false)
 }
 
-export function ExamToJSONTyped(
-  value?: Exam | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ExamToJSONTyped(value?: Exam | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    examId: value["examId"],
-    totalPointsPossible: value["totalPointsPossible"],
-    totalPointsEarned: value["totalPointsEarned"],
-    state: value["state"],
-    questions: (value["questions"] as Array<any>).map(QuestionToJSON),
-  };
+    examId: value['examId'],
+    totalPointsPossible: value['totalPointsPossible'],
+    totalPointsEarned: value['totalPointsEarned'],
+    state: value['state'],
+    questions: (value['questions'] as Array<any>).map(QuestionToJSON),
+  }
 }

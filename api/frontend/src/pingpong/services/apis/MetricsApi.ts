@@ -12,9 +12,9 @@
  * Do not edit the class manually.
  */
 
-import * as runtime from "../runtime";
-import type { Trend } from "../models/index";
-import { TrendFromJSON, TrendToJSON } from "../models/index";
+import * as runtime from '../runtime'
+import type { Trend } from '../models/index'
+import { TrendFromJSON, TrendToJSON } from '../models/index'
 
 /**
  * MetricsApi - interface
@@ -32,15 +32,13 @@ export interface MetricsApiInterface {
    */
   getDailyDistributionRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<Trend>>;
+  ): Promise<runtime.ApiResponse<Trend>>
 
   /**
    * Retrieve total number of PingPong Pongs per day
    * Get total number of ping pongs per day
    */
-  getDailyDistribution(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Trend>;
+  getDailyDistribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Trend>
 
   /**
    * Retrieve total number of PingPong Pongs
@@ -49,17 +47,13 @@ export interface MetricsApiInterface {
    * @throws {RequiredError}
    * @memberof MetricsApiInterface
    */
-  getTotalPingPongsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<number>>;
+  getTotalPingPongsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<number>>
 
   /**
    * Retrieve total number of PingPong Pongs
    * Get total number of Pings Pongs
    */
-  getTotalPingPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number>;
+  getTotalPingPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number>
 
   /**
    * Retrieve total number of PingPong Pings
@@ -68,17 +62,13 @@ export interface MetricsApiInterface {
    * @throws {RequiredError}
    * @memberof MetricsApiInterface
    */
-  getTotalPingsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<number>>;
+  getTotalPingsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<number>>
 
   /**
    * Retrieve total number of PingPong Pings
    * Get total number of Pings
    */
-  getTotalPings(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number>;
+  getTotalPings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number>
 
   /**
    * Retrieve total number of PingPong Pongs
@@ -87,17 +77,13 @@ export interface MetricsApiInterface {
    * @throws {RequiredError}
    * @memberof MetricsApiInterface
    */
-  getTotalPongsRaw(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<runtime.ApiResponse<number>>;
+  getTotalPongsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<number>>
 
   /**
    * Retrieve total number of PingPong Pongs
    * Get total number of Pongs
    */
-  getTotalPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number>;
+  getTotalPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number>
 }
 
 /**
@@ -111,36 +97,32 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
   async getDailyDistributionRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<Trend>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/metrics/dailyDistribution`;
+    let urlPath = `/metrics/dailyDistribution`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      TrendFromJSON(jsonValue),
-    );
+    return new runtime.JSONApiResponse(response, (jsonValue) => TrendFromJSON(jsonValue))
   }
 
   /**
    * Retrieve total number of PingPong Pongs per day
    * Get total number of ping pongs per day
    */
-  async getDailyDistribution(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<Trend> {
-    const response = await this.getDailyDistributionRaw(initOverrides);
-    return await response.value();
+  async getDailyDistribution(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Trend> {
+    const response = await this.getDailyDistributionRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -150,26 +132,26 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
   async getTotalPingPongsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<number>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/metrics/totalPingPongs`;
+    let urlPath = `/metrics/totalPingPongs`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    if (this.isJsonMime(response.headers.get("content-type"))) {
-      return new runtime.JSONApiResponse<number>(response);
+    if (this.isJsonMime(response.headers.get('content-type'))) {
+      return new runtime.JSONApiResponse<number>(response)
     } else {
-      return new runtime.TextApiResponse(response) as any;
+      return new runtime.TextApiResponse(response) as any
     }
   }
 
@@ -177,11 +159,9 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
    * Retrieve total number of PingPong Pongs
    * Get total number of Pings Pongs
    */
-  async getTotalPingPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number> {
-    const response = await this.getTotalPingPongsRaw(initOverrides);
-    return await response.value();
+  async getTotalPingPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number> {
+    const response = await this.getTotalPingPongsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -191,26 +171,26 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
   async getTotalPingsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<number>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/metrics/totalPings`;
+    let urlPath = `/metrics/totalPings`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    if (this.isJsonMime(response.headers.get("content-type"))) {
-      return new runtime.JSONApiResponse<number>(response);
+    if (this.isJsonMime(response.headers.get('content-type'))) {
+      return new runtime.JSONApiResponse<number>(response)
     } else {
-      return new runtime.TextApiResponse(response) as any;
+      return new runtime.TextApiResponse(response) as any
     }
   }
 
@@ -218,11 +198,9 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
    * Retrieve total number of PingPong Pings
    * Get total number of Pings
    */
-  async getTotalPings(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number> {
-    const response = await this.getTotalPingsRaw(initOverrides);
-    return await response.value();
+  async getTotalPings(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number> {
+    const response = await this.getTotalPingsRaw(initOverrides)
+    return await response.value()
   }
 
   /**
@@ -232,26 +210,26 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
   async getTotalPongsRaw(
     initOverrides?: RequestInit | runtime.InitOverrideFunction,
   ): Promise<runtime.ApiResponse<number>> {
-    const queryParameters: any = {};
+    const queryParameters: any = {}
 
-    const headerParameters: runtime.HTTPHeaders = {};
+    const headerParameters: runtime.HTTPHeaders = {}
 
-    let urlPath = `/metrics/totalPongs`;
+    let urlPath = `/metrics/totalPongs`
 
     const response = await this.request(
       {
         path: urlPath,
-        method: "GET",
+        method: 'GET',
         headers: headerParameters,
         query: queryParameters,
       },
       initOverrides,
-    );
+    )
 
-    if (this.isJsonMime(response.headers.get("content-type"))) {
-      return new runtime.JSONApiResponse<number>(response);
+    if (this.isJsonMime(response.headers.get('content-type'))) {
+      return new runtime.JSONApiResponse<number>(response)
     } else {
-      return new runtime.TextApiResponse(response) as any;
+      return new runtime.TextApiResponse(response) as any
     }
   }
 
@@ -259,10 +237,8 @@ export class MetricsApi extends runtime.BaseAPI implements MetricsApiInterface {
    * Retrieve total number of PingPong Pongs
    * Get total number of Pongs
    */
-  async getTotalPongs(
-    initOverrides?: RequestInit | runtime.InitOverrideFunction,
-  ): Promise<number> {
-    const response = await this.getTotalPongsRaw(initOverrides);
-    return await response.value();
+  async getTotalPongs(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<number> {
+    const response = await this.getTotalPongsRaw(initOverrides)
+    return await response.value()
   }
 }

@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
+import { mapValues } from '../runtime'
 /**
  *
  * @export
@@ -24,45 +24,40 @@ export interface RegisterResponse {
    * @type {string}
    * @memberof RegisterResponse
    */
-  email: string;
+  email: string
   /**
    *
    * @type {string}
    * @memberof RegisterResponse
    */
-  id: string;
+  id: string
 }
 
 /**
  * Check if a given object implements the RegisterResponse interface.
  */
-export function instanceOfRegisterResponse(
-  value: object,
-): value is RegisterResponse {
-  if (!("email" in value) || value["email"] === undefined) return false;
-  if (!("id" in value) || value["id"] === undefined) return false;
-  return true;
+export function instanceOfRegisterResponse(value: object): value is RegisterResponse {
+  if (!('email' in value) || value['email'] === undefined) return false
+  if (!('id' in value) || value['id'] === undefined) return false
+  return true
 }
 
 export function RegisterResponseFromJSON(json: any): RegisterResponse {
-  return RegisterResponseFromJSONTyped(json, false);
+  return RegisterResponseFromJSONTyped(json, false)
 }
 
-export function RegisterResponseFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): RegisterResponse {
+export function RegisterResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean): RegisterResponse {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    email: json["email"],
-    id: json["id"],
-  };
+    email: json['email'],
+    id: json['id'],
+  }
 }
 
 export function RegisterResponseToJSON(json: any): RegisterResponse {
-  return RegisterResponseToJSONTyped(json, false);
+  return RegisterResponseToJSONTyped(json, false)
 }
 
 export function RegisterResponseToJSONTyped(
@@ -70,11 +65,11 @@ export function RegisterResponseToJSONTyped(
   ignoreDiscriminator: boolean = false,
 ): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    email: value["email"],
-    id: value["id"],
-  };
+    email: value['email'],
+    id: value['id'],
+  }
 }

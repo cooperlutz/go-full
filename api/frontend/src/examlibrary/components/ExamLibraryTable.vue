@@ -1,28 +1,26 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { CircleX } from "lucide-vue-next";
+import { onMounted } from 'vue'
+import { CircleX } from 'lucide-vue-next'
 
-import { type ExamMetadata } from "../services";
-import { useGetFindAllExams } from "../composables/useGetFindAllExams";
+import { type ExamMetadata } from '../services'
+import { useGetFindAllExams } from '../composables/useGetFindAllExams'
 
-const { error, loading, allExams, fetchData } = useGetFindAllExams();
+const { error, loading, allExams, fetchData } = useGetFindAllExams()
 
 const examTableHeaders: Record<keyof ExamMetadata, string> = {
-  id: "Exam ID",
-  name: "Name",
-  gradeLevel: "Grade Level",
-  timeLimit: "Time Limit (seconds)",
-};
+  id: 'Exam ID',
+  name: 'Name',
+  gradeLevel: 'Grade Level',
+  timeLimit: 'Time Limit (seconds)',
+}
 
 onMounted(async () => {
-  await fetchData();
-});
+  await fetchData()
+})
 </script>
 
 <template>
-  <div
-    class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid"
-  >
+  <div class="card w-full bg-base-100 shadow-lg card-border border-secondary border-solid">
     <div v-if="loading" id="exam-table-loading">
       <div class="skeleton h-32 w-full"></div>
     </div>
@@ -42,9 +40,7 @@ onMounted(async () => {
       <tbody>
         <tr v-for="entity in allExams" :key="entity.id">
           <td>
-            <a :href="`/exam-library/${entity.id}`" class="link">{{
-              entity.id
-            }}</a>
+            <a :href="`/exam-library/${entity.id}`" class="link">{{ entity.id }}</a>
           </td>
           <td>{{ entity.name }}</td>
           <td>{{ entity.gradeLevel }}</td>

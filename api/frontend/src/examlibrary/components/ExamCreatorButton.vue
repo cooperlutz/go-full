@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 function navigateToExamCreator() {
-  router.push({ name: "ExamCreator" });
+  router.push({ name: 'ExamCreator' })
 }
 </script>
 
 <template>
-  <button class="btn btn-warning btn-block my-2" @click="navigateToExamCreator">
-    Exam Creator
-  </button>
+  <button class="btn btn-warning btn-block my-2" @click="navigateToExamCreator">Exam Creator</button>
 </template>

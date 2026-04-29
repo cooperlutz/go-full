@@ -12,14 +12,14 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
-import type { ExamQuestion } from "./ExamQuestion";
+import { mapValues } from '../runtime'
+import type { ExamQuestion } from './ExamQuestion'
 import {
   ExamQuestionFromJSON,
   ExamQuestionFromJSONTyped,
   ExamQuestionToJSON,
   ExamQuestionToJSONTyped,
-} from "./ExamQuestion";
+} from './ExamQuestion'
 
 /**
  * An Exam entity including its associated questions.
@@ -32,83 +32,71 @@ export interface Exam {
    * @type {string}
    * @memberof Exam
    */
-  id?: string;
+  id?: string
   /**
    * The name of the Exam
    * @type {string}
    * @memberof Exam
    */
-  name?: string;
+  name?: string
   /**
    * The grade level for which the exam is intended
    * @type {number}
    * @memberof Exam
    */
-  gradeLevel?: number;
+  gradeLevel?: number
   /**
    * The time limit for the exam in seconds
    * @type {number}
    * @memberof Exam
    */
-  timeLimit?: number;
+  timeLimit?: number
   /**
    *
    * @type {Array<ExamQuestion>}
    * @memberof Exam
    */
-  questions?: Array<ExamQuestion>;
+  questions?: Array<ExamQuestion>
 }
 
 /**
  * Check if a given object implements the Exam interface.
  */
 export function instanceOfExam(value: object): value is Exam {
-  return true;
+  return true
 }
 
 export function ExamFromJSON(json: any): Exam {
-  return ExamFromJSONTyped(json, false);
+  return ExamFromJSONTyped(json, false)
 }
 
-export function ExamFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): Exam {
+export function ExamFromJSONTyped(json: any, ignoreDiscriminator: boolean): Exam {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    id: json["id"] == null ? undefined : json["id"],
-    name: json["name"] == null ? undefined : json["name"],
-    gradeLevel: json["gradeLevel"] == null ? undefined : json["gradeLevel"],
-    timeLimit: json["timeLimit"] == null ? undefined : json["timeLimit"],
-    questions:
-      json["questions"] == null
-        ? undefined
-        : (json["questions"] as Array<any>).map(ExamQuestionFromJSON),
-  };
+    id: json['id'] == null ? undefined : json['id'],
+    name: json['name'] == null ? undefined : json['name'],
+    gradeLevel: json['gradeLevel'] == null ? undefined : json['gradeLevel'],
+    timeLimit: json['timeLimit'] == null ? undefined : json['timeLimit'],
+    questions: json['questions'] == null ? undefined : (json['questions'] as Array<any>).map(ExamQuestionFromJSON),
+  }
 }
 
 export function ExamToJSON(json: any): Exam {
-  return ExamToJSONTyped(json, false);
+  return ExamToJSONTyped(json, false)
 }
 
-export function ExamToJSONTyped(
-  value?: Exam | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function ExamToJSONTyped(value?: Exam | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    id: value["id"],
-    name: value["name"],
-    gradeLevel: value["gradeLevel"],
-    timeLimit: value["timeLimit"],
-    questions:
-      value["questions"] == null
-        ? undefined
-        : (value["questions"] as Array<any>).map(ExamQuestionToJSON),
-  };
+    id: value['id'],
+    name: value['name'],
+    gradeLevel: value['gradeLevel'],
+    timeLimit: value['timeLimit'],
+    questions: value['questions'] == null ? undefined : (value['questions'] as Array<any>).map(ExamQuestionToJSON),
+  }
 }

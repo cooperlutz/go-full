@@ -12,14 +12,9 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from "../runtime";
-import type { PingPong } from "./PingPong";
-import {
-  PingPongFromJSON,
-  PingPongFromJSONTyped,
-  PingPongToJSON,
-  PingPongToJSONTyped,
-} from "./PingPong";
+import { mapValues } from '../runtime'
+import type { PingPong } from './PingPong'
+import { PingPongFromJSON, PingPongFromJSONTyped, PingPongToJSON, PingPongToJSONTyped } from './PingPong'
 
 /**
  * A collection of PingPong messages
@@ -32,51 +27,39 @@ export interface PingPongs {
    * @type {Array<PingPong>}
    * @memberof PingPongs
    */
-  pingpongs?: Array<PingPong>;
+  pingpongs?: Array<PingPong>
 }
 
 /**
  * Check if a given object implements the PingPongs interface.
  */
 export function instanceOfPingPongs(value: object): value is PingPongs {
-  return true;
+  return true
 }
 
 export function PingPongsFromJSON(json: any): PingPongs {
-  return PingPongsFromJSONTyped(json, false);
+  return PingPongsFromJSONTyped(json, false)
 }
 
-export function PingPongsFromJSONTyped(
-  json: any,
-  ignoreDiscriminator: boolean,
-): PingPongs {
+export function PingPongsFromJSONTyped(json: any, ignoreDiscriminator: boolean): PingPongs {
   if (json == null) {
-    return json;
+    return json
   }
   return {
-    pingpongs:
-      json["pingpongs"] == null
-        ? undefined
-        : (json["pingpongs"] as Array<any>).map(PingPongFromJSON),
-  };
+    pingpongs: json['pingpongs'] == null ? undefined : (json['pingpongs'] as Array<any>).map(PingPongFromJSON),
+  }
 }
 
 export function PingPongsToJSON(json: any): PingPongs {
-  return PingPongsToJSONTyped(json, false);
+  return PingPongsToJSONTyped(json, false)
 }
 
-export function PingPongsToJSONTyped(
-  value?: PingPongs | null,
-  ignoreDiscriminator: boolean = false,
-): any {
+export function PingPongsToJSONTyped(value?: PingPongs | null, ignoreDiscriminator: boolean = false): any {
   if (value == null) {
-    return value;
+    return value
   }
 
   return {
-    pingpongs:
-      value["pingpongs"] == null
-        ? undefined
-        : (value["pingpongs"] as Array<any>).map(PingPongToJSON),
-  };
+    pingpongs: value['pingpongs'] == null ? undefined : (value['pingpongs'] as Array<any>).map(PingPongToJSON),
+  }
 }
