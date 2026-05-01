@@ -1,3 +1,9 @@
+## v0.1.91 (2026-05-01)
+
+### Fix
+
+- migrate mkdocs to zensical (#265)
+
 ## v0.1.90 (2026-04-29)
 
 ### Fix
