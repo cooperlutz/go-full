@@ -295,8 +295,8 @@ version:  ### print app version
 	@echo $(APP_VERSION)
 .PHONY: version
 
-docs: ### generate documentation and run mkdocs server
-	cd docs && uv sync && uv run mkdocs serve
+docs: ### generate documentation and run zensical server
+	cd docs && uv sync && uv run zensical serve
 .PHONY: docs
 
 coverage-directory: ### create .coverage directory

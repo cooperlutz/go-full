@@ -39,4 +39,6 @@ markdown_extensions:
   toc:
     permalink: true
   admonition:
+  pymdownx.snippets: # For including snippets in admonitions
+      restrict_base_path: false # Allow including files outside the base_path
   pymdownx.superfences: # For nested content within admonitions
