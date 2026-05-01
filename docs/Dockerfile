@@ -4,4 +4,4 @@ COPY . .
 
 RUN uv sync --locked
 
-CMD ["uv", "run", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
+CMD ["uv", "run", "zensical", "serve", "-a", "0.0.0.0:8000"]
