@@ -1,3 +1,9 @@
+## v0.1.94 (2026-05-05)
+
+### Fix
+
+- **deps**: bump github.com/getkin/kin-openapi from 0.136.0 to 0.137.0 in the all-go-modules group (#268)
+
 ## v0.1.93 (2026-05-01)
 
 ### Fix
