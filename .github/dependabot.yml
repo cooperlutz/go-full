@@ -23,11 +23,11 @@ updates:
           prefix: "chore(deps)"
     schedule:
       interval: "weekly"
-    groups:
-      # Group all npm updates together
-      all-npm-dependencies:
-        patterns:
-          - "*"
+    # groups:
+    #   # Group all npm updates together
+    #   all-npm-dependencies:
+    #     patterns:
+    #       - "*"
 
   # Enable version updates for Docker
   - package-ecosystem: "docker"
