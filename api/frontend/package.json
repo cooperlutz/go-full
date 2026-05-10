@@ -60,7 +60,7 @@
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-standard-with-typescript": "9.2.0",
     "@vue/eslint-config-typescript": "14.7.0",
-    "@vue/test-utils": "2.4.9",
+    "@vue/test-utils": "2.4.10",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.5.0",
     "eslint": "10.2.1",
