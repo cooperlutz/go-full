@@ -55,7 +55,7 @@
     "@vitejs/plugin-vue": "6.0.6",
     "@vitejs/plugin-vue-jsx": "5.1.5",
     "@vitest/coverage-v8": "4.1.5",
-    "@vitest/eslint-plugin": "1.6.16",
+    "@vitest/eslint-plugin": "1.6.17",
     "@vitest/ui": "4.1.5",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-standard-with-typescript": "9.2.0",
