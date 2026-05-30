@@ -55,7 +55,10 @@ describe('ExamLibraryTable', () => {
 
   it('shows error message on fetch failure', async () => {
     // Arrange
-    global.fetch = vi.fn(() => Promise.reject(new Error('ruh roh')))
+    Object.defineProperty(global, 'fetch', {
+      value: vi.fn(() => Promise.reject(new Error('ruh roh'))),
+      writable: true,
+    })
 
     const wrapper = mount(ExamLibraryTable)
 
