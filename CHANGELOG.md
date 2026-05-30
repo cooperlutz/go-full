@@ -1,3 +1,15 @@
+## v0.1.96 (2026-05-30)
+
+### Fix
+
+- **deps**: bump @vueuse/core from 14.2.1 to 14.3.0 in /api/frontend (#276)
+
+## v0.1.95 (2026-05-09)
+
+### Fix
+
+- bump go to 1.26.3 and fix js deps (#270)
+
 ## v0.1.94 (2026-05-05)
 
 ### Fix
