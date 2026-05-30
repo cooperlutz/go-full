@@ -1,3 +1,9 @@
+## v0.1.97 (2026-05-30)
+
+### Fix
+
+- bump frontend deps and fix tests (#282)
+
 ## v0.1.96 (2026-05-30)
 
 ### Fix
