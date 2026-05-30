@@ -66,12 +66,15 @@ describe('PingPongTable', () => {
 
   it('shows error message on fetch failure', async () => {
     // Arrange
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-        statusText: 'Internal Server Error',
-      } as Response),
-    ) as unknown as typeof fetch
+    Object.defineProperty(global, 'fetch', {
+      value: vi.fn(() =>
+        Promise.resolve({
+          ok: false,
+          statusText: 'Internal Server Error',
+        } as Response),
+      ),
+      writable: true,
+    })
 
     const wrapper = mount(PingPongTable)
 

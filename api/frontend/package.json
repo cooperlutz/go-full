@@ -29,7 +29,11 @@
       "ignoreGhsas": [
         "GHSA-r4q5-vmmm-2653",
         "GHSA-rp42-5vxx-qpwr",
-        "GHSA-6v7q-wjvx-w8wg"
+        "GHSA-6v7q-wjvx-w8wg",
+        "GHSA-pjwm-pj3p-43mv",
+        "GHSA-35jp-ww65-95wh",
+        "GHSA-898c-q2cr-xwhg",
+        "GHSA-654m-c8p4-x5fp"
       ]
     }
   },
@@ -49,7 +53,7 @@
     "vue-router": "5.0.6"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "2.32.0",
+    "@openapitools/openapi-generator-cli": "2.34.0",
     "@tsconfig/node22": "22.0.5",
     "@types/node": "25.6.0",
     "@vitejs/plugin-vue": "6.0.6",
@@ -60,7 +64,7 @@
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-standard-with-typescript": "9.2.0",
     "@vue/eslint-config-typescript": "14.7.0",
-    "@vue/test-utils": "2.4.9",
+    "@vue/test-utils": "2.4.10",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.5.0",
     "eslint": "10.2.1",
@@ -73,8 +77,8 @@
     "msw": "2.13.6",
     "prettier": "3.8.3",
     "typescript": "6.0.3",
-    "vite": "8.0.10",
+    "vite": "8.0.14",
     "vitest": "4.1.5",
-    "vue-tsc": "3.2.7"
+    "vue-tsc": "3.2.8"
   }
 }

@@ -40,13 +40,15 @@ describe('PingPongMetrics', () => {
 
   it('displays an error message when metrics fail to load', async () => {
     // Arrange
-    // mock fetch to return an error
-    global.fetch = vi.fn(() =>
-      Promise.resolve({
-        ok: false,
-        statusText: 'Internal Server Error',
-      } as Response),
-    ) as unknown as typeof fetch
+    Object.defineProperty(global, 'fetch', {
+      value: vi.fn(() =>
+        Promise.resolve({
+          ok: false,
+          statusText: 'Internal Server Error',
+        } as Response),
+      ),
+      writable: true,
+    })
 
     const wrapper = mount(PingPongMetrics)
 
