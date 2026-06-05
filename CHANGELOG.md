@@ -1,3 +1,9 @@
+## v0.1.99 (2026-06-05)
+
+### Fix
+
+- **deps**: bump the all-github-actions group across 1 directory with 3 updates (#281)
+
 ## v0.1.98 (2026-06-05)
 
 ### Fix
