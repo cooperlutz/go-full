@@ -1,3 +1,9 @@
+## v0.1.98 (2026-06-05)
+
+### Fix
+
+- **deps**: bump marked from 18.0.2 to 18.0.4 in /api/frontend (#287)
+
 ## v0.1.97 (2026-05-30)
 
 ### Fix
