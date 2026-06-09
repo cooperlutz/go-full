@@ -21,20 +21,12 @@
   },
   "pnpm": {
     "overrides": {
-      "axios": "1.15.2",
+      "axios": "1.16.0",
       "ip-address": "10.1.1",
       "basic-ftp": "5.3.1"
     },
     "auditConfig": {
-      "ignoreGhsas": [
-        "GHSA-r4q5-vmmm-2653",
-        "GHSA-rp42-5vxx-qpwr",
-        "GHSA-6v7q-wjvx-w8wg",
-        "GHSA-pjwm-pj3p-43mv",
-        "GHSA-35jp-ww65-95wh",
-        "GHSA-898c-q2cr-xwhg",
-        "GHSA-654m-c8p4-x5fp"
-      ]
+      "ignoreGhsas": []
     }
   },
   "dependencies": {
@@ -46,7 +38,7 @@
     "lucide-vue-next": "1.0.0",
     "marked": "18.0.4",
     "sweetalert2": "11.26.24",
-    "tailwindcss": "4.2.2",
+    "tailwindcss": "4.3.0",
     "uuid": "14.0.0",
     "vue": "3.5.33",
     "vue-chartjs": "5.3.3",
