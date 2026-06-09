@@ -1,3 +1,9 @@
+## v0.1.100 (2026-06-09)
+
+### Fix
+
+- **deps**: bump tailwindcss from 4.2.2 to 4.3.0 in /api/frontend (#288)
+
 ## v0.1.99 (2026-06-05)
 
 ### Fix
