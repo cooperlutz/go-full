@@ -1,3 +1,9 @@
+## v0.1.101 (2026-06-19)
+
+### Fix
+
+- **deps**: bump codecov/codecov-action from 6.0.1 to 7.0.0 in the all-github-actions group (#289)
+
 ## v0.1.100 (2026-06-09)
 
 ### Fix
