@@ -75,7 +75,7 @@ type MockIQuerierExamLibrary_FindAllExamQuestions_Call struct {
 // FindAllExamQuestions is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.FindAllExamQuestionsParams
-func (_e *MockIQuerierExamLibrary_Expecter) FindAllExamQuestions(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) FindAllExamQuestions(ctx any, arg any) *MockIQuerierExamLibrary_FindAllExamQuestions_Call {
 	return &MockIQuerierExamLibrary_FindAllExamQuestions_Call{Call: _e.mock.On("FindAllExamQuestions", ctx, arg)}
 }
 
@@ -142,7 +142,7 @@ type MockIQuerierExamLibrary_FindAllExams_Call struct {
 
 // FindAllExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierExamLibrary_Expecter) FindAllExams(ctx interface{}) *MockIQuerierExamLibrary_FindAllExams_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) FindAllExams(ctx any) *MockIQuerierExamLibrary_FindAllExams_Call {
 	return &MockIQuerierExamLibrary_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx)}
 }
 
@@ -203,7 +203,7 @@ type MockIQuerierExamLibrary_FindExamByID_Call struct {
 // FindExamByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.FindExamByIDParams
-func (_e *MockIQuerierExamLibrary_Expecter) FindExamByID(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindExamByID_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) FindExamByID(ctx any, arg any) *MockIQuerierExamLibrary_FindExamByID_Call {
 	return &MockIQuerierExamLibrary_FindExamByID_Call{Call: _e.mock.On("FindExamByID", ctx, arg)}
 }
 
@@ -269,7 +269,7 @@ type MockIQuerierExamLibrary_FindExamQuestionByID_Call struct {
 // FindExamQuestionByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.FindExamQuestionByIDParams
-func (_e *MockIQuerierExamLibrary_Expecter) FindExamQuestionByID(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) FindExamQuestionByID(ctx any, arg any) *MockIQuerierExamLibrary_FindExamQuestionByID_Call {
 	return &MockIQuerierExamLibrary_FindExamQuestionByID_Call{Call: _e.mock.On("FindExamQuestionByID", ctx, arg)}
 }
 
@@ -326,7 +326,7 @@ type MockIQuerierExamLibrary_SaveExam_Call struct {
 // SaveExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.SaveExamParams
-func (_e *MockIQuerierExamLibrary_Expecter) SaveExam(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_SaveExam_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) SaveExam(ctx any, arg any) *MockIQuerierExamLibrary_SaveExam_Call {
 	return &MockIQuerierExamLibrary_SaveExam_Call{Call: _e.mock.On("SaveExam", ctx, arg)}
 }
 
@@ -383,7 +383,7 @@ type MockIQuerierExamLibrary_SaveExamQuestion_Call struct {
 // SaveExamQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.SaveExamQuestionParams
-func (_e *MockIQuerierExamLibrary_Expecter) SaveExamQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) SaveExamQuestion(ctx any, arg any) *MockIQuerierExamLibrary_SaveExamQuestion_Call {
 	return &MockIQuerierExamLibrary_SaveExamQuestion_Call{Call: _e.mock.On("SaveExamQuestion", ctx, arg)}
 }
 
@@ -441,7 +441,7 @@ type MockIQuerierExamLibrary_WithTx_Call struct {
 
 // WithTx is a helper method to define mock.On call
 //   - tx pgx.Tx
-func (_e *MockIQuerierExamLibrary_Expecter) WithTx(tx interface{}) *MockIQuerierExamLibrary_WithTx_Call {
+func (_e *MockIQuerierExamLibrary_Expecter) WithTx(tx any) *MockIQuerierExamLibrary_WithTx_Call {
 	return &MockIQuerierExamLibrary_WithTx_Call{Call: _e.mock.On("WithTx", tx)}
 }
 

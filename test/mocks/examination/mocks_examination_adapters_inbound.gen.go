@@ -55,7 +55,7 @@ type MockServerInterface_AnswerQuestion_Call struct {
 //   - r *http.Request
 //   - examId string
 //   - questionIndex int32
-func (_e *MockServerInterface_Expecter) AnswerQuestion(w interface{}, r interface{}, examId interface{}, questionIndex interface{}) *MockServerInterface_AnswerQuestion_Call {
+func (_e *MockServerInterface_Expecter) AnswerQuestion(w any, r any, examId any, questionIndex any) *MockServerInterface_AnswerQuestion_Call {
 	return &MockServerInterface_AnswerQuestion_Call{Call: _e.mock.On("AnswerQuestion", w, r, examId, questionIndex)}
 }
 
@@ -111,7 +111,7 @@ type MockServerInterface_FindAllExams_Call struct {
 // FindAllExams is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockServerInterface_Expecter) FindAllExams(w interface{}, r interface{}) *MockServerInterface_FindAllExams_Call {
+func (_e *MockServerInterface_Expecter) FindAllExams(w any, r any) *MockServerInterface_FindAllExams_Call {
 	return &MockServerInterface_FindAllExams_Call{Call: _e.mock.On("FindAllExams", w, r)}
 }
 
@@ -158,7 +158,7 @@ type MockServerInterface_GetExam_Call struct {
 //   - w http.ResponseWriter
 //   - r *http.Request
 //   - examId string
-func (_e *MockServerInterface_Expecter) GetExam(w interface{}, r interface{}, examId interface{}) *MockServerInterface_GetExam_Call {
+func (_e *MockServerInterface_Expecter) GetExam(w any, r any, examId any) *MockServerInterface_GetExam_Call {
 	return &MockServerInterface_GetExam_Call{Call: _e.mock.On("GetExam", w, r, examId)}
 }
 
@@ -210,7 +210,7 @@ type MockServerInterface_GetExamProgress_Call struct {
 //   - w http.ResponseWriter
 //   - r *http.Request
 //   - examId string
-func (_e *MockServerInterface_Expecter) GetExamProgress(w interface{}, r interface{}, examId interface{}) *MockServerInterface_GetExamProgress_Call {
+func (_e *MockServerInterface_Expecter) GetExamProgress(w any, r any, examId any) *MockServerInterface_GetExamProgress_Call {
 	return &MockServerInterface_GetExamProgress_Call{Call: _e.mock.On("GetExamProgress", w, r, examId)}
 }
 
@@ -263,7 +263,7 @@ type MockServerInterface_GetExamQuestion_Call struct {
 //   - r *http.Request
 //   - examId string
 //   - questionIndex int32
-func (_e *MockServerInterface_Expecter) GetExamQuestion(w interface{}, r interface{}, examId interface{}, questionIndex interface{}) *MockServerInterface_GetExamQuestion_Call {
+func (_e *MockServerInterface_Expecter) GetExamQuestion(w any, r any, examId any, questionIndex any) *MockServerInterface_GetExamQuestion_Call {
 	return &MockServerInterface_GetExamQuestion_Call{Call: _e.mock.On("GetExamQuestion", w, r, examId, questionIndex)}
 }
 
@@ -319,7 +319,7 @@ type MockServerInterface_StartNewExam_Call struct {
 // StartNewExam is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockServerInterface_Expecter) StartNewExam(w interface{}, r interface{}) *MockServerInterface_StartNewExam_Call {
+func (_e *MockServerInterface_Expecter) StartNewExam(w any, r any) *MockServerInterface_StartNewExam_Call {
 	return &MockServerInterface_StartNewExam_Call{Call: _e.mock.On("StartNewExam", w, r)}
 }
 
@@ -366,7 +366,7 @@ type MockServerInterface_SubmitExam_Call struct {
 //   - w http.ResponseWriter
 //   - r *http.Request
 //   - examId string
-func (_e *MockServerInterface_Expecter) SubmitExam(w interface{}, r interface{}, examId interface{}) *MockServerInterface_SubmitExam_Call {
+func (_e *MockServerInterface_Expecter) SubmitExam(w any, r any, examId any) *MockServerInterface_SubmitExam_Call {
 	return &MockServerInterface_SubmitExam_Call{Call: _e.mock.On("SubmitExam", w, r, examId)}
 }
 
@@ -454,7 +454,7 @@ type MockFindAllExamsResponseObject_VisitFindAllExamsResponse_Call struct {
 
 // VisitFindAllExamsResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockFindAllExamsResponseObject_Expecter) VisitFindAllExamsResponse(w interface{}) *MockFindAllExamsResponseObject_VisitFindAllExamsResponse_Call {
+func (_e *MockFindAllExamsResponseObject_Expecter) VisitFindAllExamsResponse(w any) *MockFindAllExamsResponseObject_VisitFindAllExamsResponse_Call {
 	return &MockFindAllExamsResponseObject_VisitFindAllExamsResponse_Call{Call: _e.mock.On("VisitFindAllExamsResponse", w)}
 }
 
@@ -532,7 +532,7 @@ type MockStartNewExamResponseObject_VisitStartNewExamResponse_Call struct {
 
 // VisitStartNewExamResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockStartNewExamResponseObject_Expecter) VisitStartNewExamResponse(w interface{}) *MockStartNewExamResponseObject_VisitStartNewExamResponse_Call {
+func (_e *MockStartNewExamResponseObject_Expecter) VisitStartNewExamResponse(w any) *MockStartNewExamResponseObject_VisitStartNewExamResponse_Call {
 	return &MockStartNewExamResponseObject_VisitStartNewExamResponse_Call{Call: _e.mock.On("VisitStartNewExamResponse", w)}
 }
 
@@ -610,7 +610,7 @@ type MockGetExamResponseObject_VisitGetExamResponse_Call struct {
 
 // VisitGetExamResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockGetExamResponseObject_Expecter) VisitGetExamResponse(w interface{}) *MockGetExamResponseObject_VisitGetExamResponse_Call {
+func (_e *MockGetExamResponseObject_Expecter) VisitGetExamResponse(w any) *MockGetExamResponseObject_VisitGetExamResponse_Call {
 	return &MockGetExamResponseObject_VisitGetExamResponse_Call{Call: _e.mock.On("VisitGetExamResponse", w)}
 }
 
@@ -688,7 +688,7 @@ type MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call struct 
 
 // VisitGetExamProgressResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockGetExamProgressResponseObject_Expecter) VisitGetExamProgressResponse(w interface{}) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
+func (_e *MockGetExamProgressResponseObject_Expecter) VisitGetExamProgressResponse(w any) *MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call {
 	return &MockGetExamProgressResponseObject_VisitGetExamProgressResponse_Call{Call: _e.mock.On("VisitGetExamProgressResponse", w)}
 }
 
@@ -766,7 +766,7 @@ type MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call struct 
 
 // VisitGetExamQuestionResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockGetExamQuestionResponseObject_Expecter) VisitGetExamQuestionResponse(w interface{}) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
+func (_e *MockGetExamQuestionResponseObject_Expecter) VisitGetExamQuestionResponse(w any) *MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call {
 	return &MockGetExamQuestionResponseObject_VisitGetExamQuestionResponse_Call{Call: _e.mock.On("VisitGetExamQuestionResponse", w)}
 }
 
@@ -844,7 +844,7 @@ type MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call struct {
 
 // VisitAnswerQuestionResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockAnswerQuestionResponseObject_Expecter) VisitAnswerQuestionResponse(w interface{}) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
+func (_e *MockAnswerQuestionResponseObject_Expecter) VisitAnswerQuestionResponse(w any) *MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call {
 	return &MockAnswerQuestionResponseObject_VisitAnswerQuestionResponse_Call{Call: _e.mock.On("VisitAnswerQuestionResponse", w)}
 }
 
@@ -922,7 +922,7 @@ type MockSubmitExamResponseObject_VisitSubmitExamResponse_Call struct {
 
 // VisitSubmitExamResponse is a helper method to define mock.On call
 //   - w http.ResponseWriter
-func (_e *MockSubmitExamResponseObject_Expecter) VisitSubmitExamResponse(w interface{}) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
+func (_e *MockSubmitExamResponseObject_Expecter) VisitSubmitExamResponse(w any) *MockSubmitExamResponseObject_VisitSubmitExamResponse_Call {
 	return &MockSubmitExamResponseObject_VisitSubmitExamResponse_Call{Call: _e.mock.On("VisitSubmitExamResponse", w)}
 }
 
@@ -1012,7 +1012,7 @@ type MockStrictServerInterface_AnswerQuestion_Call struct {
 // AnswerQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.AnswerQuestionRequestObject
-func (_e *MockStrictServerInterface_Expecter) AnswerQuestion(ctx interface{}, request interface{}) *MockStrictServerInterface_AnswerQuestion_Call {
+func (_e *MockStrictServerInterface_Expecter) AnswerQuestion(ctx any, request any) *MockStrictServerInterface_AnswerQuestion_Call {
 	return &MockStrictServerInterface_AnswerQuestion_Call{Call: _e.mock.On("AnswerQuestion", ctx, request)}
 }
 
@@ -1080,7 +1080,7 @@ type MockStrictServerInterface_FindAllExams_Call struct {
 // FindAllExams is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.FindAllExamsRequestObject
-func (_e *MockStrictServerInterface_Expecter) FindAllExams(ctx interface{}, request interface{}) *MockStrictServerInterface_FindAllExams_Call {
+func (_e *MockStrictServerInterface_Expecter) FindAllExams(ctx any, request any) *MockStrictServerInterface_FindAllExams_Call {
 	return &MockStrictServerInterface_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx, request)}
 }
 
@@ -1148,7 +1148,7 @@ type MockStrictServerInterface_GetExam_Call struct {
 // GetExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.GetExamRequestObject
-func (_e *MockStrictServerInterface_Expecter) GetExam(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExam_Call {
+func (_e *MockStrictServerInterface_Expecter) GetExam(ctx any, request any) *MockStrictServerInterface_GetExam_Call {
 	return &MockStrictServerInterface_GetExam_Call{Call: _e.mock.On("GetExam", ctx, request)}
 }
 
@@ -1216,7 +1216,7 @@ type MockStrictServerInterface_GetExamProgress_Call struct {
 // GetExamProgress is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.GetExamProgressRequestObject
-func (_e *MockStrictServerInterface_Expecter) GetExamProgress(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExamProgress_Call {
+func (_e *MockStrictServerInterface_Expecter) GetExamProgress(ctx any, request any) *MockStrictServerInterface_GetExamProgress_Call {
 	return &MockStrictServerInterface_GetExamProgress_Call{Call: _e.mock.On("GetExamProgress", ctx, request)}
 }
 
@@ -1284,7 +1284,7 @@ type MockStrictServerInterface_GetExamQuestion_Call struct {
 // GetExamQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.GetExamQuestionRequestObject
-func (_e *MockStrictServerInterface_Expecter) GetExamQuestion(ctx interface{}, request interface{}) *MockStrictServerInterface_GetExamQuestion_Call {
+func (_e *MockStrictServerInterface_Expecter) GetExamQuestion(ctx any, request any) *MockStrictServerInterface_GetExamQuestion_Call {
 	return &MockStrictServerInterface_GetExamQuestion_Call{Call: _e.mock.On("GetExamQuestion", ctx, request)}
 }
 
@@ -1352,7 +1352,7 @@ type MockStrictServerInterface_StartNewExam_Call struct {
 // StartNewExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.StartNewExamRequestObject
-func (_e *MockStrictServerInterface_Expecter) StartNewExam(ctx interface{}, request interface{}) *MockStrictServerInterface_StartNewExam_Call {
+func (_e *MockStrictServerInterface_Expecter) StartNewExam(ctx any, request any) *MockStrictServerInterface_StartNewExam_Call {
 	return &MockStrictServerInterface_StartNewExam_Call{Call: _e.mock.On("StartNewExam", ctx, request)}
 }
 
@@ -1420,7 +1420,7 @@ type MockStrictServerInterface_SubmitExam_Call struct {
 // SubmitExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - request inbound.SubmitExamRequestObject
-func (_e *MockStrictServerInterface_Expecter) SubmitExam(ctx interface{}, request interface{}) *MockStrictServerInterface_SubmitExam_Call {
+func (_e *MockStrictServerInterface_Expecter) SubmitExam(ctx any, request any) *MockStrictServerInterface_SubmitExam_Call {
 	return &MockStrictServerInterface_SubmitExam_Call{Call: _e.mock.On("SubmitExam", ctx, request)}
 }
 

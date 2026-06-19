@@ -74,7 +74,7 @@ type MockIExamLibraryRepository_FindAllExams_Call struct {
 
 // FindAllExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIExamLibraryRepository_Expecter) FindAllExams(ctx interface{}) *MockIExamLibraryRepository_FindAllExams_Call {
+func (_e *MockIExamLibraryRepository_Expecter) FindAllExams(ctx any) *MockIExamLibraryRepository_FindAllExams_Call {
 	return &MockIExamLibraryRepository_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx)}
 }
 
@@ -135,7 +135,7 @@ type MockIExamLibraryRepository_FindExamByID_Call struct {
 // FindExamByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - examID uuid.UUID
-func (_e *MockIExamLibraryRepository_Expecter) FindExamByID(ctx interface{}, examID interface{}) *MockIExamLibraryRepository_FindExamByID_Call {
+func (_e *MockIExamLibraryRepository_Expecter) FindExamByID(ctx any, examID any) *MockIExamLibraryRepository_FindExamByID_Call {
 	return &MockIExamLibraryRepository_FindExamByID_Call{Call: _e.mock.On("FindExamByID", ctx, examID)}
 }
 
@@ -192,7 +192,7 @@ type MockIExamLibraryRepository_SaveExam_Call struct {
 // SaveExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - exam entity.Exam
-func (_e *MockIExamLibraryRepository_Expecter) SaveExam(ctx interface{}, exam interface{}) *MockIExamLibraryRepository_SaveExam_Call {
+func (_e *MockIExamLibraryRepository_Expecter) SaveExam(ctx any, exam any) *MockIExamLibraryRepository_SaveExam_Call {
 	return &MockIExamLibraryRepository_SaveExam_Call{Call: _e.mock.On("SaveExam", ctx, exam)}
 }
 

@@ -73,7 +73,7 @@ type MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call struct {
 
 // AverageNumberOfPingPongsCreatedPerDay is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) AverageNumberOfPingPongsCreatedPerDay(ctx interface{}) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
+func (_e *MockIPingPongRepository_Expecter) AverageNumberOfPingPongsCreatedPerDay(ctx any) *MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call {
 	return &MockIPingPongRepository_AverageNumberOfPingPongsCreatedPerDay_Call{Call: _e.mock.On("AverageNumberOfPingPongsCreatedPerDay", ctx)}
 }
 
@@ -133,7 +133,7 @@ type MockIPingPongRepository_FindAll_Call struct {
 
 // FindAll is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) FindAll(ctx interface{}) *MockIPingPongRepository_FindAll_Call {
+func (_e *MockIPingPongRepository_Expecter) FindAll(ctx any) *MockIPingPongRepository_FindAll_Call {
 	return &MockIPingPongRepository_FindAll_Call{Call: _e.mock.On("FindAll", ctx)}
 }
 
@@ -193,7 +193,7 @@ type MockIPingPongRepository_FindAllPings_Call struct {
 
 // FindAllPings is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) FindAllPings(ctx interface{}) *MockIPingPongRepository_FindAllPings_Call {
+func (_e *MockIPingPongRepository_Expecter) FindAllPings(ctx any) *MockIPingPongRepository_FindAllPings_Call {
 	return &MockIPingPongRepository_FindAllPings_Call{Call: _e.mock.On("FindAllPings", ctx)}
 }
 
@@ -253,7 +253,7 @@ type MockIPingPongRepository_FindAllPongs_Call struct {
 
 // FindAllPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) FindAllPongs(ctx interface{}) *MockIPingPongRepository_FindAllPongs_Call {
+func (_e *MockIPingPongRepository_Expecter) FindAllPongs(ctx any) *MockIPingPongRepository_FindAllPongs_Call {
 	return &MockIPingPongRepository_FindAllPongs_Call{Call: _e.mock.On("FindAllPongs", ctx)}
 }
 
@@ -314,7 +314,7 @@ type MockIPingPongRepository_FindOneByID_Call struct {
 // FindOneByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockIPingPongRepository_Expecter) FindOneByID(ctx interface{}, id interface{}) *MockIPingPongRepository_FindOneByID_Call {
+func (_e *MockIPingPongRepository_Expecter) FindOneByID(ctx any, id any) *MockIPingPongRepository_FindOneByID_Call {
 	return &MockIPingPongRepository_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, id)}
 }
 
@@ -371,7 +371,7 @@ type MockIPingPongRepository_SavePingPong_Call struct {
 // SavePingPong is a helper method to define mock.On call
 //   - ctx context.Context
 //   - p entity.PingPongEntity
-func (_e *MockIPingPongRepository_Expecter) SavePingPong(ctx interface{}, p interface{}) *MockIPingPongRepository_SavePingPong_Call {
+func (_e *MockIPingPongRepository_Expecter) SavePingPong(ctx any, p any) *MockIPingPongRepository_SavePingPong_Call {
 	return &MockIPingPongRepository_SavePingPong_Call{Call: _e.mock.On("SavePingPong", ctx, p)}
 }
 
@@ -436,7 +436,7 @@ type MockIPingPongRepository_TotalNumberOfPingPongs_Call struct {
 
 // TotalNumberOfPingPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPingPongs(ctx interface{}) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
+func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPingPongs(ctx any) *MockIPingPongRepository_TotalNumberOfPingPongs_Call {
 	return &MockIPingPongRepository_TotalNumberOfPingPongs_Call{Call: _e.mock.On("TotalNumberOfPingPongs", ctx)}
 }
 
@@ -498,7 +498,7 @@ type MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call struct {
 
 // TotalNumberOfPingPongsCreatedPerDay is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPingPongsCreatedPerDay(ctx interface{}) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
+func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPingPongsCreatedPerDay(ctx any) *MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call {
 	return &MockIPingPongRepository_TotalNumberOfPingPongsCreatedPerDay_Call{Call: _e.mock.On("TotalNumberOfPingPongsCreatedPerDay", ctx)}
 }
 
@@ -558,7 +558,7 @@ type MockIPingPongRepository_TotalNumberOfPings_Call struct {
 
 // TotalNumberOfPings is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPings(ctx interface{}) *MockIPingPongRepository_TotalNumberOfPings_Call {
+func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPings(ctx any) *MockIPingPongRepository_TotalNumberOfPings_Call {
 	return &MockIPingPongRepository_TotalNumberOfPings_Call{Call: _e.mock.On("TotalNumberOfPings", ctx)}
 }
 
@@ -618,7 +618,7 @@ type MockIPingPongRepository_TotalNumberOfPongs_Call struct {
 
 // TotalNumberOfPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPongs(ctx interface{}) *MockIPingPongRepository_TotalNumberOfPongs_Call {
+func (_e *MockIPingPongRepository_Expecter) TotalNumberOfPongs(ctx any) *MockIPingPongRepository_TotalNumberOfPongs_Call {
 	return &MockIPingPongRepository_TotalNumberOfPongs_Call{Call: _e.mock.On("TotalNumberOfPongs", ctx)}
 }
 

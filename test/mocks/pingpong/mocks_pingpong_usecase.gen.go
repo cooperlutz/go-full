@@ -73,7 +73,7 @@ type MockIPingPongUseCase_FindAll_Call struct {
 
 // FindAll is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) FindAll(ctx interface{}) *MockIPingPongUseCase_FindAll_Call {
+func (_e *MockIPingPongUseCase_Expecter) FindAll(ctx any) *MockIPingPongUseCase_FindAll_Call {
 	return &MockIPingPongUseCase_FindAll_Call{Call: _e.mock.On("FindAll", ctx)}
 }
 
@@ -133,7 +133,7 @@ type MockIPingPongUseCase_FindAllPings_Call struct {
 
 // FindAllPings is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) FindAllPings(ctx interface{}) *MockIPingPongUseCase_FindAllPings_Call {
+func (_e *MockIPingPongUseCase_Expecter) FindAllPings(ctx any) *MockIPingPongUseCase_FindAllPings_Call {
 	return &MockIPingPongUseCase_FindAllPings_Call{Call: _e.mock.On("FindAllPings", ctx)}
 }
 
@@ -193,7 +193,7 @@ type MockIPingPongUseCase_FindAllPongs_Call struct {
 
 // FindAllPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) FindAllPongs(ctx interface{}) *MockIPingPongUseCase_FindAllPongs_Call {
+func (_e *MockIPingPongUseCase_Expecter) FindAllPongs(ctx any) *MockIPingPongUseCase_FindAllPongs_Call {
 	return &MockIPingPongUseCase_FindAllPongs_Call{Call: _e.mock.On("FindAllPongs", ctx)}
 }
 
@@ -254,7 +254,7 @@ type MockIPingPongUseCase_FindOneByID_Call struct {
 // FindOneByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - q query.FindOneByID
-func (_e *MockIPingPongUseCase_Expecter) FindOneByID(ctx interface{}, q interface{}) *MockIPingPongUseCase_FindOneByID_Call {
+func (_e *MockIPingPongUseCase_Expecter) FindOneByID(ctx any, q any) *MockIPingPongUseCase_FindOneByID_Call {
 	return &MockIPingPongUseCase_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, q)}
 }
 
@@ -320,7 +320,7 @@ type MockIPingPongUseCase_PingPong_Call struct {
 // PingPong is a helper method to define mock.On call
 //   - ctx context.Context
 //   - cmd command.PingPongCommand
-func (_e *MockIPingPongUseCase_Expecter) PingPong(ctx interface{}, cmd interface{}) *MockIPingPongUseCase_PingPong_Call {
+func (_e *MockIPingPongUseCase_Expecter) PingPong(ctx any, cmd any) *MockIPingPongUseCase_PingPong_Call {
 	return &MockIPingPongUseCase_PingPong_Call{Call: _e.mock.On("PingPong", ctx, cmd)}
 }
 
@@ -385,7 +385,7 @@ type MockIPingPongUseCase_TotalNumberOfPingPongs_Call struct {
 
 // TotalNumberOfPingPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPingPongs(ctx interface{}) *MockIPingPongUseCase_TotalNumberOfPingPongs_Call {
+func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPingPongs(ctx any) *MockIPingPongUseCase_TotalNumberOfPingPongs_Call {
 	return &MockIPingPongUseCase_TotalNumberOfPingPongs_Call{Call: _e.mock.On("TotalNumberOfPingPongs", ctx)}
 }
 
@@ -447,7 +447,7 @@ type MockIPingPongUseCase_TotalNumberOfPingPongsPerDay_Call struct {
 
 // TotalNumberOfPingPongsPerDay is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPingPongsPerDay(ctx interface{}) *MockIPingPongUseCase_TotalNumberOfPingPongsPerDay_Call {
+func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPingPongsPerDay(ctx any) *MockIPingPongUseCase_TotalNumberOfPingPongsPerDay_Call {
 	return &MockIPingPongUseCase_TotalNumberOfPingPongsPerDay_Call{Call: _e.mock.On("TotalNumberOfPingPongsPerDay", ctx)}
 }
 
@@ -507,7 +507,7 @@ type MockIPingPongUseCase_TotalNumberOfPings_Call struct {
 
 // TotalNumberOfPings is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPings(ctx interface{}) *MockIPingPongUseCase_TotalNumberOfPings_Call {
+func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPings(ctx any) *MockIPingPongUseCase_TotalNumberOfPings_Call {
 	return &MockIPingPongUseCase_TotalNumberOfPings_Call{Call: _e.mock.On("TotalNumberOfPings", ctx)}
 }
 
@@ -567,7 +567,7 @@ type MockIPingPongUseCase_TotalNumberOfPongs_Call struct {
 
 // TotalNumberOfPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPongs(ctx interface{}) *MockIPingPongUseCase_TotalNumberOfPongs_Call {
+func (_e *MockIPingPongUseCase_Expecter) TotalNumberOfPongs(ctx any) *MockIPingPongUseCase_TotalNumberOfPongs_Call {
 	return &MockIPingPongUseCase_TotalNumberOfPongs_Call{Call: _e.mock.On("TotalNumberOfPongs", ctx)}
 }
 

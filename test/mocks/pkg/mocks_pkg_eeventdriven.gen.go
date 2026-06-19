@@ -63,7 +63,7 @@ type MockIPubSubEventProcessor_EmitEvent_Call struct {
 // EmitEvent is a helper method to define mock.On call
 //   - topic string
 //   - payload any
-func (_e *MockIPubSubEventProcessor_Expecter) EmitEvent(topic interface{}, payload interface{}) *MockIPubSubEventProcessor_EmitEvent_Call {
+func (_e *MockIPubSubEventProcessor_Expecter) EmitEvent(topic any, payload any) *MockIPubSubEventProcessor_EmitEvent_Call {
 	return &MockIPubSubEventProcessor_EmitEvent_Call{Call: _e.mock.On("EmitEvent", topic, payload)}
 }
 
@@ -120,7 +120,7 @@ type MockIPubSubEventProcessor_EmitEventMessage_Call struct {
 // EmitEventMessage is a helper method to define mock.On call
 //   - topic string
 //   - payload *message.Message
-func (_e *MockIPubSubEventProcessor_Expecter) EmitEventMessage(topic interface{}, payload interface{}) *MockIPubSubEventProcessor_EmitEventMessage_Call {
+func (_e *MockIPubSubEventProcessor_Expecter) EmitEventMessage(topic any, payload any) *MockIPubSubEventProcessor_EmitEventMessage_Call {
 	return &MockIPubSubEventProcessor_EmitEventMessage_Call{Call: _e.mock.On("EmitEventMessage", topic, payload)}
 }
 
@@ -220,7 +220,7 @@ type MockIPubSubEventProcessor_Run_Call struct {
 
 // Run is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIPubSubEventProcessor_Expecter) Run(ctx interface{}) *MockIPubSubEventProcessor_Run_Call {
+func (_e *MockIPubSubEventProcessor_Expecter) Run(ctx any) *MockIPubSubEventProcessor_Run_Call {
 	return &MockIPubSubEventProcessor_Run_Call{Call: _e.mock.On("Run", ctx)}
 }
 
