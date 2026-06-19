@@ -64,7 +64,7 @@ type MockRepository_AddExam_Call struct {
 // AddExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - exam *examination.Exam
-func (_e *MockRepository_Expecter) AddExam(ctx interface{}, exam interface{}) *MockRepository_AddExam_Call {
+func (_e *MockRepository_Expecter) AddExam(ctx any, exam any) *MockRepository_AddExam_Call {
 	return &MockRepository_AddExam_Call{Call: _e.mock.On("AddExam", ctx, exam)}
 }
 
@@ -132,7 +132,7 @@ type MockRepository_GetExam_Call struct {
 // GetExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockRepository_Expecter) GetExam(ctx interface{}, id interface{}) *MockRepository_GetExam_Call {
+func (_e *MockRepository_Expecter) GetExam(ctx any, id any) *MockRepository_GetExam_Call {
 	return &MockRepository_GetExam_Call{Call: _e.mock.On("GetExam", ctx, id)}
 }
 
@@ -190,7 +190,7 @@ type MockRepository_UpdateExam_Call struct {
 //   - ctx context.Context
 //   - examId uuid.UUID
 //   - updateFn func(e *examination.Exam) (*examination.Exam, error)
-func (_e *MockRepository_Expecter) UpdateExam(ctx interface{}, examId interface{}, updateFn interface{}) *MockRepository_UpdateExam_Call {
+func (_e *MockRepository_Expecter) UpdateExam(ctx any, examId any, updateFn any) *MockRepository_UpdateExam_Call {
 	return &MockRepository_UpdateExam_Call{Call: _e.mock.On("UpdateExam", ctx, examId, updateFn)}
 }
 

@@ -73,7 +73,7 @@ type MockIExamLibraryUseCase_AddExamToLibrary_Call struct {
 // AddExamToLibrary is a helper method to define mock.On call
 //   - ctx context.Context
 //   - cmd command.AddExamToLibrary
-func (_e *MockIExamLibraryUseCase_Expecter) AddExamToLibrary(ctx interface{}, cmd interface{}) *MockIExamLibraryUseCase_AddExamToLibrary_Call {
+func (_e *MockIExamLibraryUseCase_Expecter) AddExamToLibrary(ctx any, cmd any) *MockIExamLibraryUseCase_AddExamToLibrary_Call {
 	return &MockIExamLibraryUseCase_AddExamToLibrary_Call{Call: _e.mock.On("AddExamToLibrary", ctx, cmd)}
 }
 
@@ -139,7 +139,7 @@ type MockIExamLibraryUseCase_FindAllExamsWithQuestions_Call struct {
 // FindAllExamsWithQuestions is a helper method to define mock.On call
 //   - ctx context.Context
 //   - qry query.FindAllExamsWithQuestions
-func (_e *MockIExamLibraryUseCase_Expecter) FindAllExamsWithQuestions(ctx interface{}, qry interface{}) *MockIExamLibraryUseCase_FindAllExamsWithQuestions_Call {
+func (_e *MockIExamLibraryUseCase_Expecter) FindAllExamsWithQuestions(ctx any, qry any) *MockIExamLibraryUseCase_FindAllExamsWithQuestions_Call {
 	return &MockIExamLibraryUseCase_FindAllExamsWithQuestions_Call{Call: _e.mock.On("FindAllExamsWithQuestions", ctx, qry)}
 }
 
@@ -205,7 +205,7 @@ type MockIExamLibraryUseCase_FindAllExamsWithoutQuestions_Call struct {
 // FindAllExamsWithoutQuestions is a helper method to define mock.On call
 //   - ctx context.Context
 //   - qry query.FindAllExamsWithoutQuestions
-func (_e *MockIExamLibraryUseCase_Expecter) FindAllExamsWithoutQuestions(ctx interface{}, qry interface{}) *MockIExamLibraryUseCase_FindAllExamsWithoutQuestions_Call {
+func (_e *MockIExamLibraryUseCase_Expecter) FindAllExamsWithoutQuestions(ctx any, qry any) *MockIExamLibraryUseCase_FindAllExamsWithoutQuestions_Call {
 	return &MockIExamLibraryUseCase_FindAllExamsWithoutQuestions_Call{Call: _e.mock.On("FindAllExamsWithoutQuestions", ctx, qry)}
 }
 
@@ -271,7 +271,7 @@ type MockIExamLibraryUseCase_FindOneExamByID_Call struct {
 // FindOneExamByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - qry query.FindOneExamByID
-func (_e *MockIExamLibraryUseCase_Expecter) FindOneExamByID(ctx interface{}, qry interface{}) *MockIExamLibraryUseCase_FindOneExamByID_Call {
+func (_e *MockIExamLibraryUseCase_Expecter) FindOneExamByID(ctx any, qry any) *MockIExamLibraryUseCase_FindOneExamByID_Call {
 	return &MockIExamLibraryUseCase_FindOneExamByID_Call{Call: _e.mock.On("FindOneExamByID", ctx, qry)}
 }
 

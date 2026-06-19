@@ -81,9 +81,9 @@ type MockDBTX_Exec_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - ifaceVals ...interface{}
-func (_e *MockDBTX_Expecter) Exec(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockDBTX_Exec_Call {
+func (_e *MockDBTX_Expecter) Exec(context1 any, s any, ifaceVals ...any) *MockDBTX_Exec_Call {
 	return &MockDBTX_Exec_Call{Call: _e.mock.On("Exec",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]any{context1, s}, ifaceVals...)...)}
 }
 
 func (_c *MockDBTX_Exec_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockDBTX_Exec_Call {
@@ -164,9 +164,9 @@ type MockDBTX_Query_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - ifaceVals ...interface{}
-func (_e *MockDBTX_Expecter) Query(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockDBTX_Query_Call {
+func (_e *MockDBTX_Expecter) Query(context1 any, s any, ifaceVals ...any) *MockDBTX_Query_Call {
 	return &MockDBTX_Query_Call{Call: _e.mock.On("Query",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]any{context1, s}, ifaceVals...)...)}
 }
 
 func (_c *MockDBTX_Query_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockDBTX_Query_Call {
@@ -238,9 +238,9 @@ type MockDBTX_QueryRow_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - ifaceVals ...interface{}
-func (_e *MockDBTX_Expecter) QueryRow(context1 interface{}, s interface{}, ifaceVals ...interface{}) *MockDBTX_QueryRow_Call {
+func (_e *MockDBTX_Expecter) QueryRow(context1 any, s any, ifaceVals ...any) *MockDBTX_QueryRow_Call {
 	return &MockDBTX_QueryRow_Call{Call: _e.mock.On("QueryRow",
-		append([]interface{}{context1, s}, ifaceVals...)...)}
+		append([]any{context1, s}, ifaceVals...)...)}
 }
 
 func (_c *MockDBTX_QueryRow_Call) Run(run func(context1 context.Context, s string, ifaceVals ...interface{})) *MockDBTX_QueryRow_Call {
@@ -330,7 +330,7 @@ type MockQuerier_AddExam_Call struct {
 // AddExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.AddExamParams
-func (_e *MockQuerier_Expecter) AddExam(ctx interface{}, arg interface{}) *MockQuerier_AddExam_Call {
+func (_e *MockQuerier_Expecter) AddExam(ctx any, arg any) *MockQuerier_AddExam_Call {
 	return &MockQuerier_AddExam_Call{Call: _e.mock.On("AddExam", ctx, arg)}
 }
 
@@ -387,7 +387,7 @@ type MockQuerier_AddQuestion_Call struct {
 // AddQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.AddQuestionParams
-func (_e *MockQuerier_Expecter) AddQuestion(ctx interface{}, arg interface{}) *MockQuerier_AddQuestion_Call {
+func (_e *MockQuerier_Expecter) AddQuestion(ctx any, arg any) *MockQuerier_AddQuestion_Call {
 	return &MockQuerier_AddQuestion_Call{Call: _e.mock.On("AddQuestion", ctx, arg)}
 }
 
@@ -454,7 +454,7 @@ type MockQuerier_FindAllExams_Call struct {
 
 // FindAllExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockQuerier_Expecter) FindAllExams(ctx interface{}) *MockQuerier_FindAllExams_Call {
+func (_e *MockQuerier_Expecter) FindAllExams(ctx any) *MockQuerier_FindAllExams_Call {
 	return &MockQuerier_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx)}
 }
 
@@ -516,7 +516,7 @@ type MockQuerier_FindAllInProgressExams_Call struct {
 
 // FindAllInProgressExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockQuerier_Expecter) FindAllInProgressExams(ctx interface{}) *MockQuerier_FindAllInProgressExams_Call {
+func (_e *MockQuerier_Expecter) FindAllInProgressExams(ctx any) *MockQuerier_FindAllInProgressExams_Call {
 	return &MockQuerier_FindAllInProgressExams_Call{Call: _e.mock.On("FindAllInProgressExams", ctx)}
 }
 
@@ -579,7 +579,7 @@ type MockQuerier_FindQuestionsForExam_Call struct {
 // FindQuestionsForExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.FindQuestionsForExamParams
-func (_e *MockQuerier_Expecter) FindQuestionsForExam(ctx interface{}, arg interface{}) *MockQuerier_FindQuestionsForExam_Call {
+func (_e *MockQuerier_Expecter) FindQuestionsForExam(ctx any, arg any) *MockQuerier_FindQuestionsForExam_Call {
 	return &MockQuerier_FindQuestionsForExam_Call{Call: _e.mock.On("FindQuestionsForExam", ctx, arg)}
 }
 
@@ -645,7 +645,7 @@ type MockQuerier_GetExam_Call struct {
 // GetExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetExamParams
-func (_e *MockQuerier_Expecter) GetExam(ctx interface{}, arg interface{}) *MockQuerier_GetExam_Call {
+func (_e *MockQuerier_Expecter) GetExam(ctx any, arg any) *MockQuerier_GetExam_Call {
 	return &MockQuerier_GetExam_Call{Call: _e.mock.On("GetExam", ctx, arg)}
 }
 
@@ -711,7 +711,7 @@ type MockQuerier_GetQuestion_Call struct {
 // GetQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionParams
-func (_e *MockQuerier_Expecter) GetQuestion(ctx interface{}, arg interface{}) *MockQuerier_GetQuestion_Call {
+func (_e *MockQuerier_Expecter) GetQuestion(ctx any, arg any) *MockQuerier_GetQuestion_Call {
 	return &MockQuerier_GetQuestion_Call{Call: _e.mock.On("GetQuestion", ctx, arg)}
 }
 
@@ -777,7 +777,7 @@ type MockQuerier_GetQuestionByExamAndIndex_Call struct {
 // GetQuestionByExamAndIndex is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionByExamAndIndexParams
-func (_e *MockQuerier_Expecter) GetQuestionByExamAndIndex(ctx interface{}, arg interface{}) *MockQuerier_GetQuestionByExamAndIndex_Call {
+func (_e *MockQuerier_Expecter) GetQuestionByExamAndIndex(ctx any, arg any) *MockQuerier_GetQuestionByExamAndIndex_Call {
 	return &MockQuerier_GetQuestionByExamAndIndex_Call{Call: _e.mock.On("GetQuestionByExamAndIndex", ctx, arg)}
 }
 
@@ -845,7 +845,7 @@ type MockQuerier_GetQuestionsByExam_Call struct {
 // GetQuestionsByExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionsByExamParams
-func (_e *MockQuerier_Expecter) GetQuestionsByExam(ctx interface{}, arg interface{}) *MockQuerier_GetQuestionsByExam_Call {
+func (_e *MockQuerier_Expecter) GetQuestionsByExam(ctx any, arg any) *MockQuerier_GetQuestionsByExam_Call {
 	return &MockQuerier_GetQuestionsByExam_Call{Call: _e.mock.On("GetQuestionsByExam", ctx, arg)}
 }
 
@@ -902,7 +902,7 @@ type MockQuerier_SaveExam_Call struct {
 // SaveExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.SaveExamParams
-func (_e *MockQuerier_Expecter) SaveExam(ctx interface{}, arg interface{}) *MockQuerier_SaveExam_Call {
+func (_e *MockQuerier_Expecter) SaveExam(ctx any, arg any) *MockQuerier_SaveExam_Call {
 	return &MockQuerier_SaveExam_Call{Call: _e.mock.On("SaveExam", ctx, arg)}
 }
 
@@ -959,7 +959,7 @@ type MockQuerier_SaveQuestion_Call struct {
 // SaveQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.SaveQuestionParams
-func (_e *MockQuerier_Expecter) SaveQuestion(ctx interface{}, arg interface{}) *MockQuerier_SaveQuestion_Call {
+func (_e *MockQuerier_Expecter) SaveQuestion(ctx any, arg any) *MockQuerier_SaveQuestion_Call {
 	return &MockQuerier_SaveQuestion_Call{Call: _e.mock.On("SaveQuestion", ctx, arg)}
 }
 
@@ -1043,7 +1043,7 @@ type MockIQuerierExamination_AddExam_Call struct {
 // AddExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.AddExamParams
-func (_e *MockIQuerierExamination_Expecter) AddExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_AddExam_Call {
+func (_e *MockIQuerierExamination_Expecter) AddExam(ctx any, arg any) *MockIQuerierExamination_AddExam_Call {
 	return &MockIQuerierExamination_AddExam_Call{Call: _e.mock.On("AddExam", ctx, arg)}
 }
 
@@ -1100,7 +1100,7 @@ type MockIQuerierExamination_AddQuestion_Call struct {
 // AddQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.AddQuestionParams
-func (_e *MockIQuerierExamination_Expecter) AddQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamination_AddQuestion_Call {
+func (_e *MockIQuerierExamination_Expecter) AddQuestion(ctx any, arg any) *MockIQuerierExamination_AddQuestion_Call {
 	return &MockIQuerierExamination_AddQuestion_Call{Call: _e.mock.On("AddQuestion", ctx, arg)}
 }
 
@@ -1167,7 +1167,7 @@ type MockIQuerierExamination_Begin_Call struct {
 
 // Begin is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierExamination_Expecter) Begin(ctx interface{}) *MockIQuerierExamination_Begin_Call {
+func (_e *MockIQuerierExamination_Expecter) Begin(ctx any) *MockIQuerierExamination_Begin_Call {
 	return &MockIQuerierExamination_Begin_Call{Call: _e.mock.On("Begin", ctx)}
 }
 
@@ -1230,7 +1230,7 @@ type MockIQuerierExamination_BeginTx_Call struct {
 // BeginTx is a helper method to define mock.On call
 //   - ctx context.Context
 //   - options pgx.TxOptions
-func (_e *MockIQuerierExamination_Expecter) BeginTx(ctx interface{}, options interface{}) *MockIQuerierExamination_BeginTx_Call {
+func (_e *MockIQuerierExamination_Expecter) BeginTx(ctx any, options any) *MockIQuerierExamination_BeginTx_Call {
 	return &MockIQuerierExamination_BeginTx_Call{Call: _e.mock.On("BeginTx", ctx, options)}
 }
 
@@ -1303,9 +1303,9 @@ type MockIQuerierExamination_Exec_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - vs ...any
-func (_e *MockIQuerierExamination_Expecter) Exec(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_Exec_Call {
+func (_e *MockIQuerierExamination_Expecter) Exec(context1 any, s any, vs ...any) *MockIQuerierExamination_Exec_Call {
 	return &MockIQuerierExamination_Exec_Call{Call: _e.mock.On("Exec",
-		append([]interface{}{context1, s}, vs...)...)}
+		append([]any{context1, s}, vs...)...)}
 }
 
 func (_c *MockIQuerierExamination_Exec_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_Exec_Call {
@@ -1378,7 +1378,7 @@ type MockIQuerierExamination_FindAllExams_Call struct {
 
 // FindAllExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierExamination_Expecter) FindAllExams(ctx interface{}) *MockIQuerierExamination_FindAllExams_Call {
+func (_e *MockIQuerierExamination_Expecter) FindAllExams(ctx any) *MockIQuerierExamination_FindAllExams_Call {
 	return &MockIQuerierExamination_FindAllExams_Call{Call: _e.mock.On("FindAllExams", ctx)}
 }
 
@@ -1440,7 +1440,7 @@ type MockIQuerierExamination_FindAllInProgressExams_Call struct {
 
 // FindAllInProgressExams is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierExamination_Expecter) FindAllInProgressExams(ctx interface{}) *MockIQuerierExamination_FindAllInProgressExams_Call {
+func (_e *MockIQuerierExamination_Expecter) FindAllInProgressExams(ctx any) *MockIQuerierExamination_FindAllInProgressExams_Call {
 	return &MockIQuerierExamination_FindAllInProgressExams_Call{Call: _e.mock.On("FindAllInProgressExams", ctx)}
 }
 
@@ -1503,7 +1503,7 @@ type MockIQuerierExamination_FindQuestionsForExam_Call struct {
 // FindQuestionsForExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.FindQuestionsForExamParams
-func (_e *MockIQuerierExamination_Expecter) FindQuestionsForExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_FindQuestionsForExam_Call {
+func (_e *MockIQuerierExamination_Expecter) FindQuestionsForExam(ctx any, arg any) *MockIQuerierExamination_FindQuestionsForExam_Call {
 	return &MockIQuerierExamination_FindQuestionsForExam_Call{Call: _e.mock.On("FindQuestionsForExam", ctx, arg)}
 }
 
@@ -1569,7 +1569,7 @@ type MockIQuerierExamination_GetExam_Call struct {
 // GetExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetExamParams
-func (_e *MockIQuerierExamination_Expecter) GetExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_GetExam_Call {
+func (_e *MockIQuerierExamination_Expecter) GetExam(ctx any, arg any) *MockIQuerierExamination_GetExam_Call {
 	return &MockIQuerierExamination_GetExam_Call{Call: _e.mock.On("GetExam", ctx, arg)}
 }
 
@@ -1635,7 +1635,7 @@ type MockIQuerierExamination_GetQuestion_Call struct {
 // GetQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionParams
-func (_e *MockIQuerierExamination_Expecter) GetQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamination_GetQuestion_Call {
+func (_e *MockIQuerierExamination_Expecter) GetQuestion(ctx any, arg any) *MockIQuerierExamination_GetQuestion_Call {
 	return &MockIQuerierExamination_GetQuestion_Call{Call: _e.mock.On("GetQuestion", ctx, arg)}
 }
 
@@ -1701,7 +1701,7 @@ type MockIQuerierExamination_GetQuestionByExamAndIndex_Call struct {
 // GetQuestionByExamAndIndex is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionByExamAndIndexParams
-func (_e *MockIQuerierExamination_Expecter) GetQuestionByExamAndIndex(ctx interface{}, arg interface{}) *MockIQuerierExamination_GetQuestionByExamAndIndex_Call {
+func (_e *MockIQuerierExamination_Expecter) GetQuestionByExamAndIndex(ctx any, arg any) *MockIQuerierExamination_GetQuestionByExamAndIndex_Call {
 	return &MockIQuerierExamination_GetQuestionByExamAndIndex_Call{Call: _e.mock.On("GetQuestionByExamAndIndex", ctx, arg)}
 }
 
@@ -1769,7 +1769,7 @@ type MockIQuerierExamination_GetQuestionsByExam_Call struct {
 // GetQuestionsByExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.GetQuestionsByExamParams
-func (_e *MockIQuerierExamination_Expecter) GetQuestionsByExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_GetQuestionsByExam_Call {
+func (_e *MockIQuerierExamination_Expecter) GetQuestionsByExam(ctx any, arg any) *MockIQuerierExamination_GetQuestionsByExam_Call {
 	return &MockIQuerierExamination_GetQuestionsByExam_Call{Call: _e.mock.On("GetQuestionsByExam", ctx, arg)}
 }
 
@@ -1844,9 +1844,9 @@ type MockIQuerierExamination_Query_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - vs ...any
-func (_e *MockIQuerierExamination_Expecter) Query(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_Query_Call {
+func (_e *MockIQuerierExamination_Expecter) Query(context1 any, s any, vs ...any) *MockIQuerierExamination_Query_Call {
 	return &MockIQuerierExamination_Query_Call{Call: _e.mock.On("Query",
-		append([]interface{}{context1, s}, vs...)...)}
+		append([]any{context1, s}, vs...)...)}
 }
 
 func (_c *MockIQuerierExamination_Query_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_Query_Call {
@@ -1918,9 +1918,9 @@ type MockIQuerierExamination_QueryRow_Call struct {
 //   - context1 context.Context
 //   - s string
 //   - vs ...any
-func (_e *MockIQuerierExamination_Expecter) QueryRow(context1 interface{}, s interface{}, vs ...interface{}) *MockIQuerierExamination_QueryRow_Call {
+func (_e *MockIQuerierExamination_Expecter) QueryRow(context1 any, s any, vs ...any) *MockIQuerierExamination_QueryRow_Call {
 	return &MockIQuerierExamination_QueryRow_Call{Call: _e.mock.On("QueryRow",
-		append([]interface{}{context1, s}, vs...)...)}
+		append([]any{context1, s}, vs...)...)}
 }
 
 func (_c *MockIQuerierExamination_QueryRow_Call) Run(run func(context1 context.Context, s string, vs ...any)) *MockIQuerierExamination_QueryRow_Call {
@@ -1983,7 +1983,7 @@ type MockIQuerierExamination_SaveExam_Call struct {
 // SaveExam is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.SaveExamParams
-func (_e *MockIQuerierExamination_Expecter) SaveExam(ctx interface{}, arg interface{}) *MockIQuerierExamination_SaveExam_Call {
+func (_e *MockIQuerierExamination_Expecter) SaveExam(ctx any, arg any) *MockIQuerierExamination_SaveExam_Call {
 	return &MockIQuerierExamination_SaveExam_Call{Call: _e.mock.On("SaveExam", ctx, arg)}
 }
 
@@ -2040,7 +2040,7 @@ type MockIQuerierExamination_SaveQuestion_Call struct {
 // SaveQuestion is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg outbound.SaveQuestionParams
-func (_e *MockIQuerierExamination_Expecter) SaveQuestion(ctx interface{}, arg interface{}) *MockIQuerierExamination_SaveQuestion_Call {
+func (_e *MockIQuerierExamination_Expecter) SaveQuestion(ctx any, arg any) *MockIQuerierExamination_SaveQuestion_Call {
 	return &MockIQuerierExamination_SaveQuestion_Call{Call: _e.mock.On("SaveQuestion", ctx, arg)}
 }
 
@@ -2098,7 +2098,7 @@ type MockIQuerierExamination_WithTx_Call struct {
 
 // WithTx is a helper method to define mock.On call
 //   - tx pgx.Tx
-func (_e *MockIQuerierExamination_Expecter) WithTx(tx interface{}) *MockIQuerierExamination_WithTx_Call {
+func (_e *MockIQuerierExamination_Expecter) WithTx(tx any) *MockIQuerierExamination_WithTx_Call {
 	return &MockIQuerierExamination_WithTx_Call{Call: _e.mock.On("WithTx", tx)}
 }
 

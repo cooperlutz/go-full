@@ -74,7 +74,7 @@ type MockIQuerierPingPong_CountPerDay_Call struct {
 
 // CountPerDay is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) CountPerDay(ctx interface{}) *MockIQuerierPingPong_CountPerDay_Call {
+func (_e *MockIQuerierPingPong_Expecter) CountPerDay(ctx any) *MockIQuerierPingPong_CountPerDay_Call {
 	return &MockIQuerierPingPong_CountPerDay_Call{Call: _e.mock.On("CountPerDay", ctx)}
 }
 
@@ -135,7 +135,7 @@ type MockIQuerierPingPong_CreatePingPong_Call struct {
 // CreatePingPong is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.CreatePingPongParams
-func (_e *MockIQuerierPingPong_Expecter) CreatePingPong(ctx interface{}, arg interface{}) *MockIQuerierPingPong_CreatePingPong_Call {
+func (_e *MockIQuerierPingPong_Expecter) CreatePingPong(ctx any, arg any) *MockIQuerierPingPong_CreatePingPong_Call {
 	return &MockIQuerierPingPong_CreatePingPong_Call{Call: _e.mock.On("CreatePingPong", ctx, arg)}
 }
 
@@ -202,7 +202,7 @@ type MockIQuerierPingPong_FindAll_Call struct {
 
 // FindAll is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FindAll(ctx interface{}) *MockIQuerierPingPong_FindAll_Call {
+func (_e *MockIQuerierPingPong_Expecter) FindAll(ctx any) *MockIQuerierPingPong_FindAll_Call {
 	return &MockIQuerierPingPong_FindAll_Call{Call: _e.mock.On("FindAll", ctx)}
 }
 
@@ -264,7 +264,7 @@ type MockIQuerierPingPong_FindAllPing_Call struct {
 
 // FindAllPing is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FindAllPing(ctx interface{}) *MockIQuerierPingPong_FindAllPing_Call {
+func (_e *MockIQuerierPingPong_Expecter) FindAllPing(ctx any) *MockIQuerierPingPong_FindAllPing_Call {
 	return &MockIQuerierPingPong_FindAllPing_Call{Call: _e.mock.On("FindAllPing", ctx)}
 }
 
@@ -326,7 +326,7 @@ type MockIQuerierPingPong_FindAllPong_Call struct {
 
 // FindAllPong is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FindAllPong(ctx interface{}) *MockIQuerierPingPong_FindAllPong_Call {
+func (_e *MockIQuerierPingPong_Expecter) FindAllPong(ctx any) *MockIQuerierPingPong_FindAllPong_Call {
 	return &MockIQuerierPingPong_FindAllPong_Call{Call: _e.mock.On("FindAllPong", ctx)}
 }
 
@@ -387,7 +387,7 @@ type MockIQuerierPingPong_FindOneByID_Call struct {
 // FindOneByID is a helper method to define mock.On call
 //   - ctx context.Context
 //   - arg persist_postgres.FindOneByIDParams
-func (_e *MockIQuerierPingPong_Expecter) FindOneByID(ctx interface{}, arg interface{}) *MockIQuerierPingPong_FindOneByID_Call {
+func (_e *MockIQuerierPingPong_Expecter) FindOneByID(ctx any, arg any) *MockIQuerierPingPong_FindOneByID_Call {
 	return &MockIQuerierPingPong_FindOneByID_Call{Call: _e.mock.On("FindOneByID", ctx, arg)}
 }
 
@@ -454,7 +454,7 @@ type MockIQuerierPingPong_FrequencyDistribution_Call struct {
 
 // FrequencyDistribution is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FrequencyDistribution(ctx interface{}) *MockIQuerierPingPong_FrequencyDistribution_Call {
+func (_e *MockIQuerierPingPong_Expecter) FrequencyDistribution(ctx any) *MockIQuerierPingPong_FrequencyDistribution_Call {
 	return &MockIQuerierPingPong_FrequencyDistribution_Call{Call: _e.mock.On("FrequencyDistribution", ctx)}
 }
 
@@ -516,7 +516,7 @@ type MockIQuerierPingPong_FrequencyDistributionByDay_Call struct {
 
 // FrequencyDistributionByDay is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDay(ctx interface{}) *MockIQuerierPingPong_FrequencyDistributionByDay_Call {
+func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDay(ctx any) *MockIQuerierPingPong_FrequencyDistributionByDay_Call {
 	return &MockIQuerierPingPong_FrequencyDistributionByDay_Call{Call: _e.mock.On("FrequencyDistributionByDay", ctx)}
 }
 
@@ -578,7 +578,7 @@ type MockIQuerierPingPong_FrequencyDistributionByDayPing_Call struct {
 
 // FrequencyDistributionByDayPing is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDayPing(ctx interface{}) *MockIQuerierPingPong_FrequencyDistributionByDayPing_Call {
+func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDayPing(ctx any) *MockIQuerierPingPong_FrequencyDistributionByDayPing_Call {
 	return &MockIQuerierPingPong_FrequencyDistributionByDayPing_Call{Call: _e.mock.On("FrequencyDistributionByDayPing", ctx)}
 }
 
@@ -640,7 +640,7 @@ type MockIQuerierPingPong_FrequencyDistributionByDayPong_Call struct {
 
 // FrequencyDistributionByDayPong is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDayPong(ctx interface{}) *MockIQuerierPingPong_FrequencyDistributionByDayPong_Call {
+func (_e *MockIQuerierPingPong_Expecter) FrequencyDistributionByDayPong(ctx any) *MockIQuerierPingPong_FrequencyDistributionByDayPong_Call {
 	return &MockIQuerierPingPong_FrequencyDistributionByDayPong_Call{Call: _e.mock.On("FrequencyDistributionByDayPong", ctx)}
 }
 
@@ -700,7 +700,7 @@ type MockIQuerierPingPong_TotalNumberOfPingPongs_Call struct {
 
 // TotalNumberOfPingPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPingPongs(ctx interface{}) *MockIQuerierPingPong_TotalNumberOfPingPongs_Call {
+func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPingPongs(ctx any) *MockIQuerierPingPong_TotalNumberOfPingPongs_Call {
 	return &MockIQuerierPingPong_TotalNumberOfPingPongs_Call{Call: _e.mock.On("TotalNumberOfPingPongs", ctx)}
 }
 
@@ -760,7 +760,7 @@ type MockIQuerierPingPong_TotalNumberOfPings_Call struct {
 
 // TotalNumberOfPings is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPings(ctx interface{}) *MockIQuerierPingPong_TotalNumberOfPings_Call {
+func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPings(ctx any) *MockIQuerierPingPong_TotalNumberOfPings_Call {
 	return &MockIQuerierPingPong_TotalNumberOfPings_Call{Call: _e.mock.On("TotalNumberOfPings", ctx)}
 }
 
@@ -820,7 +820,7 @@ type MockIQuerierPingPong_TotalNumberOfPongs_Call struct {
 
 // TotalNumberOfPongs is a helper method to define mock.On call
 //   - ctx context.Context
-func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPongs(ctx interface{}) *MockIQuerierPingPong_TotalNumberOfPongs_Call {
+func (_e *MockIQuerierPingPong_Expecter) TotalNumberOfPongs(ctx any) *MockIQuerierPingPong_TotalNumberOfPongs_Call {
 	return &MockIQuerierPingPong_TotalNumberOfPongs_Call{Call: _e.mock.On("TotalNumberOfPongs", ctx)}
 }
 
@@ -873,7 +873,7 @@ type MockIQuerierPingPong_WithTx_Call struct {
 
 // WithTx is a helper method to define mock.On call
 //   - tx pgx.Tx
-func (_e *MockIQuerierPingPong_Expecter) WithTx(tx interface{}) *MockIQuerierPingPong_WithTx_Call {
+func (_e *MockIQuerierPingPong_Expecter) WithTx(tx any) *MockIQuerierPingPong_WithTx_Call {
 	return &MockIQuerierPingPong_WithTx_Call{Call: _e.mock.On("WithTx", tx)}
 }
 
