@@ -51,7 +51,7 @@ To run the backend tests, use the following command:
 
 ## End-to-End (e2e) Testing
 
-End to End testing is implemented using [Playwright](https://playwright.dev/) with the [playwright-go](https://github.com/playwright-community/playwright-go) library.
+End to End testing is implemented using [Playwright](https://playwright.dev/) with the [playwright-go](https://github.com/mxschmitt/playwright-go) library.
 
 ### Writing e2e Tests
 

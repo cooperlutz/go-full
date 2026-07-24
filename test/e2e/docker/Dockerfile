@@ -2,14 +2,14 @@
 # https://github.com/playwright-community/playwright-go/blob/main/Dockerfile.example
 
 # Stage 1: Modules caching
-FROM golang:1.26.4 AS modules
+FROM golang:1.26.5 AS modules
 
 COPY go.mod go.sum /modules/
 WORKDIR /modules
 RUN go mod download
 
 # Stage 2: Build
-FROM golang:1.26.4 AS builder
+FROM golang:1.26.5 AS builder
 
 COPY --from=modules /go/pkg /go/pkg
 COPY . /workdir
@@ -18,7 +18,7 @@ WORKDIR /workdir
 
 # Install playwright cli with right version for later use
 RUN PWGO_VER=$(grep -oE "playwright-go v\S+" /workdir/go.mod | sed 's/playwright-go //g') \
-    && go install github.com/playwright-community/playwright-go/cmd/playwright@${PWGO_VER}
+    && go install github.com/mxschmitt/playwright-go/cmd/playwright@${PWGO_VER}
 
 # Stage 3: Final
 FROM ubuntu:noble
