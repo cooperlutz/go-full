@@ -18,7 +18,7 @@ WORKDIR /workdir
 
 # Install playwright cli with right version for later use
 RUN PWGO_VER=$(grep -oE "playwright-go v\S+" /workdir/go.mod | sed 's/playwright-go //g') \
-    && go install github.com/playwright-community/playwright-go/cmd/playwright@${PWGO_VER}
+    && go install github.com/mxschmitt/playwright-go/cmd/playwright@${PWGO_VER}
 
 # Stage 3: Final
 FROM ubuntu:noble

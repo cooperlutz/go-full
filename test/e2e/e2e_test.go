@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
+	"github.com/mxschmitt/playwright-go"
 	openapi_types "github.com/oapi-codegen/runtime/types"
-	"github.com/playwright-community/playwright-go"
 
 	examination_api_client "github.com/cooperlutz/go-full/api/rest/examination/client"
 	examLibrary_api_client_v1 "github.com/cooperlutz/go-full/api/rest/examlibrary/v1/client"
