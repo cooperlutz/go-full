@@ -33,7 +33,6 @@ func NewRootRouterWithMiddleware(middlewares ...func(http.Handler) http.Handler)
 	r := chi.NewRouter()
 	r.Use(otelhttp.NewMiddleware("api-server"))
 	r.Use(middleware.RequestID)
-	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
