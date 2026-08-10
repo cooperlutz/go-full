@@ -39,8 +39,8 @@ importers:
         specifier: 18.0.4
         version: 18.0.4
       sweetalert2:
-        specifier: 11.26.24
-        version: 11.26.24
+        specifier: 11.26.25
+        version: 11.26.25
       tailwindcss:
         specifier: 4.3.0
         version: 4.3.0
@@ -3363,8 +3363,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  sweetalert2@11.26.24:
-    resolution: {integrity: sha512-SLgukW4wicewpW5VOukSXY5Z6DL/z7HCOK2ODSjmQPiSphCN8gJAmh9npoceXOtBRNoDN0xIz+zHYthtfiHmjg==}
+  sweetalert2@11.26.25:
+    resolution: {integrity: sha512-+hunCOJdJ6FLj04T9YSLvvZXRjsvIkTeTKP2e4VF8CaBias961BTnWiSFAy7F/CM5eq3QK2Rraoc5Gzftslvkg==}
 
   synckit@0.11.13:
     resolution: {integrity: sha512-eNRKgb3z66Yp3D2CixVujOUvXLFUTij/zVnV8KRyvFdQwpz7I5DS8UfRkTeLzb64u+dkzDSdelE24izu+zSSUg==}
@@ -7233,7 +7233,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  sweetalert2@11.26.24: {}
+  sweetalert2@11.26.25: {}
 
   synckit@0.11.13:
     dependencies:
