@@ -28,6 +28,7 @@ env:
 
 jobs:
   cd:
+    if: false
     name: Deploy Latest Image to Azure
     permissions:
       contents: write
