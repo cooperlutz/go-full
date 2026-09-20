@@ -87,6 +87,7 @@ func (r *PingPongPersistPostgresRepository) TotalNumberOfPingPongsCreatedPerDay(
 	}
 
 	var pingPongsPerDay []types.MeasureCountbyDateTimeMetric
+
 	for _, cpd := range countPerDay {
 		val := types.MeasureCountbyDateTimeMetric{
 			DateTime: cpd.CreationDate.Time,

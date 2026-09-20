@@ -9,6 +9,7 @@ import (
 	"github.com/cooperlutz/go-full/internal/examination/app/event"
 	"github.com/cooperlutz/go-full/internal/examination/domain/examination"
 	"github.com/cooperlutz/go-full/pkg/telemetree"
+	"github.com/cooperlutz/go-full/pkg/utilitee"
 )
 
 type StartExam struct {
@@ -59,7 +60,7 @@ func (h StartExamHandler) Handle(ctx context.Context, cmd StartExam) (Exam, erro
 			}
 
 			question := examination.NewQuestion(
-				int32(q.Index),
+				utilitee.SafeIntToInt32(&q.Index),
 				q.QuestionText,
 				questionType,
 				q.ResponseOptions,

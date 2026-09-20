@@ -308,14 +308,14 @@ func (sh *strictHandler) GetMetric(w http.ResponseWriter, r *http.Request, metri
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/6xSPW/bMBD9K8a1IxE6ycatQ1FkaFF06BJ4oKmTzIAi2eNRaCDovxdHybGLeMzEj/dw",
-	"9967m8GlMaeIkQuYGYo74Wjb9StRIrlkShmJPbZvlzqUs080WgYDPvLjAyjg14zrEwckWBSMWIodGnsD",
-	"C5OPAyzLGz0dX9CxsL8jk3fvG47t/4cdbxVSG/zbhvq/rC7VY8CLrljHo8haFBD+qZ6wA/N8Xf3wTpSQ",
-	"fexTa+w5CPYLcyL2cdh9+fkECiak4lMEA/d3+7u9SEoZo80eDDy2LwXZ8qmZ0dO9XlsWPV96L4INyHKI",
-	"d8s+xacODHxD3oKRKmRHZKQC5nkGL02lMiiILZ5rN9c2mSqqbba3pnEQcskpljXyh/1+HXVkjE2UzTl4",
-	"12TplyJ256t6nwl7MPBJX5ZJb5ukN/Utyw6LI595zWtFdiQHTtjtSnUOS+lrCK/Q6L2tgT9MyrrRN5TU",
-	"iH8zOsZuh2eOsArSdE67UgADJ+ZcjNbzKRWW0Bctk1YwWfL2GNb8zqDc30xASM4GgaT8YfkXAAD//1pw",
-	"g4J7AwAA",
+	"H4sIAAAAAAAC/6xSsW4bMQz9FYPteIicZNPWoSgytCg6dAk8yDraVqCTVJI6NDjcvxfUnWMX8ZhJFN8D",
+	"+fjICXweSk6YhMFOwP6Eg2vhV6JMGhTKBUkCtrTPPep7yDQ4AQshyeMDdCCvBZcvHpFg7mBAZnds7BVk",
+	"oZCOMM9v9Lx/QS/K/o5Cwb9vOLT8DzfcKtSt8G8X6/+y+lz3ES+6Uh32KmvugPBPDYQ92Ofr6rt3opQc",
+	"0iG3xkGiYr+wZJKQjpsvP5+ggxGJQ05g4f5ue7dVSblgciWAhceW6qA4ObVhzHhvlpZspkvvWbEjij46",
+	"u5OQ01MPFr6hrMZoFXIDChKDfZ4gaFOtDB2kZs/1NNdjClXs1t3e2sZOyVxy4sXyh+12WXUSTE2UKyUG",
+	"32SZF87pcisafSY8gIVP5nJMZkHZrOqblz2yp1Bk8WtBNqQPjthvuHqPzIca4ys0+sHVKB8mZbnoG0pq",
+	"wr8FvWC/wTNHWYw0nt2uFMHCSaSwNWY6ZRY1fTa66Q5GR8Ht4+LfGdT4bQiI2buokJbfzf8GAFpwg4J7",
+	"AwAA",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

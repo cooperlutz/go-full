@@ -3,16 +3,16 @@ import { mount } from '@vue/test-utils'
 import ExamCreator from '../ExamCreator.vue'
 import { nextTick } from 'vue'
 
-describe('ExamCreator', () => {
-  vi.mock('vue-router', () => ({
-    useRouter: () => ({
-      path: '/exam-library/creator',
-    }),
-    useRoute: () => ({
-      path: '/exam-library/creator',
-    }),
-  }))
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    path: '/exam-library/creator',
+  }),
+  useRoute: () => ({
+    path: '/exam-library/creator',
+  }),
+}))
 
+describe('ExamCreator', () => {
   it('renders an input for exam name and grade level', () => {
     // Arrange & Act
     const wrapper = mount(ExamCreator)

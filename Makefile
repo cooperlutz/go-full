@@ -74,7 +74,7 @@ lint: lint-be lint-fe ### run all linters
 
 lint-be: ### check by golangci linter
 	go tool goimports -w ./internal ./tools ./pkg ./app ./cmd
-	go tool golangci-lint run --config ./.golangci.yml --fix
+	golangci-lint run --config ./.golangci.yml --fix
 .PHONY: lint-be
 
 lint-fe: ### lint frontend code
@@ -214,6 +214,7 @@ install-brews: ### install brew packages
 	brew install node
 	brew install pnpm
 # dev tools
+	brew install golangci-lint
 	brew install commitizen
 	brew install golang-migrate
 	brew install sqlc
@@ -228,7 +229,7 @@ install-tools: ### install tools
 .PHONY: install-tools
 
 install-playwright: ### install playwright browsers
-	go run github.com/mxschmitt/playwright-go/cmd/playwright@v0.6100.0 install --with-deps
+	go run github.com/mxschmitt/playwright-go/cmd/playwright@v0.6201.1 install --with-deps
 .PHONY: install-playwright
 
 ############################################################################

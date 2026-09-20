@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/ThreeDotsLabs/watermill/message"
-	"github.com/pashagolub/pgxmock/v4"
+	"github.com/pashagolub/pgxmock/v5"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/cooperlutz/go-full/internal/pingpong/infra/pubsub"
