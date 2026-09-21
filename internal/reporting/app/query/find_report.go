@@ -7,6 +7,8 @@ import (
 	"github.com/cooperlutz/go-full/pkg/telemetree"
 )
 
+const metricString = "metric"
+
 type FindReport struct {
 	Name string
 }
@@ -67,7 +69,7 @@ func (h FindReportHandler) Handle(ctx context.Context, qry FindReport) (Report, 
 
 	for _, component := range r.Components {
 		switch component.Type {
-		case "metric":
+		case metricString:
 			metricName, err := reporting.MetricNameFromString(component.Key)
 			if err != nil {
 				telemetree.RecordError(ctx, err)
@@ -83,7 +85,7 @@ func (h FindReportHandler) Handle(ctx context.Context, qry FindReport) (Report, 
 			}
 
 			components = append(components, ReportComponent{
-				Type:  "metric",
+				Type:  metricString,
 				Key:   component.Key,
 				Value: m.Value,
 			})

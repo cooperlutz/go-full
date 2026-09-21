@@ -14,6 +14,7 @@ import (
 func main() {
 	// Command-line flags
 	flagMigrate := flag.Bool("migrate", false, "run migrations before starting the app")
+
 	flag.Parse()
 
 	// Load configuration
