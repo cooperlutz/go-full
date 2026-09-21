@@ -182,7 +182,7 @@ build-fe: ### build frontend
 
 pre-wflow:  ### prehook for ci tasks
 	if [ ! -d .coverage ]; then mkdir .coverage; else echo ".coverage directory already exists, skipping creation."; fi
-	go install github.com/vektra/mockery/v3@v3.7.0
+	go install github.com/vektra/mockery/v3@v3.8.0
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1
 .PHONY: pre-wflow
 
