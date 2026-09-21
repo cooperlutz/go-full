@@ -3,15 +3,16 @@ import { mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
 import ExamOverview from '../ExamOverview.vue'
 
+vi.mock('vue-router', () => ({
+  useRoute: () => ({
+    params: { id: 'f660452b-4075-4eac-b87a-a5b1ce7bd428' },
+    path: '/examlibrary/exams/f660452b-4075-4eac-b87a-a5b1ce7bd428',
+  }),
+}))
+
 describe('ExamOverview', () => {
   it('renders exam data in table rows', async () => {
     // Arrange
-    vi.mock('vue-router', () => ({
-      useRoute: () => ({
-        params: { id: 'f660452b-4075-4eac-b87a-a5b1ce7bd428' },
-        path: '/examlibrary/exams/f660452b-4075-4eac-b87a-a5b1ce7bd428',
-      }),
-    }))
     const wrapper = mount(ExamOverview)
     await nextTick()
 

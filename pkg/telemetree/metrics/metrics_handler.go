@@ -18,10 +18,12 @@ func MetricsHandler() http.Handler {
 
 	// Expose /metrics HTTP endpoint using the created custom registry.
 	mw := NewPromMiddleware(
-		reg, nil).
+		reg, nil,
+	).
 		WrapHandler("/metrics", promhttp.HandlerFor(
 			reg,
-			promhttp.HandlerOpts{}),
+			promhttp.HandlerOpts{},
+		),
 		)
 
 	return mw

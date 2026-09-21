@@ -298,14 +298,12 @@ func TestPingPongRestAPIController_GetFindOneByID_Success(t *testing.T) {
 		query.FindOneByID{ID: validPingPongID},
 	).Return(
 		query.FindOneByIDResponse{
-			PingPongRawResult: common.PingPongRawResult{
-				Message:   "Ping!",
-				CreatedAt: testTime,
-				UpdatedAt: testTime,
-				ID:        tempUUID.String(),
-				DeletedAt: nil,
-				Deleted:   false,
-			},
+			Message:   "Ping!",
+			CreatedAt: testTime,
+			UpdatedAt: testTime,
+			ID:        tempUUID.String(),
+			DeletedAt: nil,
+			Deleted:   false,
 		},
 		nil,
 	)

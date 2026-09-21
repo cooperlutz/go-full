@@ -75,7 +75,7 @@ func (c Config) String() string {
 // Example: "user=youruser password=yourpassword host=localhost port=5432 dbname=yourdb sslmode=disable".
 func (db DB) GetDSN() string {
 	var b strings.Builder
-	b.WriteString(fmt.Sprintf("user=%s password=%s host=%s port=%d dbname=%s sslmode=%s", db.User, db.Password, db.Host, db.Port, db.DBName, db.SSLMode))
+	fmt.Fprintf(&b, "user=%s password=%s host=%s port=%d dbname=%s sslmode=%s", db.User, db.Password, db.Host, db.Port, db.DBName, db.SSLMode)
 
 	return b.String()
 }

@@ -10,6 +10,12 @@ import (
 	"github.com/cooperlutz/go-full/pkg/hteeteepee"
 )
 
+const (
+	accessTokenName  = "access_token"
+	refreshTokenName = "refresh_token"
+	authPath         = "/auth"
+)
+
 func NewIamAuthApiController(iamSvc *service.IamService) http.Handler {
 	iamRouter := hteeteepee.NewRouter("iam.adapter.inbound.auth")
 	authHandler := NewAuthHandler(iamSvc)
@@ -126,7 +132,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 // RefreshToken handles access token refresh using the refresh_token cookie.
 func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
-	refreshCookie, err := r.Cookie("refresh_token")
+	refreshCookie, err := r.Cookie(refreshTokenName)
 	if err != nil {
 		http.Error(w, "Missing refresh token", http.StatusUnauthorized)
 
@@ -146,7 +152,7 @@ func (h *AuthHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
+		Name:     accessTokenName,
 		Value:    accessToken,
 		HttpOnly: true,
 		Secure:   true,
@@ -167,7 +173,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 // setTokenCookies sets the access and refresh token cookies.
 func setTokenCookies(w http.ResponseWriter, accessToken, refreshToken string, accessTTL, refreshTTL time.Duration) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
+		Name:     accessTokenName,
 		Value:    accessToken,
 		HttpOnly: true,
 		Secure:   true,
@@ -177,12 +183,12 @@ func setTokenCookies(w http.ResponseWriter, accessToken, refreshToken string, ac
 	})
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "refresh_token",
+		Name:     refreshTokenName,
 		Value:    refreshToken,
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteLaxMode,
-		Path:     "/auth",
+		Path:     authPath,
 		MaxAge:   int(refreshTTL.Seconds()),
 	})
 }
@@ -190,7 +196,7 @@ func setTokenCookies(w http.ResponseWriter, accessToken, refreshToken string, ac
 // clearTokenCookies clears the access and refresh token cookies.
 func clearTokenCookies(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     "access_token",
+		Name:     accessTokenName,
 		Value:    "",
 		HttpOnly: true,
 		Secure:   true,
@@ -200,12 +206,12 @@ func clearTokenCookies(w http.ResponseWriter) {
 	})
 
 	http.SetCookie(w, &http.Cookie{
-		Name:     "refresh_token",
+		Name:     refreshTokenName,
 		Value:    "",
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteLaxMode,
-		Path:     "/auth",
+		Path:     authPath,
 		MaxAge:   -1,
 	})
 }
