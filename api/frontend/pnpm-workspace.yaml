@@ -1,0 +1,4 @@
+allowBuilds:
+  '@openapitools/openapi-generator-cli': true
+  msw: true
+  unrs-resolver: true
