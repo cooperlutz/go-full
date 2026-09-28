@@ -19,20 +19,6 @@
     "test-ui": "vitest --ui",
     "openapi": "openapi-generator-cli --openapitools .openapitools.json generate"
   },
-  "pnpm": {
-    "overrides": {
-      "axios": "1.18.0",
-      "ip-address": "10.1.1",
-      "basic-ftp": "5.3.1",
-      "shell-quote": "1.8.4",
-      "esbuild": "0.28.1",
-      "js-yaml": "4.2.0",
-      "form-data": "4.0.6"
-    },
-    "auditConfig": {
-      "ignoreGhsas": []
-    }
-  },
   "dependencies": {
     "@lucide/lab": "0.7.0",
     "@tailwindcss/vite": "4.3.3",
